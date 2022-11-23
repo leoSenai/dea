@@ -2,35 +2,24 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
-
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <q-avatar>
+          <q-img
+            src="../assets/logo/logoPerhaps.png"
+            alt="Logo Clínica Motivar"
+            flat
+            dense
+            round
+            aria-label="Menu"
+            @click.prevent="toggleLeftDrawer"
+          />
+        </q-avatar>
+        <q-toolbar-title> Clínica Motivar </q-toolbar-title>
+        <DropDownLogout />
       </q-toolbar>
     </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
+        <q-item-label header> Profissional </q-item-label>
         <EssentialLink
           v-for="link in essentialLinks"
           :key="link.title"
@@ -38,8 +27,8 @@
         />
       </q-list>
     </q-drawer>
-
     <q-page-container>
+      <FloatingActionButton v-if="$q.platform.is.mobile" />
       <router-view />
     </q-page-container>
   </q-layout>
@@ -48,49 +37,45 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
+import FloatingActionButton from 'components/FloatingActionButton.vue'
+import DropDownLogout from 'components/DropDownLogout.vue'
 
 const linksList = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    title: 'Home',
+    caption: '',
+    icon: 'home',
+    link: { name: 'home' }
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
+    title: 'Cadastro de paciente',
+    caption: '',
+    icon: 'home',
+    link: { name: 'CadastroPaciente' }
   },
   {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
+    title: 'Cadastro pessoas próximas',
+    caption: '',
+    icon: 'home',
+    link: { name: 'CadastroPessoasProximas' }
   },
   {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
+    title: 'Cadastro de questionário',
+    caption: '',
+    icon: 'home',
+    link: { name: 'CadastroQuestionario' }
   },
   {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
+    title: 'Pacientes',
+    caption: '',
+    icon: 'home',
+    link: { name: 'Pacientes' }
   },
   {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
+    title: 'Questionários',
+    caption: '',
+    icon: 'home',
+    link: { name: 'Questionarios' }
   }
 ]
 
@@ -98,12 +83,13 @@ export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    EssentialLink
+    EssentialLink,
+    FloatingActionButton,
+    DropDownLogout
   },
 
   setup () {
     const leftDrawerOpen = ref(false)
-
     return {
       essentialLinks: linksList,
       leftDrawerOpen,

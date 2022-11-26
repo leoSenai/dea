@@ -18,8 +18,8 @@
       </q-toolbar>
     </q-header>
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
-        <q-item-label header> Profissional </q-item-label>
+      <q-list >
+        <q-item-label header > Profissional </q-item-label>
         <EssentialLink
           v-for="link in essentialLinks"
           :key="link.title"
@@ -43,39 +43,23 @@ import DropDownLogout from 'components/DropDownLogout.vue'
 const linksList = [
   {
     title: 'Home',
-    caption: '',
     icon: 'home',
-    link: { name: 'home' }
+    link: { name: 'IndexPage' }
   },
   {
     title: 'Cadastro de paciente',
-    caption: '',
-    icon: 'home',
-    link: { name: 'CadastroPaciente' }
+    icon: 'mode_edit',
+    link: { name: 'CadastroPacientes' }
   },
   {
     title: 'Cadastro pessoas próximas',
-    caption: '',
-    icon: 'home',
+    icon: 'mode_edit',
     link: { name: 'CadastroPessoasProximas' }
   },
   {
     title: 'Cadastro de questionário',
-    caption: '',
-    icon: 'home',
+    icon: 'mode_edit',
     link: { name: 'CadastroQuestionario' }
-  },
-  {
-    title: 'Pacientes',
-    caption: '',
-    icon: 'home',
-    link: { name: 'Pacientes' }
-  },
-  {
-    title: 'Questionários',
-    caption: '',
-    icon: 'home',
-    link: { name: 'Questionarios' }
   }
 ]
 

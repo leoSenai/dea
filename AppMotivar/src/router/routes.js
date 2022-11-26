@@ -5,33 +5,28 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'home',
+        name: 'IndexPage',
         component: () => import('pages/IndexPage.vue')
       },
       {
-        path: '',
-        name: 'CadastroPaciente',
-        component: () => import('pages/CadastroPaciente.vue')
+        path: 'IndexPage',
+        name: 'IndexPage',
+        component: () => import('pages/IndexPage.vue')
       },
       {
-        path: '',
+        path: 'CadastroPacientes',
+        name: 'CadastroPacientes',
+        component: () => import('pages/Cadastros/CadastroPacientes.vue')
+      },
+      {
+        path: 'CadastroPessoasProximas',
         name: 'CadastroPessoasProximas',
-        component: () => import('pages/IndexPage.vue')
+        component: () => import('src/pages/Cadastros/CadastroPessoasProximas.vue')
       },
       {
-        path: '',
+        path: 'CadastroQuestionario',
         name: 'CadastroQuestionario',
-        component: () => import('pages/IndexPage.vue')
-      },
-      {
-        path: '',
-        name: 'Pacientes',
-        component: () => import('pages/IndexPage.vue')
-      },
-      {
-        path: '',
-        name: 'Questionarios',
-        component: () => import('pages/IndexPage.vue')
+        component: () => import('src/pages/Cadastros/CadastroQuestionario.vue')
       }
     ]
   },

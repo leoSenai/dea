@@ -27,8 +27,18 @@ const routes = [
         path: 'CadastroQuestionario',
         name: 'CadastroQuestionario',
         component: () => import('src/pages/Cadastros/CadastroQuestionario.vue')
+      },
+      {
+        path: 'CadastroConselho',
+        name: 'CadastroConselho',
+        component: () => import('src/pages/Cadastros/CadastroConselho.vue')
       }
     ]
+  },
+  {
+    path: '/LoginUsuario',
+    name: 'LoginUsuario',
+    component: () => import('layouts/LoginUsuario.vue')
   },
 
   // Always leave this as last one,

@@ -1,0 +1,41 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  },
+   "conselho": [
+    {
+      "id": 1,
+      "nome": "teste",
+      "ultimaAlteracao": "joao"
+    },
+    {
+      "id": 2,
+      "nome": "teste2",
+      "ultimaAlteracao": "joao2"
+    },
+    {
+      "id": 3,
+      "nome": "teste3",
+      "ultimaAlteracao": "joao3"
+    },
+    {
+      "id": 4,
+      "nome": "teste4",
+      "ultimaAlteracao": "joao4"
+    }
+  ]
+}

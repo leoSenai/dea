@@ -21,9 +21,9 @@
       <q-list >
         <q-item-label header > Profissional </q-item-label>
         <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
+          v-for="route in essentialLinks"
+          :key="route.title"
+          v-bind="route"
         />
       </q-list>
     </q-drawer>
@@ -44,23 +44,29 @@ const linksList = [
   {
     title: 'Home',
     icon: 'home',
-    link: { name: 'IndexPage' }
+    route: { name: 'IndexPage' }
   },
   {
     title: 'Cadastro de paciente',
     icon: 'mode_edit',
-    link: { name: 'CadastroPacientes' }
+    route: { name: 'CadastroPacientes' }
   },
   {
     title: 'Cadastro pessoas próximas',
     icon: 'mode_edit',
-    link: { name: 'CadastroPessoasProximas' }
+    route: { name: 'CadastroPessoasProximas' }
   },
   {
     title: 'Cadastro de questionário',
     icon: 'mode_edit',
-    link: { name: 'CadastroQuestionario' }
+    route: { name: 'CadastroQuestionario' }
+  },
+  {
+    title: 'Cadastro de Conselho',
+    icon: 'mode_edit',
+    route: { name: 'CadastroConselho' }
   }
+
 ]
 
 export default defineComponent({

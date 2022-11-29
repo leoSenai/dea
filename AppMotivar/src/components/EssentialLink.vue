@@ -2,7 +2,7 @@
   <q-item
     clickable
     tag="a"
-    :to="link.name"
+    :to="route.name"
   >
     <q-item-section
       v-if="icon"
@@ -33,7 +33,7 @@ export default defineComponent({
       default: ''
     },
 
-    link: {
+    route: {
       type: String,
       default: ''
     },

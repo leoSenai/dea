@@ -6,7 +6,7 @@
           <q-item-label>Configurações</q-item-label>
         </q-item-section>
       </q-item>
-      <q-item clickable v-close-popup >
+      <q-item clickable  :to="LoginUsuario ">
         <q-item-section>
           <q-item-label>Logout</q-item-label>
         </q-item-section>
@@ -18,6 +18,11 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'DropDownLogout'
+  name: 'DropDownLogout',
+  setup () {
+    return {
+      LoginUsuario: { name: 'LoginUsuario' }
+    }
+  }
 })
 </script>

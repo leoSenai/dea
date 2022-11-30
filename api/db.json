@@ -5,5 +5,12 @@
     "comments": [
       { "id": 1, "body": "some comment", "postId": 1 }
     ],
-    "profile": { "name": "typicode" }
+    "profile": { "name": "typicode" },
+    {
+      "id": 1,
+      "nome": "Conselho 1",
+      "ultimaAlteracao": "teste1"
+    }
   }
+
+  

@@ -2,7 +2,7 @@
   <q-item
     clickable
     tag="a"
-    :to="route.name"
+    :to="route"
   >
     <q-item-section
       v-if="icon"

@@ -16,26 +16,26 @@
   "profile": {
     "name": "typicode"
   },
-   "conselho": [
+  "conselho": [
     {
       "id": 1,
-      "nome": "teste",
-      "ultimaAlteracao": "joao"
+      "nome": "Conselho 1",
+      "ultimaAlteracao": "teste1"
     },
     {
       "id": 2,
-      "nome": "teste2",
-      "ultimaAlteracao": "joao2"
+      "nome": "Conselho 2",
+      "ultimaAlteracao": "teste2"
     },
     {
       "id": 3,
-      "nome": "teste3",
-      "ultimaAlteracao": "joao3"
+      "nome": "Conselho 3",
+      "ultimaAlteracao": "teste3"
     },
     {
       "id": 4,
-      "nome": "teste4",
-      "ultimaAlteracao": "joao4"
+      "nome": "Conselho 4",
+      "ultimaAlteracao": "teste4"
     }
   ]
 }

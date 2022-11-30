@@ -1,18 +1,34 @@
 <template>
   <q-page padding>
-     <q-table
-      title="Cadastro de Conselhos"
-      :rows="rows"
-      row-key="name"
-      :columns="columns"
-  >
-    <template v-slot:body-cell-actions="props">
-      <q-td :props="props">
-        <q-btn  icon="delete" color="negative" @click="handleRemovePost(props.row.id), confirm=true"  dense/>
-        <q-btn icon="edit" color="negative" dense/>
-      </q-td>
-    </template>
-  </q-table>
+    <q-card >
+      <q-card-section>
+        <div class="text-h6">Cadastro de Conselho</div>
+      </q-card-section>
+      <q-card-section  class="col-12">
+        <q-form @submit="onSubmit" class="q-gutter-md" >
+          <q-input
+            outlined
+            v-model="form.nome"
+            label="Nome"
+            lazy-rules
+            :dense="dense"
+            :rules="[(val) => val.length > 0 || 'Nome é obrigatório']"
+          />
+          <q-input
+            outlined
+            v-model="form.ultimaAlteracao"
+            label="Última Alterção"
+            lazy-rules
+            :dense="dense"
+            :rules="[(val) => val.length > 0 || 'Última Alterção']"
+          />
+          <q-card-actions align="right">
+            <q-btn label="Cancelar" color="negative" :to="{name: 'ListaConselho'}" />
+            <q-btn label="Salvar"  type="submit" color="primary" />
+          </q-card-actions>
+        </q-form>
+      </q-card-section>
+    </q-card>
   </q-page>
 </template>
 
@@ -20,88 +36,50 @@
 import { defineComponent, ref, onMounted } from 'vue'
 import postsService from 'src/services/posts'
 import { useQuasar } from 'quasar'
+import { useRouter, useRoute } from 'vue-router'
 export default defineComponent({
   name: 'CadastroConselho',
   setup () {
-    const rows = ref([])
-    const columns = [{
-      name: 'id',
-      field: 'id',
-      label: 'id',
-      align: 'center',
-      sortable: true
-    },
-    {
-      name: 'nome',
-      field: 'nome',
-      label: 'Conselho',
-      align: 'center',
-      sortable: true
-    },
-    {
-      name: 'ultimaAlteracao',
-      field: 'ultimaAlteracao',
-      label: 'Ultima Alteração',
-      align: 'center',
-      sortable: true
-    },
-    {
-      name: 'actions',
-      field: 'actions',
-      label: 'Ações',
-      align: 'right',
-      sortable: true
-    }
-    ]
-    const { list, remove } = postsService()
-    onMounted(async () => {
-      getRows()
+    const form = ref({
+      nome: '',
+      ultimaAlteracao: ''
     })
     const $q = useQuasar()
+    const { post, getById, update } = postsService()
+    const router = useRouter()
+    const route = useRoute()
+    onMounted(async () => {
+      if (route.params.id) getPost(route.params.id)
+    })
 
-    const getRows = async () => {
+    const getPost = async (id) => {
       try {
-        const data = await list()
-        rows.value = data
+        form.value = await getById(id)
       } catch (error) {
         throw new Error(error)
       }
     }
 
-    const handleRemovePost = async (id) => {
+    const onSubmit = async () => {
       try {
-        $q.dialog({
-          title: 'Remover',
-          message: 'Deseja realmente remover esse Conselho ?',
-          cancel: {
-            label: 'Cancelar',
-            color: 'primary',
-            flat: true
-          },
-          ok: {
-            label: 'Remover',
-            color: 'negative',
-            flat: true
-          },
-          persistent: true
-        }).onOk(async () => {
-          await remove(id)
-          $q.notify({
-            message: 'Conselho removido com sucesso!',
-            color: 'positive',
-            position: 'bottom-right'
-          })
-          getRows()
+        if (form.value.id) {
+          await update(form.value)
+        } else {
+          await post(form.value)
+        }
+        $q.notify({
+          message: 'Conselho cadastrado com sucesso!',
+          color: 'positive',
+          position: 'bottom-right'
         })
+        router.push({ name: 'ListaConselho' })
       } catch (error) {
         throw new Error(error)
       }
     }
-
     return {
-      rows,
-      columns,
-      handleRemovePost
+      form,
+      onSubmit
     }
   }
 })

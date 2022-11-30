@@ -29,7 +29,12 @@ const routes = [
         component: () => import('src/pages/Cadastros/CadastroQuestionario.vue')
       },
       {
-        path: 'CadastroConselho',
+        path: 'ListaConselho',
+        name: 'ListaConselho',
+        component: () => import('src/pages/Cadastros/ListaConselho.vue')
+      },
+      {
+        path: 'CadastroConselho/:id?',
         name: 'CadastroConselho',
         component: () => import('src/pages/Cadastros/CadastroConselho.vue')
       }

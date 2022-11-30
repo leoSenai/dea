@@ -64,7 +64,7 @@ const linksList = [
   {
     title: 'Cadastro de Conselho',
     icon: 'mode_edit',
-    route: { name: 'CadastroConselho' }
+    route: { name: 'ListaConselho' }
   }
 
 ]

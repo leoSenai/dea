@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
      <q-table
-      title="Lista de Conselhos"
+      title="Listagem de Pessoas Próximas"
       :rows="rows"
       row-key="name"
       :columns="columns"
@@ -9,16 +9,16 @@
     <template v-slot:top>
       <q-toolbar>
         <q-toolbar-title>
-          Lista de Conselhos
+          Listagem de Pessoas Próximas
         </q-toolbar-title>
         <q-space />
-        <q-btn flat label="Adicionar" color="primary" :to="{name :'CadastroConselho'}" />
+        <q-btn flat label="Adicionar" color="primary" :to="{name :'CadastroPessoasProximas'}" />
       </q-toolbar>
     </template>
     <template v-slot:body-cell-actions="props">
       <q-td :props="props" class="q-gutter-sm">
-        <q-btn icon="edit" color="warning" @click="handleEditConselho(props.row.id)" dense/>
-        <q-btn  icon="delete" color="negative" @click="handleRemoveConselho(props.row.id)" dense />
+        <q-btn icon="edit" color="warning" @click="handleEditPessoasProximas(props.row.id)" dense />
+        <q-btn  icon="delete" color="negative" @click="handleRemovePessoasProximas(props.row.id)" dense/>
       </q-td>
     </template>
   </q-table>
@@ -31,7 +31,7 @@ import postsService from 'src/services/posts'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 export default defineComponent({
-  name: 'ListaConselho',
+  name: 'ListaPessoasProximas',
   setup () {
     const rows = ref([])
     const columns = [{
@@ -44,7 +44,7 @@ export default defineComponent({
     {
       name: 'nome',
       field: 'nome',
-      label: 'Conselho',
+      label: 'PessoasProximas',
       align: 'center',
       sortable: true
     },
@@ -79,11 +79,11 @@ export default defineComponent({
       }
     }
 
-    const handleRemoveConselho = async (id) => {
+    const handleRemovePessoasProximas = async (id) => {
       try {
         $q.dialog({
           title: 'Remover',
-          message: 'Deseja realmente remover esse Conselho ?',
+          message: 'Deseja realmente remover essa Pessoa ?',
           cancel: {
             label: 'Cancelar',
             color: 'primary',
@@ -98,7 +98,7 @@ export default defineComponent({
         }).onOk(async () => {
           await remove(id)
           $q.notify({
-            message: 'Conselho removido com sucesso!',
+            message: 'Pessoa removido com sucesso!',
             color: 'positive',
             position: 'bottom-right'
           })
@@ -108,15 +108,15 @@ export default defineComponent({
         throw new Error(error)
       }
     }
-    const handleEditConselho = (id) => {
-      router.push({ name: 'CadastroConselho', params: { id } })
+    const handleEditPessoasProximas = (id) => {
+      router.push({ name: 'CadastroPessoasProximas', params: { id } })
     }
 
     return {
       rows,
       columns,
-      handleRemoveConselho,
-      handleEditConselho,
+      handleRemovePessoasProximas,
+      handleEditPessoasProximas,
       dense: ref(true)
     }
   }

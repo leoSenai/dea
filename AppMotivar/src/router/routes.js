@@ -14,17 +14,17 @@ const routes = [
         component: () => import('pages/IndexPage.vue')
       },
       {
-        path: 'CadastroPacientes',
+        path: 'CadastroPacientes/:id?',
         name: 'CadastroPacientes',
         component: () => import('pages/Cadastros/CadastroPacientes.vue')
       },
       {
-        path: 'CadastroPessoasProximas',
-        name: 'CadastroPessoasProximas',
-        component: () => import('src/pages/Cadastros/CadastroPessoasProximas.vue')
+        path: 'ListaPessoasProximas',
+        name: 'ListaPessoasProximas',
+        component: () => import('src/pages/Cadastros/ListaPessoasProximas.vue')
       },
       {
-        path: 'CadastroQuestionario',
+        path: 'CadastroQuestionario/:id?',
         name: 'CadastroQuestionario',
         component: () => import('src/pages/Cadastros/CadastroQuestionario.vue')
       },
@@ -37,6 +37,11 @@ const routes = [
         path: 'CadastroConselho/:id?',
         name: 'CadastroConselho',
         component: () => import('src/pages/Cadastros/CadastroConselho.vue')
+      },
+      {
+        path: 'CadastroPessoasProximas/:id?',
+        name: 'CadastroPessoasProximas',
+        component: () => import('src/pages/Cadastros/CadastroPessoasProximas.vue')
       }
     ]
   },

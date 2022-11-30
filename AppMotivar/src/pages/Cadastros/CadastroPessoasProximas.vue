@@ -5,49 +5,43 @@
         <div class="text-h6">Cadastro de Pessoas Próximas</div>
       </q-card-section>
       <q-card-section>
-        <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+        <q-form @submit="onSubmit" class="q-gutter-md">
           <q-input
             outlined
-            v-model="nome"
+            v-model="form.nome"
             label="Nome"
             lazy-rules
-            :dense="dense"
+            dense
             :rules="[(val) => val.length > 0 || 'Nome é obrigatório']"
           />
           <q-input
             outlined
-            v-model="cpf"
+            v-model="form.cpf"
             label="CPF"
             lazy-rules
-            :dense="dense"
+            dense
             :rules="[(val) => val.length > 0 || 'CPF é obrigatório']"
           />
           <q-input
             outlined
-            v-model="rg"
+            v-model="form.rg"
             label="RG"
             lazy-rules
-            :dense="dense"
+            dense
             :rules="[(val) => val.length > 0 || 'RG é obrigatório']"
           />
           <q-input
             outlined
-            v-model="email"
+            v-model="form.email"
             label="Email"
             lazy-rules
-            :dense="dense"
+            dense
             :rules="[(val) => val.length > 0 || 'Email é obrigatório']"
           />
-          <div class="">
-            <q-btn label="Salvar" type="submit" color="primary" />
-            <q-btn
-              label="Limpar"
-              type="reset"
-              color="primary"
-              flat
-              class="q-ml-sm"
-            />
-          </div>
+          <q-card-actions align="right">
+            <q-btn label="Cancelar" color="negative" :to="{name: 'ListaPessoasProximas'}" />
+            <q-btn label="Salvar"  type="submit" color="primary" />
+          </q-card-actions>
         </q-form>
       </q-card-section>
     </q-card>
@@ -56,20 +50,41 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
+import postsService from 'src/services/posts'
 export default defineComponent({
   name: 'CadastroPessoasProximas',
   setup () {
+    const router = useRouter()
+    const { $q } = useQuasar()
+    const { update, post } = postsService()
+    const form = ref({
+      nome: '',
+      cpf: '',
+      rg: '',
+      email: ''
+    })
+    const onSubmit = async () => {
+      try {
+        if (form.value.id) {
+          await update(form.value)
+        } else {
+          await post(form.value)
+        }
+        $q.notify({
+          message: 'Conselho cadastrado com sucesso!',
+          color: 'positive',
+          position: 'bottom-right'
+        })
+        router.push({ name: 'ListaConselho' })
+      } catch (error) {
+        throw new Error(error)
+      }
+    }
     return {
-      form: {
-        nome: '',
-        cpf: '',
-        rg: '',
-        email: '',
-        onSubmit () {
-          console.log('submit')
-        },
-        onReset () {}
-      },
+      form,
+      onSubmit,
       dense: ref(true)
     }
   }

@@ -7,7 +7,6 @@
             src="../assets/logo/logoPerhaps.png"
             alt="Logo Clínica Motivar"
             flat
-            dense
             round
             aria-label="Menu"
             @click.prevent="toggleLeftDrawer"
@@ -54,7 +53,7 @@ const linksList = [
   {
     title: 'Cadastro pessoas próximas',
     icon: 'mode_edit',
-    route: { name: 'CadastroPessoasProximas' }
+    route: { name: 'ListaPessoasProximas' }
   },
   {
     title: 'Cadastro de questionário',

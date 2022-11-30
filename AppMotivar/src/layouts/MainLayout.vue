@@ -13,6 +13,7 @@
           />
         </q-avatar>
         <q-toolbar-title> Clínica Motivar </q-toolbar-title>
+        <DarkModeToglle/>
         <DropDownLogout />
       </q-toolbar>
     </q-header>
@@ -38,6 +39,7 @@ import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import FloatingActionButton from 'components/FloatingActionButton.vue'
 import DropDownLogout from 'components/DropDownLogout.vue'
+import DarkModeToglle from 'components/DarkModeToglle.vue'
 
 const linksList = [
   {
@@ -74,7 +76,8 @@ export default defineComponent({
   components: {
     EssentialLink,
     FloatingActionButton,
-    DropDownLogout
+    DropDownLogout,
+    DarkModeToglle
   },
 
   setup () {

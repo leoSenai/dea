@@ -52,13 +52,13 @@
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
-import postsService from 'src/services/posts'
+import importaMetodosListagemConselho from 'src/services/posts'
 export default defineComponent({
   name: 'CadastroPessoasProximas',
   setup () {
     const router = useRouter()
     const { $q } = useQuasar()
-    const { update, post } = postsService()
+    const { update, post } = importaMetodosListagemConselho()
     const form = ref({
       nome: '',
       cpf: '',

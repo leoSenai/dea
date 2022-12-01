@@ -34,7 +34,7 @@
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
-import postsService from 'src/services/posts'
+import importaMetodosListagemConselho from 'src/services/posts'
 import { useQuasar } from 'quasar'
 import { useRouter, useRoute } from 'vue-router'
 export default defineComponent({
@@ -45,7 +45,7 @@ export default defineComponent({
       ultimaAlteracao: ''
     })
     const $q = useQuasar()
-    const { post, getById, update } = postsService()
+    const { post, getById, update } = importaMetodosListagemConselho()
     const router = useRouter()
     const route = useRoute()
     onMounted(async () => {

@@ -27,7 +27,7 @@
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
-import postsService from 'src/services/posts'
+import importaMetodosListagemConselho from 'src/services/posts'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 export default defineComponent({
@@ -63,7 +63,7 @@ export default defineComponent({
       sortable: true
     }
     ]
-    const { list, remove } = postsService()
+    const { list, remove } = importaMetodosListagemConselho()
     onMounted(async () => {
       getRows()
     })

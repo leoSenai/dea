@@ -5,7 +5,7 @@
         <div class="text-h6">Cadastro de Pacientes</div>
       </q-card-section>
       <q-card-section>
-        <q-form @submit="onSubmit" class="q-gutter-md">
+        <q-form @submit="OnSubmit" class="q-gutter-md">
           <!-- campo nome com limite de 10 caracteres -->
           <q-input
             outlined
@@ -25,40 +25,12 @@
           />
           <q-input
             outlined
-            v-model="form.cidade"
-            label="Cidade"
-            ondemandString
-            dense
-            :rules="[(val) => val.length > 0 || 'Cidade é obrigatório']"
-          />
-          <q-input
-            outlined
             v-model="form.bairro"
             label="Bairro"
             ondemandString
             dense
-            :rules="[(val) => val.length > 0 || 'Bairro é obrigatório']"
+            :rules="[(val) => val.length > 0 || 'cep é obrigatório']"
           />
-          <q-input
-            outlined
-            v-model="form.rua"
-            label="Rua"
-            ondemandString
-            dense
-            :rules="[(val) => val.length > 0 || 'Rua é obrigatório']"
-          />
-          <q-input
-            outlined
-            v-model="form.numero"
-            label="Número"
-            ondemandString
-            dense
-            :rules="[(val) => val.length > 0 || 'Número é obrigatório']"
-          />
-          <q-card-actions align="right">
-            <q-btn label="Cancelar" color="negative" :to="{name: 'ListaPacientes'}" />
-            <q-btn label="Salvar"  type="submit" color="primary" />
-          </q-card-actions>
         </q-form>
       </q-card-section>
     </q-card>
@@ -77,33 +49,19 @@ export default defineComponent({
     const form = ref({
       cep: '',
       nome: '',
-      bairro: '',
-      cidade: '',
-      rua: '',
-      numero: ''
+      bairro: ''
     })
     const { getCep } = BuscaEnderecoPorCep()
     const { post, update } = importaMetodosCadastroPacientes
     const router = useRouter()
-    const $q = useQuasar()
+    const { $q } = useQuasar()
 
     // usar watch para observar mudanças no campo de cep e buscar na api pelo getCep
     watch(form.value, async (val) => {
       if (val.cep.length === 8) {
         try {
           const response = await getCep(val.cep)
-          console.log(response.erro)
-          if (response.erro) {
-            $q.notify({
-              message: 'Não foi possível encontrar o CEP',
-              color: 'negative',
-              position: 'top'
-            })
-            return
-          }
-          form.value.cidade = response.localidade ? response.localidade : ''
-          form.value.bairro = response.bairro ? response.bairro : ''
-          form.value.rua = response.logradouro ? response.logradouro : ''
+          form.value.bairro = response.bairro
         } catch (error) {
           throw new Error(error)
         }
@@ -118,7 +76,7 @@ export default defineComponent({
           await post(form.value)
         }
         $q.notify({
-          message: 'Paciente cadastrado com sucesso!',
+          message: 'Conselho cadastrado com sucesso!',
           color: 'positive',
           position: 'bottom-right'
         })

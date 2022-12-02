@@ -1,8 +1,8 @@
 import useApi from 'src/composables/UseApi'
 
 export default function importaMetodosListagemConselho () {
-  const { list, post, update, remove, getById } = useApi('conselho')
-  return { list, post, update, remove, getById }
+  const { list, post, update, remove, getById, getCep } = useApi('conselho')
+  return { list, post, update, remove, getById, getCep }
 }
 
 export function importaMetodosCadastroConselho () {
@@ -18,4 +18,13 @@ export function importaMetodosListagemPessoasProximas () {
 export function importaMetodosCadastroPessoasProximas () {
   const { list, post, update, remove, getById } = useApi('conselho')
   return { list, post, update, remove, getById }
+}
+export function importaMetodosCadastroPacientes () {
+  const { list, post, update, remove, getById } = useApi('conselho')
+  return { list, post, update, remove, getById }
+}
+
+export function BuscaEnderecoPorCep () {
+  const { getCep } = useApi('')
+  return { getCep }
 }

@@ -49,16 +49,16 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
-import importaMetodosListagemConselho from 'src/services/posts'
+import importaMetodosListagemPessoasProximas from 'src/services/posts'
 export default defineComponent({
   name: 'CadastroPessoasProximas',
   setup () {
     const router = useRouter()
     const { $q } = useQuasar()
-    const { update, post } = importaMetodosListagemConselho()
+    const { update, post, getCep } = importaMetodosListagemPessoasProximas()
     const form = ref({
       nome: '',
       cpf: '',
@@ -82,6 +82,12 @@ export default defineComponent({
         throw new Error(error)
       }
     }
+    watch(() => form.value.cpf, async () => {
+      if (form.value.cpf.length === 11) {
+        await getCep(form.value.cpf)
+      }
+    })
+
     return {
       form,
       onSubmit,

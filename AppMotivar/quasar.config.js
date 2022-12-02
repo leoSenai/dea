@@ -28,7 +28,6 @@ module.exports = configure(function (ctx) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
     boot: [
-
       'axios'
     ],
 
@@ -106,10 +105,9 @@ module.exports = configure(function (ctx) {
           negative: '#C10015',
           info: '#31CCEC',
           warning: '#F2C037'
-        },
-        lang: 'pt-br'
+        }
       },
-
+      lang: 'pt-br',
       // iconSet: 'material-icons', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
 

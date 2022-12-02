@@ -42,11 +42,21 @@ export default function useApi (url) {
     }
   }
 
+  const getCep = async (cep) => {
+    try {
+      const { data } = await api.get(`https://viacep.com.br/ws/${cep}/json/`)
+      return data
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
   return {
     list,
     post,
     update,
     remove,
-    getById
+    getById,
+    getCep
   }
 }

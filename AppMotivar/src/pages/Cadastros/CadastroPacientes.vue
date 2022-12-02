@@ -15,14 +15,11 @@
             dense
             :rules="[(val) => val.length > 0 || 'Nome é obrigatório']"
           />
-          <q-input
-            outlined
-            v-model="form.cep"
-            label="cep"
-            ondemandString
-            dense
-            :rules="[(val) => val.length > 0 || 'cep é obrigatório']"
-          />
+          <q-input outlined v-model="form.cep" dense label="Cep" type="search" debounce="500">
+            <template v-slot:append>
+            <q-icon name="search" />
+            </template>
+          </q-input>
           <q-input
             outlined
             v-model="form.cidade"
@@ -82,17 +79,16 @@ export default defineComponent({
       rua: '',
       numero: ''
     })
+
     const { getCep } = BuscaEnderecoPorCep()
     const { post, update } = importaMetodosCadastroPacientes
     const router = useRouter()
     const $q = useQuasar()
 
-    // usar watch para observar mudanças no campo de cep e buscar na api pelo getCep
-    watch(form.value, async (val) => {
-      if (val.cep.length === 8) {
+    watch(() => form.value.cep, async (val) => {
+      if (val.length === 8) {
         try {
-          const response = await getCep(val.cep)
-          console.log(response.erro)
+          const response = await getCep(val)
           if (response.erro) {
             $q.notify({
               message: 'Não foi possível encontrar o CEP',

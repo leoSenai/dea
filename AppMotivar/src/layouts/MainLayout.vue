@@ -44,7 +44,7 @@ import DarkModeToglle from 'components/DarkModeToglle.vue'
 const linksList = [
   {
     title: 'Home',
-    icon: 'home',
+    icon: 'mdi-home-account',
     route: { name: 'IndexPage' }
   },
   {

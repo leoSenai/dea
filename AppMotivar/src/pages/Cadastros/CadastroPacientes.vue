@@ -5,37 +5,44 @@
         <div class="text-h6">Cadastro de Pacientes</div>
       </q-card-section>
       <q-card-section>
-        <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+        <q-form @submit="onSubmit" class="q-gutter-md">
           <q-input
             outlined
-            v-model="nome"
+            v-model="form.nome"
             label="Nome"
             lazy-rules
-            :dense="dense"
+            dense
             :rules="[(val) => val.length > 0 || 'Nome é obrigatório']"
           />
           <q-input
             outlined
-            v-model="cpf"
+            v-model="form.cpf"
             label="CPF"
             lazy-rules
-            :dense="dense"
+            dense
             :rules="[(val) => val.length > 0 || 'CPF é obrigatório']"
           />
+
+          <q-input outlined v-model="form.dataNascimento" mask="##/##/####" :rules="['##/##/####']">
+            <template v-slot:append>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                  <q-date v-model="form.dataNascimento" mask="DD-MM-YYYY" dense>
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Fechar" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+
           <q-input
             outlined
-            v-model="rg"
-            label="RG"
-            lazy-rules
-            :dense="dense"
-            :rules="[(val) => val.length > 0 || 'RG é obrigatório']"
-          />
-          <q-input
-            outlined
-            v-model="email"
+            v-model="form.email"
             label="Email"
             lazy-rules
-            :dense="dense"
+            dense
             :rules="[(val) => val.length > 0 || 'Email é obrigatório']"
           />
           <div class="">
@@ -56,21 +63,19 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
+
 export default defineComponent({
   name: 'IndexPage',
   setup () {
+    const form = ref({
+      nome: '',
+      cpf: '',
+      dataNascimento: '',
+      email: ''
+    })
+
     return {
-      form: {
-        nome: '',
-        cpf: '',
-        rg: '',
-        email: '',
-        onSubmit () {
-          console.log('submit')
-        },
-        onReset () {}
-      },
-      dense: ref(true)
+      form
     }
   }
 })

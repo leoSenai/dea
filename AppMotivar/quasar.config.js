@@ -106,7 +106,8 @@ module.exports = configure(function (ctx) {
           negative: '#C10015',
           info: '#31CCEC',
           warning: '#F2C037'
-        }
+        },
+        lang: 'pt-br'
       },
 
       // iconSet: 'material-icons', // Quasar icon set

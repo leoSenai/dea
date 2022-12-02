@@ -4,28 +4,30 @@
       <q-card-section>
         <div class="text-h6">Cadastro de Pacientes</div>
       </q-card-section>
-      <q-card-section>
-        <q-form @submit="onSubmit" class="q-gutter-md">
+      <q-card-section class="row">
+        <q-form @submit="onSubmit" class="q-gutter-md col-sm-12 col-md-10 col-xs-12" >
           <!-- campo nome com limite de 10 caracteres -->
           <q-input
             outlined
             v-model="form.nome"
             label="Nome"
             ondemandString
-            dense
             :rules="[(val) => val.length > 0 || 'Nome é obrigatório']"
+            class="col-12"
           />
-          <q-input outlined v-model="form.cep" dense label="Cep" type="search" debounce="500">
-            <template v-slot:append>
-            <q-icon name="search" />
-            </template>
-          </q-input>
+
+          <q-input
+            outlined
+            v-model="form.cep"
+            label="Cep"
+            ondemandString
+            :rules="[(val) => val.length > 0 || 'Cep é obrigatório']" />
+
           <q-input
             outlined
             v-model="form.cidade"
             label="Cidade"
             ondemandString
-            dense
             :rules="[(val) => val.length > 0 || 'Cidade é obrigatório']"
           />
           <q-input
@@ -33,7 +35,7 @@
             v-model="form.bairro"
             label="Bairro"
             ondemandString
-            dense
+
             :rules="[(val) => val.length > 0 || 'Bairro é obrigatório']"
           />
           <q-input
@@ -41,7 +43,7 @@
             v-model="form.rua"
             label="Rua"
             ondemandString
-            dense
+
             :rules="[(val) => val.length > 0 || 'Rua é obrigatório']"
           />
           <q-input
@@ -49,7 +51,7 @@
             v-model="form.numero"
             label="Número"
             ondemandString
-            dense
+
             :rules="[(val) => val.length > 0 || 'Número é obrigatório']"
           />
           <q-card-actions align="right">
@@ -126,7 +128,6 @@ export default defineComponent({
 
     return {
       form,
-      dense: ref(true),
       onSubmit
     }
   }

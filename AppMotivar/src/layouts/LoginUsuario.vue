@@ -1,14 +1,21 @@
 <template>
-    <img src="../assets/img/wave.svg" class="wave" alt="login-wave">
-    <div class="row" style="height: 98vh">
-      <div class="col-0 col-md-6 flex justify-center content-center">
-        <img src="../assets/img/login.svg" class="responsive" alt="login-image">
+   <q-layout >
+   <q-page-container>
+    <q-page class="flex flex-center" style="background: radial-gradient(circle, #386923 0%, #519832 100%)">
+
+    <q-card class="rounded">
+    <img src="../assets/img/mesh-463.png" class="wave" alt="login-wave">
+    <div class="row" style="height: 98vh" >
+      <div class="col-0 col-md-6 flex teste justify-center content-center">
+        <img src="../assets/img/login.svg"  class="responsive" alt="login-image">
       </div>
-      <div v-bind:class="{'justify-center': $q.screen.md || $q.screen.sm || $q-screen.xs}"
+      <div v-bind:class="{'justify-center': $q.screen.md || $q.screen.sm || $q.screen.xs  || $q.screen.lg  }"
             class="col-12 col-md-6 flex content-center">
-        <q-card v-bind:style="$q.screen.lt.sm ? {'width':'80%'} : {'width':'50%'}">
+        <q-card :style="{'width': cardStyle}">
           <q-card-section>
-            <q-avatar size="100px" class="absolute-center shadow-10">
+            <q-avatar
+            size="100px"
+            class="absolute-center shadow-10">
               <img src="../assets/img/logoPerhaps.png" alt="logo">
             </q-avatar>
           </q-card-section>
@@ -21,12 +28,25 @@
           </q-card-section>
           <q-card-section>
             <q-form class="q-gutter-md" @submit.prevent="submitForm">
-              <q-input label="Usuário" v-model="login.usuario">
-              </q-input>
-              <q-input label="Senha" type="password" v-model="login.senha">
-              </q-input>
+
+              <q-input
+              label="Usuário"
+              v-model="form.usuario"
+              :rules="[(val) => val.length > 0 || 'Usuário é obrigatório']"/>
+
+              <q-input
+              label="Senha"
+              type="password"
+              v-model="form.senha"
+              :rules="[(val) => val.length > 6 || 'Senha é obrigatório']"/>
+
               <div>
-                <q-btn class="full-width" color="primary" label="Login" type="submit" rounded></q-btn>
+                <q-btn
+                class="full-width"
+                color="primary"
+                label="Login"
+                type="submit"
+                rounded></q-btn>
                 <div class="text-center q-mt-sm q-gutter-lg">
                   <router-link class="text-black" to="/">Esqueceu a senha?</router-link>
                 </div>
@@ -36,41 +56,37 @@
         </q-card>
       </div>
     </div>
+    </q-card>
+  </q-page>
+  </q-page-container>
+  </q-layout>
 </template>
 <script>
 import { useQuasar } from 'quasar'
-let $q
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   name: 'LoginUsuario',
-  data () {
-    return {
-      login: {
-        usuario: '',
-        senha: ''
-      }
-    }
-  },
-  methods: {
-    submitForm () {
+  setup () {
+    const $q = useQuasar()
+    const cardStyle = ref($q.screen.lt.sm ? '80%' : '50%')
+    const submitForm = () => {
       if (!this.login.usuario || !this.login.senha) {
         $q.notify({
           type: 'negative',
           message: 'Os dados informados são inválidos!'
         })
-      } else if (this.login.senha.length < 6) {
-        $q.notify({
-          type: 'negative',
-          message: 'A senha deve ter 6 ou mais caracteres!'
-        })
-      } else {
-        console.log('login')
       }
     }
-  },
-  mounted () {
-    $q = useQuasar()
+    const form = ref({
+      usuario: '',
+      senha: ''
+    })
+    return {
+      form,
+      submitForm,
+      cardStyle
+    }
   }
 })
 </script>
@@ -82,6 +98,16 @@ export default defineComponent({
   left: 0;
   bottom: 0;
   z-index: -1;
+}
+
+.responsive{
+  width: 95%;
+  height: auto;
+  z-index: 1;
+}
+
+.teste{
+  background-color: #3c69349d;
 }
 
 </style>

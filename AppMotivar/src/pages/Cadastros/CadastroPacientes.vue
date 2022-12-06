@@ -43,6 +43,7 @@
             v-model="form.cep"
             label="CEP"
             ondemandString
+            @blur="buscaCep"
             mask="#####-###"
             :rules="[(val) => val.length > 0 && val.length <= 9 || 'CEP é obrigatório']" />
 
@@ -89,7 +90,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch, onMounted } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import { BuscaEnderecoPorCep, importaMetodosCadastroPacientes } from 'src/services/posts'
 import { useRouter, useRoute } from 'vue-router'
 import { useQuasar } from 'quasar'
@@ -124,26 +125,20 @@ export default defineComponent({
         throw new Error(error)
       }
     }
-    watch(() => form.value.cep, async (val) => {
-      if (val.length === 9) {
-        try {
-          const response = await getCep(val)
-          if (response.erro) {
-            $q.notify({
-              message: 'Não foi possível encontrar o CEP',
-              color: 'negative',
-              position: 'top'
-            })
-            return
-          }
-          form.value.cidade = response.localidade ? response.localidade : ''
-          form.value.bairro = response.bairro ? response.bairro : ''
-          form.value.rua = response.logradouro ? response.logradouro : ''
-        } catch (error) {
-          throw new Error(error)
-        }
+    const buscaCep = async () => {
+      const response = await getCep(form.value.cep)
+      if (response.erro) {
+        $q.notify({
+          message: 'Não foi possível encontrar o CEP',
+          color: 'negative',
+          position: 'top'
+        })
+        return
       }
-    })
+      form.value.cidade = response.localidade ? response.localidade : ''
+      form.value.bairro = response.bairro ? response.bairro : ''
+      form.value.rua = response.logradouro ? response.logradouro : ''
+    }
 
     const onSubmit = async () => {
       if (form.value.id) {
@@ -161,7 +156,8 @@ export default defineComponent({
 
     return {
       form,
-      onSubmit
+      onSubmit,
+      buscaCep
     }
   }
 })

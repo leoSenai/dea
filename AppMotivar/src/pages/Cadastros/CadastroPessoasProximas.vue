@@ -11,7 +11,6 @@
             v-model="form.nome"
             label="Nome"
             lazy-rules
-            dense
             :rules="[(val) => val.length > 0 || 'Nome é obrigatório']"
           />
           <q-input
@@ -19,23 +18,14 @@
             v-model="form.cpf"
             label="CPF"
             lazy-rules
-            dense
             :rules="[(val) => val.length > 0 || 'CPF é obrigatório']"
           />
-          <q-input
-            outlined
-            v-model="form.rg"
-            label="RG"
-            lazy-rules
-            dense
-            :rules="[(val) => val.length > 0 || 'RG é obrigatório']"
-          />
+
           <q-input
             outlined
             v-model="form.email"
             label="Email"
             lazy-rules
-            dense
             :rules="[(val) => val.length > 0 || 'Email é obrigatório']"
           />
           <q-card-actions align="right">
@@ -49,16 +39,16 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
-import importaMetodosListagemPessoasProximas from 'src/services/posts'
+import { importaMetodosListagemPessoasProximas } from 'src/services/posts'
 export default defineComponent({
   name: 'CadastroPessoasProximas',
   setup () {
     const router = useRouter()
     const { $q } = useQuasar()
-    const { update, post, getCep } = importaMetodosListagemPessoasProximas()
+    const { update, post } = importaMetodosListagemPessoasProximas()
     const form = ref({
       nome: '',
       cpf: '',
@@ -66,32 +56,22 @@ export default defineComponent({
       email: ''
     })
     const onSubmit = async () => {
-      try {
-        if (form.value.id) {
-          await update(form.value)
-        } else {
-          await post(form.value)
-        }
-        $q.notify({
-          message: 'Conselho cadastrado com sucesso!',
-          color: 'positive',
-          position: 'bottom-right'
-        })
-        router.push({ name: 'ListaConselho' })
-      } catch (error) {
-        throw new Error(error)
+      if (form.value.id) {
+        await update(form.value)
+      } else {
+        await post(form.value)
       }
+      $q.notify({
+        message: 'Conselho cadastrado com sucesso!',
+        color: 'positive',
+        position: 'bottom-right'
+      })
+      router.push({ name: 'ListaConselho' })
     }
-    watch(() => form.value.cpf, async () => {
-      if (form.value.cpf.length === 11) {
-        await getCep(form.value.cpf)
-      }
-    })
 
     return {
       form,
-      onSubmit,
-      dense: ref(true)
+      onSubmit
     }
   }
 })

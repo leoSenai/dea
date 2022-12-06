@@ -27,7 +27,7 @@
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
-import { importaMetodosCadastroPacientes } from 'src/services/posts'
+import { importaMetodosListagemPacientes } from 'src/services/posts'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 export default defineComponent({
@@ -98,7 +98,7 @@ export default defineComponent({
       sortable: true
     }
     ]
-    const { list, remove } = importaMetodosCadastroPacientes()
+    const { list, remove } = importaMetodosListagemPacientes()
     onMounted(async () => {
       getRows()
     })

@@ -24,7 +24,17 @@ export function importaMetodosCadastroPacientes () {
   return { list, post, update, remove, getById }
 }
 
+export function importaMetodosListagemPacientes () {
+  const { list, remove } = useApi('paciente')
+  return { list, remove }
+}
+
 export function BuscaEnderecoPorCep () {
   const { getCep } = useApi('')
+  return { getCep }
+}
+
+export function Login () {
+  const { getCep } = useApi('login')
   return { getCep }
 }

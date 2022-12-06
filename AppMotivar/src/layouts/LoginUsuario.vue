@@ -6,8 +6,8 @@
     <q-card class="rounded">
     <img src="../assets/img/mesh-463.png" class="wave" alt="login-wave">
     <div class="row" style="height: 98vh" >
-      <div class="col-0 col-md-6 flex teste justify-center content-center">
-        <img src="../assets/img/login.svg"  class="responsive" alt="login-image">
+      <div class="col-0 col-md-6 flex fundo-login justify-center content-center">
+        <img src="../assets/img/login-user.svg"  class="responsive" alt="login-image">
       </div>
       <div v-bind:class="{'justify-center': $q.screen.md || $q.screen.sm || $q.screen.xs  || $q.screen.lg  }"
             class="col-12 col-md-6 flex content-center">
@@ -41,14 +41,9 @@
               :rules="[(val) => val.length > 6 || 'Senha é obrigatório']"/>
 
               <div>
-                <q-btn
-                class="full-width"
-                color="primary"
-                label="Login"
-                type="submit"
-                rounded></q-btn>
+                <q-btn class="full-width" color="primary" label="Login" type="submit" rounded></q-btn>
                 <div class="text-center q-mt-sm q-gutter-lg">
-                  <router-link class="text-black" to="/">Esqueceu a senha?</router-link>
+                  <router-link class="text-black" to="/LoginEsqueceSenha">Esqueceu a senha?</router-link>
                 </div>
               </div>
             </q-form>
@@ -69,14 +64,11 @@ export default defineComponent({
   name: 'LoginUsuario',
   setup () {
     const $q = useQuasar()
-    const cardStyle = ref($q.screen.lt.sm ? '80%' : '50%')
+    const cardStyle = ref($q.screen.lt.sm ? '90%' : '70%')
     const submitForm = () => {
-      if (!this.login.usuario || !this.login.senha) {
-        $q.notify({
-          type: 'negative',
-          message: 'Os dados informados são inválidos!'
-        })
-      }
+      console.log('Login feito com sucesso!')
+      console.log(form.value.usuario)
+      console.log(form.value.senha)
     }
     const form = ref({
       usuario: '',
@@ -106,7 +98,7 @@ export default defineComponent({
   z-index: 1;
 }
 
-.teste{
+.fundo-login{
   background-color: #3c69349d;
 }
 

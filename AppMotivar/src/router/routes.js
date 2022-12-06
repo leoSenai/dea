@@ -55,6 +55,11 @@ const routes = [
     name: 'LoginUsuario',
     component: () => import('layouts/LoginUsuario.vue')
   },
+  {
+    path: '/LoginEsqueceSenha',
+    name: 'LoginEsqueceSenha',
+    component: () => import('layouts/LoginEsqueceSenha.vue')
+  },
 
   // Always leave this as last one,
   // but you can also remove it

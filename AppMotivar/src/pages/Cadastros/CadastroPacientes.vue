@@ -146,21 +146,17 @@ export default defineComponent({
     })
 
     const onSubmit = async () => {
-      try {
-        if (form.value.id) {
-          await update(form.value)
-        } else {
-          await post(form.value)
-        }
-        $q.notify({
-          message: 'Paciente cadastrado com sucesso!',
-          color: 'positive',
-          position: 'bottom-right'
-        })
-        router.push({ name: 'ListaPacientes' })
-      } catch (error) {
-        throw new Error(error)
+      if (form.value.id) {
+        await update(form.value)
+      } else {
+        await post(form.value)
       }
+      $q.notify({
+        message: 'Paciente cadastrado com sucesso!',
+        color: 'positive',
+        position: 'bottom-right'
+      })
+      router.push({ name: 'ListaPacientes' })
     }
 
     return {

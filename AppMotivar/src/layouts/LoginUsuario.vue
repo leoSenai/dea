@@ -3,13 +3,13 @@
    <q-page-container>
     <q-page class="flex flex-center" style="background: radial-gradient(circle, #386923 0%, #519832 100%)">
 
-    <q-card class="rounded">
+    <q-card class="rounded" style="width: 150vh">
     <img src="../assets/img/mesh-463.png" class="wave" alt="login-wave">
     <div class="row" style="height: 98vh" >
       <div class="col-0 col-md-6 flex fundo-login justify-center content-center">
         <img src="../assets/img/login-user.svg"  class="responsive" alt="login-image">
       </div>
-      <div v-bind:class="{'justify-center': $q.screen.md || $q.screen.sm || $q.screen.xs  || $q.screen.lg  }"
+      <div :class="{'justify-center': $q.screen.md || $q.screen.sm || $q.screen.xs  || $q.screen.lg  }"
             class="col-12 col-md-6 flex content-center">
         <q-card :style="{'width': cardStyle}">
           <q-card-section>
@@ -41,7 +41,7 @@
               :rules="[(val) => val.length > 6 || 'Senha é obrigatório']"/>
 
               <div>
-                <q-btn class="full-width" color="primary" label="Login" type="submit" rounded></q-btn>
+                <q-btn class="full-width" color="primary" label="Login" type="submit" to="/IndexPage" rounded></q-btn>
                 <div class="text-center q-mt-sm q-gutter-lg">
                   <router-link class="text-black" to="/LoginEsqueceSenha">Esqueceu a senha?</router-link>
                 </div>
@@ -66,9 +66,7 @@ export default defineComponent({
     const $q = useQuasar()
     const cardStyle = ref($q.screen.lt.sm ? '90%' : '70%')
     const submitForm = () => {
-      console.log('Login feito com sucesso!')
-      console.log(form.value.usuario)
-      console.log(form.value.senha)
+
     }
     const form = ref({
       usuario: '',

@@ -39,6 +39,9 @@
                  type="submit"
                  rounded></q-btn>
                </div>
+               <div class="text-center q-mt-sm q-gutter-lg">
+                  <router-link class="text-black" to="/LoginUsuario">Voltar</router-link>
+                </div>
              </q-form>
            </q-card-section>
          </q-card>
@@ -58,12 +61,12 @@ export default defineComponent({
     const $q = useQuasar()
     const cardStyle = ref($q.screen.lt.sm ? '90%' : '70%')
     const submitForm = () => {
-      if (!this.form.email) {
-        $q.notify({
-          type: 'negative',
-          message: 'Os dados informados são inválidos!'
-        })
-      }
+      $q.notify({
+        message: 'Email enviado com sucesso!',
+        color: 'positive',
+        position: 'top',
+        timeout: 2000
+      })
     }
     const form = ref({
       email: ''

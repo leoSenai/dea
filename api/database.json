@@ -20,11 +20,6 @@
     {
       "nome": "testeasdfasdf",
       "ultimaAlteracao": "aaaaaasdfasdf",
-      "id": 13
-    },
-    {
-      "nome": "testeasdfasdf",
-      "ultimaAlteracao": "aaaaaasdfasdf",
       "id": 14
     },
     {
@@ -48,141 +43,51 @@
       "id": 19
     }
   ],
-  "estados": [
+  "paciente": [
     {
-      "id": 11,
-      "sigla": "RO",
-      "nome": "Rondônia"
+      "id": 1,
+      "nome": "Rafaelss",
+      "dataNascimento": "28/02/1990",
+      "cep": "89225-677",
+      "cidade": "Joinville",
+      "bairro": "Aventureiro",
+      "rua": "Rua Aristídes da Veiga Coutinho",
+      "numero": "119",
+      "cpf": "096.691.639-51"
     },
     {
-      "id": 12,
-      "sigla": "AC",
-      "nome": "Acre"
+      "cep": "89225677",
+      "nome": "mateus",
+      "bairro": "Aventureiro",
+      "cidade": "Joinville",
+      "rua": "Rua Aristídes da Veiga Coutinho",
+      "numero": "123",
+      "dataNascimento": "28/07/1997",
+      "cpf": "096.691.639-51",
+      "id": 2
     },
     {
-      "id": 13,
-      "sigla": "AM",
-      "nome": "Amazonas"
+      "cep": "89225-815",
+      "nome": "Matheus",
+      "bairro": "Aventureiro",
+      "cidade": "Joinville",
+      "rua": "Rua Ivani Ribeiro",
+      "numero": "89",
+      "dataNascimento": "23/09/2000",
+      "cpf": "123.121.323-32",
+      "id": 3
+    }
+  ],
+  "login": [
+    {
+      "id": 1,
+      "usuario": "rafael",
+      "senha": "00000000"
     },
     {
-      "id": 14,
-      "sigla": "RR",
-      "nome": "Roraima"
-    },
-    {
-      "id": 15,
-      "sigla": "PA",
-      "nome": "Pará"
-    },
-    {
-      "id": 16,
-      "sigla": "AP",
-      "nome": "Amapá"
-    },
-    {
-      "id": 17,
-      "sigla": "TO",
-      "nome": "Tocantins"
-    },
-    {
-      "id": 21,
-      "sigla": "MA",
-      "nome": "Maranhão"
-    },
-    {
-      "id": 22,
-      "sigla": "PI",
-      "nome": "Piauí"
-    },
-    {
-      "id": 23,
-      "sigla": "CE",
-      "nome": "Ceará"
-    },
-    {
-      "id": 24,
-      "sigla": "RN",
-      "nome": "Rio Grande do Norte"
-    },
-    {
-      "id": 25,
-      "sigla": "PB",
-      "nome": "Paraíba"
-    },
-    {
-      "id": 26,
-      "sigla": "PE",
-      "nome": "Pernambuco"
-    },
-    {
-      "id": 27,
-      "sigla": "AL",
-      "nome": "Alagoas"
-    },
-    {
-      "id": 28,
-      "sigla": "SE",
-      "nome": "Sergipe"
-    },
-    {
-      "id": 29,
-      "sigla": "BA",
-      "nome": "Bahia"
-    },
-    {
-      "id": 31,
-      "sigla": "MG",
-      "nome": "Minas Gerais"
-    },
-    {
-      "id": 32,
-      "sigla": "ES",
-      "nome": "Espírito Santo"
-    },
-    {
-      "id": 33,
-      "sigla": "RJ",
-      "nome": "Rio de Janeiro"
-    },
-    {
-      "id": 35,
-      "sigla": "SP",
-      "nome": "São Paulo"
-    },
-    {
-      "id": 41,
-      "sigla": "PR",
-      "nome": "Paraná"
-    },
-    {
-      "id": 42,
-      "sigla": "SC",
-      "nome": "Santa Catarina"
-    },
-    {
-      "id": 43,
-      "sigla": "RS",
-      "nome": "Rio Grande do Sul"
-    },
-    {
-      "id": 50,
-      "sigla": "MS",
-      "nome": "Mato Grosso do Sul"
-    },
-    {
-      "id": 51,
-      "sigla": "MT",
-      "nome": "Mato Grosso"
-    },
-    {
-      "id": 52,
-      "sigla": "GO",
-      "nome": "Goiás"
-    },
-    {
-      "id": 53,
-      "sigla": "DF",
-      "nome": "Distrito Federal"
+      "id": 2,
+      "usuario": "teste",
+      "senha": "12345678"
     }
   ]
 }

@@ -34,6 +34,11 @@ const routes = [
         component: () => import('src/pages/Cadastros/ListaConselho.vue')
       },
       {
+        path: 'ListaPacientes',
+        name: 'ListaPacientes',
+        component: () => import('src/pages/Cadastros/ListaPacientes.vue')
+      },
+      {
         path: 'CadastroConselho/:id?',
         name: 'CadastroConselho',
         component: () => import('src/pages/Cadastros/CadastroConselho.vue')

@@ -20,7 +20,7 @@ export function importaMetodosCadastroPessoasProximas () {
   return { list, post, update, remove, getById }
 }
 export function importaMetodosCadastroPacientes () {
-  const { list, post, update, remove, getById } = useApi('conselho')
+  const { list, post, update, remove, getById } = useApi('paciente')
   return { list, post, update, remove, getById }
 }
 

@@ -1,10 +1,11 @@
 <template>
   <q-page padding>
     <q-card>
-      <q-card-section>
+      <q-card-section class="row items-center justify-center">
         <div class="text-h6">Cadastro de Pacientes</div>
       </q-card-section>
-      <q-card-section class="row">
+      <q-card-section class="row items-center justify-center">
+
         <q-form @submit="onSubmit" class="q-gutter-md col-sm-12 col-md-10 col-xs-12" >
           <!-- campo nome com limite de 10 caracteres -->
           <q-input
@@ -13,15 +14,37 @@
             label="Nome"
             ondemandString
             :rules="[(val) => val.length > 0 || 'Nome é obrigatório']"
-            class="col-12"
           />
+
+          <q-input outlined v-model="form.dataNascimento" label="Data de Nascimento" mask="##/##/####" :rules="['##/##/####']">
+            <template v-slot:append>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                  <q-date v-model="form.dataNascimento" mask="DD/MM/YYYY">
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+
+          <q-input
+            outlined
+            v-model="form.cpf"
+            label="CPF"
+            mask="###.###.###-##"
+            ondemandString
+            :rules="[(val) => val.length > 0 || 'CPF é obrigatório']" />
 
           <q-input
             outlined
             v-model="form.cep"
-            label="Cep"
+            label="CEP"
             ondemandString
-            :rules="[(val) => val.length > 0 || 'Cep é obrigatório']" />
+            mask="#####-###"
+            :rules="[(val) => val.length > 0 && val.length <= 9 || 'CEP é obrigatório']" />
 
           <q-input
             outlined
@@ -30,14 +53,15 @@
             ondemandString
             :rules="[(val) => val.length > 0 || 'Cidade é obrigatório']"
           />
+
           <q-input
             outlined
             v-model="form.bairro"
             label="Bairro"
             ondemandString
-
             :rules="[(val) => val.length > 0 || 'Bairro é obrigatório']"
           />
+
           <q-input
             outlined
             v-model="form.rua"
@@ -65,9 +89,9 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref, watch, onMounted } from 'vue'
 import { BuscaEnderecoPorCep, importaMetodosCadastroPacientes } from 'src/services/posts'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useQuasar } from 'quasar'
 
 export default defineComponent({
@@ -79,16 +103,29 @@ export default defineComponent({
       bairro: '',
       cidade: '',
       rua: '',
-      numero: ''
+      numero: '',
+      dataNascimento: '',
+      cpf: ''
     })
 
     const { getCep } = BuscaEnderecoPorCep()
-    const { post, update } = importaMetodosCadastroPacientes
+    const { post, update, getById } = importaMetodosCadastroPacientes()
     const router = useRouter()
+    const route = useRoute()
     const $q = useQuasar()
+    onMounted(async () => {
+      if (route.params.id) getPost(route.params.id)
+    })
 
+    const getPost = async (id) => {
+      try {
+        form.value = await getById(id)
+      } catch (error) {
+        throw new Error(error)
+      }
+    }
     watch(() => form.value.cep, async (val) => {
-      if (val.length === 8) {
+      if (val.length === 9) {
         try {
           const response = await getCep(val)
           if (response.erro) {
@@ -120,7 +157,7 @@ export default defineComponent({
           color: 'positive',
           position: 'bottom-right'
         })
-        router.push({ name: 'ListaConselho' })
+        router.push({ name: 'ListaPacientes' })
       } catch (error) {
         throw new Error(error)
       }

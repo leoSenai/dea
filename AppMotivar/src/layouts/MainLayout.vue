@@ -50,7 +50,7 @@ const linksList = [
   {
     title: 'Cadastro de paciente',
     icon: 'mode_edit',
-    route: { name: 'CadastroPacientes' }
+    route: { name: 'ListaPacientes' }
   },
   {
     title: 'Cadastro pessoas próximas',

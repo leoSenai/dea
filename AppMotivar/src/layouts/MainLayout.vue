@@ -66,6 +66,11 @@ const linksList = [
     title: 'Cadastro de Conselho',
     icon: 'mode_edit',
     route: { name: 'ListaConselho' }
+  },
+  {
+    title: 'Cadastro de Profissionais',
+    icon: 'mode_edit',
+    route: { name: 'ListaProfissionais' }
   }
 
 ]

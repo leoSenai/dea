@@ -74,6 +74,30 @@
       "id": 2
     }
   ],
+  "profissional": [
+    {
+      "id": 1,
+      "nome": "Rafaelssxzsadasd",
+      "dataNascimento": "28/02/1990",
+      "cep": "89225-677",
+      "cidade": "Joinville",
+      "bairro": "Aventureiro",
+      "rua": "Rua Aristídes da Veiga Coutinho",
+      "numero": "119",
+      "cpf": "212.132.131-23"
+    },
+    {
+      "cep": "89225677",
+      "nome": "mateus",
+      "bairro": "Aventureiro",
+      "cidade": "Joinville",
+      "rua": "Rua Aristídes da Veiga Coutinho",
+      "numero": "123",
+      "dataNascimento": "28/07/1997",
+      "cpf": "096.691.639-51",
+      "id": 2
+    }
+  ],
   "login": [
     {
       "id": 1,

@@ -41,7 +41,7 @@
               :rules="[(val) => val.length > 6 || 'Senha é obrigatório']"/>
 
               <div>
-                <q-btn class="full-width" color="primary" label="Login" type="submit" to="/IndexPage" rounded></q-btn>
+                <q-btn class="full-width" color="primary" label="Login" type="submit" :to="{name: 'IndexPage'}" rounded></q-btn>
                 <div class="text-center q-mt-sm q-gutter-lg">
                   <router-link class="text-black" to="/LoginEsqueceSenha">Esqueceu a senha?</router-link>
                 </div>
@@ -65,8 +65,11 @@ export default defineComponent({
   setup () {
     const $q = useQuasar()
     const cardStyle = ref($q.screen.lt.sm ? '90%' : '70%')
+    const getUsers = async () => {
+      // criar validação para login e retirar o 'to' do botão submit
+    }
     const submitForm = () => {
-
+      getUsers()
     }
     const form = ref({
       usuario: '',

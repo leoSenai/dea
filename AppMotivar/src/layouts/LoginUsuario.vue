@@ -31,11 +31,13 @@
 
               <q-input
               label="Usuário"
+              outlined
               v-model="form.usuario"
               :rules="[(val) => val.length > 0 || 'Usuário é obrigatório']"/>
 
               <q-input
               label="Senha"
+              outlined
               type="password"
               v-model="form.senha"
               :rules="[(val) => val.length > 6 || 'Senha é obrigatório']"/>

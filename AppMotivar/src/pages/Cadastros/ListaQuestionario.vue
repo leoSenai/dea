@@ -12,7 +12,7 @@
           Listagem de Pessoas Próximas
         </q-toolbar-title>
         <q-space />
-        <q-btn flat label="Adicionar" color="primary" :to="{name :'CadastroPessoasProximas'}" />
+        <q-btn flat label="Adicionar" color="primary" :to="{name :'CadastroQuestionario'}" />
       </q-toolbar>
     </template>
     <template v-slot:body-cell-actions="props">
@@ -27,11 +27,11 @@
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
-import { importaMetodosListagemPessoasProximas } from 'src/services/posts'
+import { importaMetodosListagemQuestionarios } from 'src/services/posts'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 export default defineComponent({
-  name: 'ListaPessoasProximas',
+  name: 'ListaQuestionario',
   setup () {
     const rows = ref([])
     const columns = [{
@@ -42,16 +42,9 @@ export default defineComponent({
       sortable: true
     },
     {
-      name: 'cpf',
-      field: 'cpf',
-      label: 'CPF',
-      align: 'center',
-      sortable: true
-    },
-    {
-      name: 'email',
-      field: 'email',
-      label: 'Email',
+      name: 'range',
+      field: 'range',
+      label: 'Range',
       align: 'center',
       sortable: true
     },
@@ -63,7 +56,7 @@ export default defineComponent({
       sortable: true
     }
     ]
-    const { list, remove } = importaMetodosListagemPessoasProximas()
+    const { list, remove } = importaMetodosListagemQuestionarios()
     onMounted(async () => {
       getRows()
     })
@@ -109,7 +102,7 @@ export default defineComponent({
       }
     }
     const handleEditPessoasProximas = (id) => {
-      router.push({ name: 'CadastroPessoasProximas', params: { id } })
+      router.push({ name: 'CadastroQuestionario', params: { id } })
     }
 
     return {

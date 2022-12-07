@@ -41,6 +41,13 @@
       "nome": "qqq",
       "ultimaAlteracao": "123123",
       "id": 19
+    },
+    {
+      "nome": "teste",
+      "cpf": "09669163951",
+      "rg": "",
+      "email": "rafael_eduardo1997@hotmail.com",
+      "id": 20
     }
   ],
   "paciente": [
@@ -77,6 +84,80 @@
       "id": 2,
       "usuario": "teste",
       "senha": "12345678"
+    }
+  ],
+  "pessoasProximas": [
+    {
+      "id": 1,
+      "nome": "Rafaelssxzsadasd",
+      "cpf": "212.132.131-23",
+      "email": "rafael_eduardo1997@hotmail.com"
+    },
+    {
+      "nome": "rafael",
+      "cpf": "09669163951",
+      "rg": "",
+      "email": "rafael_eduardo188@hotmail.com",
+      "id": 2
+    },
+    {
+      "nome": "rafael",
+      "cpf": "09669163951",
+      "rg": "",
+      "email": "rafael_eduardo188@hotmail.com",
+      "id": 3
+    },
+    {
+      "nome": "teste",
+      "cpf": "096.691.639-51",
+      "email": "teste@gmail.com",
+      "id": 4
+    },
+    {
+      "nome": "teste",
+      "cpf": "123.123.123-21",
+      "email": "dfdsafsad",
+      "id": 5
+    },
+    {
+      "nome": "teste",
+      "cpf": "123.123.213-12",
+      "email": "teste",
+      "id": 6
+    },
+    {
+      "nome": "teste",
+      "cpf": "123.213.123-12",
+      "email": "tewteterte",
+      "id": 7
+    }
+  ],
+  "questionario": [
+    {
+      "id": 1,
+      "nome": "Rafaelssxzsadasd",
+      "range": "5"
+    },
+    {
+      "nome": "teste",
+      "range": "6",
+      "id": 2
+    },
+    {
+      "nome": "aa",
+      "range": "3",
+      "id": 3
+    },
+    {
+      "nome": "gtett",
+      "range": "332",
+      "id": 4
+    },
+    {
+      "nome": "sdas",
+      "range": "213123",
+      "ratingModel": 9,
+      "id": 5
     }
   ]
 }

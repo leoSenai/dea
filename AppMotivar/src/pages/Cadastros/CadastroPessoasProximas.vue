@@ -18,7 +18,8 @@
             v-model="form.cpf"
             label="CPF"
             lazy-rules
-            :rules="[(val) => val.length > 0 || 'CPF é obrigatório']"
+            mask="###.###.###-##"
+            :rules="[(val) => val.length > 13 || 'CPF é obrigatório']"
           />
 
           <q-input
@@ -47,12 +48,11 @@ export default defineComponent({
   name: 'CadastroPessoasProximas',
   setup () {
     const router = useRouter()
-    const { $q } = useQuasar()
+    const $q = useQuasar()
     const { update, post } = importaMetodosListagemPessoasProximas()
     const form = ref({
       nome: '',
       cpf: '',
-      rg: '',
       email: ''
     })
     const onSubmit = async () => {
@@ -66,7 +66,7 @@ export default defineComponent({
         color: 'positive',
         position: 'bottom-right'
       })
-      router.push({ name: 'ListaConselho' })
+      router.push({ name: 'ListaPessoasProximas' })
     }
 
     return {

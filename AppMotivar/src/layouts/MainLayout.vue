@@ -60,7 +60,7 @@ const linksList = [
   {
     title: 'Cadastro de questionário',
     icon: 'mode_edit',
-    route: { name: 'CadastroQuestionario' }
+    route: { name: 'ListaQuestionario' }
   },
   {
     title: 'Cadastro de Conselho',

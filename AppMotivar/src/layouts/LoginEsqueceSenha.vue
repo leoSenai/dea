@@ -38,10 +38,10 @@
                  label="Enviar"
                  type="submit"
                  rounded></q-btn>
-               </div>
-               <div class="text-center q-mt-sm q-gutter-lg">
+                <div class="text-center q-mt-sm q-gutter-lg">
                   <router-link class="text-black" to="/LoginUsuario">Voltar</router-link>
                 </div>
+              </div>
              </q-form>
            </q-card-section>
          </q-card>

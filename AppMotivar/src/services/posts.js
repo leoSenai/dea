@@ -39,6 +39,11 @@ export function importaMetodosListagemPacientes () {
   return { list, remove }
 }
 
+export function importaMetodosListagemProfissionais () {
+  const { list, post, update, remove, getById } = useApi('profissional')
+  return { list, post, update, remove, getById }
+}
+
 export function BuscaEnderecoPorCep () {
   const { getCep } = useApi('')
   return { getCep }

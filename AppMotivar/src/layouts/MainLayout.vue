@@ -1,37 +1,44 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-avatar>
-          <q-img
-            src="../assets/logo/logoPerhaps.png"
-            alt="Logo Clínica Motivar"
-            flat
-            round
-            aria-label="Menu"
-            @click.prevent="toggleLeftDrawer"
-          />
-        </q-avatar>
-        <q-toolbar-title> Clínica Motivar </q-toolbar-title>
-        <DarkModeToglle/>
-        <DropDownLogout />
-      </q-toolbar>
-    </q-header>
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list >
-        <q-item-label header > Profissional </q-item-label>
+  <div class="q-pa-md">
+    <q-layout view="hHh Lpr lff" class="shadow-2 rounded-borders">
+      <q-header elevated class="bg-primary">
+        <q-toolbar>
+          <q-avatar>
+            <q-img
+              src="../assets/logo/logoPerhaps.png"
+              alt="Logo Clínica Motivar"
+              flat
+              round
+              aria-label="Menu"
+              @click.prevent="toggleLeftDrawer"
+            />
+          </q-avatar>
+          <q-toolbar-title> Clínica Motivar </q-toolbar-title>
+          <DarkModeToglle/>
+          <DropDownLogout />
+        </q-toolbar>
+      </q-header>
+
+      <q-drawer
+        v-model="leftDrawerOpen"
+        show-if-above
+        elevated
+        class="bg-primary text-white"
+      >
+      <q-list>
         <EssentialLink
           v-for="route in essentialLinks"
           :key="route.title"
           v-bind="route"
         />
       </q-list>
-    </q-drawer>
-    <q-page-container>
-      <FloatingActionButton v-if="$q.platform.is.mobile" />
+      </q-drawer>
+      <q-page-container>
+        <FloatingActionButton v-if="$q.platform.is.mobile" />
       <router-view />
-    </q-page-container>
-  </q-layout>
+      </q-page-container>
+    </q-layout>
+  </div>
 </template>
 
 <script>

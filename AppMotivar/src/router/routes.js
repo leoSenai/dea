@@ -52,6 +52,26 @@ const routes = [
         path: 'ListaPacientes',
         name: 'ListaPacientes',
         component: () => import('src/pages/Cadastros/ListaPacientes.vue')
+      },
+      {
+        path: 'ListaProfissionais',
+        name: 'ListaProfissionais',
+        component: () => import('src/pages/Cadastros/ListaProfissionais.vue')
+      },
+      {
+        path: 'CadastroConselho/:id?',
+        name: 'CadastroConselho',
+        component: () => import('src/pages/Cadastros/CadastroConselho.vue')
+      },
+      {
+        path: 'CadastroPessoasProximas/:id?',
+        name: 'CadastroPessoasProximas',
+        component: () => import('src/pages/Cadastros/CadastroPessoasProximas.vue')
+      },
+      {
+        path: 'CadastroProfissionais/:id?',
+        name: 'CadastroProfissionais',
+        component: () => import('src/pages/Cadastros/CadastroProfissionais.vue')
       }
     ]
   },

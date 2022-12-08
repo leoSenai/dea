@@ -1,7 +1,7 @@
 <template>
     <q-page padding>
        <q-table
-        title="Listagem de Pessoas Próximas"
+        title="Listagem de Profissionais"
         :rows="rows"
         row-key="name"
         :columns="columns"
@@ -9,16 +9,16 @@
       <template v-slot:top>
         <q-toolbar>
           <q-toolbar-title>
-            Listagem de Pessoas Próximas
+            Listagem de Profissionais
           </q-toolbar-title>
           <q-space />
-          <q-btn flat label="Adicionar" color="primary" :to="{name :'CadastroPessoasProximas'}" />
+          <q-btn flat label="Adicionar" color="primary" :to="{name :'CadastroProfissionais'}" />
         </q-toolbar>
       </template>
       <template v-slot:body-cell-actions="props">
         <q-td :props="props" class="q-gutter-sm">
-          <q-btn icon="edit" color="warning" @click="handleEditPessoasProximas(props.row.id)" dense />
-          <q-btn  icon="delete" color="negative" @click="handleRemovePessoasProximas(props.row.id)" dense/>
+          <q-btn icon="edit" color="warning" @click="handleEditProfissionais(props.row.id)" dense />
+          <q-btn  icon="delete" color="negative" @click="handleRemoveProfissionais(props.row.id)" dense/>
         </q-td>
       </template>
     </q-table>
@@ -27,7 +27,7 @@
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
-import importaMetodosListagemConselho from 'src/services/posts'
+import { importaMetodosListagemProfissionais } from 'src/services/posts'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 export default defineComponent({
@@ -35,23 +35,23 @@ export default defineComponent({
   setup () {
     const rows = ref([])
     const columns = [{
-      name: 'id',
-      field: 'id',
-      label: 'id',
-      align: 'center',
-      sortable: true
-    },
-    {
       name: 'nome',
       field: 'nome',
-      label: 'PessoasProximas',
+      label: 'Nome',
       align: 'center',
       sortable: true
     },
     {
-      name: 'ultimaAlteracao',
-      field: 'ultimaAlteracao',
-      label: 'Ultima Alteração',
+      name: 'cpf',
+      field: 'cpf',
+      label: 'CPF',
+      align: 'center',
+      sortable: true
+    },
+    {
+      name: 'email',
+      field: 'email',
+      label: 'E-mail',
       align: 'center',
       sortable: true
     },
@@ -63,7 +63,7 @@ export default defineComponent({
       sortable: true
     }
     ]
-    const { list, remove } = importaMetodosListagemConselho()
+    const { list, remove } = importaMetodosListagemProfissionais()
     onMounted(async () => {
       getRows()
     })
@@ -79,11 +79,11 @@ export default defineComponent({
       }
     }
 
-    const handleRemovePessoasProximas = async (id) => {
+    const handleRemoveProfissionais = async (id) => {
       try {
         $q.dialog({
           title: 'Remover',
-          message: 'Deseja realmente remover essa Pessoa ?',
+          message: 'Deseja realmente remover esse profissional ?',
           cancel: {
             label: 'Cancelar',
             color: 'primary',
@@ -98,7 +98,7 @@ export default defineComponent({
         }).onOk(async () => {
           await remove(id)
           $q.notify({
-            message: 'Pessoa removido com sucesso!',
+            message: 'Profissional removido com sucesso!',
             color: 'positive',
             position: 'bottom-right'
           })
@@ -108,15 +108,15 @@ export default defineComponent({
         throw new Error(error)
       }
     }
-    const handleEditPessoasProximas = (id) => {
+    const handleEditProfissionais = (id) => {
       router.push({ name: 'CadastroProfissionais', params: { id } })
     }
 
     return {
       rows,
       columns,
-      handleRemovePessoasProximas,
-      handleEditPessoasProximas,
+      handleRemoveProfissionais,
+      handleEditProfissionais,
       dense: ref(true)
     }
   }

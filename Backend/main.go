@@ -2,7 +2,7 @@ package main
 
 import (
 	"api/configs"
-	"api/handlers"
+	"api/controller"
 	"fmt"
 	"net/http"
 
@@ -17,8 +17,7 @@ func main() {
 
 	r := chi.NewRouter()
 
-	r.Get("/get-by-id", handlers.Get)
-	r.Get("/", handlers.GetTeste)
+	r.Get("/get-by-id", controller.GetById)
 
 	http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 }

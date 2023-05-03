@@ -1,6 +1,6 @@
 package models
 
-type Pessoa struct {
+type Person struct {
 	IdPessoa        int64  `gorm:"column:idpessoa" json:"idpessoa"`
 	Nome            string `gorm:"column:nome" json:"nome"`
 	DataNascimento  string `gorm:"column:dataNascimento" json:"dataNascimento"`
@@ -8,4 +8,8 @@ type Pessoa struct {
 	TipoDocumento   string `gorm:"column:tipoDocumento" json:"tipoDocumento"`
 	Senha           string `gorm:"column:senha" json:"senha"`
 	Salt            string `gorm:"column:salt" json:"salt"`
+}
+
+func (p *Person) TableName() string {
+	return "pessoa"
 }

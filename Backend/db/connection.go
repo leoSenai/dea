@@ -26,6 +26,7 @@ func OpenConnection() (*gorm.DB, error) {
 	}), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
+			NoLowerCase:   true,
 		},
 	})
 

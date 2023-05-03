@@ -1,11 +1,12 @@
-package models
+package repository
 
 import (
 	"api/db"
+	"api/models"
 	"log"
 )
 
-func Get(id int64) (pessoa Pessoa, err error) {
+func Get(id int64) (pessoa models.Person, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
@@ -15,8 +16,4 @@ func Get(id int64) (pessoa Pessoa, err error) {
 	log.Printf("row: %v", row)
 
 	return
-}
-
-func Hello() {
-	log.Printf("Hello Word")
 }

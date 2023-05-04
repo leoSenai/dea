@@ -3,6 +3,7 @@ package configs
 import "github.com/spf13/viper"
 
 var cfg *config
+var vi *viper.Viper = viper.New()
 
 type config struct {
 	API APIConfig
@@ -22,16 +23,22 @@ type DBConfig struct {
 }
 
 func init() {
-	viper.SetDefault("api.port", "9000")
-	viper.SetDefault("database.host", "localhost")
-	viper.SetDefault("database.port", "5432")
+
+	vi.SetDefault("api.port", "9000")
+	vi.SetDefault("database.host", "localhost")
+	vi.SetDefault("database.port", "3306")
+	vi.SetDefault("database.user", "root")
+	vi.SetDefault("database.pass", "root")
 }
 
 func Load() error {
-	viper.SetConfigName("config")
-	viper.SetConfigType("toml")
-	viper.AddConfigPath(".")
-	err := viper.ReadInConfig()
+
+	vi.SetConfigType("toml")
+	vi.AddConfigPath(".")
+	vi.SetConfigName("config")
+	vi.SetConfigFile("config.toml")
+
+	err := vi.ReadInConfig()
 	if err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
 			return err
@@ -41,15 +48,15 @@ func Load() error {
 	cfg = new(config)
 
 	cfg.API = APIConfig{
-		Port: viper.GetString("api.port"),
+		Port: vi.GetString("api.port"),
 	}
 
 	cfg.DB = DBConfig{
-		Host:     viper.GetString("database.host"),
-		Port:     viper.GetString("database.port"),
-		User:     viper.GetString("database.user"),
-		Pass:     viper.GetString("database.pass"),
-		Database: viper.GetString("database.name"),
+		Host:     vi.GetString("database.host"),
+		Port:     vi.GetString("database.port"),
+		User:     vi.GetString("database.user"),
+		Pass:     vi.GetString("database.pass"),
+		Database: vi.GetString("database.name"),
 	}
 
 	return nil

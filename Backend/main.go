@@ -22,6 +22,7 @@ func main() {
 	r.Get("/person/get-by-id", controller.GetPersonById)
 	r.Get("/person/get-all", controller.GetAllPerson)
 	r.Post("/person/insert", controller.PostPerson)
+	r.Put("/person/update", controller.PutPerson)
 
 	r.Get("/user/get-by-id", controller.GetUserById)
 	r.Get("/user/get-all", controller.GetAllUsers)

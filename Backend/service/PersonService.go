@@ -30,3 +30,20 @@ func GetAllPersons() (persons []models.Person, err error) {
 	persons, err = repository.GetAllPersons()
 	return persons, err
 }
+
+func UpdatePerson(personUpdate models.Person) (err error) {
+	var person models.Person
+
+	person, err = repository.GetPersonById(personUpdate.IdPerson)
+	if err != nil {
+		return err
+	}
+
+	if person.IdPerson == 0 {
+		return fmt.Errorf("Pessoa não está cadastrada no sistema!")
+	}
+
+	err = repository.UpdatePerson(personUpdate)
+
+	return
+}

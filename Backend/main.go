@@ -4,6 +4,7 @@ import (
 	"api/configs"
 	"api/controller"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -12,13 +13,21 @@ import (
 func main() {
 	err := configs.Load()
 	if err != nil {
+		log.Println("Cannot load configuration from viper")
 		panic(err)
 	}
 
 	r := chi.NewRouter()
 
-	r.Get("/get-by-id", controller.GetById)
-	r.Post("/", controller.InsertPerson)
+	r.Get("/person/get-by-id", controller.GetPersonById)
 
-	http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
+	r.Get("/user/get-by-id", controller.GetUserById)
+	r.Get("/user/get-all", controller.GetAllUsers)
+	r.Post("/user/insert", controller.PostUser)
+
+	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
+	if err != nil {
+		log.Println("Server not initialized")
+		panic(err)
+	}
 }

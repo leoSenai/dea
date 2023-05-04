@@ -1,7 +1,9 @@
 package db
 
 import (
+	"api/configs"
 	"database/sql"
+	"log"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -11,15 +13,10 @@ import (
 )
 
 func OpenConnection() (*gorm.DB, error) {
-	// conf := configs.GetDB()
 
-	// sc := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=/%s sslmode=disable",
-	// conf.Host, conf.Port, conf.User, conf.Pass, conf.Database)
+	conf := configs.GetDB()
 
-	// sqlDB, err := sql.Open("mysql", "mydb_dsn")
-
-	// log.Printf("teste %v", sc)
-	conn, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/dea")
+	conn, err := sql.Open("mysql", conf.User+":"+conf.Pass+"@tcp("+conf.Host+":"+conf.Port+")/"+conf.Database)
 
 	gormDB, err := gorm.Open(mysql.New(mysql.Config{
 		Conn: conn,
@@ -31,10 +28,9 @@ func OpenConnection() (*gorm.DB, error) {
 	})
 
 	if err != nil {
+		log.Printf("Cannot connect to database named '%s' using the host '%s' on port '%s' with user '%s'", conf.Database, conf.Host, conf.Port, conf.User)
 		panic(err)
 	}
-
-	// err = gormDB.Ping()
 
 	return gormDB, err
 }

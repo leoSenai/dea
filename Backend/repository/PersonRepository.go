@@ -5,13 +5,13 @@ import (
 	"api/models"
 )
 
-func Get(id int64) (pessoa models.Person, err error) {
+func GetPersonById(id int64) (person models.Person, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
 	}
 
-	conn.First(&pessoa, id)
+	row := conn.First(&person, id)
 
 	return
 }

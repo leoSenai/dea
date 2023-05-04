@@ -18,6 +18,7 @@ func main() {
 	r := chi.NewRouter()
 
 	r.Get("/get-by-id", controller.GetById)
+	r.Post("/", controller.InsertPerson)
 
 	http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 }

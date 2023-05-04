@@ -11,7 +11,7 @@ func GetPersonById(id int64) (person models.Person, err error) {
 		return
 	}
 
-	row := conn.First(&person, id)
+	conn.First(&person, id)
 
 	return
 }

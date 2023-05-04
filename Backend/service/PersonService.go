@@ -3,6 +3,7 @@ package service
 import (
 	"api/models"
 	"api/repository"
+	"fmt"
 )
 
 func GetPersonById(id int64) (person models.Person, err error) {
@@ -11,9 +12,21 @@ func GetPersonById(id int64) (person models.Person, err error) {
 }
 
 func InsertPerson(person models.Person) (err error) {
-	if repository.VerifyPersonByDocument(person.DocNumber) {
-		return nil
+	found, err := repository.VerifyPersonByDocument(person.DocNumber)
+	if err != nil {
+		return err
 	}
+
+	if found {
+		return fmt.Errorf("Pessoa com o número de documento %s já cadastrado!", person.DocNumber)
+	}
+
 	err = repository.InsertPerson(person)
+
 	return err
+}
+
+func GetAllPersons() (persons []models.Person, err error) {
+	persons, err = repository.GetAllPersons()
+	return persons, err
 }

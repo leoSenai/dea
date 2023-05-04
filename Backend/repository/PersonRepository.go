@@ -6,13 +6,13 @@ import (
 	"log"
 )
 
-func Get(id int64) (pessoa models.Person, err error) {
+func GetPersonById(id int64) (person models.Person, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
 	}
 
-	row := conn.First(&pessoa, id)
+	row := conn.First(&person, id)
 	log.Printf("row: %v", row)
 
 	return

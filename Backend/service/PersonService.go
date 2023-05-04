@@ -5,7 +5,7 @@ import (
 	"api/repository"
 )
 
-func GetPersonById(id int64) (pessoa models.Person, err error) {
-	pessoa, err = repository.Get(int64(id))
-	return pessoa, err
+func GetPersonById(id int64) (person models.Person, err error) {
+	person, err = repository.GetPersonById(int64(id))
+	return person, err
 }

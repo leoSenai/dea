@@ -2,25 +2,8 @@ package configs
 
 import "github.com/spf13/viper"
 
-var cfg *config
+var cfg *Config
 var vi *viper.Viper = viper.New()
-
-type config struct {
-	API APIConfig
-	DB  DBConfig
-}
-
-type APIConfig struct {
-	Port string
-}
-
-type DBConfig struct {
-	Host     string
-	Port     string
-	User     string
-	Pass     string
-	Database string
-}
 
 func init() {
 
@@ -45,7 +28,7 @@ func Load() error {
 		}
 	}
 
-	cfg = new(config)
+	cfg = new(Config)
 
 	cfg.API = APIConfig{
 		Port: vi.GetString("api.port"),

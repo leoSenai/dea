@@ -19,7 +19,7 @@ func main() {
 
 	r := chi.NewRouter()
 
-	r.Get("/person/get-by-id", controller.GetPersonById)
+	r.Get("/person/get-by-id{id}", controller.GetPersonById)
 	r.Get("/person/get-all", controller.GetAllPerson)
 	r.Post("/person/insert", controller.PostPerson)
 	r.Put("/person/update", controller.PutPerson)

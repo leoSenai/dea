@@ -21,7 +21,7 @@ func main() {
 
 	r.Get("/person/get-by-id", controller.GetPersonById)
 
-	r.Get("/user/get-by-id", controller.GetUserById)
+	r.Get("/user/get-by-id/{id}", controller.GetUserById)
 	r.Get("/user/get-all", controller.GetAllUsers)
 	r.Post("/user/insert", controller.PostUser)
 	r.Put("/user/update", controller.UpdateUser)

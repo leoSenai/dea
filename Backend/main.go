@@ -26,6 +26,11 @@ func main() {
 	r.Post("/user/insert", controller.PostUser)
 	r.Put("/user/update", controller.UpdateUser)
 
+	r.Get("/cbo/get-by-id", controller.GetCboById)
+	r.Get("/cbo/get-all", controller.GetAllCbos)
+	r.Post("/cbo/insert", controller.PostCbo)
+	r.Put("/cbo/update", controller.UpdateCbo)
+
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {
 		log.Println("Server not initialized")

@@ -24,6 +24,7 @@ func main() {
 	r.Get("/user/get-by-id", controller.GetUserById)
 	r.Get("/user/get-all", controller.GetAllUsers)
 	r.Post("/user/insert", controller.PostUser)
+	r.Put("/user/update", controller.UpdateUser)
 
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {

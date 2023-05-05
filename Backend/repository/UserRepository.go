@@ -41,3 +41,20 @@ func PostUser(userPost models.User) (userBack models.User, err error) {
 
 	return
 }
+
+func PutUser(userPut models.User) (userBack models.User, err error) {
+	conn, err := db.OpenConnection()
+	if err != nil {
+		return
+	}
+
+	userBack = userPut
+	userBack.IdUser = 0
+
+	if userPut.IdUser != 0 {
+		row := conn.Table("usuario").Where("idusuario = ?", userPut.IdUser).Updates(&userBack)
+		log.Printf("row: %v", row)
+	}
+
+	return
+}

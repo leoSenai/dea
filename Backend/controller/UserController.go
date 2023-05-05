@@ -40,7 +40,6 @@ func GetAllUsers(w http.ResponseWriter, _ *http.Request) {
 }
 
 func PostUser(w http.ResponseWriter, r *http.Request) {
-
 	var user models.User
 
 	err := json.NewDecoder(r.Body).Decode(&user)
@@ -53,6 +52,27 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 	user, err = service.PostUser(user)
 	if err != nil {
 		log.Printf("Cannot do Post: %v", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Add("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(user)
+}
+
+func UpdateUser(w http.ResponseWriter, r *http.Request) {
+	var user models.User
+
+	err := json.NewDecoder(r.Body).Decode(&user)
+	if err != nil {
+		log.Printf("Cannot do Put: %v", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	user, err = service.PutUser(user)
+	if err != nil {
+		log.Printf("Cannot do Put: %v", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}

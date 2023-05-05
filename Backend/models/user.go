@@ -7,7 +7,7 @@ type User struct {
 	Salt     string `gorm:"column:salt" json:"Salt"`
 	TypeUser string `gorm:"column:tipousuario" json:"TypeUser"`
 	IdCbo    int    `gorm:"column:cbo_idcbo" json:"IdCbo"`
-	Active   string `gorm:"column:ativo" json:"Active"`
+	Active   int    `gorm:"column:ativo" json:"Active"`
 }
 
 func (p *User) TableName() string {

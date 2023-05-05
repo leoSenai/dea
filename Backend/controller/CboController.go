@@ -29,7 +29,7 @@ func GetCboById(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllCbos(w http.ResponseWriter, _ *http.Request) {
-	cbos, err := service.GetAllUsers()
+	cbos, err := service.GetAllCbos()
 	if err != nil {
 		log.Printf("Cannot find Get: %v", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

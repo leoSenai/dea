@@ -70,8 +70,7 @@ func PostPerson(w http.ResponseWriter, r *http.Request) {
 	utils.ReturnResponseJSON(w, http.StatusOK, "Pessoa cadastrada com sucesso!", "")
 }
 
-func GetAllPerson(w http.ResponseWriter, _ *http.Request) {
-
+func GetAllPerson(w http.ResponseWriter, r *http.Request) {
 	persons, err := service.GetAllPerson()
 	if err != nil {
 		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")

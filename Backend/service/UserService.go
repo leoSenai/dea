@@ -10,14 +10,17 @@ func GetUserById(id int64) (user models.User, err error) {
 	return user, err
 }
 
-func GetAllUsers() (user []models.User, err error) {
-	users, err := repository.GetAllUsers()
+func GetAllUser() (user []models.User, err error) {
+	users, err := repository.GetAllUser()
 	return users, err
 }
 
 func PostUser(userPost models.User) (userBack models.User, err error) {
-
 	userBack, err = repository.PostUser(userPost)
+	return userBack, err
+}
 
+func PutUser(userPut models.User) (userBack models.User, err error) {
+	userBack, err = repository.PutUser(userPut)
 	return userBack, err
 }

@@ -22,9 +22,9 @@ func main() {
 	r.Get("/person/get-by-id", controller.GetPersonById)
 
 	r.Get("/user/get-by-id/{id}", controller.GetUserById)
-	r.Get("/user/get-all", controller.GetAllUsers)
+	r.Get("/user/get-all", controller.GetAllUser)
 	r.Post("/user/insert", controller.PostUser)
-	r.Put("/user/update", controller.UpdateUser)
+	r.Put("/user/update", controller.PutUser)
 
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {

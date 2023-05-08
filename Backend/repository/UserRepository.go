@@ -18,7 +18,7 @@ func GetUserById(id int64) (user models.User, err error) {
 	return
 }
 
-func GetAllUsers() (users []models.User, err error) {
+func GetAllUser() (users []models.User, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return

@@ -39,6 +39,8 @@ func PostPatient(patientPost models.Patient) (patientBack models.Patient, err er
 	row := conn.Create(&patientPost)
 	log.Printf("row: %v", row)
 
+	conn.First(&patientBack, patientPost.IdPatient)
+
 	return
 }
 
@@ -54,6 +56,7 @@ func PutPatient(patientPut models.Patient) (patientBack models.Patient, err erro
 	if patientPut.IdPatient != 0 {
 		row := conn.Table("paciente").Where("idpaciente = ?", patientPut.IdPatient).Updates(&patientBack)
 		log.Printf("row: %v", row)
+		conn.First(&patientBack, patientPut.IdPatient)
 	}
 
 	return

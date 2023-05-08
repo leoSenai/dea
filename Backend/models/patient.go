@@ -1,7 +1,7 @@
 package models
 
 type Patient struct {
-	IdPatient int    `gorm:"column:idpaciente" json:"IdPatient"`
+	IdPatient int    `gorm:"column:idpaciente;primaryKey" json:"IdPatient"`
 	Name      string `gorm:"column:nome" json:"Name"`
 	Cpf       string `gorm:"column:cpf" json:"Cpf"`
 	Address   string `gorm:"column:endereco" json:"Address"`

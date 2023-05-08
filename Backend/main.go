@@ -35,9 +35,9 @@ func main() {
 	r.Put("/cbo/update", controller.UpdateCbo)
 
 	r.Get("/patient/get-by-id/{id}", controller.GetPatientById)
-	r.Get("/patient/get-all", controller.GetAllPatients)
+	r.Get("/patient/get-all", controller.GetAllPatient)
 	r.Post("/patient/insert", controller.PostPatient)
-	r.Put("/patient/update", controller.UpdatePatient)
+	r.Put("/patient/update", controller.PutPatient)
 
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {

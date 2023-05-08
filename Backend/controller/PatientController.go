@@ -30,8 +30,8 @@ func GetPatientById(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(patient)
 }
 
-func GetAllPatients(w http.ResponseWriter, _ *http.Request) {
-	patients, err := service.GetAllPatients()
+func GetAllPatient(w http.ResponseWriter, _ *http.Request) {
+	patients, err := service.GetAllPatient()
 	if err != nil {
 		log.Printf("Cannot find Get: %v", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -62,7 +62,7 @@ func PostPatient(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(patient)
 }
 
-func UpdatePatient(w http.ResponseWriter, r *http.Request) {
+func PutPatient(w http.ResponseWriter, r *http.Request) {
 	var patient models.Patient
 
 	err := json.NewDecoder(r.Body).Decode(&patient)

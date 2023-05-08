@@ -10,8 +10,8 @@ func GetPatientById(id int64) (patient models.Patient, err error) {
 	return patient, err
 }
 
-func GetAllPatients() (patients []models.Patient, err error) {
-	patients, err = repository.GetAllPatients()
+func GetAllPatient() (patients []models.Patient, err error) {
+	patients, err = repository.GetAllPatient()
 	return patients, err
 }
 

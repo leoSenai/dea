@@ -18,7 +18,7 @@ func GetPatientById(id int64) (patient models.Patient, err error) {
 	return
 }
 
-func GetAllPatients() (patients []models.Patient, err error) {
+func GetAllPatient() (patients []models.Patient, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return

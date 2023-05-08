@@ -24,7 +24,7 @@ func GetPersonById(id int64) (person models.Person, err error) {
 	return
 }
 
-func InsertPerson(person models.Person) (err error) {
+func PostPerson(person models.Person) (err error) {
 	conn, err := db.OpenConnection()
 
 	if err != nil {
@@ -54,7 +54,7 @@ func VerifyPersonByDocument(docNumber string) (found bool, err error) {
 	return true, nil
 }
 
-func GetAllPersons() (persons []models.Person, err error) {
+func GetAllPerson() (persons []models.Person, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
@@ -65,7 +65,7 @@ func GetAllPersons() (persons []models.Person, err error) {
 	return
 }
 
-func UpdatePerson(person models.Person) (err error) {
+func PutPerson(person models.Person) (err error) {
 	conn, err := db.OpenConnection()
 
 	if err != nil {

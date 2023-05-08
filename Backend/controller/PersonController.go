@@ -37,7 +37,7 @@ func PostPerson(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = service.InsertPerson(person)
+	err = service.PostPerson(person)
 	if err != nil {
 		if strings.Contains(err.Error(), "já cadastrado!") {
 			http.Error(w, err.Error(), http.StatusConflict)
@@ -57,7 +57,7 @@ func PostPerson(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllPerson(w http.ResponseWriter, r *http.Request) {
-	persons, err := service.GetAllPersons()
+	persons, err := service.GetAllPerson()
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return

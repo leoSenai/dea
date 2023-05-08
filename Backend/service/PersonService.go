@@ -21,7 +21,7 @@ func PostPerson(person models.Person) (err error) {
 		return fmt.Errorf("Pessoa com o número de documento %s já cadastrado!", person.DocNumber)
 	}
 
-	err = repository.InsertPerson(person)
+	err = repository.PutPerson(person)
 
 	return err
 }

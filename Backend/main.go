@@ -19,12 +19,20 @@ func main() {
 
 	r := chi.NewRouter()
 
-	r.Get("/person/get-by-id", controller.GetPersonById)
+	r.Get("/person/get-by-id/{id}", controller.GetPersonById)
+	r.Get("/person/get-all", controller.GetAllPerson)
+	r.Post("/person/insert", controller.PostPerson)
+	r.Put("/person/update", controller.PutPerson)
 
 	r.Get("/user/get-by-id/{id}", controller.GetUserById)
 	r.Get("/user/get-all", controller.GetAllUser)
 	r.Post("/user/insert", controller.PostUser)
 	r.Put("/user/update", controller.PutUser)
+
+	r.Get("/cbo/get-by-id/{id}", controller.GetCboById)
+	r.Get("/cbo/get-all", controller.GetAllCbos)
+	r.Post("/cbo/insert", controller.PostCbo)
+	r.Put("/cbo/update", controller.UpdateCbo)
 
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {

@@ -38,7 +38,7 @@ func PostUser(userPost models.User) (userBack models.User, err error) {
 
 	row := conn.Create(&userPost)
 	log.Printf("row: %v", row)
-
+	conn.First(&userBack, userPost.IdUser)
 	return
 }
 
@@ -54,6 +54,7 @@ func PutUser(userPut models.User) (userBack models.User, err error) {
 	if userPut.IdUser != 0 {
 		row := conn.Table("usuario").Where("idusuario = ?", userPut.IdUser).Updates(&userBack)
 		log.Printf("row: %v", row)
+		conn.First(&userBack, userPut.IdUser)
 	}
 
 	return

@@ -75,7 +75,7 @@ func PutPerson(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = service.UpdatePerson(person)
+	err = service.PutPerson(person)
 	if err != nil {
 		if strings.Contains(err.Error(), "não está cadastrada") {
 			http.Error(w, err.Error(), http.StatusConflict)

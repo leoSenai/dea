@@ -39,6 +39,7 @@ func PostUser(userPost models.User) (userBack models.User, err error) {
 	row := conn.Create(&userPost)
 	log.Printf("row: %v", row)
 	conn.First(&userBack, userPost.IdUser)
+
 	return
 }
 

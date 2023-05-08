@@ -30,8 +30,8 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(user)
 }
 
-func GetAllUsers(w http.ResponseWriter, _ *http.Request) {
-	users, err := service.GetAllUsers()
+func GetAllUser(w http.ResponseWriter, _ *http.Request) {
+	users, err := service.GetAllUser()
 	if err != nil {
 		log.Printf("Cannot find Get: %v", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -62,7 +62,7 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(user)
 }
 
-func UpdateUser(w http.ResponseWriter, r *http.Request) {
+func PutUser(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 
 	err := json.NewDecoder(r.Body).Decode(&user)

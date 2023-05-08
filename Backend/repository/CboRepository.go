@@ -18,7 +18,7 @@ func GetCboById(id int64) (cbo models.Cbo, err error) {
 	return
 }
 
-func GetAllCbos() (cbos []models.Cbo, err error) {
+func GetAllCbo() (cbos []models.Cbo, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return

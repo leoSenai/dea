@@ -30,9 +30,9 @@ func main() {
 	r.Put("/user/update", controller.UpdateUser)
 
 	r.Get("/cbo/get-by-id/{id}", controller.GetCboById)
-	r.Get("/cbo/get-all", controller.GetAllCbos)
+	r.Get("/cbo/get-all", controller.GetAllCbo)
 	r.Post("/cbo/insert", controller.PostCbo)
-	r.Put("/cbo/update", controller.UpdateCbo)
+	r.Put("/cbo/update", controller.PutCbo)
 
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {

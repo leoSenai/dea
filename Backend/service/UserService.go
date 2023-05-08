@@ -16,8 +16,11 @@ func GetAllUsers() (user []models.User, err error) {
 }
 
 func PostUser(userPost models.User) (userBack models.User, err error) {
-
 	userBack, err = repository.PostUser(userPost)
+	return userBack, err
+}
 
+func PutUser(userPut models.User) (userBack models.User, err error) {
+	userBack, err = repository.PutUser(userPut)
 	return userBack, err
 }

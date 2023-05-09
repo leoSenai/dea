@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"api/controller/utils"
 	"api/models"
 	"api/service"
 	"encoding/json"
@@ -11,23 +12,13 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func HttpReturnResponseJSON(w http.ResponseWriter, response map[string]interface{}) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
-}
-
 func GetUserById(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		log.Printf("Cannot parse ID: %v", err)
-		http.Error(w, err.Error(), 400)
 
-		response := map[string]interface{}{
-			"message": "Não foi especificado o id do usuário procurado.",
-			"data":    "",
-		}
-
-		HttpReturnResponseJSON(w, response)
+		response := utils.BuildResponseJSON("Não foi especificado o id do usuário procurado.", "")
+		utils.HttpReturnResponseJSON(w, response, 400)
 
 		return
 	}
@@ -35,24 +26,15 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	user, err := service.GetUserById(int64(id))
 	if err != nil {
 		log.Printf("Cannot find Get: %v", err)
-		http.Error(w, err.Error(), 500)
 
-		response := map[string]interface{}{
-			"message": "Não foi possível encontrar usuário, houve um erro interno no servidor.",
-			"data":    "",
-		}
-
-		HttpReturnResponseJSON(w, response)
+		response := utils.BuildResponseJSON("Não foi possível encontrar usuário, houve um erro interno no servidor.", "")
+		utils.HttpReturnResponseJSON(w, response, 500)
 
 		return
 	}
 
-	response := map[string]interface{}{
-		"message": "Usuário encontrado com sucesso!",
-		"data":    user,
-	}
-
-	HttpReturnResponseJSON(w, response)
+	response := utils.BuildResponseJSON("Usuário encontrado com sucesso!", user)
+	utils.HttpReturnResponseJSON(w, response, 200)
 }
 
 func GetAllUser(w http.ResponseWriter, _ *http.Request) {
@@ -66,7 +48,7 @@ func GetAllUser(w http.ResponseWriter, _ *http.Request) {
 			"data":    "",
 		}
 
-		HttpReturnResponseJSON(w, response)
+		utils.HttpReturnResponseJSON(w, response, 400)
 
 		return
 	}
@@ -76,7 +58,7 @@ func GetAllUser(w http.ResponseWriter, _ *http.Request) {
 		"data":    users,
 	}
 
-	HttpReturnResponseJSON(w, response)
+	utils.HttpReturnResponseJSON(w, response, 400)
 }
 
 func PostUser(w http.ResponseWriter, r *http.Request) {
@@ -92,7 +74,7 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 			"data":    "",
 		}
 
-		HttpReturnResponseJSON(w, response)
+		utils.HttpReturnResponseJSON(w, response, 400)
 
 		return
 	}
@@ -107,7 +89,7 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 			"data":    "",
 		}
 
-		HttpReturnResponseJSON(w, response)
+		utils.HttpReturnResponseJSON(w, response, 400)
 
 		return
 	}
@@ -117,7 +99,7 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 		"data":    "",
 	}
 
-	HttpReturnResponseJSON(w, response)
+	utils.HttpReturnResponseJSON(w, response, 400)
 }
 
 func PutUser(w http.ResponseWriter, r *http.Request) {
@@ -133,7 +115,7 @@ func PutUser(w http.ResponseWriter, r *http.Request) {
 			"data":    "",
 		}
 
-		HttpReturnResponseJSON(w, response)
+		utils.HttpReturnResponseJSON(w, response, 400)
 		return
 	}
 
@@ -147,7 +129,7 @@ func PutUser(w http.ResponseWriter, r *http.Request) {
 			"data":    "",
 		}
 
-		HttpReturnResponseJSON(w, response)
+		utils.HttpReturnResponseJSON(w, response, 400)
 		return
 	}
 
@@ -156,5 +138,5 @@ func PutUser(w http.ResponseWriter, r *http.Request) {
 		"data":    user,
 	}
 
-	HttpReturnResponseJSON(w, response)
+	utils.HttpReturnResponseJSON(w, response, 400)
 }

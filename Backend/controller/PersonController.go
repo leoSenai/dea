@@ -56,7 +56,7 @@ func PostPerson(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func GetAllPerson(w http.ResponseWriter, r *http.Request) {
+func GetAllPerson(w http.ResponseWriter, _ *http.Request) {
 	persons, err := service.GetAllPersons()
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

@@ -75,12 +75,27 @@ func PostPerson(w http.ResponseWriter, r *http.Request) {
 
 func GetAllPerson(w http.ResponseWriter, _ *http.Request) {
 	persons, err := service.GetAllPerson()
+	var status int
+	var message string
+	var data []models.Person
 	if err != nil {
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
+		status = 400
+		message = err.Error()
+	} else if len(persons) == 0 {
+		status = 201
+		message = "Não há pessoas cadastradas ainda."
+	} else {
+		status = 200
+		message = "Busca realizada com sucesso!"
+		data = persons
 	}
-	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(&persons)
+	response := map[string]interface{}{
+		"message": message,
+		"data":    data,
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	json.NewEncoder(w).Encode(response)
 }
 
 func PutPerson(w http.ResponseWriter, r *http.Request) {
@@ -103,7 +118,6 @@ func PutPerson(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := map[string]interface{}{
-		"error":   false,
 		"message": "Pessoa autualizado com sucesso!",
 	}
 

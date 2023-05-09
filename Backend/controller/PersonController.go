@@ -24,8 +24,13 @@ func GetPersonById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	response := map[string]interface{}{
+		"message": "Pessoa autualizado com sucesso!",
+		"data":    json.NewEncoder(w).Encode(person),
+	}
+
 	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(person)
+	json.NewEncoder(w).Encode(response)
 }
 
 func PostPerson(w http.ResponseWriter, r *http.Request) {
@@ -33,23 +38,35 @@ func PostPerson(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&person)
 	if err != nil {
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	err = service.PostPerson(person)
 	if err != nil {
+		var status int
+		var message string
 		if strings.Contains(err.Error(), "já cadastrado!") {
-			http.Error(w, err.Error(), http.StatusConflict)
-			return
+			status = 400
+			message = err.Error()
+		} else {
+			status = 500
+			message = http.StatusText(http.StatusInternalServerError)
 		}
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+		response := map[string]interface{}{
+			"message": message,
+			"data":    "",
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(status)
+		json.NewEncoder(w).Encode(response)
 		return
 	}
 
 	response := map[string]interface{}{
-		"error":   false,
 		"message": "Pessoa cadastrado com sucesso!",
+		"data":    "",
 	}
 
 	w.Header().Set("Content-Type", "application/json")

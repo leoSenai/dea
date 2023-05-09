@@ -36,22 +36,21 @@ func PostPerson(person models.Person) (err error) {
 	return
 }
 
-func VerifyPersonByDocument(docNumber string) (found bool, err error) {
+func VerifyPersonByDocument(docNumber string) (found bool) {
 	conn, err := db.OpenConnection()
-
 	if err != nil {
-		return false, err
+		return false
 	}
 
 	var person models.Person
 	if err := conn.Where("numeroDocumento = ?", docNumber).First(&person).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return false, nil
+			return false
 		}
-		return false, err
+		return false
 	}
 
-	return true, nil
+	return true
 }
 
 func GetAllPerson() (persons []models.Person, err error) {

@@ -41,10 +41,9 @@ func GetAllUser(w http.ResponseWriter, _ *http.Request) {
 	users, err := service.GetAllUser()
 	if err != nil {
 		log.Printf("Cannot find Get: %v", err)
-		http.Error(w, err.Error(), 204)
 
 		response := utils.BuildResponseJSON("Não há usuários cadastrados na base de dados.", "")
-		utils.ReturnResponseJSON(w, response, 400)
+		utils.ReturnResponseJSON(w, response, 204)
 
 		return
 	}
@@ -60,7 +59,6 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		log.Printf("Cannot do Post: %v", err)
-		http.Error(w, err.Error(), 400)
 
 		response := utils.BuildResponseJSON("Houve algum erro ao tentar obter as informações para cadastro do usuário.", "")
 		utils.ReturnResponseJSON(w, response, 400)
@@ -71,10 +69,9 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 	user, err = service.PostUser(user)
 	if err != nil {
 		log.Printf("Cannot do Post: %v", err)
-		http.Error(w, err.Error(), 500)
 
 		response := utils.BuildResponseJSON("Não foi possível cadastrar o usuário, houve um erro interno no sistema.", "")
-		utils.ReturnResponseJSON(w, response, 400)
+		utils.ReturnResponseJSON(w, response, 500)
 
 		return
 	}
@@ -89,7 +86,6 @@ func PutUser(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		log.Printf("Cannot do Put: %v", err)
-		http.Error(w, err.Error(), 400)
 
 		response := utils.BuildResponseJSON("Houve algum erro ao tentar obter as informações de atualização do usuário.", "")
 		utils.ReturnResponseJSON(w, response, 400)
@@ -100,10 +96,9 @@ func PutUser(w http.ResponseWriter, r *http.Request) {
 	user, err = service.PutUser(user)
 	if err != nil {
 		log.Printf("Cannot do Put: %v", err)
-		http.Error(w, err.Error(), 500)
 
 		response := utils.BuildResponseJSON("Não foi possível atualizar o usuário, houve um erro interno no sistema.", "")
-		utils.ReturnResponseJSON(w, response, 400)
+		utils.ReturnResponseJSON(w, response, 500)
 
 		return
 	}

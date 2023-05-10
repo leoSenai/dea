@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"api/controller/utils"
 	"api/models"
 	"api/service"
+	"api/utils"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -18,7 +18,7 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Cannot parse ID: %v", err)
 
 		response := utils.BuildResponseJSON("Não foi especificado o id do usuário procurado.", "")
-		utils.HttpReturnResponseJSON(w, response, 400)
+		utils.ReturnResponseJSON(w, response, 400)
 
 		return
 	}
@@ -28,13 +28,13 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Cannot find Get: %v", err)
 
 		response := utils.BuildResponseJSON("Não foi possível encontrar usuário, houve um erro interno no servidor.", "")
-		utils.HttpReturnResponseJSON(w, response, 500)
+		utils.ReturnResponseJSON(w, response, 500)
 
 		return
 	}
 
 	response := utils.BuildResponseJSON("Usuário encontrado com sucesso!", user)
-	utils.HttpReturnResponseJSON(w, response, 200)
+	utils.ReturnResponseJSON(w, response, 200)
 }
 
 func GetAllUser(w http.ResponseWriter, _ *http.Request) {
@@ -43,22 +43,15 @@ func GetAllUser(w http.ResponseWriter, _ *http.Request) {
 		log.Printf("Cannot find Get: %v", err)
 		http.Error(w, err.Error(), 204)
 
-		response := map[string]interface{}{
-			"message": "Não há usuários cadastrados na base de dados.",
-			"data":    "",
-		}
-
-		utils.HttpReturnResponseJSON(w, response, 400)
+		response := utils.BuildResponseJSON("Não há usuários cadastrados na base de dados.", "")
+		utils.ReturnResponseJSON(w, response, 400)
 
 		return
 	}
 
-	response := map[string]interface{}{
-		"message": "Usuários encontrados!",
-		"data":    users,
-	}
+	response := utils.BuildResponseJSON("Usuários encontrados!", users)
 
-	utils.HttpReturnResponseJSON(w, response, 400)
+	utils.ReturnResponseJSON(w, response, 200)
 }
 
 func PostUser(w http.ResponseWriter, r *http.Request) {
@@ -69,12 +62,8 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Cannot do Post: %v", err)
 		http.Error(w, err.Error(), 400)
 
-		response := map[string]interface{}{
-			"message": "Houve algum erro ao tentar obter as informações para cadastro do usuário.",
-			"data":    "",
-		}
-
-		utils.HttpReturnResponseJSON(w, response, 400)
+		response := utils.BuildResponseJSON("Houve algum erro ao tentar obter as informações para cadastro do usuário.", "")
+		utils.ReturnResponseJSON(w, response, 400)
 
 		return
 	}
@@ -84,22 +73,14 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Cannot do Post: %v", err)
 		http.Error(w, err.Error(), 500)
 
-		response := map[string]interface{}{
-			"message": "Não foi possível cadastrar o usuário, houve um erro interno no sistema.",
-			"data":    "",
-		}
-
-		utils.HttpReturnResponseJSON(w, response, 400)
+		response := utils.BuildResponseJSON("Não foi possível cadastrar o usuário, houve um erro interno no sistema.", "")
+		utils.ReturnResponseJSON(w, response, 400)
 
 		return
 	}
 
-	response := map[string]interface{}{
-		"message": "Usuário cadastrado com sucesso!",
-		"data":    "",
-	}
-
-	utils.HttpReturnResponseJSON(w, response, 400)
+	response := utils.BuildResponseJSON("Usuário cadastrado com sucesso!", "")
+	utils.ReturnResponseJSON(w, response, 200)
 }
 
 func PutUser(w http.ResponseWriter, r *http.Request) {
@@ -110,12 +91,9 @@ func PutUser(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Cannot do Put: %v", err)
 		http.Error(w, err.Error(), 400)
 
-		response := map[string]interface{}{
-			"message": "Houve algum erro ao tentar obter as informações de atualização do usuário.",
-			"data":    "",
-		}
+		response := utils.BuildResponseJSON("Houve algum erro ao tentar obter as informações de atualização do usuário.", "")
+		utils.ReturnResponseJSON(w, response, 400)
 
-		utils.HttpReturnResponseJSON(w, response, 400)
 		return
 	}
 
@@ -124,19 +102,16 @@ func PutUser(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Cannot do Put: %v", err)
 		http.Error(w, err.Error(), 500)
 
-		response := map[string]interface{}{
-			"message": "Não foi possível atualizar o usuário, houve um erro interno no sistema.",
-			"data":    "",
-		}
+		response := utils.BuildResponseJSON("Não foi possível atualizar o usuário, houve um erro interno no sistema.", "")
+		utils.ReturnResponseJSON(w, response, 400)
 
-		utils.HttpReturnResponseJSON(w, response, 400)
 		return
 	}
 
 	response := map[string]interface{}{
-		"message": "Não foi possível atualizar o usuário, houve um erro interno no sistema.",
-		"data":    user,
+		"message": "Informações do usuário atualizadas com sucesso!",
+		"data":    "",
 	}
 
-	utils.HttpReturnResponseJSON(w, response, 400)
+	utils.ReturnResponseJSON(w, response, 200)
 }

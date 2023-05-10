@@ -12,25 +12,32 @@ import (
 )
 
 func GetPersonById(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+
+	idParam := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idParam)
+
+	if id <= 0 {
+		jsonResponse(w, http.StatusBadRequest, "ID inválido", "")
+		return
+	}
+
 	if err != nil {
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		jsonResponse(w, http.StatusBadRequest, err.Error(), "")
 		return
 	}
 
 	person, err := service.GetPersonById(int64(id))
 	if err != nil {
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		jsonResponse(w, http.StatusInternalServerError, err.Error(), "")
 		return
 	}
 
-	response := map[string]interface{}{
-		"message": "Pessoa autualizado com sucesso!",
-		"data":    json.NewEncoder(w).Encode(person),
+	if person.IdPerson == 0 {
+		jsonResponse(w, http.StatusNotFound, "Pessoa não encontrada", "")
+		return
 	}
 
-	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	jsonResponse(w, http.StatusOK, "Pessoa encontrada com sucesso", person)
 }
 
 func PostPerson(w http.ResponseWriter, r *http.Request) {
@@ -38,7 +45,7 @@ func PostPerson(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&person)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		jsonResponse(w, http.StatusBadRequest, err.Error(), "")
 		return
 	}
 
@@ -46,56 +53,36 @@ func PostPerson(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		var status int
 		var message string
+
 		if strings.Contains(err.Error(), "já cadastrado!") {
-			status = 400
+			status = http.StatusBadRequest
 			message = err.Error()
 		} else {
-			status = 500
+			status = http.StatusInternalServerError
 			message = http.StatusText(http.StatusInternalServerError)
 		}
 
-		response := map[string]interface{}{
-			"message": message,
-			"data":    "",
-		}
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(status)
-		json.NewEncoder(w).Encode(response)
+		jsonResponse(w, status, message, "")
 		return
 	}
 
-	response := map[string]interface{}{
-		"message": "Pessoa cadastrado com sucesso!",
-		"data":    "",
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	jsonResponse(w, http.StatusOK, "Pessoa cadastrada com sucesso!", "")
 }
 
 func GetAllPerson(w http.ResponseWriter, _ *http.Request) {
 	persons, err := service.GetAllPerson()
-	var status int
-	var message string
-	var data []models.Person
+
 	if err != nil {
-		status = 400
-		message = err.Error()
-	} else if len(persons) == 0 {
-		status = 201
-		message = "Não há pessoas cadastradas ainda."
-	} else {
-		status = 200
-		message = "Busca realizada com sucesso!"
-		data = persons
+		jsonResponse(w, http.StatusBadRequest, err.Error(), "")
+		return
 	}
-	response := map[string]interface{}{
-		"message": message,
-		"data":    data,
+
+	if len(persons) == 0 {
+		jsonResponse(w, http.StatusNotFound, "Não há pessoas cadastradas ainda.", "")
+		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(response)
+
+	jsonResponse(w, http.StatusOK, "Busca realizada com sucesso!", persons)
 }
 
 func PutPerson(w http.ResponseWriter, r *http.Request) {
@@ -103,24 +90,35 @@ func PutPerson(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&person)
 	if err != nil {
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		jsonResponse(w, http.StatusBadRequest, err.Error(), "")
 		return
 	}
 
 	err = service.PutPerson(person)
 	if err != nil {
 		if strings.Contains(err.Error(), "não está cadastrada") {
-			http.Error(w, err.Error(), http.StatusConflict)
+			jsonResponse(w, http.StatusBadRequest, err.Error(), "")
+			return
+		} else if strings.Contains(err.Error(), "Nenhum dado foi atualizado") {
+			jsonResponse(w, http.StatusCreated, err.Error(), "")
 			return
 		}
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+		jsonResponse(w, http.StatusInternalServerError, err.Error(), "")
 		return
 	}
 
+	jsonResponse(w, http.StatusOK, "Pessoa atualizada com sucesso!", "")
+}
+
+func jsonResponse(w http.ResponseWriter, status int, message string, data interface{}) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+
 	response := map[string]interface{}{
-		"message": "Pessoa autualizado com sucesso!",
+		"message": message,
+		"data":    data,
 	}
 
-	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }

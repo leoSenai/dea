@@ -108,10 +108,6 @@ func PutUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := map[string]interface{}{
-		"message": "Informações do usuário atualizadas com sucesso!",
-		"data":    "",
-	}
-
+	response := utils.BuildResponseJSON("Informações do usuário atualizadas com sucesso!", "")
 	utils.ReturnResponseJSON(w, response, 200)
 }

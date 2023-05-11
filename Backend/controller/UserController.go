@@ -12,6 +12,11 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
+func HttpReturnResponseJSON(w http.ResponseWriter, response map[string]interface{}) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
 func GetUserById(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
@@ -26,7 +31,7 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	user, err := service.GetUserById(int64(id))
 	if err != nil {
 		log.Printf("Cannot find Get: %v", err)
-
+    
 		response := utils.BuildResponseJSON("Não foi possível encontrar usuário, houve um erro interno no servidor.", "")
 		utils.ReturnResponseJSON(w, response, 500)
 
@@ -59,7 +64,7 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		log.Printf("Cannot do Post: %v", err)
-
+    
 		response := utils.BuildResponseJSON("Houve algum erro ao tentar obter as informações para cadastro do usuário.", "")
 		utils.ReturnResponseJSON(w, response, 400)
 

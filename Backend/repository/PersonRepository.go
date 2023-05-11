@@ -24,7 +24,7 @@ func GetPersonById(id int64) (person models.Person, err error) {
 	return
 }
 
-func InsertPerson(person models.Person) (err error) {
+func PostPerson(person models.Person) (err error) {
 	conn, err := db.OpenConnection()
 
 	if err != nil {
@@ -36,25 +36,24 @@ func InsertPerson(person models.Person) (err error) {
 	return
 }
 
-func VerifyPersonByDocument(docNumber string) (found bool, err error) {
+func VerifyPersonByDocument(docNumber string) (found bool) {
 	conn, err := db.OpenConnection()
-
 	if err != nil {
-		return false, err
+		return false
 	}
 
 	var person models.Person
 	if err := conn.Where("numeroDocumento = ?", docNumber).First(&person).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return false, nil
+			return false
 		}
-		return false, err
+		return false
 	}
 
-	return true, nil
+	return true
 }
 
-func GetAllPersons() (persons []models.Person, err error) {
+func GetAllPerson() (persons []models.Person, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
@@ -65,7 +64,7 @@ func GetAllPersons() (persons []models.Person, err error) {
 	return
 }
 
-func UpdatePerson(person models.Person) (err error) {
+func PutPerson(person models.Person) (err error) {
 	conn, err := db.OpenConnection()
 
 	if err != nil {

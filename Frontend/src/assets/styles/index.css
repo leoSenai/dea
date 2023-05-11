@@ -1,5 +1,5 @@
-@import url('./typography.css');
-@import url('./theme.css');
+@import url("./typography.css");
+@import url("./theme.css");
 
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -20,6 +20,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: black;
 }
 
 body {

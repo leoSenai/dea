@@ -70,8 +70,8 @@ func PostPerson(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllPerson(w http.ResponseWriter, _ *http.Request) {
-	persons, err := service.GetAllPerson()
 
+	persons, err := service.GetAllPerson()
 	if err != nil {
 		jsonResponse(w, http.StatusBadRequest, err.Error(), "")
 		return

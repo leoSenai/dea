@@ -1,14 +1,20 @@
-200 - OK - JSON
-204 - Vazio
-400 - Erro usuário
-500 - Erro servidor
+[STATUS DEFINITION]
+
+200: OK - JSON
+204: Vazio
+400: Erro usuário
+500: Erro servidor
+
+For more status definition take a look in C:\Program Files\Go\src\net\http\status.go
+
+[RESPONSE MODEL]
 
 {
     message: ""
     data: 
 }
 
-CONVENTIONAL COMMITS
+[CONVENTIONAL COMMITS]
 
 -fix
 -feat

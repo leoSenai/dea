@@ -15,42 +15,36 @@ import (
 func GetUserById(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
-		log.Printf("Cannot parse ID: %v", err)
+		log.Printf("Cannot parse ID: %s", err.Error())
 
-		response := utils.BuildResponseJSON("Não foi especificado o id do usuário procurado.", "")
-		utils.ReturnResponseJSON(w, response, 400)
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi especificado o id do usuário procurado.", "")
 
 		return
 	}
 
 	user, err := service.GetUserById(int64(id))
 	if err != nil {
-		log.Printf("Cannot find Get: %v", err)
+		log.Printf("Cannot find Get: %s", err.Error())
 
-		response := utils.BuildResponseJSON("Não foi possível encontrar usuário, houve um erro interno no servidor.", "")
-		utils.ReturnResponseJSON(w, response, 500)
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível encontrar usuário, houve um erro interno no servidor.", "")
 
 		return
 	}
 
-	response := utils.BuildResponseJSON("Usuário encontrado com sucesso!", user)
-	utils.ReturnResponseJSON(w, response, 200)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Usuário encontrado com sucesso!", user)
 }
 
 func GetAllUser(w http.ResponseWriter, _ *http.Request) {
 	users, err := service.GetAllUser()
 	if err != nil {
-		log.Printf("Cannot find Get: %v", err)
+		log.Printf("Cannot find Get: %s", err.Error())
 
-		response := utils.BuildResponseJSON("Não há usuários cadastrados na base de dados.", "")
-		utils.ReturnResponseJSON(w, response, 204)
+		utils.ReturnResponseJSON(w, http.StatusNoContent, "Não há usuários cadastrados na base de dados.", "")
 
 		return
 	}
 
-	response := utils.BuildResponseJSON("Usuários encontrados!", users)
-
-	utils.ReturnResponseJSON(w, response, 200)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Usuários encontrados!", users)
 }
 
 func PostUser(w http.ResponseWriter, r *http.Request) {
@@ -58,26 +52,23 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		log.Printf("Cannot do Post: %v", err)
+		log.Printf("Cannot do Post: %s", err.Error())
 
-		response := utils.BuildResponseJSON("Houve algum erro ao tentar obter as informações para cadastro do usuário.", "")
-		utils.ReturnResponseJSON(w, response, 400)
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Houve algum erro ao tentar obter as informações para cadastro do usuário.", "")
 
 		return
 	}
 
 	user, err = service.PostUser(user)
 	if err != nil {
-		log.Printf("Cannot do Post: %v", err)
+		log.Printf("Cannot do Post: %s", err.Error())
 
-		response := utils.BuildResponseJSON("Não foi possível cadastrar o usuário, houve um erro interno no sistema.", "")
-		utils.ReturnResponseJSON(w, response, 500)
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível cadastrar o usuário, houve um erro interno no sistema.", "")
 
 		return
 	}
 
-	response := utils.BuildResponseJSON("Usuário cadastrado com sucesso!", "")
-	utils.ReturnResponseJSON(w, response, 200)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Usuário cadastrado com sucesso!", "")
 }
 
 func PutUser(w http.ResponseWriter, r *http.Request) {
@@ -85,24 +76,21 @@ func PutUser(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		log.Printf("Cannot do Put: %v", err)
+		log.Printf("Cannot do Put: %s", err.Error())
 
-		response := utils.BuildResponseJSON("Houve algum erro ao tentar obter as informações de atualização do usuário.", "")
-		utils.ReturnResponseJSON(w, response, 400)
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Houve algum erro ao tentar obter as informações de atualização do usuário.", "")
 
 		return
 	}
 
 	user, err = service.PutUser(user)
 	if err != nil {
-		log.Printf("Cannot do Put: %v", err)
+		log.Printf("Cannot do Put: %s", err.Error())
 
-		response := utils.BuildResponseJSON("Não foi possível atualizar o usuário, houve um erro interno no sistema.", "")
-		utils.ReturnResponseJSON(w, response, 500)
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi possível atualizar o usuário, houve um erro interno no sistema.", "")
 
 		return
 	}
 
-	response := utils.BuildResponseJSON("Informações do usuário atualizadas com sucesso!", "")
-	utils.ReturnResponseJSON(w, response, 200)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Informações do usuário atualizadas com sucesso!", "")
 }

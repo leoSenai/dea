@@ -1,15 +1,13 @@
 <template>
   <q-input @focus="teste" ref="input">
-    <template v-slot:prepend v-if="icon && iconLeft">
+    <template v-slot:before></template>
+
+    <template v-slot:prepend v-if="icon && !iconLeft">
       <i :class="['ph', `ph-${icon}`]"></i>
     </template>
 
     <template v-slot:append v-if="icon && !iconLeft">
       <i :class="['ph', `ph-${icon}`]"></i>
-    </template>
-
-    <template v-slot:hint v-if="caption">
-      {{ caption }}
     </template>
   </q-input>
 </template>
@@ -20,18 +18,6 @@ export default {
     iconLeft: {
       type: Boolean,
       default: false,
-    },
-    caption: String,
-  },
-  computed: {
-    focused() {
-      console.log(this.$refs.input.focus);
-      return this.$refs.input.focus;
-    },
-  },
-  methods: {
-    teste() {
-      console.log(this.$refs.input);
     },
   },
 };

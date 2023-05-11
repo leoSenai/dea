@@ -18,7 +18,7 @@ func GetCboById(id int64) (cbo models.Cbo, err error) {
 	return
 }
 
-func GetAllCbos() (cbos []models.Cbo, err error) {
+func GetAllCbo() (cbos []models.Cbo, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
@@ -39,6 +39,8 @@ func PostCbo(cboPost models.Cbo) (cboBack models.Cbo, err error) {
 	row := conn.Create(&cboPost)
 	log.Printf("row: %v", row)
 
+	conn.First(&cboBack, cboPost.IdCbo)
+
 	return
 }
 
@@ -55,6 +57,8 @@ func PutCbo(cboPut models.Cbo) (cboBack models.Cbo, err error) {
 		row := conn.Table("cbo").Where("idcbo = ?", cboPut.IdCbo).Updates(&cboBack)
 		log.Printf("row: %v", row)
 	}
+
+	conn.First(&cboBack, cboPut.IdCbo)
 
 	return
 }

@@ -30,8 +30,8 @@ func GetCboById(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(cbo)
 }
 
-func GetAllCbos(w http.ResponseWriter, _ *http.Request) {
-	cbos, err := service.GetAllCbos()
+func GetAllCbo(w http.ResponseWriter, _ *http.Request) {
+	cbos, err := service.GetAllCbo()
 	if err != nil {
 		log.Printf("Cannot find Get: %v", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -62,7 +62,7 @@ func PostCbo(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(cbo)
 }
 
-func UpdateCbo(w http.ResponseWriter, r *http.Request) {
+func PutCbo(w http.ResponseWriter, r *http.Request) {
 	var cbo models.Cbo
 
 	err := json.NewDecoder(r.Body).Decode(&cbo)

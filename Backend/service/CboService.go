@@ -10,8 +10,8 @@ func GetCboById(id int64) (cbo models.Cbo, err error) {
 	return cbo, err
 }
 
-func GetAllCbos() (cbos []models.Cbo, err error) {
-	cbos, err = repository.GetAllCbos()
+func GetAllCbo() (cbos []models.Cbo, err error) {
+	cbos, err = repository.GetAllCbo()
 	return cbos, err
 }
 

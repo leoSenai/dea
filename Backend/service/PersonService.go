@@ -11,27 +11,22 @@ func GetPersonById(id int64) (person models.Person, err error) {
 	return person, err
 }
 
-func InsertPerson(person models.Person) (err error) {
-	found, err := repository.VerifyPersonByDocument(person.DocNumber)
-	if err != nil {
-		return err
-	}
-
-	if found {
+func PostPerson(person models.Person) (err error) {
+	if repository.VerifyPersonByDocument(person.DocNumber) {
 		return fmt.Errorf("Pessoa com o número de documento %s já cadastrado!", person.DocNumber)
+	} else {
+		err = repository.PostPerson(person)
 	}
-
-	err = repository.InsertPerson(person)
 
 	return err
 }
 
-func GetAllPersons() (persons []models.Person, err error) {
-	persons, err = repository.GetAllPersons()
+func GetAllPerson() (persons []models.Person, err error) {
+	persons, err = repository.GetAllPerson()
 	return persons, err
 }
 
-func UpdatePerson(personUpdate models.Person) (err error) {
+func PutPerson(personUpdate models.Person) (err error) {
 	var person models.Person
 
 	person, err = repository.GetPersonById(personUpdate.IdPerson)
@@ -43,7 +38,7 @@ func UpdatePerson(personUpdate models.Person) (err error) {
 		return fmt.Errorf("Pessoa não está cadastrada no sistema!")
 	}
 
-	err = repository.UpdatePerson(personUpdate)
+	err = repository.PutPerson(personUpdate)
 
 	return
 }

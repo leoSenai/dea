@@ -13,7 +13,8 @@ import (
 )
 
 func GetCboById(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	idParam := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idParam)
 	if err != nil {
 		log.Printf("Cannot parse ID: %s", err.Error())
 		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi possível coletar o ID do CBO.", "")

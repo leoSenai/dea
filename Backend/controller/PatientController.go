@@ -13,7 +13,8 @@ import (
 )
 
 func GetPatientById(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	idParam := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idParam)
 	if err != nil {
 		log.Printf("Cannot parse ID: %v", err.Error())
 

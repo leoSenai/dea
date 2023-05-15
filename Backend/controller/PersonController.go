@@ -13,7 +13,6 @@ import (
 )
 
 func GetPersonById(w http.ResponseWriter, r *http.Request) {
-
 	idParam := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idParam)
 

@@ -12,10 +12,7 @@ func GetPersonById(id int64) (person models.Person, err error) {
 }
 
 func PostPerson(person models.Person) (err error) {
-	found, err := repository.VerifyPersonByDocument(person.DocNumber)
-	if err != nil {
-		return err
-	}
+	found := repository.VerifyPersonByDocument(person.DocNumber)
 
 	if found {
 		return fmt.Errorf("Pessoa com o número de documento %s já cadastrado!", person.DocNumber)

@@ -3,6 +3,7 @@ package controller
 import (
 	"api/models"
 	"api/service"
+	"api/utils"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -17,27 +18,27 @@ func GetPersonById(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(idParam)
 
 	if id <= 0 {
-		jsonResponse(w, http.StatusBadRequest, "ID inválido", "")
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "ID inválido", "")
 		return
 	}
 
 	if err != nil {
-		jsonResponse(w, http.StatusBadRequest, err.Error(), "")
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")
 		return
 	}
 
 	person, err := service.GetPersonById(int64(id))
 	if err != nil {
-		jsonResponse(w, http.StatusInternalServerError, err.Error(), "")
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, err.Error(), "")
 		return
 	}
 
 	if person.IdPerson == 0 {
-		jsonResponse(w, http.StatusNotFound, "Pessoa não encontrada", "")
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Pessoa não encontrada", "")
 		return
 	}
 
-	jsonResponse(w, http.StatusOK, "Pessoa encontrada com sucesso", person)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Pessoa encontrada com sucesso", person)
 }
 
 func PostPerson(w http.ResponseWriter, r *http.Request) {
@@ -45,7 +46,7 @@ func PostPerson(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&person)
 	if err != nil {
-		jsonResponse(w, http.StatusBadRequest, err.Error(), "")
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")
 		return
 	}
 
@@ -62,27 +63,27 @@ func PostPerson(w http.ResponseWriter, r *http.Request) {
 			message = http.StatusText(http.StatusInternalServerError)
 		}
 
-		jsonResponse(w, status, message, "")
+		utils.ReturnResponseJSON(w, status, message, "")
 		return
 	}
 
-	jsonResponse(w, http.StatusOK, "Pessoa cadastrada com sucesso!", "")
+	utils.ReturnResponseJSON(w, http.StatusOK, "Pessoa cadastrada com sucesso!", "")
 }
 
 func GetAllPerson(w http.ResponseWriter, _ *http.Request) {
 
 	persons, err := service.GetAllPerson()
 	if err != nil {
-		jsonResponse(w, http.StatusBadRequest, err.Error(), "")
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")
 		return
 	}
 
 	if len(persons) == 0 {
-		jsonResponse(w, http.StatusNotFound, "Não há pessoas cadastradas ainda.", "")
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não há pessoas cadastradas ainda.", "")
 		return
 	}
 
-	jsonResponse(w, http.StatusOK, "Busca realizada com sucesso!", persons)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Busca realizada com sucesso!", persons)
 }
 
 func PutPerson(w http.ResponseWriter, r *http.Request) {
@@ -90,35 +91,23 @@ func PutPerson(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&person)
 	if err != nil {
-		jsonResponse(w, http.StatusBadRequest, err.Error(), "")
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")
 		return
 	}
 
 	err = service.PutPerson(person)
 	if err != nil {
 		if strings.Contains(err.Error(), "não está cadastrada") {
-			jsonResponse(w, http.StatusBadRequest, err.Error(), "")
+			utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")
 			return
 		} else if strings.Contains(err.Error(), "Nenhum dado foi atualizado") {
-			jsonResponse(w, http.StatusCreated, err.Error(), "")
+			utils.ReturnResponseJSON(w, http.StatusCreated, err.Error(), "")
 			return
 		}
 
-		jsonResponse(w, http.StatusInternalServerError, err.Error(), "")
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, err.Error(), "")
 		return
 	}
 
-	jsonResponse(w, http.StatusOK, "Pessoa atualizada com sucesso!", "")
-}
-
-func jsonResponse(w http.ResponseWriter, status int, message string, data interface{}) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-
-	response := map[string]interface{}{
-		"message": message,
-		"data":    data,
-	}
-
-	json.NewEncoder(w).Encode(response)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Pessoa atualizada com sucesso!", "")
 }

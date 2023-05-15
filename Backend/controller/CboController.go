@@ -26,6 +26,8 @@ func GetCboById(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Cannot find Get: %s", err.Error())
 		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Erro ao buscar por CBO, problema interno no sistema.", "")
 		return
+	} else if cbo.IdCbo == 0 {
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "CBO não encontrado.", "")
 	}
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "CBO Encontrado com sucesso!", cbo)
@@ -36,6 +38,9 @@ func GetAllCbo(w http.ResponseWriter, _ *http.Request) {
 	if err != nil {
 		log.Printf("Cannot find Get: %s", err.Error())
 		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível procurar pelos CBOs, erro interno no sistema.", "")
+		return
+	} else if len(cbos) == 0 {
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Nenhum CBO foi encontrado nos registros.", "")
 		return
 	}
 	utils.ReturnResponseJSON(w, http.StatusOK, "CBOs Encontrado com sucesso!", cbos)

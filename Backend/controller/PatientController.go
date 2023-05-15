@@ -28,6 +28,9 @@ func GetPatientById(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Cannot find Get: %v", err.Error())
 		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível encontrar o paciente, erro interno no servidor.", "")
 		return
+	} else if patient.IdPatient == 0 {
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não foi encontrado pacientes com o ID informado!", "")
+		return
 	}
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Paciente encontrado com sucesso!", patient)
@@ -41,6 +44,8 @@ func GetAllPatient(w http.ResponseWriter, _ *http.Request) {
 		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível encontrar pacientes, erro interno no servidor.", "")
 
 		return
+	} else if len(patients) == 0 {
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não foram encontrados registros de Pacientes.", "")
 	}
 	utils.ReturnResponseJSON(w, http.StatusOK, "Pacientes encontrados com sucesso!", patients)
 }

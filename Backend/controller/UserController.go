@@ -29,6 +29,9 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível encontrar usuário, houve um erro interno no servidor.", "")
 
 		return
+	} else if user.IdUser == 0 {
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não foi possível encontrar o usuário.", "")
+		return
 	}
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Usuário encontrado com sucesso!", user)
@@ -39,8 +42,11 @@ func GetAllUser(w http.ResponseWriter, _ *http.Request) {
 	if err != nil {
 		log.Printf("Cannot find Get: %s", err.Error())
 
-		utils.ReturnResponseJSON(w, http.StatusNoContent, "Não há usuários cadastrados na base de dados.", "")
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível encontrar registros, erro interno no sistema.", "")
 
+		return
+	} else if len(users) == 0 {
+		utils.ReturnResponseJSON(w, http.StatusNoContent, "Não há usuários cadastrados na base de dados.", "")
 		return
 	}
 

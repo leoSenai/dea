@@ -28,6 +28,7 @@ func GetCboById(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if cbo.IdCbo == 0 {
 		utils.ReturnResponseJSON(w, http.StatusNotFound, "CBO não encontrado.", "")
+		return
 	}
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "CBO Encontrado com sucesso!", cbo)

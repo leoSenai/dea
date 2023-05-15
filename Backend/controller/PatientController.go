@@ -46,6 +46,7 @@ func GetAllPatient(w http.ResponseWriter, _ *http.Request) {
 		return
 	} else if len(patients) == 0 {
 		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não foram encontrados registros de Pacientes.", "")
+		return
 	}
 	utils.ReturnResponseJSON(w, http.StatusOK, "Pacientes encontrados com sucesso!", patients)
 }

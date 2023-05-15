@@ -62,7 +62,7 @@ func PostPatient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Paciente cadastrado com sucesso!", patient)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Paciente cadastrado com sucesso!", "")
 }
 
 func PutPatient(w http.ResponseWriter, r *http.Request) {
@@ -82,5 +82,5 @@ func PutPatient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Dados do paciente atualizados com sucesso!", patient)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Dados do paciente atualizados com sucesso!", "")
 }

@@ -58,7 +58,7 @@ func PostCbo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "CBO registrado com sucesso!", cbo)
+	utils.ReturnResponseJSON(w, http.StatusOK, "CBO registrado com sucesso!", "")
 }
 
 func PutCbo(w http.ResponseWriter, r *http.Request) {
@@ -78,5 +78,5 @@ func PutCbo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "CBO atualizado com sucesso!", cbo)
+	utils.ReturnResponseJSON(w, http.StatusOK, "CBO atualizado com sucesso!", "")
 }

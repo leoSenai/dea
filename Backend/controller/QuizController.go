@@ -46,7 +46,7 @@ func GetAllQuiz(w http.ResponseWriter, _ *http.Request) {
 
 		return
 	} else if len(quizs) == 0 {
-		utils.ReturnResponseJSON(w, http.StatusNoContent, "Não há questionários cadastrados na base de dados.", "")
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não há questionários cadastrados na base de dados.", "")
 		return
 	}
 

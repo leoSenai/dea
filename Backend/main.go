@@ -44,6 +44,11 @@ func main() {
 	r.Post("/doctor/insert", controller.PostDoctor)
 	r.Put("/doctor/update", controller.PutDoctor)
 
+	r.Get("/services/get-by-id/{id}", controller.GetServicesById)
+	r.Get("/services/get-all", controller.GetAllServices)
+	r.Post("/services/insert", controller.PostServices)
+	r.Put("/services/update", controller.PutServices)
+
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {
 		log.Println("Server not initialized")

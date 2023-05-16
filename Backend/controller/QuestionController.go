@@ -34,7 +34,7 @@ func GetQuestionById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Questão encontrado com sucesso!", question)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Questão encontrada com sucesso!", question)
 }
 
 func GetAllQuestion(w http.ResponseWriter, _ *http.Request) {
@@ -46,11 +46,11 @@ func GetAllQuestion(w http.ResponseWriter, _ *http.Request) {
 
 		return
 	} else if len(questions) == 0 {
-		utils.ReturnResponseJSON(w, http.StatusNoContent, "Não há questões cadastradas na base de dados.", "")
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não há questões cadastradas na base de dados.", "")
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Questões encontrados!", questions)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Questões encontradas!", questions)
 }
 
 func PostQuestion(w http.ResponseWriter, r *http.Request) {

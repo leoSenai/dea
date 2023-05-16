@@ -6,56 +6,56 @@ import (
 	"log"
 )
 
-func GetQuizById(id int64) (quiz models.Quiz, err error) {
+func GetUserById(id int64) (user models.User, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
 	}
 
-	row := conn.First(&quiz, id)
+	row := conn.First(&user, id)
 	log.Printf("row: %v", row)
 
 	return
 }
 
-func GetAllQuiz() (quizs []models.Quiz, err error) {
+func GetAllUser() (users []models.User, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
 	}
 
-	rows := conn.Find(&quizs)
+	rows := conn.Find(&users)
 	log.Printf("rows: %v", rows)
 
 	return
 }
 
-func PostQuiz(quizPost models.Quiz) (quizBack models.Quiz, err error) {
+func PostUser(userPost models.User) (userBack models.User, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
 	}
 
-	row := conn.Create(&quizPost)
+	row := conn.Create(&userPost)
 	log.Printf("row: %v", row)
-	conn.First(&quizBack, quizPost.IdQuiz)
+	conn.First(&userBack, userPost.IdUser)
 
 	return
 }
 
-func PutQuiz(quizPut models.Quiz) (quizBack models.Quiz, err error) {
+func PutUser(userPut models.User) (userBack models.User, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
 	}
 
-	quizBack = quizPut
-	quizBack.IdQuiz = 0
+	userBack = userPut
+	userBack.IdUser = 0
 
-	if quizPut.IdQuiz != 0 {
-		row := conn.Table("questionario").Where("idquestionario = ?", quizPut.IdQuiz).Updates(&quizBack)
+	if userPut.IdUser != 0 {
+		row := conn.Table("usuario").Where("idusuario = ?", userPut.IdUser).Updates(&userBack)
 		log.Printf("row: %v", row)
-		conn.First(&quizBack, quizPut.IdQuiz)
+		conn.First(&userBack, userPut.IdUser)
 	}
 
 	return

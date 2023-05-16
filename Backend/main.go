@@ -54,6 +54,10 @@ func main() {
 	r.Post("/quiz/insert", controller.PostQuiz)
 	r.Put("/quiz/update", controller.PutQuiz)
 
+	r.Get("/question/get-by-id/{id}", controller.GetQuestionById)
+	r.Get("/question/get-all", controller.GetAllQuestion)
+	r.Post("/question/insert", controller.PostQuestion)
+	r.Put("/question/update", controller.PutQuestion)
 
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {

@@ -58,7 +58,12 @@ func main() {
 	r.Get("/question/get-all", controller.GetAllQuestion)
 	r.Post("/question/insert", controller.PostQuestion)
 	r.Put("/question/update", controller.PutQuestion)
-
+  
+	r.Get("/anamnese/get-by-id/{id}", controller.GetAnamneseById)
+	r.Get("/anamnese/get-all", controller.GetAllAnamnese)
+	r.Post("/anamnese/insert", controller.PostAnamnese)
+	r.Put("/anamnese/update", controller.PutAnamnese)
+  
 	r.Get("/asking/get-by-id/{id}", controller.GetAskingById)
 	r.Get("/asking/get-all", controller.GetAllAsking)
 	r.Post("/asking/insert", controller.PostAsking)

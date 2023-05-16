@@ -69,7 +69,7 @@ func PostDoctor(w http.ResponseWriter, r *http.Request) {
 	utils.ReturnResponseJSON(w, http.StatusOK, "Médico cadastrado com sucesso!", "")
 }
 
-func GetAllDoctor(w http.ResponseWriter, r *http.Request) {
+func GetAllDoctor(w http.ResponseWriter, _ *http.Request) {
 	doctors, err := service.GetAllDoctor()
 	if err != nil {
 		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")

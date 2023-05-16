@@ -46,7 +46,7 @@ func GetAllUser(w http.ResponseWriter, _ *http.Request) {
 
 		return
 	} else if len(users) == 0 {
-		utils.ReturnResponseJSON(w, http.StatusNoContent, "Não há usuários cadastrados na base de dados.", "")
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não há usuários cadastrados na base de dados.", "")
 		return
 	}
 

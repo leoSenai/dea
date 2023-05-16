@@ -69,7 +69,7 @@ func PostServices(w http.ResponseWriter, r *http.Request) {
 	utils.ReturnResponseJSON(w, http.StatusOK, "Serviço cadastrado com sucesso!", "")
 }
 
-func GetAllServices(w http.ResponseWriter, r *http.Request) {
+func GetAllServices(w http.ResponseWriter, _ *http.Request) {
 	servicess, err := service.GetAllServices()
 	if err != nil {
 		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")

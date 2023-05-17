@@ -5,12 +5,12 @@ import (
 	"api/repository"
 )
 
-func GetAnamneseHasAskingByAnamneseId(id int64) (anamneseHasAsking models.AnamneseHasAsking, err error) {
+func GetAnamneseHasAskingByAnamneseId(id int64) (anamneseHasAsking []models.AnamneseHasAsking, err error) {
 	anamneseHasAsking, err = repository.GetAnamneseHasAskingByAnamneseId(int64(id))
 	return anamneseHasAsking, err
 }
 
-func GetAnamneseHasAskingByAskingId(id int64) (anamneseHasAsking models.AnamneseHasAsking, err error) {
+func GetAnamneseHasAskingByAskingId(id int64) (anamneseHasAsking []models.AnamneseHasAsking, err error) {
 	anamneseHasAsking, err = repository.GetAnamneseHasAskingByAskingId(int64(id))
 	return anamneseHasAsking, err
 }

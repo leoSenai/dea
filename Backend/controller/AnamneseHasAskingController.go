@@ -29,12 +29,12 @@ func GetAnamneseHasAskingByAnamneseId(w http.ResponseWriter, r *http.Request) {
 		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível encontrar o registro, houve um erro interno no servidor.", "")
 
 		return
-	} else if anamneseHasAsking.IdAnamnese == 0 {
+	} else if len(anamneseHasAsking) == 0 {
 		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não foi possível encontrar o registro.", "")
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Registro encontrado com sucesso!", anamneseHasAsking)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Registros encontrados com sucesso!", anamneseHasAsking)
 }
 
 func GetAnamneseHasAskingByAskingId(w http.ResponseWriter, r *http.Request) {
@@ -54,12 +54,12 @@ func GetAnamneseHasAskingByAskingId(w http.ResponseWriter, r *http.Request) {
 		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível encontrar o registro, houve um erro interno no servidor.", "")
 
 		return
-	} else if anamneseHasAsking.IdAnamnese == 0 {
+	} else if len(anamneseHasAsking) == 0 {
 		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não foi possível encontrar o registro.", "")
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Registro encontrado com sucesso!", anamneseHasAsking)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Registros encontrados com sucesso!", anamneseHasAsking)
 }
 
 func GetAllAnamneseHasAsking(w http.ResponseWriter, _ *http.Request) {

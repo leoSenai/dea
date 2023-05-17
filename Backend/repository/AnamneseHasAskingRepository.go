@@ -6,25 +6,25 @@ import (
 	"log"
 )
 
-func GetAnamneseHasAskingByAnamneseId(id int64) (anamneseHasAsking models.AnamneseHasAsking, err error) {
+func GetAnamneseHasAskingByAnamneseId(id int64) (anamneseHasAsking []models.AnamneseHasAsking, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
 	}
 
-	row := conn.First(&anamneseHasAsking, id)
+	row := conn.First(&anamneseHasAsking, "anamnese_idanamnese = ?", id)
 	log.Printf("row: %v", row)
 
 	return
 }
 
-func GetAnamneseHasAskingByAskingId(id int64) (anamneseHasAsking models.AnamneseHasAsking, err error) {
+func GetAnamneseHasAskingByAskingId(id int64) (anamneseHasAsking []models.AnamneseHasAsking, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
 	}
 
-	row := conn.First(&anamneseHasAsking, id)
+	row := conn.First(&anamneseHasAsking, "pergunta_idpergunta = ?", id)
 	log.Printf("row: %v", row)
 
 	return

@@ -32,12 +32,8 @@ body {
     flex-direction: column;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
     :root {
-        background-color: #ffffff;
-    }
-
-    button {
-        background-color: #f9f9f9;
+        color: var(--neutral-white) !important;
     }
 }

@@ -26,11 +26,11 @@ func GetAnamneseHasAskingByAnamneseId(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("Cannot find Get: %s", err.Error())
 
-		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível encontrar o registro, houve um erro interno no servidor.", "")
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível encontrar os registros, houve um erro interno no servidor.", "")
 
 		return
 	} else if len(anamneseHasAsking) == 0 {
-		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não foi possível encontrar o registro.", "")
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não foi possível encontrar os registros.", "")
 		return
 	}
 
@@ -51,11 +51,11 @@ func GetAnamneseHasAskingByAskingId(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("Cannot find Get: %s", err.Error())
 
-		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível encontrar o registro, houve um erro interno no servidor.", "")
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível encontrar os registros, houve um erro interno no servidor.", "")
 
 		return
 	} else if len(anamneseHasAsking) == 0 {
-		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não foi possível encontrar o registro.", "")
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não foi possível encontrar os registros.", "")
 		return
 	}
 

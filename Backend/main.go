@@ -73,7 +73,6 @@ func main() {
 	r.Get("/anamnesehasasking/get-by-asking-id/{id}", controller.GetAnamneseHasAskingByAskingId)
 	r.Get("/anamnesehasasking/get-all", controller.GetAllAnamneseHasAsking)
 	r.Post("/anamnesehasasking/insert", controller.PostAnamneseHasAsking)
-	r.Delete("/anamnesehasasking/delete", controller.DeleteAnamneseHasAsking)
 
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {

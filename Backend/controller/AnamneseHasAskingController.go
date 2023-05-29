@@ -102,27 +102,3 @@ func PostAnamneseHasAsking(w http.ResponseWriter, r *http.Request) {
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Registro cadastrado com sucesso!", "")
 }
-
-func DeleteAnamneseHasAsking(w http.ResponseWriter, r *http.Request) {
-	var anamneseHasAsking models.AnamneseHasAsking
-
-	err := json.NewDecoder(r.Body).Decode(&anamneseHasAsking)
-	if err != nil {
-		log.Printf("Cannot do Put: %s", err.Error())
-		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Houve algum erro ao tentar obter as informações de remoção do registro.", "")
-
-		return
-	}
-
-	anamneseHasAsking, err = service.DeleteAnamneseHasAsking(anamneseHasAsking)
-	if err != nil {
-
-		log.Printf("Cannot do Put: %s", err.Error())
-
-		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível atualizar o usuário, houve um erro interno no sistema.", "")
-
-		return
-	}
-
-	utils.ReturnResponseJSON(w, http.StatusOK, "Informações do usuário atualizadas com sucesso!", "")
-}

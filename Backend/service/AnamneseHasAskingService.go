@@ -24,8 +24,3 @@ func PostAnamneseHasAsking(anamneseHasAskingPost models.AnamneseHasAsking) (anam
 	anamneseHasAskingBack, err = repository.PostAnamneseHasAsking(anamneseHasAskingPost)
 	return anamneseHasAskingBack, err
 }
-
-func DeleteAnamneseHasAsking(anamneseHasAskingDelete models.AnamneseHasAsking) (anamneseHasAskingBack models.AnamneseHasAsking, err error) {
-	anamneseHasAskingBack, err = repository.DeleteAnamneseHasAsking(anamneseHasAskingDelete)
-	return anamneseHasAskingBack, err
-}

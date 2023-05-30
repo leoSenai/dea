@@ -24,16 +24,17 @@ func GetPersonById(id int64) (person models.Person, err error) {
 	return
 }
 
-func PostPerson(person models.Person) (err error) {
+func PostPerson(person models.Person) (models.Person, error) {
 	conn, err := db.OpenConnection()
 
 	if err != nil {
-		return
+		return person, err
 	}
 
-	conn.Create(person)
+	conn.Create(&person)
 
-	return
+
+	return GetPersonById(person.IdPerson)
 }
 
 func VerifyPersonByDocument(docNumber string) (found bool) {
@@ -82,4 +83,16 @@ func PutPerson(person models.Person) (err error) {
 	}
 
 	return nil
+}
+
+func DeletePersonById(id int64) error {
+	conn, err := db.OpenConnection()
+
+	if err != nil {
+		return err
+	}
+
+	result := conn.Delete(&models.Person{}, id)
+
+	return result.Error
 }

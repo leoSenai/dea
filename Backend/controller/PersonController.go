@@ -2,6 +2,7 @@ package controller
 
 import (
 	"api/models"
+	"api/models/dtos"
 	"api/service"
 	"api/utils"
 	"encoding/json"
@@ -41,20 +42,23 @@ func GetPersonById(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostPerson(w http.ResponseWriter, r *http.Request) {
-	var person models.Person
+	var personDto dtos.PersonDTO
 
-	err := json.NewDecoder(r.Body).Decode(&person)
+	err := json.NewDecoder(r.Body).Decode(&personDto)
 	if err != nil {
 		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")
 		return
 	}
 
-	err = service.PostPerson(person)
+	err = service.PostPerson(personDto)
 	if err != nil {
 		var status int
 		var message string
 
 		if strings.Contains(err.Error(), "já cadastrado!") {
+			status = http.StatusBadRequest
+			message = err.Error()
+		} else if strings.Contains(err.Error(), "Não foi possivel") {
 			status = http.StatusBadRequest
 			message = err.Error()
 		} else {

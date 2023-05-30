@@ -69,6 +69,10 @@ func main() {
 	r.Post("/asking/insert", controller.PostAsking)
 	r.Put("/asking/update", controller.PutAsking)
 
+	r.Post("/proximity/insert", controller.PostProximity)
+	r.Get("/proximity/get-by-id-person/{id}", controller.GetProximityAllByIdPerson)
+	r.Get("/proximity/get-by-id-patient/{id}", controller.GetProximityAllByIdPatient)
+
 	r.Get("/anamnesehasasking/get-by-anamnese-id/{id}", controller.GetAnamneseHasAskingByAnamneseId)
 	r.Get("/anamnesehasasking/get-by-asking-id/{id}", controller.GetAnamneseHasAskingByAskingId)
 	r.Get("/anamnesehasasking/get-all", controller.GetAllAnamneseHasAsking)

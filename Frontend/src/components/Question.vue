@@ -8,10 +8,14 @@
     </div>
     <div class="question">
       <p>
-        {{ question }}
+        <slot> </slot>
       </p>
     </div>
     <div class="question-answer">
+      <template v-if="isAnswered">
+        <p class="heading-subtitle">Resposta: {{ modelValue < 10 ? '0' + modelValue : modelValue }}</p>
+      </template>
+      <template v-else>
       <div class="disagree text-caption">Discordo</div>
       <div class="question-range">
         <template v-for="answer in answers">
@@ -46,19 +50,17 @@
         </template>
       </div>
       <div class="agree text-caption">Concordo</div>
+    </template>
+
     </div>
   </div>
 </template>
 <script>
 export default {
   props: {
-    modelValue: Number,
+    modelValue: Number | String,
     questionNumber: {
       type: Number,
-      required: true,
-    },
-    question: {
-      type: String,
       required: true,
     },
     isAnswered: {
@@ -83,10 +85,9 @@ export default {
       const isEven = this.answerRange % 2 === 0;
 
       const middleArray = Math.ceil(arr.length / 2);
-      const middleValues =
-        isEven
-          ? arr.slice(middleArray - 1, middleArray + 1)
-          : arr.slice(middleArray - 1, middleArray);
+      const middleValues = isEven
+        ? arr.slice(middleArray - 1, middleArray + 1)
+        : arr.slice(middleArray - 1, middleArray);
 
       const colors = new Array(this.answerRange);
       const scales = new Array(this.answerRange).fill(0);
@@ -113,7 +114,6 @@ export default {
           if (i === 0) colors[i] = "hsl(0, 40%, 46%)";
         }
       }
-
 
       return arr.map((el, i) => {
         return {

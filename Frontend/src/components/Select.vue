@@ -1,34 +1,33 @@
 <template>
-  <q-select class="select-input" label-slot hideDropdownIcon ref="select">
-    <template v-slot:label>
-      <span class="label">
-        {{ label }}
-      </span>
-    </template>
-    <template v-slot:append>
-      <i @click="clickSelect" class="icon ph ph-caret-down"></i>
-    </template>
-    <template v-slot:option="option">
-      <q-item class="option" v-bind="option.itemProps"
+    <q-select class="select-input" label-slot hideDropdownIcon ref="select" :options="options" :behavior="$q.platform.is.ios === true ? 'dialog' : 'menu'" borderless>
+      <template v-slot:label>
+        <span class="label">
+          {{ label }}
+        </span>
+      </template>
+      <template v-slot:append>
+        <PhCaretDown class="icon" />
+      </template>
+      <template v-slot:option="option">
+        <q-item class="option" v-bind="option.itemProps"
         ><p :class="option.selected ? 'selected' : ''">
           {{ option.label }}
         </p></q-item
-      >
-    </template>
-  </q-select>
+        >
+      </template>
+    </q-select>
 </template>
 <script>
+import { PhCaretDown } from '@phosphor-icons/vue'
+
 export default {
   props: {
     label: String | Number,
+    options: Array,
   },
-  computed: {
-    active() {
-      return this.$refs.select;
-    },
-  },
-  methods: {
-  },
+  components: {
+    PhCaretDown
+  }
 };
 </script>
 <style scoped>
@@ -47,6 +46,18 @@ export default {
   border-radius: 4px;
 }
 
+.select-input:hover{
+  opacity: .8;
+}
+
+.label {
+  margin-left: 1rem;
+}
+
+.icon {
+  margin-right: 1rem;
+}
+
 .select-input:has([aria-expanded="true"]) .icon {
   transform: rotate(180deg);
   color: var(--primary);
@@ -54,6 +65,10 @@ export default {
 
 .select-input:has([aria-expanded="true"]) .label {
   color: var(--primary);
+}
+
+.select-input:has([aria-expanded="true"])::before {
+  border-color: var(--primary);
 }
 
 .icon {
@@ -65,7 +80,7 @@ export default {
   color: var(--neutral-black);
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .option.selected {
@@ -88,6 +103,9 @@ export default {
 }
 
 @media (prefers-color-scheme: dark) {
+  .select-input {
+    color: var(--neutral-white);
+  }
   .option {
     color: var(--neutral-white);
     background: rgba(0, 0, 0, 0.8);

@@ -1,16 +1,13 @@
 <template>
-  <button :class="[outlined ? 'outlined' : '', roundedFull ? 'rounded-full' : '']" type="button">
-    <i v-if="iconLeft" :class="['ph', `ph-${iconLeft}`, 'icon-left']"></i>
-    <span v-if="label">{{ label }}</span>
-    <i v-if="icon" :class="['ph', `ph-${icon}`, 'icon-right']"></i>
+  <button :class="[outlined ? 'outlined' : '', roundedFull ? 'rounded-full' : '']" :disabled="disabled" type="button">
+    <slot name="before-label"></slot>
+    <slot></slot>
+    <slot name="after-label"></slot>
 </button>
 </template>
 <script>
 export default {
   props: {
-    label: String,
-    icon: String,
-    iconLeft: String,
     outlined: {
       type: Boolean,
       default: false
@@ -19,6 +16,7 @@ export default {
       type: Boolean,
       default: false
     },
+    disabled: Boolean
   }
 }
 </script>
@@ -46,11 +44,11 @@ button.outlined {
   color: var(--primary);
 }
 
-button:has(.icon-left) {
+button:has(.before-label) {
   padding-left: 1.5rem;
 }
 
-button:has(.icon-right) {
+button:has(.after-label) {
   padding-right: 1.5rem;
 }
 

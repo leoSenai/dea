@@ -1,7 +1,9 @@
-<template></template>
+<template>
+  <Select v-model="valor" label="Label" :options="['google', 'twitter']" />
+</template>
 <script>
 import Header from "../components/Header.vue";
-import Input from "../components/Input.vue";
+import Select from "../components/Select.vue";
 
 export default {
   data() {
@@ -9,7 +11,7 @@ export default {
       valor: "",
     };
   },
-  components: { Header, Input },
+  components: { Header, Select },
   methods: {
     teste() {
       console.log(this.valor);

@@ -13,52 +13,49 @@
     </div>
     <div class="question-answer">
       <template v-if="isAnswered">
-        <p class="heading-subtitle">Resposta: {{ modelValue < 10 ? '0' + modelValue : modelValue }}</p>
+        <p class="heading-subtitle">
+          Resposta: {{ modelValue < 10 ? "0" + modelValue : modelValue }}
+        </p>
       </template>
       <template v-else>
-      <div class="disagree text-caption">Discordo</div>
-      <div class="question-range">
-        <template v-for="answer in answers">
-          <div class="answer-container">
-            <input
-              :id="`question-${questionNumber}-option-${answer.value}`"
-              :value="answer.value"
-              type="radio"
-              name="option-question"
-              ref="option"
-              @input="$emit('update:modelValue', answer.value)"
-              style="display: none"
-              :checked="modelValue === answer.value"
-            />
-            <label
-              :for="`question-${questionNumber}-option-${answer.value}`"
-              class="icon"
-              :style="{
-                transform: `scale(${answer.scale})`,
-                background: modelValue === answer.value ? answer.color : '',
-                borderColor: modelValue === answer.value ? answer.color : '',
-              }"
-            >
-              <i
-                :class="[
-                  'ph',
-                  modelValue === answer.value ? 'ph-check' : 'ph-checked',
-                ]"
-              ></i>
-            </label>
-          </div>
-        </template>
-      </div>
-      <div class="agree text-caption">Concordo</div>
-    </template>
-
+        <div class="disagree text-caption">Discordo</div>
+        <div class="question-range">
+          <template v-for="answer in answers">
+            <div class="answer-container">
+              <input
+                :id="`question-${questionNumber}-option-${answer.value}`"
+                :value="answer.value"
+                type="radio"
+                name="option-question"
+                ref="option"
+                @input="$emit('update:modelValue', answer.value)"
+                style="display: none"
+                :checked="modelValue === answer.value"
+              />
+              <label
+                :for="`question-${questionNumber}-option-${answer.value}`"
+                class="icon"
+                :style="{
+                  transform: `scale(${answer.scale})`,
+                  background: modelValue === answer.value ? answer.color : '',
+                  borderColor: modelValue === answer.value ? answer.color : '',
+                }"
+              >
+                <PhCheck v-if="answer.value === modelValue"/>
+              </label>
+            </div>
+          </template>
+        </div>
+        <div class="agree text-caption">Concordo</div>
+      </template>
     </div>
   </div>
 </template>
 <script>
+import { PhCheck } from '@phosphor-icons/vue'
 export default {
   props: {
-    modelValue: Number | String,
+    modelValue: Number,
     questionNumber: {
       type: Number,
       required: true,
@@ -123,6 +120,9 @@ export default {
         };
       });
     },
+  },
+  components: {
+    PhCheck
   },
   emits: ["update:modelValue"],
 };

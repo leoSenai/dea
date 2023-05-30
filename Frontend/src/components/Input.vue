@@ -1,7 +1,7 @@
 <template>
-  <q-input class="input" @focus="teste" label-slot outlined>
-    <template v-slot:prepend v-if="icon && iconLeft">
-      <i :class="['ph', `ph-${icon}`]"></i>
+  <q-input class="input" label-slot color="primary" :dark="false">
+    <template v-slot:prepend>
+      <slot name="before-label"></slot>
     </template>
 
     <template v-slot:label>
@@ -10,20 +10,16 @@
       </span>
     </template>
 
-    <template v-slot:append v-if="icon && !iconLeft">
-      <i :class="['ph', `ph-${icon}`, 'icon']"></i>
+    <template v-slot:append>
+      <slot name="after-label"></slot>
     </template>
   </q-input>
 </template>
 <script>
 export default {
   props: {
-    icon: String,
-    iconLeft: {
-      type: Boolean,
-      default: false,
-    },
-    label: String | Number
+    label: String | Number,
+    modelValue: String
   },
 };
 </script>

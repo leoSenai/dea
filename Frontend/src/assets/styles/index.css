@@ -8,7 +8,6 @@
 
     color-scheme: light dark;
     color: rgba(255, 255, 255, 1);
-    background-color: #242424;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -35,5 +34,6 @@ body {
 @media (prefers-color-scheme: dark) {
     :root {
         color: var(--neutral-white) !important;
+        background-color: #242424;
     }
 }

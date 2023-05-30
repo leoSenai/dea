@@ -3,7 +3,7 @@
     <template v-for="link in links" :key="link.path">
       <router-link :to="link.path" class="link">
         {{ link.name }}
-        <i :class="['ph', `ph-${link.icon}`, 'link-icon']"></i>
+        <component :is="link.icon"/>
       </router-link>
     </template>
   </div>
@@ -15,12 +15,6 @@ export default {
       type: Array,
       required: true,
     },
-  },
-  data() {
-    return {};
-  },
-  components: {
-    PhScooter: () => import("@phosphor-icons/vue"),
   },
 };
 </script>

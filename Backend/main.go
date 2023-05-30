@@ -69,6 +69,10 @@ func main() {
 	r.Post("/asking/insert", controller.PostAsking)
 	r.Put("/asking/update", controller.PutAsking)
 
+	r.Post("/proximity/insert", controller.PostProximity)
+	r.Get("/proximity/get-by-id-person/{id}", controller.GetProximityAllByIdPerson)
+	r.Get("/proximity/get-by-id-patient/{id}", controller.GetProximityAllByIdPatient)
+
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {
 		log.Println("Server not initialized")

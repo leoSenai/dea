@@ -58,12 +58,12 @@ func main() {
 	r.Get("/question/get-all", controller.GetAllQuestion)
 	r.Post("/question/insert", controller.PostQuestion)
 	r.Put("/question/update", controller.PutQuestion)
-  
+
 	r.Get("/anamnese/get-by-id/{id}", controller.GetAnamneseById)
 	r.Get("/anamnese/get-all", controller.GetAllAnamnese)
 	r.Post("/anamnese/insert", controller.PostAnamnese)
 	r.Put("/anamnese/update", controller.PutAnamnese)
-  
+
 	r.Get("/asking/get-by-id/{id}", controller.GetAskingById)
 	r.Get("/asking/get-all", controller.GetAllAsking)
 	r.Post("/asking/insert", controller.PostAsking)
@@ -72,6 +72,11 @@ func main() {
 	r.Post("/proximity/insert", controller.PostProximity)
 	r.Get("/proximity/get-by-id-person/{id}", controller.GetProximityAllByIdPerson)
 	r.Get("/proximity/get-by-id-patient/{id}", controller.GetProximityAllByIdPatient)
+
+	r.Get("/anamnesehasasking/get-by-anamnese-id/{id}", controller.GetAnamneseHasAskingByAnamneseId)
+	r.Get("/anamnesehasasking/get-by-asking-id/{id}", controller.GetAnamneseHasAskingByAskingId)
+	r.Get("/anamnesehasasking/get-all", controller.GetAllAnamneseHasAsking)
+	r.Post("/anamnesehasasking/insert", controller.PostAnamneseHasAsking)
 
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {

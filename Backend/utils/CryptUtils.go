@@ -19,6 +19,18 @@ func GenerateEncryptedPassword(password string) (encryptedPassword string, salt 
 	return encryptedPassword, salt
 }
 
+func GenerateSha256(password string, salt string) (encryptedPassword string) {
+
+	sha256o := sha256.New()
+
+	passwordSalted := password + salt
+
+	sha256o.Write([]byte(passwordSalted))
+	encryptedPassword = hex.EncodeToString(sha256o.Sum(nil))
+
+	return encryptedPassword
+}
+
 func generateSalt() (salt string) {
 
 	saltByte := make([]byte, 15, 20)

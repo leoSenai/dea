@@ -1,32 +1,49 @@
 <template>
-    <q-select class="select-input" label-slot hideDropdownIcon ref="select" :options="options" :behavior="$q.platform.is.ios === true ? 'dialog' : 'menu'" borderless>
-      <template v-slot:label>
-        <span class="label">
-          {{ label }}
-        </span>
-      </template>
-      <template v-slot:append>
-        <PhCaretDown class="icon" />
-      </template>
-      <template v-slot:option="option">
-        <q-item class="option" v-bind="option.itemProps"
-        ><p :class="option.selected ? 'selected' : ''">
+  <q-select
+    ref="select"
+    class="select-input"
+    label-slot
+    hide-dropdown-icon
+    :options="options"
+    :behavior="$q.platform.is.ios === true ? 'dialog' : 'menu'"
+    borderless
+  >
+    <template #label>
+      <span class="label">
+        {{ label }}
+      </span>
+    </template>
+    <template #append>
+      <PhCaretDown class="icon" />
+    </template>
+    <template #option="option">
+      <q-item
+        class="option"
+        v-bind="option.itemProps"
+      >
+        <p :class="option.selected ? 'selected' : ''">
           {{ option.label }}
-        </p></q-item
-        >
-      </template>
-    </q-select>
+        </p>
+      </q-item>
+    </template>
+  </q-select>
 </template>
 <script>
 import { PhCaretDown } from '@phosphor-icons/vue'
 
 export default {
-  props: {
-    label: String | Number,
-    options: Array,
-  },
   components: {
     PhCaretDown
+  },
+  props: {
+    label: {
+      type: String,
+      default: ''
+    },
+    options: {
+      type: Array,
+      default: new Array()
+    },
   }
 };
 </script>

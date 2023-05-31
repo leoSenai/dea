@@ -1,5 +1,8 @@
 <template>
-  <q-checkbox color="primary" :label="label"/>
+  <q-checkbox
+    color="primary"
+    :label="label"
+  />
 </template>
 <script>
 export default {
@@ -7,13 +10,12 @@ export default {
     label: {
       type: String,
       required: true,
-    }
-  }
-}
+    },
+  },
+};
 </script>
-<style >
-
-.q-checkbox__inner--truthy .q-checkbox__bg{
+<style>
+.q-checkbox__inner--truthy .q-checkbox__bg {
   border-color: var(--primary) !important;
 }
 
@@ -22,5 +24,4 @@ export default {
     border-color: var(--neutral-dark-gray) !important;
   }
 }
-
 </style>

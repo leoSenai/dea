@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src"
   },
   "dependencies": {
     "@phosphor-icons/vue": "^2.0.1",
@@ -27,10 +28,12 @@
     "@storybook/vue3": "^7.0.18",
     "@storybook/vue3-vite": "^7.0.18",
     "@vitejs/plugin-vue": "^4.1.0",
+    "eslint-plugin-vue": "^9.14.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.32.12",
     "storybook": "^7.0.18",
-    "vite": "^4.3.2"
+    "vite": "^4.3.2",
+    "vite-plugin-eslint": "^1.8.1"
   }
 }

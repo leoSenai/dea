@@ -1,12 +1,12 @@
 <template>
   <div class="option-slider-container">
     <input
-    type="checkbox"
-    class="option-slider"
-    ref="input"
-    @input="$emit('update:modelValue', $event.target.checked)"
-    :checked="modelValue"
-    />
+      ref="input"
+      type="checkbox"
+      class="option-slider"
+      :checked="modelValue"
+      @input="$emit('update:modelValue', $event.target.checked)"
+    >
     <label v-if="label">{{ label }}</label>
   </div>
 </template>
@@ -14,8 +14,14 @@
 
 export default {
   props: {
-    modelValue: Boolean,
-    label: String,
+    modelValue: {
+      type: Boolean,
+      default: false
+    },
+    label: {
+      type: String,
+      default: ''
+    },
   },
   emits: ['update:modelValue'],
 }

@@ -1,14 +1,15 @@
 <template>
-  <div :id="`question-${questionNumber}`" class="question-container">
+  <div
+    :id="`question-${questionNumber}`"
+    class="question-container"
+  >
     <div class="question-title">
-      <span class="heading-6"
-        >Questão
-        {{ questionNumber < 10 ? "0" + questionNumber : questionNumber }}:</span
-      >
+      <span class="heading-6">Questão
+        {{ questionNumber < 10 ? "0" + questionNumber : questionNumber }}:</span>
     </div>
     <div class="question">
       <p>
-        <slot> </slot>
+        <slot />
       </p>
     </div>
     <div class="question-answer">
@@ -18,20 +19,25 @@
         </p>
       </template>
       <template v-else>
-        <div class="disagree text-caption">Discordo</div>
+        <div class="disagree text-caption">
+          Discordo
+        </div>
         <div class="question-range">
-          <template v-for="answer in answers">
+          <template
+            v-for="answer in answers"
+            :key="answer.value"
+          >
             <div class="answer-container">
               <input
                 :id="`question-${questionNumber}-option-${answer.value}`"
+                ref="option"
                 :value="answer.value"
                 type="radio"
                 name="option-question"
-                ref="option"
-                @input="$emit('update:modelValue', answer.value)"
                 style="display: none"
                 :checked="modelValue === answer.value"
-              />
+                @input="$emit('update:modelValue', answer.value)"
+              >
               <label
                 :for="`question-${questionNumber}-option-${answer.value}`"
                 class="icon"
@@ -41,12 +47,14 @@
                   borderColor: modelValue === answer.value ? answer.color : '',
                 }"
               >
-                <PhCheck v-if="answer.value === modelValue"/>
+                <PhCheck v-if="answer.value === modelValue" />
               </label>
             </div>
           </template>
         </div>
-        <div class="agree text-caption">Concordo</div>
+        <div class="agree text-caption">
+          Concordo
+        </div>
       </template>
     </div>
   </div>
@@ -54,8 +62,14 @@
 <script>
 import { PhCheck } from '@phosphor-icons/vue'
 export default {
+  components: {
+    PhCheck
+  },
   props: {
-    modelValue: Number,
+    modelValue: {
+      type: Number,
+      default: 0
+    },
     questionNumber: {
       type: Number,
       required: true,
@@ -70,6 +84,7 @@ export default {
       default: 5,
     },
   },
+  emits: ['update:modelValue'],
   computed: {
     scaleMax() {
       return this.answerRange;
@@ -98,7 +113,7 @@ export default {
           k++;
           if (middleValues[1] - 1 === i && middleValues.length == 2) {
             scales[i] = 1;
-            colors[i] = "#656565";
+            colors[i] = '#656565';
           }
         } else {
           scales[i] = j;
@@ -106,9 +121,9 @@ export default {
           j--;
           if (middleValues[0] - 1 === i) {
             scales[i] = 1;
-            colors[i] = "#656565";
+            colors[i] = '#656565';
           }
-          if (i === 0) colors[i] = "hsl(0, 40%, 46%)";
+          if (i === 0) colors[i] = 'hsl(0, 40%, 46%)';
         }
       }
 
@@ -121,10 +136,6 @@ export default {
       });
     },
   },
-  components: {
-    PhCheck
-  },
-  emits: ["update:modelValue"],
 };
 </script>
 <style scoped>

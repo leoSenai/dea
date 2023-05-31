@@ -1,34 +1,40 @@
 <template>
-  <button :class="[outlined ? 'outlined' : '', roundedFull ? 'rounded-full' : '']" :disabled="disabled" type="button">
-    <slot name="before-label"></slot>
-    <slot></slot>
-    <slot name="after-label"></slot>
-</button>
+  <button
+    :class="[outlined ? 'outlined' : '', roundedFull ? 'rounded-full' : '']"
+    :disabled="disabled"
+    type="button"
+  >
+    <slot name="before-label" />
+    <slot />
+    <slot name="after-label" />
+  </button>
 </template>
 <script>
 export default {
   props: {
     outlined: {
       type: Boolean,
-      default: false
+      default: false,
     },
     roundedFull: {
       type: Boolean,
+      default: false,
+    },
+    disabled: {
+      type: Boolean,
       default: false
     },
-    disabled: Boolean
-  }
-}
+  },
+};
 </script>
 <style scoped>
-
 button {
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  gap: .5rem;
+  gap: 0.5rem;
   padding: 1rem 2rem;
   border: none;
   background: var(--primary);
@@ -65,5 +71,4 @@ button.outlined:disabled {
 button:not(:disabled):hover {
   filter: opacity(0.8);
 }
-
 </style>

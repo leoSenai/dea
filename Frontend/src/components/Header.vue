@@ -5,23 +5,26 @@
       <h6>Clínica Motivar</h6>
     </div>
     <div class="user white">
-      <ph-user-circle class="user-icon" regular />
+      <ph-user-circle
+        class="user-icon"
+        regular
+      />
       <span class="text-body">Usuário</span>
     </div>
   </header>
 </template>
 
 <script>
-import { PhUserCircle } from "@phosphor-icons/vue";
+import { PhUserCircle } from '@phosphor-icons/vue';
 
 export default {
-  data() {
-    return {
-      LogoSrc: "src/assets/imgs/Logo.png",
-    };
-  },
   components: {
     PhUserCircle,
+  },
+  data() {
+    return {
+      LogoSrc: 'src/assets/imgs/Logo.png',
+    };
   },
 };
 </script>

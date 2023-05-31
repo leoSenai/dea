@@ -1,25 +1,36 @@
 <template>
-  <q-input class="input" label-slot color="primary" :dark="false">
-    <template v-slot:prepend>
-      <slot name="before-label"></slot>
+  <q-input
+    class="input"
+    label-slot
+    color="primary"
+    :dark="false"
+  >
+    <template #prepend>
+      <slot name="before-label" />
     </template>
 
-    <template v-slot:label>
+    <template #label>
       <span class="label">
         {{ label }}
       </span>
     </template>
 
-    <template v-slot:append>
-      <slot name="after-label"></slot>
+    <template #append>
+      <slot name="after-label" />
     </template>
   </q-input>
 </template>
 <script>
 export default {
   props: {
-    label: String | Number,
-    modelValue: String
+    label: {
+      type: String,
+      default: '0'
+    },
+    modelValue: {
+      type: String,
+      default: ''
+    }
   },
 };
 </script>

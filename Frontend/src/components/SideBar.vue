@@ -1,9 +1,18 @@
 <template>
   <div class="sidebar bg-success">
-    <template v-for="link in links" :key="link.path">
-      <router-link :to="link.path" class="link">
+    <template
+      v-for="link in links"
+      :key="link.path"
+    >
+      <router-link
+        :to="link.path"
+        class="link"
+      >
         {{ link.name }}
-        <component :is="link.icon"/>
+        <component
+          :is="link.icon"
+          class="link-icon"
+        />
       </router-link>
     </template>
   </div>

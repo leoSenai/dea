@@ -1,14 +1,14 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
-import eslint from 'vite-plugin-eslint'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
+import eslint from 'vite-plugin-eslint';
 
 export default defineConfig({
   plugins: [
     vue({
-      template: { transformAssetUrls }
+      template: { transformAssetUrls },
     }),
-    eslint(),
-    quasar()
-  ]
-})
+    eslint({ exclude: ['/virtual/**', 'node_modules/**'] }),
+    quasar(),
+  ],
+});

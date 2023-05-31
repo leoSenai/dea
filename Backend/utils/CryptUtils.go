@@ -6,16 +6,20 @@ import (
 	"encoding/hex"
 )
 
-func GenerateSha256(password string) (sha256password string) {
+func GenerateEncryptedPassword(password string) (encryptedPassword string, salt string) {
 
 	sha256o := sha256.New()
-	sha256o.Write([]byte(password))
-	sha256password = hex.EncodeToString(sha256o.Sum(nil))
 
-	return sha256password
+	salt = generateSalt()
+	passwordSalted := password + salt
+
+	sha256o.Write([]byte(passwordSalted))
+	encryptedPassword = hex.EncodeToString(sha256o.Sum(nil))
+
+	return encryptedPassword, salt
 }
 
-func GenerateSalt() (salt string) {
+func generateSalt() (salt string) {
 
 	saltByte := make([]byte, 15, 20)
 	rand.Read(saltByte)

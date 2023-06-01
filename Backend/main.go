@@ -78,6 +78,13 @@ func main() {
 	r.Get("/anamnesehasasking/get-all", controller.GetAllAnamneseHasAsking)
 	r.Post("/anamnesehasasking/insert", controller.PostAnamneseHasAsking)
 
+	r.Get("/proximityhasquiz/get", controller.GetProximityQuizByQuizPatientPersonIDs)
+	r.Get("/proximityhasquiz/get-by-id-quiz/{id}", controller.GetProximityQuizByQuizID)
+	r.Get("/proximityhasquiz/get-by-id-patient/{id}", controller.GetProximityQuizByPatientID)
+	r.Get("/proximityhasquiz/get-by-id-person{id}", controller.GetProximityQuizByPersonID)
+	r.Post("/proximityhasquiz/insert", controller.PostProximityQuiz)
+	r.Post("/proximityhasquiz/update", controller.PutProximityQuiz)
+
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {
 		log.Println("Server not initialized")

@@ -1,8 +1,8 @@
-import Header from '../components/Header.vue'
+import HeaderPrimary from '../components/HeaderPrimary.vue'
 
 export default {
-  title: 'Example/Header',
-  component: Header,
+  title: 'Example/HeaderPrimary',
+  component: HeaderPrimary,
   tags: ['autodocs'],
   argTypes: {
     onClick: {},
@@ -11,10 +11,10 @@ export default {
 
 export const Primary = {
   render: (args) => ({
-    components: { Header },
+    components: { HeaderPrimary },
     setup() {
       return { args };
     },
-    template: '<Header />',
+    template: '<HeaderPrimary />',
   }),
 };

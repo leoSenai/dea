@@ -1,8 +1,8 @@
-import Checkbox from '../components/Checkbox.vue'
+import CheckboxPrimary from '../components/CheckboxPrimary.vue'
 
 export default {
-  title: 'Example/Checkbox',
-  component: Checkbox,
+  title: 'Example/CheckboxPrimary',
+  component: CheckboxPrimary,
   tags: ['autodocs'],
   argTypes: {
     onClick: {},
@@ -11,11 +11,11 @@ export default {
 
 export const Primary = {
   render: (args) => ({
-    components: { Checkbox },
+    components: { CheckboxPrimary },
     setup() {
       return args;
     },
-    template: '<Checkbox :label="label" v-model="value" />',
+    template: '<CheckboxPrimary :label="label" v-model="value" />',
   }),
   args: {
     label: 'Label',

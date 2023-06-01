@@ -1,8 +1,8 @@
-import Input from '../components/Input.vue'
+import InputPrimary from '../components/InputPrimary.vue'
 
 export default {
-  title: 'Example/Input',
-  component: Input,
+  title: 'Example/InputPrimary',
+  component: InputPrimary,
   tags: ['autodocs'],
   argTypes: {
     onClick: {},
@@ -11,10 +11,10 @@ export default {
 
 export const Primary = {
   render: (args) => ({
-    components: { Input },
+    components: { InputPrimary },
     setup () {
       return { args }
     },
-    template: '<Input label="Input" />',
+    template: '<InputPrimary label="InputPrimary" />',
   }),
 };

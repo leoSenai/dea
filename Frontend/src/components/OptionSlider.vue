@@ -1,13 +1,17 @@
 <template>
   <div class="option-slider-container">
     <input
+      :id="`option-slider-${id}`"
       ref="input"
       type="checkbox"
       class="option-slider"
       :checked="modelValue"
       @input="$emit('update:modelValue', $event.target.checked)"
     >
-    <label v-if="label">{{ label }}</label>
+    <label
+      v-if="label"
+      :for="`option-slider-${id}`"
+    >{{ label }}</label>
   </div>
 </template>
 <script>
@@ -24,6 +28,11 @@ export default {
     },
   },
   emits: ['update:modelValue'],
+  computed: {
+    id () {
+      return this._uid;
+    }
+  },
 }
 </script>
 <style scoped>
@@ -32,7 +41,6 @@ export default {
   align-items: center;
   justify-content: center;
   gap: .5rem;
-  padding: 1rem;
 }
 
 .option-slider {

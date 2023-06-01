@@ -3,11 +3,12 @@ package repository
 import (
 	"api/db"
 	"api/models"
+	"api/models/dtos"
 	"api/utils"
 	"log"
 )
 
-func GetUserById(id int64) (user models.User, err error) {
+func GetUserById(id int64) (user dtos.UserDTO, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
@@ -19,7 +20,7 @@ func GetUserById(id int64) (user models.User, err error) {
 	return
 }
 
-func GetAllUser() (users []models.User, err error) {
+func GetAllUser() (users []dtos.UserDTO, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return

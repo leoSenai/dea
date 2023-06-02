@@ -2,16 +2,15 @@ package service
 
 import (
 	"api/models"
-	"api/models/dtos"
 	"api/repository"
 )
 
-func GetUserById(id int64) (user dtos.UserDTO, err error) {
+func GetUserById(id int64) (user models.User, err error) {
 	user, err = repository.GetUserById(int64(id))
 	return user, err
 }
 
-func GetAllUser() (user []dtos.UserDTO, err error) {
+func GetAllUser() (user []models.User, err error) {
 	users, err := repository.GetAllUser()
 	return users, err
 }

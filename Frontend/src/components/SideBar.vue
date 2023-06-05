@@ -30,7 +30,8 @@ export default {
 <style scoped>
 .sidebar {
   position: fixed;
-  min-height: 100%;
+  bottom: 0;
+  min-height: calc(100vh - 4.5rem);
   padding: 2rem 0rem;
 
   display: flex;

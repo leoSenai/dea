@@ -31,8 +31,9 @@ export default {
 
 <style scoped>
 header {
-  position: sticky;
+  position: fixed;
   min-width: 100%;
+  z-index: 1;
 
   display: flex;
   align-items: center;

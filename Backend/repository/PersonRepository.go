@@ -3,6 +3,7 @@ package repository
 import (
 	"api/db"
 	"api/models"
+	"api/utils"
 	"errors"
 	"fmt"
 
@@ -31,8 +32,11 @@ func PostPerson(person models.Person) (models.Person, error) {
 		return person, err
 	}
 
-	conn.Create(&person)
+	passwordEncrypted, salt := utils.GenerateEncryptedPassword(person.Password)
+	person.Password = passwordEncrypted
+	person.Salt = salt
 
+	conn.Create(&person)
 
 	return GetPersonById(person.IdPerson)
 }
@@ -72,7 +76,13 @@ func PutPerson(person models.Person) (err error) {
 		return
 	}
 
-	result := conn.Where("idpessoa = ?", person.IdPerson).Updates(models.Person{Name: person.Name, BornDate: person.BornDate, DocNumber: person.DocNumber, DocType: person.DocType, Password: person.Password, Salt: person.Salt})
+	if person.Password != "" {
+		passwordEncrypted, salt := utils.GenerateEncryptedPassword(person.Password)
+		person.Password = passwordEncrypted
+		person.Salt = salt
+	}
+
+	result := conn.Where("idpessoa = ?", person.IdPerson).Updates(person)
 
 	if result.Error != nil {
 		return result.Error

@@ -20,3 +20,7 @@ For more status definition take a look in C:\Program Files\Go\src\net\http\statu
 -feat
 -chore
 -test
+
+[BACKEND UTIL TIPS]
+
+-If you want delete the gorm parameters from a struct, you can use the regular expression to filter and delete: `([\w:" ;]{0,})`

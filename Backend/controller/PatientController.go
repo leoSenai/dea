@@ -2,6 +2,7 @@ package controller
 
 import (
 	"api/models"
+	"api/models/dtos"
 	"api/service"
 	"api/utils"
 	"encoding/json"
@@ -33,7 +34,23 @@ func GetPatientById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Paciente encontrado com sucesso!", patient)
+	var patientDto dtos.PatientDTO = dtos.PatientDTO{
+		IdPatient: patient.IdPatient,
+		Name:      patient.Name,
+		Cpf:       patient.Cpf,
+		Address:   patient.Address,
+		Phone:     patient.Phone,
+		BornDate:  patient.BornDate,
+		Sex:       patient.Sex,
+		NewBorn:   patient.NewBorn,
+		DadName:   patient.DadName,
+		MomName:   patient.MomName,
+		Cns:       patient.Cns,
+		Cid10:     patient.Cid10,
+		Active:    patient.Active,
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Paciente encontrado com sucesso!", patientDto)
 }
 
 func GetAllPatient(w http.ResponseWriter, _ *http.Request) {
@@ -48,6 +65,27 @@ func GetAllPatient(w http.ResponseWriter, _ *http.Request) {
 		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não foram encontrados registros de Pacientes.", "")
 		return
 	}
+
+	var patientsDto []dtos.PatientDTO
+
+	for i := 0; i < len(patients); i++ {
+		patientsDto = append(patientsDto, dtos.PatientDTO{
+			IdPatient: patients[i].IdPatient,
+			Name:      patients[i].Name,
+			Cpf:       patients[i].Cpf,
+			Address:   patients[i].Address,
+			Phone:     patients[i].Phone,
+			BornDate:  patients[i].BornDate,
+			Sex:       patients[i].Sex,
+			NewBorn:   patients[i].NewBorn,
+			DadName:   patients[i].DadName,
+			MomName:   patients[i].MomName,
+			Cns:       patients[i].Cns,
+			Cid10:     patients[i].Cid10,
+			Active:    patients[i].Active,
+		})
+	}
+
 	utils.ReturnResponseJSON(w, http.StatusOK, "Pacientes encontrados com sucesso!", patients)
 }
 

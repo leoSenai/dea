@@ -4,6 +4,7 @@ import (
 	"api/models"
 	"api/models/dtos"
 	"api/repository"
+	"api/service/utils"
 	"fmt"
 )
 
@@ -25,7 +26,7 @@ func PostPerson(personDto dtos.PersonDTO) (err error) {
 		return fmt.Errorf("Pessoa com o número de documento %s já cadastrado!", personDto.DocNumber)
 	} else {
 
-		person, err := repository.PostPerson(ConvertPersonDTOToPerson(personDto))
+		person, err := repository.PostPerson(utils.ConvertPersonDTOToPerson(personDto))
 		if err != nil {
 			return fmt.Errorf("Não foi possivel cadastrar está pessoa!")
 		}
@@ -60,17 +61,4 @@ func PutPerson(personUpdate models.Person) (err error) {
 	err = repository.PutPerson(personUpdate)
 
 	return
-}
-
-func ConvertPersonDTOToPerson(personDto dtos.PersonDTO) models.Person {
-	person := models.Person{
-		IdPerson:  personDto.IdPerson,
-		Name:      personDto.Name,
-		BornDate:  personDto.BornDate,
-		DocNumber: personDto.DocNumber,
-		DocType:   personDto.DocType,
-		Password:  personDto.Password,
-		Salt:      personDto.Salt,
-	}
-	return person
 }

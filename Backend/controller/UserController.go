@@ -2,6 +2,7 @@ package controller
 
 import (
 	"api/models"
+	"api/models/dtos"
 	"api/service"
 	"api/utils"
 	"encoding/json"
@@ -34,7 +35,15 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Usuário encontrado com sucesso!", user)
+	var userDtoSend dtos.UserDTO = dtos.UserDTO{
+		IdUser:   user.IdUser,
+		Name:     user.Name,
+		TypeUser: user.TypeUser,
+		IdCbo:    user.IdCbo,
+		Active:   user.Active,
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Usuário encontrado com sucesso!", userDtoSend)
 }
 
 func GetAllUser(w http.ResponseWriter, _ *http.Request) {
@@ -50,7 +59,23 @@ func GetAllUser(w http.ResponseWriter, _ *http.Request) {
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Usuários encontrados!", users)
+	var usersDto []dtos.UserDTO
+
+	for i := 0; i < len(users); i++ {
+
+		usersDto = append(usersDto,
+			dtos.UserDTO{
+				IdUser:   users[i].IdUser,
+				Name:     users[i].Name,
+				Active:   users[i].Active,
+				IdCbo:    users[i].IdCbo,
+				TypeUser: users[i].TypeUser,
+			},
+		)
+
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Usuários encontrados!", usersDto)
 }
 
 func PostUser(w http.ResponseWriter, r *http.Request) {

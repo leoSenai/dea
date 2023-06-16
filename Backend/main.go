@@ -82,9 +82,14 @@ func main() {
 	r.Get("/proximityhasquiz/get", controller.GetProximityQuizByQuizPatientPersonIDs)
 	r.Get("/proximityhasquiz/get-by-id-quiz/{id}", controller.GetProximityQuizByQuizID)
 	r.Get("/proximityhasquiz/get-by-id-patient/{id}", controller.GetProximityQuizByPatientID)
-	r.Get("/proximityhasquiz/get-by-id-person{id}", controller.GetProximityQuizByPersonID)
+	r.Get("/proximityhasquiz/get-by-id-person/{id}", controller.GetProximityQuizByPersonID)
 	r.Post("/proximityhasquiz/insert", controller.PostProximityQuiz)
 	r.Post("/proximityhasquiz/update", controller.PutProximityQuiz)
+
+	r.Get("/patienthasdoctor/get-by-patient-id/{id}", controller.GetPatientHasDoctorByPatientId)
+	r.Get("/patienthasdoctor/get-by-doctor-id/{id}", controller.GetPatientHasDoctorByDoctorId)
+	r.Get("/patienthasdoctor/get-all", controller.GetAllPatientHasDoctor)
+	r.Post("/patienthasdoctor/insert", controller.PostPatientHasDoctor)
 
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {

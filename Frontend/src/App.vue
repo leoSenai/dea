@@ -7,13 +7,13 @@
 </template>
 
 <script setup>
-import { PhArticle, PhScooter, PhUsers } from '@phosphor-icons/vue';
+import { PhUsers } from '@phosphor-icons/vue';
 import HeaderPrimary from './components/HeaderPrimary.vue';
 import SideBar from './components/SideBar.vue';
 
 const links = [
-  { path: '/pacientes', name: 'Pacientes', icon: PhScooter },
-  { path: '/questionarios', name: 'Questionários', icon: PhArticle },
+  // { path: '/pacientes', name: 'Pacientes', icon: PhScooter },
+  // { path: '/questionarios', name: 'Questionários', icon: PhArticle },
   { path: '/usuarios', name: 'Usuários', icon: PhUsers }
 ]
 </script>

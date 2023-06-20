@@ -1,5 +1,6 @@
 @import url("./typography.css");
 @import url("./theme.css");
+@import url("./responsivity.css");
 
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -29,11 +30,4 @@ a {
 body {
     display: flex;
     flex-direction: column;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        color: var(--neutral-white) !important;
-        background-color: #242424;
-    }
 }

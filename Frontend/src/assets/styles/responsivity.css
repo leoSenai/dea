@@ -1,0 +1,17 @@
+@media (max-width: 320px) {
+  :root {
+    font-size: 65%;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    font-size: 80%;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    font-size: 100%;
+  }
+}

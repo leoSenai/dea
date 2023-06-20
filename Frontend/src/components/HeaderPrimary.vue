@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      LogoSrc: 'src/assets/imgs/Logo.png',
+      LogoSrc: '/src/assets/imgs/Logo.png',
     };
   },
 };

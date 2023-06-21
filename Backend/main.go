@@ -3,6 +3,7 @@ package main
 import (
 	"api/configs"
 	"api/controller"
+	"api/tests"
 	"fmt"
 	"log"
 	"net/http"
@@ -17,6 +18,8 @@ func main() {
 		log.Println("Cannot load configuration from viper")
 		panic(err)
 	}
+
+	tests.Run()
 
 	r := chi.NewRouter()
 

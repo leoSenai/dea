@@ -3,7 +3,9 @@ package repository
 import (
 	"api/db"
 	"api/models"
-	"api/utils"
+	repositoryUtils "api/repository/utils"
+	generalUtils "api/utils"
+	"errors"
 	"log"
 )
 
@@ -37,12 +39,20 @@ func PostUser(userPost models.User) (userBack models.User, err error) {
 		return
 	}
 
-	passwordEncrypted, salt := utils.GenerateEncryptedPassword(userPost.Password)
-	userPost.Password = passwordEncrypted
-	userPost.Salt = salt
+	found := repositoryUtils.VerifyUserExistanceByDocument(userPost.IdCbo)
 
-	row := conn.Create(&userPost)
-	log.Printf("row: %v", row)
+	if found {
+		err = errors.New("Esse usuário já foi cadastrado no sistema!")
+	} else {
+
+		passwordEncrypted, salt := generalUtils.GenerateEncryptedPassword(userPost.Password)
+		userPost.Password = passwordEncrypted
+		userPost.Salt = salt
+
+		row := conn.Create(&userPost)
+		log.Printf("row: %v", row)
+
+	}
 
 	return
 }
@@ -54,7 +64,7 @@ func PutUser(userPut models.User) (userBack models.User, err error) {
 	}
 
 	if userPut.Password != "" {
-		passwordEncrypted, salt := utils.GenerateEncryptedPassword(userPut.Password)
+		passwordEncrypted, salt := generalUtils.GenerateEncryptedPassword(userPut.Password)
 		userPut.Password = passwordEncrypted
 		userPut.Salt = salt
 	}

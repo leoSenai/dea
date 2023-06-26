@@ -1,8 +1,8 @@
-import Select from '../components/Select.vue'
+import SelectPrimary from '../components/SelectPrimary.vue'
 
 export default {
-  title: 'Example/Select',
-  component: Select,
+  title: 'Example/SelectPrimary',
+  component: SelectPrimary,
   tags: ['autodocs'],
   argTypes: {
     onClick: {},
@@ -11,11 +11,11 @@ export default {
 
 export const Primary = {
   render: (args) => ({
-    components: { Select },
+    components: { SelectPrimary },
     setup() {
       return { args };
     },
-    template: '<Select label="Label" />',
+    template: '<SelectPrimary label="Label" />',
   }),
   args: {
     options: ['Teste 1', 'Teste 2'],

@@ -42,7 +42,7 @@ export default {
     },
     options: {
       type: Array,
-      default: new Array()
+      default: () => []
     },
   }
 };

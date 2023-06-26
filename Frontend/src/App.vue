@@ -1,22 +1,9 @@
 <template>
-  <HeaderPrimary />
-  <main>
-    <SideBar :links="links" />
-    <router-view class="content" />
-  </main>
+  <router-view name="header" />
+  <router-view />
 </template>
 
-<script setup>
-import { PhUsers } from '@phosphor-icons/vue';
-import HeaderPrimary from './components/HeaderPrimary.vue';
-import SideBar from './components/SideBar.vue';
-
-const links = [
-  // { path: '/pacientes', name: 'Pacientes', icon: PhScooter },
-  // { path: '/questionarios', name: 'Questionários', icon: PhArticle },
-  { path: '/usuarios', name: 'Usuários', icon: PhUsers }
-]
-</script>
+<script setup></script>
 
 <style scoped>
 

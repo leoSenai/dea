@@ -3,14 +3,18 @@
     class="input"
     label-slot
     color="primary"
-    :dark="false"
+    :outlined="outlined"
+    :dark="dark"
   >
     <template #prepend>
       <slot name="before-label" />
     </template>
 
     <template #label>
-      <span class="label">
+      <span
+        class="label"
+        :style="`color:${labelColor};`"
+      >
         {{ label }}
       </span>
     </template>
@@ -30,6 +34,18 @@ export default {
     modelValue: {
       type: String,
       default: ''
+    },
+    outlined: {
+      type: Boolean,
+      default: true
+    },
+    dark: {
+      type: Boolean,
+      default: false
+    },
+    labelColor: {
+      type: String,
+      default: 'white'
     }
   },
 };

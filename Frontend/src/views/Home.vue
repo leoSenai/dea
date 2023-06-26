@@ -1,59 +1,15 @@
 <template>
-  <div class="container">
-    <ButtonPrimary
-      outlined
-      class="btn-link"
-    >
-      <router-link
-        to="/pacientes"
-        class="link"
-      >
-        Pacientes
-      </router-link>
-      <template #after-label>
-        <PhScooter size="20" />
-      </template>
-    </ButtonPrimary>
-    <ButtonPrimary
-      outlined
-      class="btn-link"
-    >
-      <router-link
-        to="/questionarios"
-        class="link"
-      >
-        Questionários
-      </router-link>
-      <template #after-label>
-        <PhClipboard size="20" />
-      </template>
-    </ButtonPrimary>
-    <ButtonPrimary
-      outlined
-      class="btn-link"
-    >
-      <router-link
-        to="/usuarios"
-        class="link"
-      >
-        Usuários
-      </router-link>
-      <template #after-label>
-        <PhUsers size="20" />
-      </template>
-    </ButtonPrimary>
-  </div>
+  <div />
 </template>
 <script>
-import ButtonPrimary from '../components/ButtonPrimary.vue';
-import { PhUsers, PhScooter, PhClipboard } from '@phosphor-icons/vue';
+
 export default {
-    components: {
-    ButtonPrimary,
-    PhUsers,
-    PhScooter,
-    PhClipboard
-}
+  components: {
+  },
+  data() {
+    return {
+    };
+  },
 };
 </script>
 <style scoped>

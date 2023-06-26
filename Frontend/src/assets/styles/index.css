@@ -31,10 +31,3 @@ body {
     display: flex;
     flex-direction: column;
 }
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        color: var(--neutral-white) !important;
-        background-color: #242424;
-    }
-}

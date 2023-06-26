@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-
 	err := configs.Load()
 	if err != nil {
 		log.Println("Cannot load configuration from viper")

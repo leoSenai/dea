@@ -3,7 +3,6 @@ package repository
 import (
 	"api/db"
 	"api/models"
-	"api/utils"
 	"log"
 )
 
@@ -37,10 +36,6 @@ func PostPatient(patientPost models.Patient) (patientBack models.Patient, err er
 		return
 	}
 
-	passwordEncrypted, salt := utils.GenerateEncryptedPassword(patientPost.Password)
-	patientPost.Password = passwordEncrypted
-	patientPost.Salt = salt
-
 	row := conn.Create(&patientPost)
 	log.Printf("row: %v", row)
 
@@ -55,15 +50,13 @@ func PutPatient(patientPut models.Patient) (patientBack models.Patient, err erro
 		return
 	}
 
-	if patientPut.Password != "" {
-		passwordEncrypted, salt := utils.GenerateEncryptedPassword(patientPut.Password)
-		patientPut.Password = passwordEncrypted
-		patientPut.Salt = salt
-	}
+	patientBack = patientPut
+	patientBack.IdPatient = 0
 
 	if patientPut.IdPatient != 0 {
-		row := conn.Table("paciente").Where("idpaciente = ?", patientPut.IdPatient).Updates(&patientPut)
+		row := conn.Table("paciente").Where("idpaciente = ?", patientPut.IdPatient).Updates(&patientBack)
 		log.Printf("row: %v", row)
+		conn.First(&patientBack, patientPut.IdPatient)
 	}
 
 	return

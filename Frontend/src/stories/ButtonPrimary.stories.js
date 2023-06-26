@@ -1,9 +1,9 @@
-import Button from '../components/Button.vue';
+import ButtonPrimary from '../components/ButtonPrimary.vue';
 import { PhUser } from '@phosphor-icons/vue'
 
 export default {
-  title: 'Example/Button',
-  component: Button,
+  title: 'Example/ButtonPrimary',
+  component: ButtonPrimary,
   tags: ['autodocs'],
   argTypes: {
     onClick: {},
@@ -12,21 +12,21 @@ export default {
 
 export const Primary = {
   render: (args) => ({
-    components: { Button },
+    components: { ButtonPrimary },
     setup() {
       return args;
     },
-    template: '<Button v-bind="args">Label</Button>',
+    template: '<ButtonPrimary v-bind="args">Label</ButtonPrimary>',
   }),
 };
 
 export const Outlined = {
   render: (args) => ({
-    components: { Button },
+    components: { ButtonPrimary },
     setup() {
       return args;
     },
-    template: '<Button v-bind="args">Label</Button>',
+    template: '<ButtonPrimary v-bind="args">Label</ButtonPrimary>',
   }),
   args: {
     outlined: true,
@@ -35,11 +35,11 @@ export const Outlined = {
 
 export const RoundedFull = {
   render: (args) => ({
-    components: { Button },
+    components: { ButtonPrimary },
     setup() {
       return { args };
     },
-    template: '<Button v-bind="args">Label</Button>',
+    template: '<ButtonPrimary v-bind="args">Label</ButtonPrimary>',
   }),
   args: {
     roundedFull: true,
@@ -48,11 +48,11 @@ export const RoundedFull = {
 
 export const OutlinedRoundedFull = {
   render: (args) => ({
-    components: { Button },
+    components: { ButtonPrimary },
     setup() {
       return { args };
     },
-    template: '<Button v-bind="args">Label</Button>',
+    template: '<ButtonPrimary v-bind="args">Label</ButtonPrimary>',
   }),
   args: {
     outlined: true,
@@ -62,17 +62,17 @@ export const OutlinedRoundedFull = {
 
 export const IconBefore = {
   render: (args) => ({
-    components: { Button, PhUser },
+    components: { ButtonPrimary, PhUser },
     setup() {
       return { args };
     },
     template: `
-    <Button v-bind="args">
+    <ButtonPrimary v-bind="args">
       <template v-slot:before-label>
         <PhUser class="before-label" />
       </template>
       Label
-    </Button>`,
+    </ButtonPrimary>`,
   }),
   args: {
   },
@@ -80,17 +80,17 @@ export const IconBefore = {
 
 export const IconAfter = {
   render: (args) => ({
-    components: { Button, PhUser },
+    components: { ButtonPrimary, PhUser },
     setup() {
       return { args };
     },
     template: `
-    <Button v-bind="args">
+    <ButtonPrimary v-bind="args">
       <template v-slot:after-label>
         <PhUser class="after-label" />
       </template>
       Label
-    </Button>`,
+    </ButtonPrimary>`,
   }),
   args: {
   },

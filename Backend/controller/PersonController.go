@@ -38,17 +38,7 @@ func GetPersonById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var personDto dtos.PersonDTO = dtos.PersonDTO{
-		IdPerson:  person.IdPerson,
-		Name:      person.Name,
-		BornDate:  person.BornDate,
-		DocNumber: person.DocNumber,
-		DocType:   person.DocType,
-		Password:  "",
-		Salt:      "",
-	}
-
-	utils.ReturnResponseJSON(w, http.StatusOK, "Pessoa encontrada com sucesso", personDto)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Pessoa encontrada com sucesso", person)
 }
 
 func PostPerson(w http.ResponseWriter, r *http.Request) {
@@ -95,21 +85,7 @@ func GetAllPerson(w http.ResponseWriter, _ *http.Request) {
 		return
 	}
 
-	var personsDto []dtos.PersonDTO
-
-	for i := 0; i < len(persons); i++ {
-		personsDto = append(personsDto, dtos.PersonDTO{
-			IdPerson:  persons[i].IdPerson,
-			Name:      persons[i].Name,
-			BornDate:  persons[i].BornDate,
-			DocNumber: persons[i].DocNumber,
-			DocType:   persons[i].DocType,
-			Password:  "",
-			Salt:      "",
-		})
-	}
-
-	utils.ReturnResponseJSON(w, http.StatusOK, "Busca realizada com sucesso!", personsDto)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Busca realizada com sucesso!", persons)
 }
 
 func PutPerson(w http.ResponseWriter, r *http.Request) {

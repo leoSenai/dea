@@ -3,7 +3,6 @@ package repository
 import (
 	"api/db"
 	"api/models"
-	"api/utils"
 	"log"
 )
 
@@ -37,12 +36,9 @@ func PostUser(userPost models.User) (userBack models.User, err error) {
 		return
 	}
 
-	passwordEncrypted, salt := utils.GenerateEncryptedPassword(userPost.Password)
-	userPost.Password = passwordEncrypted
-	userPost.Salt = salt
-
 	row := conn.Create(&userPost)
 	log.Printf("row: %v", row)
+	conn.First(&userBack, userPost.IdUser)
 
 	return
 }
@@ -53,15 +49,13 @@ func PutUser(userPut models.User) (userBack models.User, err error) {
 		return
 	}
 
-	if userPut.Password != "" {
-		passwordEncrypted, salt := utils.GenerateEncryptedPassword(userPut.Password)
-		userPut.Password = passwordEncrypted
-		userPut.Salt = salt
-	}
+	userBack = userPut
+	userBack.IdUser = 0
 
 	if userPut.IdUser != 0 {
-		row := conn.Table("usuario").Where("idusuario = ?", userPut.IdUser).Updates(&userPut)
+		row := conn.Table("usuario").Where("idusuario = ?", userPut.IdUser).Updates(&userBack)
 		log.Printf("row: %v", row)
+		conn.First(&userBack, userPut.IdUser)
 	}
 
 	return

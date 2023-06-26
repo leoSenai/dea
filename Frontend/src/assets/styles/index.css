@@ -1,5 +1,6 @@
 @import url("./typography.css");
 @import url("./theme.css");
+@import url("./responsive.css");
 
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;

@@ -4,9 +4,15 @@
     :disabled="disabled"
     type="button"
   >
-    <slot name="before-label" />
+    <slot
+      name="before-label"
+      class="before-label"
+    />
     <slot />
-    <slot name="after-label" />
+    <slot
+      name="after-label"
+      class="after-label"
+    />
   </button>
 </template>
 <script>

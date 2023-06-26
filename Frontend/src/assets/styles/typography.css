@@ -46,7 +46,7 @@ h6,
     font-size: 1rem;
 }
 
-p, span, a, li, td, th, dt, .text-body {
+p, span, a, li, td, th, dt, button, .text-body {
     font-weight: 400;
     line-height: 20px;
     font-size: 1rem;

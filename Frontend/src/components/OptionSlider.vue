@@ -28,11 +28,14 @@ export default {
     },
   },
   emits: ['update:modelValue'],
-  computed: {
-    id () {
-      return this._uid;
+  data() {
+    return {
+        id: ''
     }
   },
+  mounted () {
+    this.id = this._uid
+  }
 }
 </script>
 <style scoped>
@@ -84,6 +87,7 @@ export default {
 
 label {
   color: var(--neutral-black);
+  cursor: pointer;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -62,7 +62,7 @@ export const OutlinedRoundedFull = {
 
 export const IconBefore = {
   render: (args) => ({
-    components: { Button, PhUser },
+    components: { ButtonPrimary, PhUser },
     setup() {
       return { args };
     },

@@ -106,3 +106,18 @@ func DeletePersonById(id int64) error {
 
 	return result.Error
 }
+
+func GetPersonByDocNumber(docNumber string) (person models.Person, err error) {
+	conn, err := db.OpenConnection()
+	if err != nil {
+		return person, err
+	}
+
+	conn.Where("numeroDocumento = ?", docNumber).First(&person)
+
+	if person.IdPerson == 0 {
+		person = models.Person{}
+	}
+
+	return person, nil
+}

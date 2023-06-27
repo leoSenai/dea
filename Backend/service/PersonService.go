@@ -62,3 +62,8 @@ func PutPerson(personUpdate models.Person) (err error) {
 
 	return
 }
+
+func GetPersonByDocNumber(docNumber string) (person models.Person, err error) {
+	person, err = repository.GetPersonByDocNumber(docNumber)
+	return person, err
+}

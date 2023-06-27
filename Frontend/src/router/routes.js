@@ -20,7 +20,7 @@ export const routes = [
       header: { links },
     },
   },
-    {
+  {
     path: '/home',
     components: {
       default: Home,
@@ -29,5 +29,5 @@ export const routes = [
     props: {
       header: { links },
     },
-  },
+  }
 ];

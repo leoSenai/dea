@@ -1,5 +1,5 @@
 import Home from '../views/HomeView.vue';
-import Header from '../components/Header.vue';
+import Header from '../components/HeaderPrimary.vue';
 
 import { PhUsers } from '@phosphor-icons/vue';
 

@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"api/models"
 	"api/models/dtos"
 	"api/service"
 	"api/utils"
@@ -115,7 +114,7 @@ func GetAllPerson(w http.ResponseWriter, _ *http.Request) {
 }
 
 func PutPerson(w http.ResponseWriter, r *http.Request) {
-	var person models.Person
+	var person dtos.PersonDTO
 
 	err := json.NewDecoder(r.Body).Decode(&person)
 	if err != nil {

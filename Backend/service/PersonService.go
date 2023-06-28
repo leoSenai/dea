@@ -16,12 +16,6 @@ func GetPersonById(id int64) (person models.Person, err error) {
 func PostPerson(personDto dtos.PersonDTO) (err error) {
 	found := repository.VerifyPersonByDocument(personDto.DocNumber)
 
-	patient, err := repository.GetPatientById(personDto.IdPatient)
-
-	if patient.IdPatient == 0 {
-		return fmt.Errorf("Não foi possivel encontrar paciente!")
-	}
-
 	if found {
 		return fmt.Errorf("Pessoa com o número de documento %s já cadastrado!", personDto.DocNumber)
 	} else {
@@ -31,10 +25,12 @@ func PostPerson(personDto dtos.PersonDTO) (err error) {
 			return fmt.Errorf("Não foi possivel cadastrar está pessoa!")
 		}
 
-		proximity := models.Proximity{IdPatient: personDto.IdPatient, IdPerson: person.IdPerson, Desc: personDto.DescPerson}
-		err = repository.PostProximity(proximity)
-		if err != nil {
-			return fmt.Errorf("Não foi possivel cadastrar a proximidade!")
+		if personDto.IdPatient != 0 {
+			proximity := models.Proximity{IdPatient: personDto.IdPatient, IdPerson: person.IdPerson, Desc: personDto.DescPerson}
+			err = repository.PostProximity(proximity)
+			if err != nil {
+				return fmt.Errorf("Não foi possivel cadastrar a proximidade!")
+			}
 		}
 	}
 

@@ -76,11 +76,9 @@ func PutPerson(person models.Person) (err error) {
 		return
 	}
 
-	if person.Password != "" {
-		passwordEncrypted, salt := utils.GenerateEncryptedPassword(person.Password)
-		person.Password = passwordEncrypted
-		person.Salt = salt
-	}
+	passwordEncrypted, salt := utils.GenerateEncryptedPassword(person.Password)
+	person.Password = passwordEncrypted
+	person.Salt = salt
 
 	result := conn.Where("idpessoa = ?", person.IdPerson).Updates(person)
 

@@ -44,6 +44,7 @@ func GetPersonById(w http.ResponseWriter, r *http.Request) {
 		BornDate:  person.BornDate,
 		DocNumber: person.DocNumber,
 		DocType:   person.DocType,
+		Email:     person.Email,
 		Password:  "",
 		Salt:      "",
 	}
@@ -104,6 +105,7 @@ func GetAllPerson(w http.ResponseWriter, _ *http.Request) {
 			BornDate:  persons[i].BornDate,
 			DocNumber: persons[i].DocNumber,
 			DocType:   persons[i].DocType,
+			Email:     persons[i].Email,
 			Password:  "",
 			Salt:      "",
 		})
@@ -158,6 +160,7 @@ func GetPersonByDocNumber(w http.ResponseWriter, r *http.Request) {
 		BornDate:  person.BornDate,
 		DocNumber: person.DocNumber,
 		DocType:   person.DocType,
+		Email:     person.Email,
 		Password:  "",
 		Salt:      "",
 	}

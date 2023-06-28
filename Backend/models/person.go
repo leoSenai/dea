@@ -3,6 +3,7 @@ package models
 type Person struct {
 	IdPerson  int64  `gorm:"primaryKey;autoIncrement;column:idpessoa" json:"IdPerson"`
 	Name      string `gorm:"column:nome" json:"Name"`
+	Email     string `gorm:"column:Email" json:"Email"`
 	BornDate  string `gorm:"column:dataNascimento" json:"BornDate"`
 	DocNumber string `gorm:"column:numeroDocumento" json:"DocNumber"`
 	DocType   string `gorm:"column:tipoDocumento" json:"DocType"`

@@ -39,7 +39,7 @@ func PostUser(userPost models.User) (userBack models.User, err error) {
 		return
 	}
 
-	found := repositoryUtils.VerifyUserExistanceByDocument(userPost.IdCbo)
+	found := repositoryUtils.VerifyUserExistanceByDocument(userPost.Email)
 
 	if found {
 		err = errors.New("Esse usuário já foi cadastrado no sistema!")

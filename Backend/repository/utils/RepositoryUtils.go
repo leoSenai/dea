@@ -5,7 +5,7 @@ import (
 	"api/models"
 )
 
-func VerifyUserExistanceByDocument(idCbo int) (exist bool) {
+func VerifyUserExistanceByDocument(email string) (exist bool) {
 
 	conn, err := db.OpenConnection()
 	if err != nil {
@@ -14,7 +14,7 @@ func VerifyUserExistanceByDocument(idCbo int) (exist bool) {
 
 	var userFound models.User
 
-	conn.First(&userFound, "cbo_idcbo = ?", idCbo)
+	conn.First(&userFound, "email = ?", email)
 
 	if userFound.IdUser != 0 {
 		return true

@@ -10,4 +10,5 @@ type PersonDTO struct {
 	Salt       string
 	IdPatient  int64
 	DescPerson string
+	Email      string
 }

@@ -71,6 +71,7 @@ export default {
 header {
   position: sticky;
   min-width: 100%;
+  z-index: 999;
 
   display: flex;
   align-items: center;
@@ -104,6 +105,7 @@ header {
 
 .sidebar {
   position: fixed;
+  z-index: 999;
   min-height: 100%;
   padding: 2rem 0rem;
 
@@ -142,7 +144,7 @@ header {
   display: none;
 }
 
-@media (min-width: 320px) and (max-width: 768px) {
+@media (max-width: 768px) {
   .hamburguer {
     display: flex;
     font-size: 1.5rem;

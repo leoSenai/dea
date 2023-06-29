@@ -1,6 +1,8 @@
 <template>
   <router-view name="header" />
-  <router-view />
+  <div class="content">
+    <router-view />
+  </div>
 </template>
 
 <script setup></script>
@@ -11,11 +13,15 @@ main {
   display: flex;
 }
 .content {
+  position: relative;
   height: calc(100vh - 30%);
   overflow: hidden;
-  margin-top: 10rem;
-  margin-left: 16rem;
-  margin-right: 5rem;
+}
+
+@media (min-width: 768px) {
+  .content {
+    margin-left: 10rem;
+  }
 }
 
 </style>

@@ -1,24 +1,15 @@
 <template>
   <div>
-    <div>
-      <SelectPrimary
-        v-model="valor"
-        label="Label"
-        :options="['google', 'twitter']"
-      />
-    </div>
-    <div><HeaderPrimary /></div>
+    <modal-primary v-model="valor" />
   </div>
 </template>
 <script>
-import HeaderPrimary from '../components/HeaderPrimary.vue';
-import SelectPrimary from '../components/SelectPrimary.vue';
-
+import ModalPrimary from '../components/ModalPrimary.vue'
 export default {
-  components: { HeaderPrimary, SelectPrimary },
+  components: { ModalPrimary },
   data() {
     return {
-      valor: '',
+      valor: true,
     };
   },
   methods: {

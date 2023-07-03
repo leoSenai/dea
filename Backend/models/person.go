@@ -6,6 +6,7 @@ type Person struct {
 	BornDate  string `gorm:"column:dataNascimento" json:"BornDate"`
 	DocNumber string `gorm:"column:numeroDocumento" json:"DocNumber"`
 	DocType   string `gorm:"column:tipoDocumento" json:"DocType"`
+	Email     string `gorm:"column:email" json:"Email"`
 	Password  string `gorm:"column:senha" json:"Password"`
 	Salt      string `gorm:"column:salt" json:"Salt"`
 }

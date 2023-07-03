@@ -3,6 +3,7 @@ package models
 type User struct {
 	IdUser   int    `gorm:"column:idusuario;primaryKey" json:"IdUser,omitempty"`
 	Name     string `gorm:"column:nome" json:"Name"`
+	Email    string `gorm:"column:email" json:"Email"`
 	Password string `gorm:"column:senha" json:"Password"`
 	Salt     string `gorm:"column:salt" json:"Salt"`
 	TypeUser string `gorm:"column:tipoUsuario" json:"TypeUser"`

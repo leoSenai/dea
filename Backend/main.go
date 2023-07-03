@@ -3,6 +3,7 @@ package main
 import (
 	"api/configs"
 	"api/controller"
+	"api/tests"
 	"fmt"
 	"log"
 	"net/http"
@@ -18,12 +19,15 @@ func main() {
 		panic(err)
 	}
 
+	tests.Run()
+
 	r := chi.NewRouter()
 
 	r.Get("/person/get-by-id/{id}", controller.GetPersonById)
 	r.Get("/person/get-all", controller.GetAllPerson)
 	r.Post("/person/insert", controller.PostPerson)
 	r.Put("/person/update", controller.PutPerson)
+	r.Get("/person/get-by-doc/{docNumber}", controller.GetPersonByDocNumber)
 
 	r.Get("/user/get-by-id/{id}", controller.GetUserById)
 	r.Get("/user/get-all", controller.GetAllUser)

@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"api/models"
 	"api/models/dtos"
 	"api/service"
 	"api/utils"
@@ -44,6 +43,7 @@ func GetPersonById(w http.ResponseWriter, r *http.Request) {
 		BornDate:  person.BornDate,
 		DocNumber: person.DocNumber,
 		DocType:   person.DocType,
+		Email:     person.Email,
 		Password:  "",
 		Salt:      "",
 	}
@@ -104,6 +104,7 @@ func GetAllPerson(w http.ResponseWriter, _ *http.Request) {
 			BornDate:  persons[i].BornDate,
 			DocNumber: persons[i].DocNumber,
 			DocType:   persons[i].DocType,
+			Email:     persons[i].Email,
 			Password:  "",
 			Salt:      "",
 		})
@@ -113,7 +114,7 @@ func GetAllPerson(w http.ResponseWriter, _ *http.Request) {
 }
 
 func PutPerson(w http.ResponseWriter, r *http.Request) {
-	var person models.Person
+	var person dtos.PersonDTO
 
 	err := json.NewDecoder(r.Body).Decode(&person)
 	if err != nil {
@@ -136,4 +137,32 @@ func PutPerson(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Pessoa atualizada com sucesso!", "")
+}
+
+func GetPersonByDocNumber(w http.ResponseWriter, r *http.Request) {
+	docNumber := chi.URLParam(r, "docNumber")
+
+	person, err := service.GetPersonByDocNumber(docNumber)
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, err.Error(), "")
+		return
+	}
+
+	if person.IdPerson == 0 {
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Pessoa não encontrada", "")
+		return
+	}
+
+	var personDto dtos.PersonDTO = dtos.PersonDTO{
+		IdPerson:  person.IdPerson,
+		Name:      person.Name,
+		BornDate:  person.BornDate,
+		DocNumber: person.DocNumber,
+		DocType:   person.DocType,
+		Email:     person.Email,
+		Password:  "",
+		Salt:      "",
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Pessoa encontrada com sucesso", personDto)
 }

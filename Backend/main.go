@@ -17,6 +17,10 @@ func main() {
 	if err != nil {
 		log.Println("Cannot load configuration from viper")
 		panic(err)
+	}else{
+		conf := configs.GetDB()
+		fmt.Println("[INFO] Database host is on " + conf.Host)
+		fmt.Println("[INFO] Listening...")
 	}
 
 	tests.Run()

@@ -1,7 +1,7 @@
 package models
 
 type Asking struct {
-	IdAsking int64  `gorm:"column:idpergunta" json:"idAsking"`
+	IdAsking int64  `gorm:"column:idpergunta;primaryKey" json:"idAsking"`
 	Desc     string `gorm:"column:descricao" json:"Desc"`
 }
 

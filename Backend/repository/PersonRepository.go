@@ -76,11 +76,9 @@ func PutPerson(person models.Person) (err error) {
 		return
 	}
 
-	if person.Password != "" {
-		passwordEncrypted, salt := utils.GenerateEncryptedPassword(person.Password)
-		person.Password = passwordEncrypted
-		person.Salt = salt
-	}
+	passwordEncrypted, salt := utils.GenerateEncryptedPassword(person.Password)
+	person.Password = passwordEncrypted
+	person.Salt = salt
 
 	result := conn.Where("idpessoa = ?", person.IdPerson).Updates(person)
 
@@ -105,4 +103,19 @@ func DeletePersonById(id int64) error {
 	result := conn.Delete(&models.Person{}, id)
 
 	return result.Error
+}
+
+func GetPersonByDocNumber(docNumber string) (person models.Person, err error) {
+	conn, err := db.OpenConnection()
+	if err != nil {
+		return person, err
+	}
+
+	conn.Where("numeroDocumento = ?", docNumber).First(&person)
+
+	if person.IdPerson == 0 {
+		person = models.Person{}
+	}
+
+	return person, nil
 }

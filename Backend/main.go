@@ -3,6 +3,7 @@ package main
 import (
 	"api/configs"
 	"api/controller"
+	"api/tests"
 	"fmt"
 	"log"
 	"net/http"
@@ -16,7 +17,13 @@ func main() {
 	if err != nil {
 		log.Println("Cannot load configuration from viper")
 		panic(err)
+	}else{
+		conf := configs.GetDB()
+		fmt.Println("[INFO] Database host is on " + conf.Host)
+		fmt.Println("[INFO] Listening...")
 	}
+
+	tests.Run()
 
 	r := chi.NewRouter()
 
@@ -24,6 +31,7 @@ func main() {
 	r.Get("/person/get-all", controller.GetAllPerson)
 	r.Post("/person/insert", controller.PostPerson)
 	r.Put("/person/update", controller.PutPerson)
+	r.Get("/person/get-by-doc/{docNumber}", controller.GetPersonByDocNumber)
 
 	r.Get("/user/get-by-id/{id}", controller.GetUserById)
 	r.Get("/user/get-all", controller.GetAllUser)
@@ -82,9 +90,14 @@ func main() {
 	r.Get("/proximityhasquiz/get", controller.GetProximityQuizByQuizPatientPersonIDs)
 	r.Get("/proximityhasquiz/get-by-id-quiz/{id}", controller.GetProximityQuizByQuizID)
 	r.Get("/proximityhasquiz/get-by-id-patient/{id}", controller.GetProximityQuizByPatientID)
-	r.Get("/proximityhasquiz/get-by-id-person{id}", controller.GetProximityQuizByPersonID)
+	r.Get("/proximityhasquiz/get-by-id-person/{id}", controller.GetProximityQuizByPersonID)
 	r.Post("/proximityhasquiz/insert", controller.PostProximityQuiz)
 	r.Post("/proximityhasquiz/update", controller.PutProximityQuiz)
+
+	r.Get("/patienthasdoctor/get-by-patient-id/{id}", controller.GetPatientHasDoctorByPatientId)
+	r.Get("/patienthasdoctor/get-by-doctor-id/{id}", controller.GetPatientHasDoctorByDoctorId)
+	r.Get("/patienthasdoctor/get-all", controller.GetAllPatientHasDoctor)
+	r.Post("/patienthasdoctor/insert", controller.PostPatientHasDoctor)
 
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {

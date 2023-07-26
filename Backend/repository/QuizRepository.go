@@ -36,27 +36,21 @@ func PostQuiz(quizPost models.Quiz) (quizBack models.Quiz, err error) {
 		return
 	}
 
-	row := conn.Create(&quizPost)
-	log.Printf("row: %v", row)
+	conn.Create(&quizPost)
 	conn.First(&quizBack, quizPost.IdQuiz)
 
 	return
 }
 
-func PutQuiz(quizPut models.Quiz) (quizBack models.Quiz, err error) {
+func PutQuiz(quizPut models.Quiz) (err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
 	}
 
-	quizBack = quizPut
-	quizBack.IdQuiz = 0
-
-	if quizPut.IdQuiz != 0 {
-		row := conn.Table("questionario").Where("idquestionario = ?", quizPut.IdQuiz).Updates(&quizBack)
-		log.Printf("row: %v", row)
-		conn.First(&quizBack, quizPut.IdQuiz)
-	}
+	row := conn.Table("questionario").Where("idquestionario = ?", quizPut.IdQuiz).Updates(&quizPut)
+	log.Printf("row: %v", row)
+	conn.First(quizPut, quizPut.IdQuiz)
 
 	return
 }

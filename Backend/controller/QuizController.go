@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -83,19 +84,20 @@ func PutQuiz(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&quiz)
 	if err != nil {
-		log.Printf("Cannot do Put: %s", err.Error())
-		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Houve algum erro ao tentar obter as informações de atualização do questionário.", "")
-
+		log.Printf("Erro ao decodificar os dados do questionário: %v", err)
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Houve um erro ao obter as informações de atualização do questionário.", "")
 		return
 	}
 
-	quiz, err = service.PutQuiz(quiz)
+	err = service.PutQuiz(quiz)
 	if err != nil {
-
-		log.Printf("Cannot do Put: %s", err.Error())
-
-		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível atualizar o questionário, houve um erro interno no sistema.", "")
-
+		log.Printf("Erro ao atualizar o questionário: %v", err)
+		statusCode := http.StatusInternalServerError
+		message := "Não foi possível atualizar o questionário, ocorreu um erro interno no sistema."
+		if strings.Contains(err.Error(), "Questionário já respondido") {
+			statusCode = http.StatusBadRequest
+		}
+		utils.ReturnResponseJSON(w, statusCode, message, "")
 		return
 	}
 

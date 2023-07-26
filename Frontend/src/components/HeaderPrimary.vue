@@ -1,41 +1,45 @@
 <template>
-  <header class="bg-primary-700">
-    <button
-      class="hamburguer"
-      @click="activeSidebar"
-    >
-      <PhList />
-    </button>
-    <div class="logo white">
-      <q-img
-        :src="LogoSrc"
-      />
-      <h6>Clínica Motivar</h6>
+  <div class="all-content">
+    <div class="header-bar">
+      <header class="bg-primary-700">
+        <button
+          class="hamburguer"
+          @click="activeSidebar"
+        >
+          <PhList />
+        </button>
+        <div class="logo white">
+          <q-img
+            :src="LogoSrc"
+          />
+          <h6>Clínica Motivar</h6>
+        </div>
+        <div class="user white">
+          <ph-user-circle
+            class="user-icon"
+            regular
+          />
+          <span class="text-body">Usuário</span>
+        </div>
+      </header>
     </div>
-    <div class="user white">
-      <ph-user-circle
-        class="user-icon"
-        regular
-      />
-      <span class="text-body">Usuário</span>
-    </div>
-  </header>
-  <div :class="['sidebar', 'bg-success', isSidebarActive ? 'active' : '']">
-    <template
-      v-for="link in links"
-      :key="link.path"
-    >
-      <router-link
-        :to="link.path"
-        class="link"
+    <div :class="['sidebar', 'bg-success', isSidebarActive ? 'active' : '']">
+      <template
+        v-for="link in links"
+        :key="link.path"
       >
-        {{ link.name }}
-        <component
-          :is="link.icon"
-          class="link-icon"
-        />
-      </router-link>
-    </template>
+        <router-link
+          :to="link.path"
+          class="link"
+        >
+          {{ link.name }}
+          <component
+            :is="link.icon"
+            class="link-icon"
+          />
+        </router-link>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -69,7 +73,8 @@ export default {
 
 <style scoped>
 header {
-  position: sticky;
+  position: fixed;
+  z-index: 2;
   min-width: 100%;
 
   display: flex;
@@ -105,7 +110,8 @@ header {
 .sidebar {
   position: fixed;
   min-height: 100%;
-  padding: 2rem 0rem;
+  padding: 5rem 0rem;
+  z-index: 1;
 
   display: flex;
   flex-direction: column;

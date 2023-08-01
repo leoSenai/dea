@@ -26,7 +26,7 @@
     <div :class="['sidebar', 'bg-success', isSidebarActive ? 'active' : '']">
       <template
         v-for="link in links"
-        :key="link.path"
+        :key="link.path"  
       >
         <router-link
           :to="link.path"

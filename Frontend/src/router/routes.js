@@ -1,5 +1,6 @@
 import Home from '../views/HomeView.vue';
 import Header from '../components/HeaderPrimary.vue';
+import Header2 from '../components/HeaderPrimary2.vue';
 import Patients from '../views/PatientsView.vue';
 
 import { PhUsers } from '@phosphor-icons/vue';
@@ -35,7 +36,7 @@ export const routes = [
     path: '/patients',
     components: {
       default: Patients,
-      header: Header,
+      header: Header2,
     },
     props: {
       header: { links },

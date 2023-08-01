@@ -7,6 +7,7 @@ import './style.css'
 
 import { colorTheme } from './assets/styles/theme'
 
+import api from './api'
 import App from './App.vue'
 
 const myApp = createApp(App)
@@ -16,6 +17,6 @@ myApp.use(Quasar, {
   config: {
     brand: { ...colorTheme }
   }
-}).use(router)
+}).use(router).use(api)
 
 router.isReady().then(() => myApp.mount('#app'))

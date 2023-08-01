@@ -1,5 +1,9 @@
 <template>
-  <div />
+  <div>
+    <button @click="handleClick">
+      click
+    </button>
+  </div>
 </template>
 <script>
 export default {
@@ -7,5 +11,13 @@ export default {
     return {
     };
   },
+  methods: {
+    handleClick () {
+      this.$api.DoctorController.getAll().then(response => {
+        console.log(response)
+      })
+    },
+
+  }
 };
 </script>

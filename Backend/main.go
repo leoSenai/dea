@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 )
 
 func main() {
@@ -17,7 +18,7 @@ func main() {
 	if err != nil {
 		log.Println("Cannot load configuration from viper")
 		panic(err)
-	}else{
+	} else {
 		conf := configs.GetDB()
 		fmt.Println("[INFO] Database host is on " + conf.Host)
 		fmt.Println("[INFO] Listening...")
@@ -26,6 +27,16 @@ func main() {
 	tests.Run()
 
 	r := chi.NewRouter()
+
+	// Configurar o middleware de CORS para permitir acesso de qualquer origem
+	corsHandler := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"}, // Permitir acesso de qualquer origem (isso é apenas para desenvolvimento, em produção, especifique as origens permitidas)
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+	})
+
+	r.Use(corsHandler.Handler) // Use o middleware de CORS em todas as rotas
 
 	r.Get("/person/get-by-id/{id}", controller.GetPersonById)
 	r.Get("/person/get-all", controller.GetAllPerson)

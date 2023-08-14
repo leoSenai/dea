@@ -1,10 +1,12 @@
 <template>
   <q-input
+    v-model="model"
     class="input"
     label-slot
     color="primary"
     :outlined="outlined"
     :dark="dark"
+    @update:model-value="(current) => $emit('update:modelValue', current)"
   >
     <template #prepend>
       <slot name="before-label" />
@@ -48,11 +50,20 @@ export default {
       default: 'white'
     }
   },
+  emits: [
+    'update:modelValue'
+  ],
+  data() {
+    return {
+      model: ''
+    }
+  }
 };
 </script>
 <style scoped>
 .input {
   position: relative;
+  width: 100%;
 }
 
 .input::before {

@@ -15,7 +15,6 @@
       </div>
       <h5 class="modal-title">
         <slot name="modal-title" />
-        Título
       </h5>
       <q-card-section class="modal-content">
         <slot name="modal-content" />
@@ -44,7 +43,7 @@ export default {
 </script>
 <style scoped>
 .modal {
-  position: sticky;
+  position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
@@ -109,7 +108,7 @@ export default {
   .modal {
     padding: 4rem 1rem;
   }
-  
+
   .card {
     width: 70%;
   }

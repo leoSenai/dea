@@ -23,5 +23,7 @@
 # How to setup and run frontend
 
 <ol>
-  <li>Start typing here</li>
+  <li>Clone this git repository</li>
+  <li>Checkout the 'beta' branch</li>
+  <li>...</li>
 </ol>

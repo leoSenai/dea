@@ -3,6 +3,7 @@ package repository
 import (
 	"api/db"
 	"api/models"
+	"api/utils"
 	"errors"
 	"fmt"
 
@@ -24,37 +25,40 @@ func GetPersonById(id int64) (person models.Person, err error) {
 	return
 }
 
-func InsertPerson(person models.Person) (err error) {
+func PostPerson(person models.Person) (models.Person, error) {
 	conn, err := db.OpenConnection()
 
 	if err != nil {
-		return
+		return person, err
 	}
 
-	conn.Create(person)
+	passwordEncrypted, salt := utils.GenerateEncryptedPassword(person.Password)
+	person.Password = passwordEncrypted
+	person.Salt = salt
 
-	return
+	conn.Create(&person)
+
+	return GetPersonById(person.IdPerson)
 }
 
-func VerifyPersonByDocument(docNumber string) (found bool, err error) {
+func VerifyPersonByDocument(docNumber string) (found bool) {
 	conn, err := db.OpenConnection()
-
 	if err != nil {
-		return false, err
+		return false
 	}
 
 	var person models.Person
 	if err := conn.Where("numeroDocumento = ?", docNumber).First(&person).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return false, nil
+			return false
 		}
-		return false, err
+		return false
 	}
 
-	return true, nil
+	return true
 }
 
-func GetAllPersons() (persons []models.Person, err error) {
+func GetAllPerson() (persons []models.Person, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
@@ -65,14 +69,18 @@ func GetAllPersons() (persons []models.Person, err error) {
 	return
 }
 
-func UpdatePerson(person models.Person) (err error) {
+func PutPerson(person models.Person) (err error) {
 	conn, err := db.OpenConnection()
 
 	if err != nil {
 		return
 	}
 
-	result := conn.Where("idpessoa = ?", person.IdPerson).Updates(models.Person{Name: person.Name, BornDate: person.BornDate, DocNumber: person.DocNumber, DocType: person.DocType, Password: person.Password, Salt: person.Salt})
+	passwordEncrypted, salt := utils.GenerateEncryptedPassword(person.Password)
+	person.Password = passwordEncrypted
+	person.Salt = salt
+
+	result := conn.Where("idpessoa = ?", person.IdPerson).Updates(person)
 
 	if result.Error != nil {
 		return result.Error
@@ -83,4 +91,31 @@ func UpdatePerson(person models.Person) (err error) {
 	}
 
 	return nil
+}
+
+func DeletePersonById(id int64) error {
+	conn, err := db.OpenConnection()
+
+	if err != nil {
+		return err
+	}
+
+	result := conn.Delete(&models.Person{}, id)
+
+	return result.Error
+}
+
+func GetPersonByDocNumber(docNumber string) (person models.Person, err error) {
+	conn, err := db.OpenConnection()
+	if err != nil {
+		return person, err
+	}
+
+	conn.Where("numeroDocumento = ?", docNumber).First(&person)
+
+	if person.IdPerson == 0 {
+		person = models.Person{}
+	}
+
+	return person, nil
 }

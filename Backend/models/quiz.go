@@ -1,7 +1,7 @@
 package models
 
 type Quiz struct {
-	IdQuiz   int    `gorm:"column:idquestionario;primaryKey" json:"IdQuiz"`
+	IdQuiz   int64  `gorm:"column:idquestionario" json:"IdQuiz"`
 	Name     string `gorm:"column:nome" json:"Name"`
 	Created  string `gorm:"column:criado" json:"Created"`
 	Updated  string `gorm:"column:atualizado" json:"Updated"`

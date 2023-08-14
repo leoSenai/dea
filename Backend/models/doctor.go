@@ -1,10 +1,10 @@
 package models
 
 type Doctor struct {
-	IdDoctor int    `gorm:"column:idmedico;primaryKey" json:"IdDoctor"`
+	IdDoctor int64  `gorm:"column:idmedico;primaryKey" json:"IdDoctor"`
 	Crm      string `gorm:"column:crm" json:"Crm"`
 	Name     string `gorm:"column:nome" json:"Name"`
-	IdCbo    int    `gorm:"column:cbo_idcbo" json:"IdCbo"`
+	IdCbo    int64  `gorm:"column:cbo_idcbo" json:"IdCbo"`
 }
 
 func (p *Doctor) TableName() string {

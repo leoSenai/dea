@@ -11,7 +11,7 @@
           </div>
           <div class="login-container">
             <div class="login-form">
-              <Input
+              <InputTemplate
                 color="primary"
                 outlined
                 dark
@@ -20,8 +20,8 @@
                 class="login-input q-mt-md"
                 ><template v-slot:before-label
                   ><PhUser class="icon-color"></PhUser></template
-              ></Input>
-              <Input
+              ></InputTemplate>
+              <InputTemplate
                 color="primary"
                 outlined
                 dark
@@ -30,10 +30,10 @@
                 class="login-input q-mt-md q-field__inner"
                 ><template v-slot:before-label
                   ><PhLock class="icon-color"></PhLock></template
-              ></Input>
+              ></InputTemplate>
             </div>
             <div class="login-button">
-              <Button class="q-mt-lg btn-login">Entrar</Button>
+              <ButtonTemplate class="q-mt-lg btn-login">Entrar</ButtonTemplate>
             </div>
           </div>
         </div>
@@ -48,16 +48,16 @@
 </template>
 
 <script>
-import logo from "../assets/imgs/Logo.png";
-import imagem_principal from "../assets/imgs/imagem-principal.png";
-import Input from "../components/Input.vue";
-import Button from "../components/Button.vue";
-import { PhUser } from "@phosphor-icons/vue";
-import { PhLock } from "@phosphor-icons/vue";
+import logo from '../assets/imgs/Logo.png';
+import imagem_principal from '../assets/imgs/imagem-principal.png';
+import InputTemplate from '../components/InputPrimary.vue';
+import ButtonTemplate from '../components/ButtonPrimary.vue';
+import { PhUser } from '@phosphor-icons/vue';
+import { PhLock } from '@phosphor-icons/vue';
 export default {
   components: {
-    Input,
-    Button,
+    InputTemplate,
+    ButtonTemplate,
     PhUser,
     PhLock,
   },

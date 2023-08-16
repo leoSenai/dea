@@ -12,21 +12,22 @@
           <div class="login-container">
             <div class="login-form">
               <InputTemplate
+                v-model="user"
                 color="primary"
                 outlined
                 dark
-                v-model="text"
                 label="Email ou Telefone"
                 class="login-input q-mt-md"
                 ><template v-slot:before-label
                   ><PhUser class="icon-color"></PhUser></template
               ></InputTemplate>
               <InputTemplate
+                v-model="password"
                 color="primary"
                 outlined
                 dark
-                v-model="text"
                 label="Senha"
+                type="password"
                 class="login-input q-mt-md q-field__inner"
                 ><template v-slot:before-label
                   ><PhLock class="icon-color"></PhLock></template
@@ -63,6 +64,8 @@ export default {
   },
   data() {
     return {
+      user: '',
+      password: '',
       logo: logo,
       imagem_principal: imagem_principal,
     };

@@ -1,5 +1,6 @@
 <template>
   <q-input
+    v-model="inputValue"
     class="input"
     label-slot
     color="primary"
@@ -26,6 +27,11 @@
 </template>
 <script>
 export default {
+  data() {
+    return {
+      inputValue: '',
+    }
+  },  
   props: {
     label: {
       type: String,

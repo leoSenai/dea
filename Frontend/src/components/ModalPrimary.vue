@@ -6,7 +6,7 @@
     <q-card class="card">
       <div
         class="close-button"
-        @click="$emit('update:modelValue', false)"
+        @click="close"
       >
         <PhX
           size="1rem"
@@ -38,7 +38,13 @@ export default {
       default: false
     }
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'close'],
+  methods: {
+    close() {
+      this.$emit('update:modelValue', false)
+      this.$emit('close')
+    }
+  }
 }
 </script>
 <style scoped>

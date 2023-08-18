@@ -55,7 +55,7 @@ export default {
   ],
   data() {
     return {
-      model: ''
+      model: this.modelValue
     }
   }
 };

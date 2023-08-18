@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const appUrl = import.meta.env.VITE_API_URL_DEV + '/quiz/'
+const appUrl = import.meta.env.VITE_API_URL_DEV + '/question/'
 
 export default {
   getAll() {

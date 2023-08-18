@@ -1,5 +1,8 @@
 <template>
-  <modal-primary v-model="show">
+  <modal-primary
+    v-model="show"
+    @close="closeModal"
+  >
     <template #modal-title>
       {{ model && model.IdQuiz ? 'Editar' : 'Cadastrar' }} Questionário
     </template>
@@ -29,7 +32,7 @@
         class="row q-mb-sm"
       >
         <input-primary
-          v-model="question.value"
+          v-model="question.Desc"
           :name="`${i}`"
           :label="`Pergunta ${i + 1}`"
           label-color="primary"
@@ -84,7 +87,7 @@
   </modal-primary>
 </template>
 <script>
-import ModalPrimary from '../components/ModalPrimary.vue'
+import ModalPrimary from '../components/ModalPrimary.vue';
 import InputPrimary from '../components/InputPrimary.vue';
 import ButtonPrimary from '../components/ButtonPrimary.vue';
 import { PhPlus } from '@phosphor-icons/vue';
@@ -96,6 +99,7 @@ export default {
     ButtonPrimary,
     PhPlus,
   },
+  emits: ['close'],
   data() {
     return {
       show: false,
@@ -104,25 +108,48 @@ export default {
         IdQuiz: null,
         Interval: 5,
         Created: null,
-        Updated: null
+        Updated: null,
       },
-      questions: [{ key: 0, value: '' }]
-    }
+      questions: [{ key: 0, Desc: '', IdQuestion: null }],
+    };
   },
   methods: {
     openModal(current) {
       const th = this;
       th.show = true;
       if (current) {
-        th.model = current;
+        th.model = { ...current, Interval: +current.Interval };
+        th.$api.QuestionController.getAll()
+          .then(({ data }) => {
+            console.log(
+              data.data.filter(({ IdQuiz }) => IdQuiz === th.model.IdQuiz)
+            );
+            const filteredQuestions = data.data
+              .filter(({ IdQuiz }) => IdQuiz === th.model.IdQuiz)
+              .map((el) => {
+                return {
+                  IdQuestion: el.IdQuestion,
+                  Desc: el.Desc,
+                  key: el.IdQuestion,
+                };
+              });
+            th.questions =
+              filteredQuestions.length > 0
+                ? filteredQuestions
+                : [{ key: 0, Desc: '' }];
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
     addQuestion() {
       if (!this.questions.includes('')) {
         this.questions.push({
-          value: '',
-          key: this.questions[this.questions.length - 1].key + 1
-        })
+          Desc: '',
+          IdQuestion: null,
+          key: this.questions[this.questions.length - 1].key + 1,
+        });
       }
     },
     removeQuestion(index) {
@@ -136,27 +163,80 @@ export default {
         Name: '',
         IdQuiz: null,
         Interval: 5,
-      }
-      this.questions = [{ key: 0, value: null }]
+      };
+      this.questions = [{ key: 0, Desc: '', IdQuestion: null }];
+      this.$emit('close');
     },
     createQuiz() {
       const th = this;
-      th.$api.QuizController.insert({ ...th.model, Interval: th.model.Interval.toString() }).then(response => {
-        console.log(response)
-      }).catch(err => {
-        console.log(err)
+      th.$api.QuizController.insert({
+        ...th.model,
+        Interval: th.model.Interval.toString(),
       })
+        .then((responseQuiz) => {
+          console.log(responseQuiz);
+          th.questions.forEach((question) => {
+            const questionDto = {
+              IdQuiz: th.model.IdQuiz,
+              IdQuestion: question.IdQuestion,
+              Desc: question.Desc,
+            };
+            th.$api.QuestionController.insert(questionDto)
+              .then((responseQuestion) => {
+                console.log(responseQuestion);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+          return;
+        })
+        .then(() => {
+          th.closeModal();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     updateQuiz() {
       const th = this;
-      th.$api.QuizController.update({ ...th.model, Interval: th.model.Interval.toString() }).then(response => {
-        console.log(response)
-      }).catch(err => {
-        console.log(err)
+      th.$api.QuizController.update({
+        ...th.model,
+        Interval: th.model.Interval.toString(),
       })
-    }
-  }
-}
+        .then((response) => {
+          console.log(response);
+          th.questions.forEach((question) => {
+            const questionDto = {
+              IdQuiz: th.model.IdQuiz,
+              IdQuestion: question.IdQuestion,
+              Desc: question.Desc,
+            };
+            if (questionDto.IdQuestion) {
+              th.$api.QuestionController.update(questionDto).then(
+                (responseQuestion) => [console.log(responseQuestion)]
+              );
+            } else {
+              th.$api.QuestionController.insert(questionDto)
+                .then((responseQuestion) => {
+                  console.log(responseQuestion);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
+          });
+          return;
+        })
+        .then(() => {
+          th.closeModal();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
+};
 </script>
 <style scoped>
 .fill-content {
@@ -168,7 +248,7 @@ export default {
   flex: 1;
   text-align: end;
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
   border: none;
   background: none;
 }
@@ -180,7 +260,7 @@ export default {
 
 .interval-field {
   border: 1px solid black;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   color: var(--neutral-dark-gray);
   border-radius: 4px;
 }

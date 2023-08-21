@@ -48,9 +48,7 @@ func PutQuiz(quizPut models.Quiz) (err error) {
 		return
 	}
 
-	row := conn.Table("questionario").Where("idquestionario = ?", quizPut.IdQuiz).Updates(&quizPut)
-	log.Printf("row: %v", row)
-	conn.First(quizPut, quizPut.IdQuiz)
+	conn.Table("questionario").Where("idquestionario = ?", quizPut.IdQuiz).Updates(&quizPut)
 
 	return
 }

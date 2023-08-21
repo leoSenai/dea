@@ -9,7 +9,7 @@ func VerifyResponseQuizById(idQuiz int64) (hasQuiz bool, err error) {
 	}
 
 	var count int64
-	row := conn.Table("patient").Where("respondido_em IS NOT NULL AND idquiz = ?", idQuiz).Count(&count)
+	row := conn.Table("paciente_has_questionario").Where("respondido_em IS NOT NULL AND questionario_idquestionario = ?", idQuiz).Count(&count)
 	if row.Error != nil {
 		err = row.Error
 		return

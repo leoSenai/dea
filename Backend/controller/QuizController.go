@@ -89,6 +89,8 @@ func PutQuiz(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Println(quiz)
+
 	err = service.PutQuiz(quiz)
 	if err != nil {
 		log.Printf("Erro ao atualizar o questionário: %v", err)

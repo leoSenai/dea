@@ -36,8 +36,7 @@ func PostQuiz(quizPost models.Quiz) (quizBack models.Quiz, err error) {
 		return
 	}
 
-	conn.Create(&quizPost)
-	conn.First(&quizBack, quizPost.IdQuiz)
+	result := conn.Create(&quizPost)
 
 	return
 }

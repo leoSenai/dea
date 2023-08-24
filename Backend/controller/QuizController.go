@@ -76,7 +76,7 @@ func PostQuiz(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Questionário cadastrado com sucesso!", "")
+	utils.ReturnResponseJSON(w, http.StatusOK, "Questionário cadastrado com sucesso!", quiz)
 }
 
 func PutQuiz(w http.ResponseWriter, r *http.Request) {

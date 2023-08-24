@@ -7,59 +7,61 @@
       {{ model && model.IdQuiz ? 'Editar' : 'Cadastrar' }} Questionário
     </template>
     <template #modal-content>
-      <div class="row q-mb-sm">
-        <input-primary
-          v-model="model.Name"
-          label="Nome do Questionário"
-          label-color="primary"
-          required
-        />
-      </div>
-      <div class="row q-mb-sm interval-field">
-        <span>Intervalo de resposta: {{ model.Interval }}</span>
-        <q-slider
-          v-model="model.Interval"
-          :min="3"
-          :max="7"
-          :step="1"
-          label
-          color="primary"
-        />
-      </div>
-      <div
-        v-for="(question, i) in questions"
-        :key="question.key"
-        class="row q-mb-sm"
-      >
-        <input-primary
-          v-model="question.Desc"
-          :name="`${i}`"
-          :label="`Pergunta ${i + 1}`"
-          label-color="primary"
-        />
-        <button
-          v-if="questions.length > 1"
-          class="remove-question"
-          @click="removeQuestion(i)"
+      <q-form ref="form">
+        <div class="row q-mb-sm">
+          <input-primary
+            v-model="model.Name"
+            label="Nome do Questionário"
+            label-color="primary"
+            required
+          />
+        </div>
+        <div class="row q-mb-sm interval-field">
+          <span>Intervalo de resposta: {{ model.Interval }}</span>
+          <q-slider
+            v-model="model.Interval"
+            :min="3"
+            :max="7"
+            :step="1"
+            label
+            color="primary"
+          />
+        </div>
+        <div
+          v-for="(question, i) in questions"
+          :key="question.key"
+          class="row q-mb-sm"
         >
-          Remover
-        </button>
-      </div>
-      <div class="row">
-        <button-primary
-          class="fill-content"
-          outlined
-          @click="addQuestion"
-        >
-          Adicionar pergunta
-          <template #after-label>
-            <PhPlus
-              class="primary"
-              weight="bold"
-            />
-          </template>
-        </button-primary>
-      </div>
+          <button
+            v-if="questions.length > 1"
+            class="remove-question"
+            @click="removeQuestion(i)"
+          >
+            Remover
+          </button>
+          <input-primary
+            v-model="question.Desc"
+            :name="`${i}`"
+            :label="`Pergunta ${i + 1}`"
+            label-color="primary"
+          />
+        </div>
+        <div class="row">
+          <button-primary
+            class="fill-content"
+            outlined
+            @click="addQuestion"
+          >
+            Adicionar pergunta
+            <template #after-label>
+              <PhPlus
+                class="primary"
+                weight="bold"
+              />
+            </template>
+          </button-primary>
+        </div>
+      </q-form>
     </template>
     <template #modal-actions>
       <button-primary
@@ -72,6 +74,8 @@
       <button-primary
         v-if="model.IdQuiz"
         size="sm"
+        type="submit"
+        :disabled="disabledAddEditBtn"
         @click="updateQuiz"
       >
         Atualizar
@@ -79,6 +83,8 @@
       <button-primary
         v-else
         size="sm"
+        type="submit"
+        :disabled="disabledAddEditBtn"
         @click="createQuiz"
       >
         Cadastrar
@@ -121,9 +127,6 @@ export default {
         th.model = { ...current, Interval: +current.Interval };
         th.$api.QuestionController.getAll()
           .then(({ data }) => {
-            console.log(
-              data.data.filter(({ IdQuiz }) => IdQuiz === th.model.IdQuiz)
-            );
             const filteredQuestions = data.data
               .filter(({ IdQuiz }) => IdQuiz === th.model.IdQuiz)
               .map((el) => {
@@ -169,71 +172,82 @@ export default {
     },
     createQuiz() {
       const th = this;
-      th.$api.QuizController.insert({
-        ...th.model,
-        Interval: th.model.Interval.toString(),
+      th.$refs.form.validate().then(success => {
+        if (success) {
+          th.$api.QuizController.insert({
+            ...th.model,
+            Interval: th.model.Interval.toString(),
+          })
+            .then((responseQuiz) => {
+              if (responseQuiz) {
+                console.log(responseQuiz)
+                th.questions.forEach((question) => {
+                  const questionDto = {
+                    IdQuiz: th.model.IdQuiz,
+                    IdQuestion: question.IdQuestion,
+                    Desc: question.Desc,
+                  };
+                  th.$api.QuestionController.insert(questionDto)
+                    .then((responseQuestion) => {
+                      console.log(responseQuestion);
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                });
+              }
+              return;
+            })
+            .then(() => {
+              th.closeModal();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       })
-        .then((responseQuiz) => {
-          console.log(responseQuiz);
-          th.questions.forEach((question) => {
-            const questionDto = {
-              IdQuiz: th.model.IdQuiz,
-              IdQuestion: question.IdQuestion,
-              Desc: question.Desc,
-            };
-            th.$api.QuestionController.insert(questionDto)
-              .then((responseQuestion) => {
-                console.log(responseQuestion);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          });
-          return;
-        })
-        .then(() => {
-          th.closeModal();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     updateQuiz() {
       const th = this;
-      th.$api.QuizController.update({
-        ...th.model,
-        Interval: th.model.Interval.toString(),
+      console.log(th.$refs.form)
+      th.$refs.form.validate().then(success => {
+        if (success) {
+          th.$api.QuizController.update({
+            ...th.model,
+            Interval: th.model.Interval.toString(),
+          })
+            .then((response) => {
+              console.log(response);
+              th.questions.forEach((question) => {
+                const questionDto = {
+                  IdQuiz: th.model.IdQuiz,
+                  IdQuestion: question.IdQuestion,
+                  Desc: question.Desc,
+                };
+                if (questionDto.IdQuestion) {
+                  th.$api.QuestionController.update(questionDto).then(
+                    (responseQuestion) => [console.log(responseQuestion)]
+                  );
+                } else {
+                  th.$api.QuestionController.insert(questionDto)
+                    .then((responseQuestion) => {
+                      console.log(responseQuestion);
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                }
+              });
+              return;
+            })
+            .then(() => {
+              th.closeModal();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       })
-        .then((response) => {
-          console.log(response);
-          th.questions.forEach((question) => {
-            const questionDto = {
-              IdQuiz: th.model.IdQuiz,
-              IdQuestion: question.IdQuestion,
-              Desc: question.Desc,
-            };
-            if (questionDto.IdQuestion) {
-              th.$api.QuestionController.update(questionDto).then(
-                (responseQuestion) => [console.log(responseQuestion)]
-              );
-            } else {
-              th.$api.QuestionController.insert(questionDto)
-                .then((responseQuestion) => {
-                  console.log(responseQuestion);
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            }
-          });
-          return;
-        })
-        .then(() => {
-          th.closeModal();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
   },
 };

@@ -1,0 +1,7 @@
+.q-field--outlined .q-field__control:before {
+  border: 1px solid var(--neutral-dark-gray) !important;
+}
+
+.interval-field {
+  border: 1px solid var(--neutral-dark-gray) !important;
+}

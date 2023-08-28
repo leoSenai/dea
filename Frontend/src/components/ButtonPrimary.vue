@@ -30,6 +30,10 @@ export default {
       type: Boolean,
       default: false
     },
+    size: {
+      type: String,
+      default: 'md',
+    }
   },
 };
 </script>
@@ -76,5 +80,25 @@ button.outlined:disabled {
 
 button:not(:disabled):hover {
   filter: opacity(0.8);
+}
+
+button[size=xs] {
+  padding: .5rem 1.5rem;
+  font-size: .5rem;
+}
+
+button[size=sm] {
+  padding: .75rem 1.75rem;
+  font-size: .75rem;
+}
+
+button[size=lg] {
+  padding: 1.25rem 2.25rem;
+  font-size: 1.25rem;
+}
+
+button[size=xl] {
+  padding: 1.5rem 2.5rem;
+  font-size: 1.5rem;
 }
 </style>

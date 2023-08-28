@@ -35,6 +35,9 @@ func PutQuiz(quizPut models.Quiz) (err error) {
 		return fmt.Errorf("Questionário já respondido, não é possível atualizar!")
 	}
 
+	now := time.Now().Format("2006-01-02 15:04:05")
+	quizPut.Updated = now
+
 	err = repository.PutQuiz(quizPut)
 	if err != nil {
 		return fmt.Errorf("Erro ao atualizar o questionário: %v", err)

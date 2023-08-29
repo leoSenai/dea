@@ -1,11 +1,12 @@
 <template>
   <q-input
-    v-model="inputValue"
+    v-model="model"
     class="input"
     label-slot
     color="primary"
     :outlined="outlined"
     :dark="dark"
+    @update:model-value="(current) => $emit('update:modelValue', current)"
   >
     <template #prepend>
       <slot name="before-label" />
@@ -29,7 +30,7 @@
 export default {
   data() {
     return {
-      inputValue: '',
+      model: this.modelValue,
     }
   },  
   props: {

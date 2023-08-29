@@ -10,32 +10,34 @@
             <h2>Clínica Motivar</h2>
           </div>
           <div class="login-container">
-            <div class="login-form">
-              <InputTemplate
-                v-model="user"
-                color="primary"
-                outlined
-                dark
-                label="Email ou Telefone"
-                class="login-input q-mt-md"
-                ><template v-slot:before-label
-                  ><PhUser class="icon-color"></PhUser></template
-              ></InputTemplate>
-              <InputTemplate
-                v-model="password"
-                color="primary"
-                outlined
-                dark
-                label="Senha"
-                type="password"
-                class="login-input q-mt-md q-field__inner"
-                ><template v-slot:before-label
-                  ><PhLock class="icon-color"></PhLock></template
-              ></InputTemplate>
-            </div>
-            <div class="login-button">
-              <ButtonTemplate class="q-mt-lg btn-login">Entrar</ButtonTemplate>
-            </div>
+            <form v-on:submit.prevent="submitForm">
+              <div class="login-form">
+                <InputTemplate
+                  v-model="formInfo.user"
+                  color="primary"
+                  outlined
+                  dark
+                  label="Email ou Telefone"
+                  class="login-input q-mt-md"
+                  ><template v-slot:before-label
+                    ><PhUser class="icon-color"></PhUser></template
+                ></InputTemplate>
+                <InputTemplate
+                  v-model="formInfo.password"
+                  color="primary"
+                  outlined
+                  dark
+                  label="Senha"
+                  type="password"
+                  class="login-input q-mt-md q-field__inner"
+                  ><template v-slot:before-label
+                    ><PhLock class="icon-color"></PhLock></template
+                ></InputTemplate>
+              </div>
+              <div class="login-button">
+                <ButtonTemplate class="q-mt-lg btn-login" type="submit">Entrar</ButtonTemplate>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -55,6 +57,7 @@ import InputTemplate from '../components/InputPrimary.vue';
 import ButtonTemplate from '../components/ButtonPrimary.vue';
 import { PhUser } from '@phosphor-icons/vue';
 import { PhLock } from '@phosphor-icons/vue';
+
 export default {
   components: {
     InputTemplate,
@@ -64,12 +67,22 @@ export default {
   },
   data() {
     return {
-      user: '',
-      password: '',
+      formInfo: {
+        user: '',
+        password: ''
+      },
       logo: logo,
       imagem_principal: imagem_principal,
     };
   },
+  methods: {
+    submitForm() {
+      const th = this;
+      th.$api.AuthController.login(th.formInfo).then(response => {
+        console.log(response)
+      })
+    }
+  }
 };
 </script>
 

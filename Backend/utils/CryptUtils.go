@@ -32,7 +32,7 @@ func IsPasswordValid(login string, password string) (isValid bool) {
 	userVerify.Name = login
 
 	var user models.User
-	conn.First(&user, "nome = ?", userVerify.Name)
+	conn.First(&user, "email = ? OR telefone = ?", userVerify.Name, userVerify.Name)
 
 	sha256o := sha256.New()
 	passwordSalted := userVerify.Password + user.Salt

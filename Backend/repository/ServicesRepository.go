@@ -78,7 +78,7 @@ func PutServices(services models.Services) (err error) {
 	}
 
 	if result.RowsAffected == 0 {
-		return fmt.Errorf("Nenhum dado foi atualizado")
+		return fmt.Errorf("nenhum dado foi atualizado")
 	}
 
 	return nil

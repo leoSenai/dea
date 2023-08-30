@@ -35,6 +35,11 @@
 </template>
 <script>
 export default {
+  data() {
+    return {
+      model: this.modelValue,
+    }
+  },  
   props: {
     label: {
       type: String,

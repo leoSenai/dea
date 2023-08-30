@@ -38,6 +38,8 @@ func main() {
 
 	r.Use(corsHandler.Handler) // Use o middleware de CORS em todas as rotas
 
+	r.Post("/auth/login", controller.PostLogin)
+
 	r.Get("/person/get-by-id/{id}", controller.GetPersonById)
 	r.Get("/person/get-all", controller.GetAllPerson)
 	r.Post("/person/insert", controller.PostPerson)

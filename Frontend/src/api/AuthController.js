@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const appUrl = import.meta.env.VITE_API_URL_DEV + '/auth/'
+const appUrl = import.meta.env.VITE_API_URL_DEV + 'auth/'
 
 export default {
     login (formInfo) {
         console.log(formInfo)
-        return axios.get(appUrl + 'login')
+        return axios.post(appUrl + 'login', formInfo)
     },
     logout () {
-        return axios.get(appUrl + 'logout')
+        return 'not success'
     }
 }

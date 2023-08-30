@@ -9,6 +9,7 @@ type Person struct {
 	Email     string `gorm:"column:email" json:"Email"`
 	Password  string `gorm:"column:senha" json:"Password"`
 	Salt      string `gorm:"column:salt" json:"Salt"`
+	Phone     string `gorm:"column:telefone" json:"Phone"`
 }
 
 func (p *Person) TableName() string {

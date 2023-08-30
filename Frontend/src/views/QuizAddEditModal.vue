@@ -30,14 +30,14 @@
         <div
           v-for="(question, i) in questions"
           :key="question.key"
-          class="row q-mb-sm"
+          class="question row q-mb-sm"
         >
           <button
             v-if="questions.length > 1"
-            class="remove-question"
+            class="remove-question rounded-full"
             @click="removeQuestion(i)"
           >
-            Remover
+            <PhX weight="bold" />
           </button>
           <input-primary
             v-model="question.Desc"
@@ -96,7 +96,7 @@
 import ModalPrimary from '../components/ModalPrimary.vue';
 import InputPrimary from '../components/InputPrimary.vue';
 import ButtonPrimary from '../components/ButtonPrimary.vue';
-import { PhPlus } from '@phosphor-icons/vue';
+import { PhPlus, PhX } from '@phosphor-icons/vue';
 
 export default {
   components: {
@@ -104,6 +104,7 @@ export default {
     InputPrimary,
     ButtonPrimary,
     PhPlus,
+    PhX,
   },
   emits: ['close'],
   data() {
@@ -117,6 +118,7 @@ export default {
         Updated: null,
       },
       questions: [{ key: 0, Desc: '', IdQuestion: null }],
+      questionRemoved: [],
     };
   },
   methods: {
@@ -157,7 +159,8 @@ export default {
     },
     removeQuestion(index) {
       if (index !== -1) {
-        this.questions.splice(index, 1);
+        const [question] = this.questions.splice(index, 1);
+        this.questionRemoved.push(question);
       }
     },
     closeModal() {
@@ -172,20 +175,27 @@ export default {
     },
     createQuiz() {
       const th = this;
-      th.$refs.form.validate().then(success => {
+      th.$refs.form.validate().then((success) => {
+        if (th.questions.some(({ Desc }) => !Desc || Desc.trim() === '')) {
+          alert(
+            'Não é possível criar questionários com questões sem descrição!'
+          );
+          return;
+        }
         if (success) {
           th.$api.QuizController.insert({
             ...th.model,
             Interval: th.model.Interval.toString(),
           })
-            .then((responseQuiz) => {
-              if (responseQuiz) {
-                console.log(responseQuiz)
+            .then(({ data }) => {
+              th.model = data.data;
+              if (th.model.IdQuiz) {
+                console.log(th.model);
                 th.questions.forEach((question) => {
                   const questionDto = {
                     IdQuiz: th.model.IdQuiz,
                     IdQuestion: question.IdQuestion,
-                    Desc: question.Desc,
+                    Desc: question.Desc.trim(),
                   };
                   th.$api.QuestionController.insert(questionDto)
                     .then((responseQuestion) => {
@@ -205,29 +215,31 @@ export default {
               console.log(err);
             });
         }
-      })
+      });
     },
     updateQuiz() {
       const th = this;
-      console.log(th.$refs.form)
-      th.$refs.form.validate().then(success => {
+      th.$refs.form.validate().then((success) => {
         if (success) {
+          if (th.questions.some(({ Desc }) => !Desc || Desc.trim() === '')) {
+            alert(
+              'Não é possível atualizar questionários com questões sem descrição!'
+            );
+            return;
+          }
           th.$api.QuizController.update({
             ...th.model,
             Interval: th.model.Interval.toString(),
           })
-            .then((response) => {
-              console.log(response);
+            .then(() => {
               th.questions.forEach((question) => {
                 const questionDto = {
                   IdQuiz: th.model.IdQuiz,
                   IdQuestion: question.IdQuestion,
-                  Desc: question.Desc,
+                  Desc: question.Desc.trim(),
                 };
                 if (questionDto.IdQuestion) {
-                  th.$api.QuestionController.update(questionDto).then(
-                    (responseQuestion) => [console.log(responseQuestion)]
-                  );
+                  th.$api.QuestionController.update(questionDto);
                 } else {
                   th.$api.QuestionController.insert(questionDto)
                     .then((responseQuestion) => {
@@ -241,13 +253,19 @@ export default {
               return;
             })
             .then(() => {
+              th.questionRemoved.forEach(({ IdQuestion }) => {
+                th.$api.QuestionController.delete(IdQuestion);
+              });
+              return;
+            })
+            .then(() => {
               th.closeModal();
             })
             .catch((err) => {
               console.log(err);
             });
         }
-      })
+      });
     },
   },
 };
@@ -257,19 +275,37 @@ export default {
   width: 100%;
 }
 
+.question {
+  position: relative;
+}
+
 .remove-question {
-  color: var(--others-red-300);
+  position: absolute;
+  top: 30%;
+  right: 3%;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform: translateY(-50%);
+  color: var(--neutral-dark-gray);
   flex: 1;
   text-align: end;
   cursor: pointer;
   transition: 0.3s;
+  background: #fff;
   border: none;
-  background: none;
+  border: 1px solid var(--neutral-dark-gray);
+  border-radius: 99999px;
+  cursor: pointer;
+  z-index: 1;
 }
 
 .remove-question:hover {
-  filter: brightness(0.8);
-  text-decoration: underline;
+  color: var(--others-red-600);
+  border-color: var(--others-red-600);
 }
 
 .interval-field {

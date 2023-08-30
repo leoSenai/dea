@@ -13,7 +13,9 @@ export default {
     return axios.post(appUrl + 'insert', data)
   },
   update(data) {
-    console.log('update')
     return axios.put(appUrl + 'update', data)
+  },
+  delete(id) {
+    return axios.delete(appUrl + id)
   }
 }

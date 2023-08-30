@@ -101,3 +101,59 @@ func PutQuestion(w http.ResponseWriter, r *http.Request) {
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Informações da questão atualizadas com sucesso!", "")
 }
+
+func PutQuestionsBulk(w http.ResponseWriter, r *http.Request) {
+	var questions []models.Question
+
+	err := json.NewDecoder(r.Body).Decode(&questions)
+	if err != nil {
+		// log.Printf("Cannot do PutBulk: %s", err.Error())
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Houve algum erro ao tentar obter as informações para atualização das questões.", "")
+		return
+	}
+
+	insertedQuestions, err := service.PutQuestionsBulk(questions)
+	if err != nil {
+		// log.Printf("Error putting questions bulk: %s", err.Error())
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Houve um erro ao atualizar/criar as questões.", "")
+		return
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Questões inseridas/atualizadas com sucesso!", insertedQuestions)
+}
+
+func GetQuestionsByQuiz(w http.ResponseWriter, r *http.Request) {
+	idQuizParam := chi.URLParam(r, "idQuiz")
+	idQuiz, err := strconv.Atoi(idQuizParam)
+	if err != nil {
+		// log.Printf("Não é possível analisar o IdQuiz: %s", err.Error())
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Parâmetro IdQuiz inválido.", "")
+		return
+	}
+
+	questions, err := service.GetQuestionsByQuiz(idQuiz)
+	if err != nil {
+		// log.Printf("Erro ao obter perguntas por questionário: %s", err.Error())
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Erro ao obter perguntas.", "")
+		return
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "As perguntas foram encontradas com sucesso!", questions)
+}
+
+func DeleteQuestionById(w http.ResponseWriter, r *http.Request) {
+	idParam := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Parâmetro de ID inválido.", "")
+		return
+	}
+
+	err = service.DeleteQuestionById(int64(id))
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Erro ao eliminar a pergunta.", "")
+		return
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Pergunta eliminada com sucesso!", "")
+}

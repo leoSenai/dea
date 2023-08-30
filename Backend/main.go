@@ -78,6 +78,9 @@ func main() {
 	r.Get("/question/get-all", controller.GetAllQuestion)
 	r.Post("/question/insert", controller.PostQuestion)
 	r.Put("/question/update", controller.PutQuestion)
+	r.Put("/question/update-bulk", controller.PutQuestionsBulk)
+	r.Put("/question/get-by-quiz/{idQuiz}", controller.GetQuestionsByQuiz)
+	r.Delete("/questions/{id}", controller.DeleteQuestionById)
 
 	r.Get("/anamnese/get-by-id/{id}", controller.GetAnamneseById)
 	r.Get("/anamnese/get-all", controller.GetAllAnamnese)

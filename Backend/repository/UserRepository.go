@@ -42,7 +42,7 @@ func PostUser(userPost models.User) (userBack models.User, err error) {
 	found := repositoryUtils.VerifyUserExistanceByDocument(userPost.Email)
 
 	if found {
-		err = errors.New("Esse usuário já foi cadastrado no sistema!")
+		err = errors.New("esse usuario ja foi cadastrado no sistema")
 	} else {
 
 		passwordEncrypted, salt := generalUtils.GenerateEncryptedPassword(userPost.Password)

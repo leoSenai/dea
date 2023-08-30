@@ -6,7 +6,7 @@
     <q-card class="card">
       <div
         class="close-button"
-        @click="$emit('update:modelValue', false)"
+        @click="close"
       >
         <PhX
           size="1rem"
@@ -15,7 +15,6 @@
       </div>
       <h5 class="modal-title">
         <slot name="modal-title" />
-        Título
       </h5>
       <q-card-section class="modal-content">
         <slot name="modal-content" />
@@ -39,12 +38,18 @@ export default {
       default: false
     }
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'close'],
+  methods: {
+    close() {
+      this.$emit('update:modelValue', false)
+      this.$emit('close')
+    }
+  }
 }
 </script>
 <style scoped>
 .modal {
-  position: sticky;
+  position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
@@ -109,7 +114,7 @@ export default {
   .modal {
     padding: 4rem 1rem;
   }
-  
+
   .card {
     width: 70%;
   }

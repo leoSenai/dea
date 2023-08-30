@@ -6,6 +6,7 @@
     color="primary"
     :outlined="outlined"
     :dark="dark"
+    :rules="rulesComputed"
     @update:model-value="(current) => $emit('update:modelValue', current)"
   >
     <template #prepend>
@@ -24,6 +25,12 @@
     <template #append>
       <slot name="after-label" />
     </template>
+
+    <template #error>
+      <span>
+        aaa
+      </span>
+    </template>
   </q-input>
 </template>
 <script>
@@ -36,41 +43,58 @@ export default {
   props: {
     label: {
       type: String,
-      default: '0'
+      default: '0',
     },
     modelValue: {
       type: String,
-      default: ''
+      default: '',
     },
     outlined: {
       type: Boolean,
-      default: true
+      default: true,
     },
     dark: {
       type: Boolean,
-      default: false
+      default: false,
     },
     labelColor: {
       type: String,
-      default: 'white'
-    }
+      default: 'white',
+    },
+    required: {
+      type: Boolean,
+      default: false,
+    },
+    rules: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  emits: ['update:modelValue'],
+  data() {
+    return {
+      model: this.modelValue,
+    };
+  },
+  computed: {
+    rulesComputed() {
+      return [
+        ...this.rules,
+        () => {
+          if (this.required && this.model.length <= 0) {
+            return 'Campo requirido!'
+          }
+          return null
+        },
+      ];
+    },
   },
 };
 </script>
-<style scoped>
+<style>
 .input {
   position: relative;
-}
-
-.input::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  border: 1px solid var(--neutral-dark-gray);
-  border-radius: 4px;
+  width: 100%;
 }
 
 .label {

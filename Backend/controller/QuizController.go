@@ -76,7 +76,7 @@ func PostQuiz(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Questionário cadastrado com sucesso!", "")
+	utils.ReturnResponseJSON(w, http.StatusOK, "Questionário cadastrado com sucesso!", quiz)
 }
 
 func PutQuiz(w http.ResponseWriter, r *http.Request) {
@@ -88,6 +88,8 @@ func PutQuiz(w http.ResponseWriter, r *http.Request) {
 		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Houve um erro ao obter as informações de atualização do questionário.", "")
 		return
 	}
+
+	log.Println(quiz)
 
 	err = service.PutQuiz(quiz)
 	if err != nil {

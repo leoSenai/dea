@@ -2,7 +2,16 @@
 <p>This branch is the <b>homologation</b> branch</p>
 <ul>
   <li>Version: 0.0.1</li>
-  <li>Authors: <i>David, Dario, Felipe J, Leonardo, Rodrigo</i></li>
+  <li>Authors: 
+    <i>
+      <a href="https://github.com/davidsidor" target="_blank">David Sidro</a>, 
+      <a href="https://github.com/daniloserafim" target="_blank">Danilo de Matos Serafim</a>, 
+      <a href="https://github.com/dariokrugerjunior" target="_blank">Dario Kruger Junior</a>, 
+      <a href="https://github.com/FelipeJanotte" target="_blank">Felipe Janotte</a>, 
+      <a href="https://github.com/leoSenai" target="_blank">Leonardo</a>, 
+      <a href="https://github.com/RodrigoPerozin" target="_blank">Rodrigo Perozin</a>
+    </i>
+  </li>
 </ul>
 
 # How to setup and run backend

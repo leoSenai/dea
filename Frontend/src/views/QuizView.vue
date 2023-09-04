@@ -66,7 +66,6 @@ export default {
       th.$api.QuizController.getAll().then(({ data }) => {
         th.model = data
       }).catch(({ response }) => {
-        console.log(response.data)
         th.model = {
           ...response.data,
           hasError: true

@@ -4,7 +4,10 @@
       <div class="col-12 col-lg-5">
         <div class="login flex items-center column justify-center q-px-lg">
           <div class="login-logo">
-            <img :src="logo" alt="" />
+            <img
+              :src="logo"
+              alt=""
+            />
           </div>
           <div class="login-title">
             <h2>Clínica Motivar</h2>
@@ -19,9 +22,9 @@
                   dark
                   label="Email ou Telefone"
                   class="login-input q-mt-md"
-                  ><template v-slot:before-label
-                    ><PhUser class="icon-color"></PhUser></template
-                ></InputTemplate>
+                ><template v-slot:before-label>
+                    <PhUser class="icon-color"></PhUser>
+                  </template></InputTemplate>
                 <InputTemplate
                   v-model="formInfo.password"
                   color="primary"
@@ -30,12 +33,15 @@
                   label="Senha"
                   type="password"
                   class="login-input q-mt-md q-field__inner"
-                  ><template v-slot:before-label
-                    ><PhLock class="icon-color"></PhLock></template
-                ></InputTemplate>
+                ><template v-slot:before-label>
+                    <PhLock class="icon-color"></PhLock>
+                  </template></InputTemplate>
               </div>
               <div class="login-button">
-                <ButtonTemplate class="q-mt-lg btn-login" type="submit">Entrar</ButtonTemplate>
+                <ButtonTemplate
+                  class="q-mt-lg btn-login"
+                  type="submit"
+                >Entrar</ButtonTemplate>
               </div>
             </form>
           </div>
@@ -78,9 +84,7 @@ export default {
   methods: {
     submitForm() {
       const th = this;
-      th.$api.AuthController.login(th.formInfo).then(response => {
-        console.log(response)
-      })
+      th.$api.AuthController.login(th.formInfo)
     }
   }
 };
@@ -97,12 +101,12 @@ export default {
   width: 100%;
 }
 
-.login-logo > img {
+.login-logo>img {
   width: 110px;
   height: 98px;
 }
 
-.login-title > h2 {
+.login-title>h2 {
   font-size: 38px;
 }
 
@@ -149,5 +153,4 @@ export default {
 
 .icon-color {
   color: var(--neutral-white);
-}
-</style>
+}</style>

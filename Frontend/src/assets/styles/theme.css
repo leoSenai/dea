@@ -2,6 +2,7 @@
   --primary: #519832;
   --primary-300: #6c965a;
   --primary-500: var(--primary);
+  --primary-600: #468b28;
   --primary-700: #386923;
   
   --primary-opacity-100: var(--primary);

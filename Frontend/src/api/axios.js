@@ -9,7 +9,7 @@ axios.interceptors.response.use((response) => {
     !response.config.url.includes('question')
   ) {
     Toastify({
-      avatar: '../../public/check-circle-fill.svg',
+      avatar: '/public/check-circle-fill.svg',
       text: response.data.message,
       duration: 3000,
       gravity: 'top',
@@ -31,7 +31,7 @@ axios.interceptors.response.use((response) => {
     }).showToast();
   } else if (response.status >= 400 && response.status < 600) {
     Toastify({
-      avatar: '../../public/x-circle-fill.svg',
+      avatar: '/public/x-circle-fill.svg',
       text: response.data.message,
       duration: 3000,
       gravity: 'top',

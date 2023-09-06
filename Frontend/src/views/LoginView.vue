@@ -90,7 +90,10 @@ export default {
   methods: {
     submitForm() {
       const th = this;
-      th.$api.AuthController.login(th.model)
+      th.$api.AuthController.login(th.model).then(({ data }) => {
+        this.$cookies.set('authToken', data.data, '1d')
+        this.$router.push('/')
+      })
     }
   },
 

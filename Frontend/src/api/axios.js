@@ -11,7 +11,7 @@ axios.interceptors.response.use((response) => {
     !response.config.url.includes('question')
   ) {
     Toastify({
-      avatar: '/public/check-circle-fill.svg',
+      avatar: '/check-circle-fill.svg',
       text: response.data.message,
       duration: 3000,
       gravity: 'top',
@@ -28,14 +28,14 @@ axios.interceptors.response.use((response) => {
       },
       offset: {
         x: 0,
-        y: 65,
+        y: location.href.includes('login') ? 0 : 65,
       },
     }).showToast();
   }
   return response;
 }, ({ response }) => {
   Toastify({
-    avatar: '/public/x-circle-fill.svg',
+    avatar: '/x-circle-fill.svg',
     text: response.data.message,
     duration: 3000,
     gravity: 'top',

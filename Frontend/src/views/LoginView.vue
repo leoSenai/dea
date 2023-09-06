@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-12 col-lg-5">
+      <div class="col-12 col-md-5">
         <div class="login flex items-center column justify-center q-px-lg">
           <div class="login-logo">
             <img :src="logo" alt="" />
@@ -19,7 +19,7 @@
                 label="Email ou Telefone"
                 class="login-input q-mt-md"
                 ><template v-slot:before-label
-                  ><PhUser class="icon-color"></PhUser></template
+                  ><PhUser class="icon-color"></PhUser></template>
               ></InputTemplate>
               <InputTemplate
                 color="primary"
@@ -38,7 +38,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-7">
+      <div class="col-md-7">
         <div class="login-img">
           <div class="bg-img"></div>
         </div>

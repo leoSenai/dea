@@ -1,25 +1,26 @@
 <template>
   <div>
     <router-view name="header" />
-    <div class="content">
+    <div :class="['content', isLoginScreen ? 'login-screen' : '']">
       <router-view />
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const isLoginScreen = location.href.includes('login')
+</script>
 
 <style scoped>
 .content {
   position: relative;
   display: flex;
-  height: calc(100vh - 5rem);
+  flex-direction: column;
   overflow: hidden;
+  height: calc(100vh - 5rem);
 }
 
-@media (min-width: 768px) {
-  .content {
-    margin-left: 10rem;
-  }
+.content.login-screen {
+  height: 100vh;
 }
 </style>

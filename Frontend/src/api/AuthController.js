@@ -1,13 +1,16 @@
-import axios from 'axios';
-
-const appUrl = import.meta.env.VITE_API_URL_DEV + 'auth/'
+import axios from './axios';
 
 export default {
-    login (formInfo) {
-        console.log(formInfo)
-        return axios.post(appUrl + 'login', formInfo)
+    url: '/auth/',
+    config: {
+        headers: {
+            Authorization: `; ${document.cookie}`.split('; authToken=').pop().split(';').shift()
+        }
     },
-    logout () {
+    login(data) {
+        return axios.post(this.url + 'login', data, this.config)
+    },
+    logout() {
         return 'not success'
     }
 }

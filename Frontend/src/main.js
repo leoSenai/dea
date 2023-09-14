@@ -1,22 +1,33 @@
-import { createApp } from 'vue'
-import { Quasar } from 'quasar'
-import router from './router'
+import { createApp } from 'vue';
+import { Quasar } from 'quasar';
+import router from './router';
+import 'toastify-js/src/toastify.css';
 
-import 'quasar/dist/quasar.css'
-import './style.css'
+import 'quasar/dist/quasar.css';
+import './style.css';
 
-import { colorTheme } from './assets/styles/theme'
+import { colorTheme } from './assets/styles/theme';
 
-import api from './api'
-import App from './App.vue'
+import cookies from 'vue3-cookies';
 
-const myApp = createApp(App)
+import api from './api';
+import App from './App.vue';
 
-myApp.use(Quasar, {
-  plugins: { },
-  config: {
-    brand: { ...colorTheme }
-  }
-}).use(router).use(api)
+const myApp = createApp(App);
 
-router.isReady().then(() => myApp.mount('#app'))
+myApp
+  .use(Quasar, {
+    plugins: {},
+    config: {
+      brand: { ...colorTheme },
+    },
+  })
+  .use(router)
+  .use(api)
+  .use(cookies, {
+    expireTimes: '30d',
+    sameSite: 'None',
+    secure: true
+  });
+
+router.isReady().then(() => myApp.mount('#app'));

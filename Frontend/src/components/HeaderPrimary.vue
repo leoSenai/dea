@@ -2,14 +2,15 @@
   <header class="bg-primary-700">
     <button
       class="hamburguer"
-      @click="activeSidebar"
+      @click="toggleSidebar"
     >
       <PhList />
     </button>
-    <div class="logo white">
-      <q-img
-        :src="LogoSrc"
-      />
+    <div
+      class="logo white"
+      @click="goHome"
+    >
+      <q-img :src="LogoSrc" />
       <h6>Clínica Motivar</h6>
     </div>
     <div class="user white">
@@ -20,7 +21,10 @@
       <span class="text-body">Usuário</span>
     </div>
   </header>
-  <div :class="['sidebar', 'bg-success', isSidebarActive ? 'active' : '']">
+  <div
+    :class="['sidebar', 'bg-success', isSidebarActive ? 'active' : '']"
+    @blur="hideSidebar"
+  >
     <template
       v-for="link in links"
       :key="link.path"
@@ -28,6 +32,8 @@
       <router-link
         :to="link.path"
         class="link"
+        tabindex="0"
+        @blur="hideSidebar"
       >
         {{ link.name }}
         <component
@@ -45,7 +51,7 @@ import { PhUserCircle, PhList } from '@phosphor-icons/vue';
 export default {
   components: {
     PhUserCircle,
-    PhList
+    PhList,
   },
   props: {
     links: {
@@ -56,14 +62,20 @@ export default {
   data() {
     return {
       LogoSrc: 'src/assets/imgs/Logo.png',
-      isSidebarActive: false
+      isSidebarActive: false,
     };
   },
   methods: {
-    activeSidebar () {
-      this.isSidebarActive = !this.isSidebarActive
+    toggleSidebar() {
+      this.isSidebarActive = !this.isSidebarActive;
+    },
+    hideSidebar() {
+      this.isSidebarActive = false;
+    },
+    goHome() {
+      this.$router.push('/')
     }
-  }
+  },
 };
 </script>
 
@@ -85,6 +97,7 @@ header {
   align-items: center;
   justify-content: flex-start;
   gap: 2rem;
+  cursor: pointer;
 }
 
 .user {
@@ -108,13 +121,11 @@ header {
   z-index: 999;
   min-height: 100%;
   padding: 2rem 0rem;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-
-  transition: .3s ease-in-out;
+  transition: 0.3s ease-in-out;
   transform: translateX(0%);
 }
 
@@ -125,10 +136,8 @@ header {
   min-width: 100%;
   padding: 1rem 2rem;
   gap: 1rem;
-
   transition: 200ms ease;
   cursor: pointer;
-
   color: white;
 }
 
@@ -141,24 +150,18 @@ header {
 }
 
 .hamburguer {
-  display: none;
+  display: flex;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
-@media (max-width: 768px) {
-  .hamburguer {
-    display: flex;
-    font-size: 1.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
+.sidebar {
+  transform: translateX(-100%);
+}
 
-  .sidebar {
-    transform: translateX(-100%);
-  }
-
-  .sidebar.active {
-    transform: translateX(0%);
-  }
+.sidebar.active {
+  transform: translateX(0%);
 }
 </style>

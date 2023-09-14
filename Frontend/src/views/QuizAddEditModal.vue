@@ -75,7 +75,6 @@
         v-if="model.IdQuiz"
         size="sm"
         type="submit"
-        :disabled="disabledAddEditBtn"
         @click="updateQuiz"
       >
         Atualizar
@@ -84,7 +83,6 @@
         v-else
         size="sm"
         type="submit"
-        :disabled="disabledAddEditBtn"
         @click="createQuiz"
       >
         Cadastrar
@@ -143,9 +141,6 @@ export default {
                 ? filteredQuestions
                 : [{ key: 0, Desc: '' }];
           })
-          .catch((err) => {
-            console.log(err);
-          });
       }
     },
     addQuestion() {
@@ -190,7 +185,6 @@ export default {
             .then(({ data }) => {
               th.model = data.data;
               if (th.model.IdQuiz) {
-                console.log(th.model);
                 th.questions.forEach((question) => {
                   const questionDto = {
                     IdQuiz: th.model.IdQuiz,
@@ -198,12 +192,6 @@ export default {
                     Desc: question.Desc.trim(),
                   };
                   th.$api.QuestionController.insert(questionDto)
-                    .then((responseQuestion) => {
-                      console.log(responseQuestion);
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                    });
                 });
               }
               return;
@@ -211,9 +199,6 @@ export default {
             .then(() => {
               th.closeModal();
             })
-            .catch((err) => {
-              console.log(err);
-            });
         }
       });
     },
@@ -242,12 +227,6 @@ export default {
                   th.$api.QuestionController.update(questionDto);
                 } else {
                   th.$api.QuestionController.insert(questionDto)
-                    .then((responseQuestion) => {
-                      console.log(responseQuestion);
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                    });
                 }
               });
               return;
@@ -261,9 +240,6 @@ export default {
             .then(() => {
               th.closeModal();
             })
-            .catch((err) => {
-              console.log(err);
-            });
         }
       });
     },

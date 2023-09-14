@@ -1,12 +1,16 @@
-import axios from 'axios';
-
-const appUrl = import.meta.env.VITE_API_URL_DEV + '/doctor/'
+import axios from './axios';
 
 export default {
-    getAll () {
-        return axios.get(appUrl + 'get-all')
+    url: '/doctor/',
+    config: {
+        headers: {
+            Authorization: `; ${document.cookie}`.split('; authToken=').pop().split(';').shift()
+        }
     },
-    insert () {
-        return axios.post(appUrl + 'insert', { Name: 'Felipe', Crm: '1243', IdCbo: 1 })
+    getAll() {
+        return axios.get(this.url + 'get-all', this.config)
+    },
+    insert() {
+        return axios.post(this.url + 'insert', { Name: 'Felipe', Crm: '1243', IdCbo: 1 }, this.config)
     }
 }

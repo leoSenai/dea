@@ -10,6 +10,8 @@ require (
 	gorm.io/gorm v1.25.0
 )
 
+require github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+
 require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-chi/cors v1.2.1

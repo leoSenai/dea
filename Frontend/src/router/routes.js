@@ -2,11 +2,11 @@ import Home from '../views/HomeView.vue';
 import Login from '../views/LoginView.vue';
 import Header from '../components/HeaderPrimary.vue';
 import Quiz from '../views/QuizView.vue';
-import { PhAppWindow, PhUsers, PhArticle } from '@phosphor-icons/vue';
+import NotFound from '../views/NotFoundView.vue';
+import { PhUsers, PhArticle } from '@phosphor-icons/vue';
 
 const links = [
   { path: '/usuarios', name: 'Usuários', icon: PhUsers },
-  { path: '/login', name: 'Login', icon: PhAppWindow },
   { path: '/questionarios', name: 'Questionários', icon: PhArticle },
 ];
 
@@ -24,26 +24,33 @@ export const routes = [
   {
     path: '/home',
     components: {
-    default: Home,
-    header: Header,
-    },
-    props: {
-    header: { links },
-    },  
-  },
-  {
-    path: '/login',
-    components: {
-      default: Login,
+      default: Home,
+      header: Header,
     },
     props: {
       header: { links },
     },
   },
   {
+    path: '/login',
+    components: {
+      default: Login,
+    },
+  },
+  {
     path: '/questionarios',
     components: {
       default: Quiz,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    components: {
+      default: NotFound,
       header: Header,
     },
     props: {

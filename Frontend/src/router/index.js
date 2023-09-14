@@ -7,7 +7,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  const authToken = `; ${document.cookie}`.split('; authToken').pop().split(';').shift()
+  const authToken = `; ${document.cookie}`.split('; authToken=').pop().split(';').shift()
   if (!authToken && to.path !== '/login') {
     return { path: '/login' }
   } else if (authToken && to.path === '/login') {

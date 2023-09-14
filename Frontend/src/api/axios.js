@@ -36,7 +36,7 @@ axios.interceptors.response.use((response) => {
 }, ({ response }) => {
   Toastify({
     avatar: '/x-circle-fill.svg',
-    text: response.data.message,
+    text: response ? response.data.message : 'Ocorreu um erro!',
     duration: 3000,
     gravity: 'top',
     position: 'right',
@@ -56,7 +56,7 @@ axios.interceptors.response.use((response) => {
     },
   }).showToast();
 
-  return response;
+  return response ? response : { data: null };
 });
 
 export default axios;

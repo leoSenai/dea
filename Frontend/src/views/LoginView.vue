@@ -1,6 +1,6 @@
 <template>
   <div class="row login-container">
-    <div :class="[isMobileScreen ? 'col-12' : 'col-5']">
+    <div :class="[pageSize === 'xs' ? 'col-12' : 'col-5']">
       <div class="login">
         <div class="login-logo">
           <img
@@ -11,7 +11,10 @@
         <h3 class="login-title">
           Clínica Motivar
         </h3>
-        <form @submit.prevent="submitForm">
+        <form
+          :class="pageSize === 'xl' || pageSize === 'lg' || pageSize === 'md' ? 'w-70' : ''"
+          @submit.prevent="submitForm"
+        >
           <div class="login-form">
             <InputTemplate
               v-model="model.user"
@@ -51,7 +54,7 @@
       </div>
     </div>
     <div
-      v-if="!isMobileScreen"
+      v-if="pageSize !== 'xs'"
       class="col-7"
     >
       <div class="login-background" />
@@ -84,8 +87,9 @@ export default {
     };
   },
   computed: {
-    isMobileScreen() {
-      return this.$q.screen.xs
+    pageSize() {
+      console.log(this.$q.screen.name)
+      return this.$q.screen.name
     }
   },
   methods: {
@@ -104,6 +108,10 @@ export default {
 </script>
 
 <style scoped>
+.w-70 {
+  width: 70%;
+}
+
 .login-container {
   width: 100%;
   max-height: 100vh;

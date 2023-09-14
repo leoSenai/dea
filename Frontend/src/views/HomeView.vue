@@ -11,13 +11,6 @@ export default {
     return {
     };
   },
-  methods: {
-    handleClick () {
-      this.$api.DoctorController.getAll().then(response => {
-        console.log(response)
-      })
-    },
-
-  }
+  methods: {}
 };
 </script>

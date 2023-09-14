@@ -38,6 +38,8 @@ func main() {
 
 	r.Use(corsHandler.Handler) // Use o middleware de CORS em todas as rotas
 
+	r.Post("/auth/login", controller.PostLogin)
+
 	r.Get("/person/get-by-id/{id}", controller.GetPersonById)
 	r.Get("/person/get-all", controller.GetAllPerson)
 	r.Post("/person/insert", controller.PostPerson)
@@ -78,6 +80,9 @@ func main() {
 	r.Get("/question/get-all", controller.GetAllQuestion)
 	r.Post("/question/insert", controller.PostQuestion)
 	r.Put("/question/update", controller.PutQuestion)
+	r.Put("/question/update-bulk", controller.PutQuestionsBulk)
+	r.Put("/question/get-by-quiz/{idQuiz}", controller.GetQuestionsByQuiz)
+	r.Delete("/question/{id}", controller.DeleteQuestionById)
 
 	r.Get("/anamnese/get-by-id/{id}", controller.GetAnamneseById)
 	r.Get("/anamnese/get-all", controller.GetAllAnamnese)

@@ -4,7 +4,10 @@
       <div class="col-12 col-md-5">
         <div class="login flex items-center column justify-center q-px-lg">
           <div class="login-logo">
-            <img :src="logo" alt="" />
+            <img
+              :src="logo"
+              alt=""
+            />
           </div>
           <div class="login-title">
             <h2>Clínica Motivar</h2>
@@ -54,6 +57,7 @@ import InputTemplate from '../components/InputPrimary.vue';
 import ButtonTemplate from '../components/ButtonPrimary.vue';
 import { PhUser } from '@phosphor-icons/vue';
 import { PhLock } from '@phosphor-icons/vue';
+
 export default {
   components: {
     InputTemplate,
@@ -63,10 +67,20 @@ export default {
   },
   data() {
     return {
+      formInfo: {
+        user: '',
+        password: ''
+      },
       logo: logo,
       imagem_principal: imagem_principal,
     };
   },
+  methods: {
+    submitForm() {
+      const th = this;
+      th.$api.AuthController.login(th.formInfo)
+    }
+  }
 };
 </script>
 
@@ -81,12 +95,12 @@ export default {
   width: 100%;
 }
 
-.login-logo > img {
+.login-logo>img {
   width: 110px;
   height: 98px;
 }
 
-.login-title > h2 {
+.login-title>h2 {
   font-size: 38px;
 }
 
@@ -133,5 +147,4 @@ export default {
 
 .icon-color {
   color: var(--neutral-white);
-}
-</style>
+}</style>

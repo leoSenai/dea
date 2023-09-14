@@ -37,8 +37,7 @@ func PostQuiz(quizPost models.Quiz) (quizBack models.Quiz, err error) {
 	}
 
 	conn.Create(&quizPost)
-	conn.First(&quizBack, quizPost.IdQuiz)
-
+	quizBack = quizPost
 	return
 }
 
@@ -48,9 +47,7 @@ func PutQuiz(quizPut models.Quiz) (err error) {
 		return
 	}
 
-	row := conn.Table("questionario").Where("idquestionario = ?", quizPut.IdQuiz).Updates(&quizPut)
-	log.Printf("row: %v", row)
-	conn.First(quizPut, quizPut.IdQuiz)
+	conn.Table("questionario").Where("idquestionario = ?", quizPut.IdQuiz).Updates(&quizPut)
 
 	return
 }

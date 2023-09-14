@@ -95,7 +95,7 @@ func PutProximityQuiz(proximityHasQuiz models.ProximityHasQuiz) error {
 	}
 
 	if result.RowsAffected == 0 {
-		return fmt.Errorf("Nenhum dado foi atualizado")
+		return fmt.Errorf("nenhum dado foi atualizado")
 	}
 
 	return nil

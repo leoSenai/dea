@@ -1,14 +1,14 @@
 import Home from '../views/HomeView.vue';
 import Login from '../views/LoginView.vue';
 import Header from '../components/HeaderPrimary.vue';
-import Pacientes from '../views/PacientesView.vue';
+import Patients from '../views/PatientsView.vue';
 import InputPrimary from '../components/InputPrimary.vue';
 
 import { PhAppWindow, PhUsers } from '@phosphor-icons/vue';
 
 const links = [
   // { path: '/questionarios', name: 'Questionários', icon: PhArticle },
-  {path: '/pacientes', name: 'Pacientes', icon: PhAppWindow},
+  {path: '/patients', name: 'Patients', icon: PhAppWindow},
   {path: '/usuarios', name: 'Usuários', icon: PhUsers},
 ];
 
@@ -43,12 +43,14 @@ export const routes = [
     },
   },
   {
-    path: '/pacientes',
+    path: '/patients',
     components: {
-      default: Pacientes,
+      default: Patients,
       header: Header,
       input: InputPrimary
     },
-   
+    props: {
+      header: { links },
+    },
   },
 ];

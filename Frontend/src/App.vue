@@ -10,20 +10,10 @@
 <script setup></script>
 
 <style scoped>
-
-main {
-  display: flex;
-}
 .content {
   position: relative;
-  height: calc(100vh - 30%);
+  display: flex;
+  height: calc(100vh - 5rem);
   overflow: hidden;
 }
-
-@media (min-width: 768px) {
-  .content {
-    margin-left: 10rem;
-  }
-}
-
 </style>

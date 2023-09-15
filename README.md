@@ -1,4 +1,5 @@
 # dea - branch beta
+
 <p>This branch is the <b>homologation</b> branch</p>
 <ul>
   <li>Version: 0.0.1</li>
@@ -34,5 +35,13 @@
 <ol>
   <li>Clone this git repository</li>
   <li>Checkout the 'beta' branch</li>
-  <li>...</li>
+  <li>Install <a href="https://nodejs.org/pt-br/download">Node JS</a></li>
+  <li>Open a terminal and type:
+    <pre>
+      <code>$ cd /dea/FrontEnd -> To change for project directory </code>
+      <code>$ npm i -> To install project dependencies</code>
+      <code>$ npm run serve -> To run project</code>
+    </pre>
+  </li>
+  <li>Open your favorite navitor and go to <a href="http://localhost:5173/">http://localhost:5173/</a></li>
 </ol>

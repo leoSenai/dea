@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import Cookie from '../cookie'
 import logo from '../assets/imgs/logo.png';
 import InputTemplate from '../components/InputPrimary.vue';
 import ButtonTemplate from '../components/ButtonPrimary.vue';
@@ -92,7 +93,7 @@ export default {
       const th = this;
       th.$api.AuthController.login(th.model).then(({ data }) => {
         if (data) {
-          this.$cookies.set('authToken', data.data, '1d')
+          Cookie.set({ name: 'authToken', value: data.data })
           this.$router.push('/')
         }
       })

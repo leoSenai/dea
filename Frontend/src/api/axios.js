@@ -1,7 +1,18 @@
 import axios from 'axios';
 import Toastify from 'toastify-js';
+import Cookie from '../cookie';
+import router from '../router';
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL_DEV
+
+axios.interceptors.request.use(config => {
+  config.headers = {
+    Authorization: `; ${document.cookie}`.split('; authToken=').pop().split(';').shift()
+  }
+  return config
+}, (err) => {
+  return Promise.reject(err);
+})
 
 axios.interceptors.response.use((response) => {
   if (
@@ -55,6 +66,11 @@ axios.interceptors.response.use((response) => {
       y: location.href.includes('login') ? 0 : 65,
     },
   }).showToast();
+
+  if (response.status === 401) {
+    Cookie.delete('authToken');
+    router.push('/login')
+  }
 
   return response ? response : { data: null };
 });

@@ -8,8 +8,6 @@ import './style.css';
 
 import { colorTheme } from './assets/styles/theme';
 
-import cookies from 'vue3-cookies';
-
 import api from './api';
 import App from './App.vue';
 
@@ -23,11 +21,6 @@ myApp
     },
   })
   .use(router)
-  .use(api)
-  .use(cookies, {
-    expireTimes: '30d',
-    sameSite: 'None',
-    secure: true
-  });
+  .use(api);
 
 router.isReady().then(() => myApp.mount('#app'));

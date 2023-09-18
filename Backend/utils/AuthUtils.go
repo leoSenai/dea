@@ -27,7 +27,6 @@ func GenerateTokenJWT(User string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	fmt.Printf("tokenString: %v\n", tokenString)
 	return tokenString, nil
 }
 

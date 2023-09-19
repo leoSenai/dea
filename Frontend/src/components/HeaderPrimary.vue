@@ -2,11 +2,14 @@
   <header class="bg-primary-700">
     <button
       class="hamburguer"
-      @click="activeSidebar"
+      @click="toggleSidebar"
     >
       <PhList />
     </button>
-    <div class="logo white">
+    <div
+      class="logo white"
+      @click="goHome"
+    >
       <q-img :src="LogoSrc" />
       <h6>Clínica Motivar</h6>
     </div>
@@ -18,7 +21,10 @@
       <span class="text-body">Usuário</span>
     </div>
   </header>
-  <div :class="['sidebar', 'bg-success', isSidebarActive ? 'active' : '']">
+  <div
+    :class="['sidebar', 'bg-success', isSidebarActive ? 'active' : '']"
+    @blur="hideSidebar"
+  >
     <template
       v-for="link in links"
       :key="link.path"
@@ -26,6 +32,8 @@
       <router-link
         :to="link.path"
         class="link"
+        tabindex="0"
+        @blur="hideSidebar"
       >
         {{ link.name }}
         <component
@@ -58,9 +66,15 @@ export default {
     };
   },
   methods: {
-    activeSidebar() {
+    toggleSidebar() {
       this.isSidebarActive = !this.isSidebarActive;
     },
+    hideSidebar() {
+      this.isSidebarActive = false;
+    },
+    goHome() {
+      this.$router.push('/')
+    }
   },
 };
 </script>
@@ -83,6 +97,7 @@ header {
   align-items: center;
   justify-content: flex-start;
   gap: 2rem;
+  cursor: pointer;
 }
 
 .user {
@@ -148,4 +163,5 @@ header {
 
 .sidebar.active {
   transform: translateX(0%);
-}</style>
+}
+</style>

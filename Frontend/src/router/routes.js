@@ -3,13 +3,13 @@ import Login from '../views/LoginView.vue';
 import Header from '../components/HeaderPrimary.vue';
 import Patients from '../views/PatientsView.vue';
 import InputPrimary from '../components/InputPrimary.vue';
-
-import { PhAppWindow, PhUsers } from '@phosphor-icons/vue';
+import NotFound from '../views/NotFoundView.vue';
+import { PhUsers } from '@phosphor-icons/vue';
+import { PhArticle } from '@phosphor-icons/vue';
 
 const links = [
-  // { path: '/questionarios', name: 'Questionários', icon: PhArticle },
-  {path: '/patients', name: 'Patients', icon: PhAppWindow},
-  {path: '/usuarios', name: 'Usuários', icon: PhUsers},
+  { path: '/usuarios', name: 'Usuários', icon: PhUsers },
+  { path: '/questionarios', name: 'Questionários', icon: PhArticle },
 ];
 
 export const routes = [
@@ -26,20 +26,17 @@ export const routes = [
   {
     path: '/home',
     components: {
-    default: Home,
-    header: Header,
+      default: Home,
+      header: Header,
     },
     props: {
-    header: { links },
-    },  
+      header: { links },
+    },
   },
   {
     path: '/login',
     components: {
       default: Login,
-    },
-    props: {
-      header: { links },
     },
   },
   {
@@ -48,6 +45,27 @@ export const routes = [
       default: Patients,
       header: Header,
       input: InputPrimary
+    },
+    props: {
+      header: { links },
+    },
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    components: {
+      default: NotFound,
+      header: Header,
+      input: InputPrimary
+    },
+    props: {
+      header: { links },
+    },
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    components: {
+      default: NotFound,
+      header: Header,
     },
     props: {
       header: { links },

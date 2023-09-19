@@ -1,58 +1,70 @@
 <template>
-  <div>
-    <div class="row">
-      <div class="col-12 col-md-5">
-        <div class="login flex items-center column justify-center q-px-lg">
-          <div class="login-logo">
-            <img
-              :src="logo"
-              alt=""
-            />
-          </div>
-          <div class="login-title">
-            <h2>Clínica Motivar</h2>
-          </div>
-          <div class="login-container">
-            <div class="login-form">
-              <InputTemplate
-                color="primary"
-                outlined
-                dark
-                v-model="text"
-                label="Email ou Telefone"
-                class="login-input q-mt-md"
-                ><template v-slot:before-label
-                  ><PhUser class="icon-color"></PhUser></template>
-              ></InputTemplate>
-              <InputTemplate
-                color="primary"
-                outlined
-                dark
-                v-model="text"
-                label="Senha"
-                class="login-input q-mt-md q-field__inner"
-                ><template v-slot:before-label
-                  ><PhLock class="icon-color"></PhLock></template
-              ></InputTemplate>
-            </div>
-            <div class="login-button">
-              <ButtonTemplate class="q-mt-lg btn-login">Entrar</ButtonTemplate>
-            </div>
-          </div>
+  <div class="row login-container">
+    <div :class="[pageSize === 'xs' ? 'col-12' : 'col-5']">
+      <div class="login">
+        <div class="login-logo">
+          <img
+            :src="logo"
+            alt=""
+          >
         </div>
+        <h3 class="login-title">
+          Clínica Motivar
+        </h3>
+        <form
+          :class="pageSize === 'xl' || pageSize === 'lg' || pageSize === 'md' ? 'w-70' : ''"
+          @submit.prevent="submitForm"
+        >
+          <div class="login-form">
+            <InputTemplate
+              v-model="model.user"
+              color="primary"
+              outlined
+              dark
+              label="Email ou Telefone"
+              class="q-mt-md"
+            >
+              <template #before-label>
+                <PhUser class="icon-color" />
+              </template>
+            </InputTemplate>
+            <InputTemplate
+              v-model="model.password"
+              color="primary"
+              outlined
+              dark
+              label="Senha"
+              type="password"
+              class="q-mt-md"
+            >
+              <template #before-label>
+                <PhLock class="icon-color" />
+              </template>
+            </InputTemplate>
+          </div>
+          <div class="login-button">
+            <ButtonTemplate
+              class="q-mt-lg btn-login heading-6"
+              type="submit"
+            >
+              Entrar
+            </ButtonTemplate>
+          </div>
+        </form>
       </div>
-      <div class="col-md-7">
-        <div class="login-img">
-          <div class="bg-img"></div>
-        </div>
-      </div>
+    </div>
+    <div
+      v-if="pageSize !== 'xs'"
+      class="col-7"
+    >
+      <div class="login-background" />
     </div>
   </div>
 </template>
 
 <script>
-import logo from '../assets/imgs/Logo.png';
-import imagem_principal from '../assets/imgs/imagem-principal.png';
+import Cookie from '../cookie'
+import logo from '../assets/imgs/logo.png';
 import InputTemplate from '../components/InputPrimary.vue';
 import ButtonTemplate from '../components/ButtonPrimary.vue';
 import { PhUser } from '@phosphor-icons/vue';
@@ -67,28 +79,52 @@ export default {
   },
   data() {
     return {
-      formInfo: {
+      model: {
         user: '',
         password: ''
       },
       logo: logo,
-      imagem_principal: imagem_principal,
     };
+  },
+  computed: {
+    pageSize() {
+      console.log(this.$q.screen.name)
+      return this.$q.screen.name
+    }
   },
   methods: {
     submitForm() {
       const th = this;
-      th.$api.AuthController.login(th.formInfo)
+      th.$api.AuthController.login(th.model).then(({ data }) => {
+        if (data) {
+          Cookie.set({ name: 'authToken', value: data.data })
+          this.$router.push('/')
+        }
+      })
     }
-  }
+  },
+
 };
 </script>
 
 <style scoped>
+.w-70 {
+  width: 70%;
+}
+
+.login-container {
+  width: 100%;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
 .login {
   height: 100vh;
-  background: #386923;
   background: linear-gradient(180deg, #386923 35%, #163408 100%);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 3rem;
 }
 
 .login-form {
@@ -96,55 +132,36 @@ export default {
 }
 
 .login-logo>img {
-  width: 110px;
-  height: 98px;
+  width: 6.25rem;
 }
 
-.login-title>h2 {
-  font-size: 38px;
-}
-
-.login-container {
-  width: 80%;
-}
-
-@media screen and (max-width: 992px) {
-  .login-container {
-    width: 75% !important;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .login-container {
-    width: 100% !important;
-  }
+.login-title {
+  font-size: 2rem;
 }
 
 .btn-login {
-  width: 100% !important;
-  font-size: 18px !important;
-  font-weight: bold;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .login-button {
-  width: 100% !important;
+  width: 100%;
 }
 
-.login-img {
-  background-image: url("../assets/imgs/imagem-principal.png");
-  background-size: cover;
-  background-position-x: -50px;
+.login-background {
+  background-size: contain;
   background-repeat: no-repeat;
   height: 100%;
   width: 100%;
 }
 
-.bg-img {
-  background-color: rgba(0, 0, 0, 0.324);
-  width: 100%;
-  height: 100%;
+.login-background {
+  background: url('../assets/imgs/login-background.png') no-repeat;
+  background-size: cover;
 }
 
 .icon-color {
   color: var(--neutral-white);
-}</style>
+}
+</style>

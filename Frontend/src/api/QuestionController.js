@@ -1,21 +1,20 @@
 import axios from './axios';
 
-const appUrl = import.meta.env.VITE_API_URL_DEV + '/question/'
-
 export default {
+  url: '/question/',
   getAll() {
-    return axios.get(appUrl + 'get-all')
+    return axios.get(this.url + 'get-all')
   },
   getById(id) {
-    return axios.get(appUrl + 'get-by-id/' + id)
+    return axios.get(this.url + 'get-by-id/' + id)
   },
   insert(data) {
-    return axios.post(appUrl + 'insert', data)
+    return axios.post(this.url + 'insert', data)
   },
   update(data) {
-    return axios.put(appUrl + 'update', data)
+    return axios.put(this.url + 'update', data)
   },
   delete(id) {
-    return axios.delete(appUrl + id)
+    return axios.delete(this.url + id)
   }
 }

@@ -64,29 +64,31 @@
       </q-form>
     </template>
     <template #modal-actions>
-      <button-primary
-        outlined
-        size="sm"
-        @click="closeModal"
-      >
-        Fechar
-      </button-primary>
-      <button-primary
-        v-if="model.IdQuiz"
-        size="sm"
-        type="submit"
-        @click="updateQuiz"
-      >
-        Atualizar
-      </button-primary>
-      <button-primary
-        v-else
-        size="sm"
-        type="submit"
-        @click="createQuiz"
-      >
-        Cadastrar
-      </button-primary>
+      <div class="modal-actions">
+        <button-primary
+          outlined
+          size="sm"
+          @click="closeModal"
+        >
+          Fechar
+        </button-primary>
+        <button-primary
+          v-if="model.IdQuiz"
+          size="sm"
+          type="submit"
+          @click="updateQuiz"
+        >
+          Atualizar
+        </button-primary>
+        <button-primary
+          v-else
+          size="sm"
+          type="submit"
+          @click="createQuiz"
+        >
+          Cadastrar
+        </button-primary>
+      </div>
     </template>
   </modal-primary>
 </template>
@@ -289,5 +291,11 @@ export default {
   padding: 0.5rem 1rem;
   color: var(--neutral-dark-gray);
   border-radius: 4px;
+}
+
+.modal-actions {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 </style>

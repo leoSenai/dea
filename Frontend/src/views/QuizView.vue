@@ -1,5 +1,22 @@
 <template>
   <div class="quiz-content">
+    <div class="quiz-title">
+      <div class="title">
+        <h3>Questionários</h3>
+      </div>
+      <div
+        v-if="!isMobile"
+        class="title-add-quiz"
+      >
+        <button
+          type="button"
+          @click="openAddEditModal()"
+        >
+          Adicionar
+          <PhPlus />
+        </button>
+      </div>
+    </div>
     <div
       v-if="model.hasError"
       class="error quiz"
@@ -24,7 +41,10 @@
         </button>
       </div>
     </div>
-    <div class="add-quiz">
+    <div
+      v-if="isMobile"
+      class="add-quiz"
+    >
       <button
         type="button"
         @click="openAddEditModal()"
@@ -57,6 +77,11 @@ export default {
       },
     }
   },
+  computed: {
+    isMobile() {
+      return this.$q.screen.xs || this.$q.screen.sm
+    }
+  },
   mounted() {
     this.load();
   },
@@ -80,11 +105,34 @@ export default {
 </script>
 <style>
 .quiz-content {
-  padding: 3rem .5rem;
+  padding: 3rem 1.5rem;
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: .75rem;
+}
+
+.quiz-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title-add-quiz button {
+  background: var(--primary);
+  border-radius: 8px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .2s;
+  gap: .5rem;
+  padding: .5rem 1rem;
+  cursor: pointer;
+}
+
+.title-add-quiz button:hover {
+  filter: brightness(0.8);
 }
 
 .error {

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="modelValue"
-    class="modal"
+    :class="['modal', isMobile ? 'mobile' : '']"
   >
     <q-card class="card">
       <div
@@ -39,6 +39,11 @@ export default {
     }
   },
   emits: ['update:modelValue', 'close'],
+  computed: {
+    isMobile() {
+      return this.$q.screen.xs || this.$q.screen.sm
+    }
+  },
   methods: {
     close() {
       this.$emit('update:modelValue', false)
@@ -65,7 +70,10 @@ export default {
   gap: 2rem;
 
   z-index: 1;
+}
 
+.modal.mobile {
+  padding: 0;
 }
 
 .card {
@@ -77,6 +85,12 @@ export default {
   width: 100%;
   border-radius: 4px;
   padding: 1rem;
+}
+
+.mobile .card {
+  height: 100%;
+  border-radius: 0;
+
 }
 
 .close-button {

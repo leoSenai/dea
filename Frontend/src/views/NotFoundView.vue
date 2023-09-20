@@ -25,7 +25,6 @@ export default {
   },
   computed: {
     isMobile() {
-      console.log(this.$q.screen)
       return this.$q.screen.xs || this.$q.screen.sm
     }
   },

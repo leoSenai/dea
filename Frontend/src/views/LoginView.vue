@@ -88,7 +88,6 @@ export default {
   },
   computed: {
     pageSize() {
-      console.log(this.$q.screen.name)
       return this.$q.screen.name
     }
   },

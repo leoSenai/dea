@@ -19,7 +19,7 @@ func GenerateTokenJWT(User string) (string, error) {
 	claims := Claims{
 		User: User,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
+			ExpiresAt: time.Now().Add(76 * time.Hour).Unix(),
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -33,7 +33,6 @@ func GenerateTokenJWT(User string) (string, error) {
 func VerifyToken(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenString := r.Header.Get("Authorization")
-		fmt.Printf("tokenString: %v\n", tokenString)
 		if tokenString == "" {
 			ReturnResponseJSON(w, http.StatusUnauthorized, "Token não Informado!", "Token not informed")
 			return
@@ -53,7 +52,28 @@ func VerifyToken(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		// If the token is valid, proceed to the next handler.
 		next.ServeHTTP(w, r)
 	})
+}
+
+func RefreshToken(oldTokenString string) (string, error) {
+	oldToken, err := jwt.ParseWithClaims(oldTokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return jwtKey, nil
+	})
+	if err != nil {
+		return "", err
+	}
+
+	// Extract the claims from the old token
+	claims, ok := oldToken.Claims.(*Claims)
+	if !ok {
+		return "", fmt.Errorf("Falha ao extrair inforações do Token!")
+	}
+
+	newTokenString, err := GenerateTokenJWT(claims.User)
+	if err != nil {
+		return "", err
+	}
+
+	return newTokenString, nil
 }

@@ -23,7 +23,7 @@ func PostLogin(w http.ResponseWriter, r *http.Request) {
 		var status int
 		var message string
 
-		if strings.Contains(err.Error(), "credenciais sao invalidas") {
+		if strings.Contains(err.Error(), "credenciais são inválidas") {
 			status = http.StatusBadRequest
 			message = err.Error()
 		} else {
@@ -38,4 +38,16 @@ func PostLogin(w http.ResponseWriter, r *http.Request) {
 	token, err := utils.GenerateTokenJWT(login.User)
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Credenciais válidas!", token)
+}
+
+func GetRefreshToken(w http.ResponseWriter, r *http.Request) {
+	oldToken := r.Header.Get("Authorization")
+
+	token, err := utils.RefreshToken(oldToken)
+
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Token atualizado!", token)
 }

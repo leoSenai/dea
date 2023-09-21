@@ -18,7 +18,7 @@
         class="user-icon"
         regular
       />
-      <span class="text-body">Usuário</span>
+      <span class="text-body"> {{ username }} </span>
     </div>
   </header>
   <div
@@ -42,17 +42,28 @@
         />
       </router-link>
     </template>
+    <a 
+      class="link" 
+      @click="logout"
+    >
+      Sair
+      <PhDoor />
+    </a>
   </div>
 </template>
 
 <script>
-import { PhUserCircle, PhList } from '@phosphor-icons/vue';
+import { PhUserCircle, PhList, PhDoor } from '@phosphor-icons/vue';
+import ButtonPrimary from '../components/ButtonPrimary.vue'
+import cookie from '../cookie';
 
 export default {
   components: {
     PhUserCircle,
     PhList,
-  },
+    ButtonPrimary,
+    PhDoor
+},
   props: {
     links: {
       type: Array,
@@ -65,6 +76,11 @@ export default {
       isSidebarActive: false,
     };
   },
+  computed: {
+    username(){
+      return cookie.getAuthUser(cookie.get('authToken'))
+    }
+  },
   methods: {
     toggleSidebar() {
       this.isSidebarActive = !this.isSidebarActive;
@@ -74,8 +90,13 @@ export default {
     },
     goHome() {
       this.$router.push('/')
+    },
+    logout(){
+      const th = this;
+      th.$api.AuthController.logout()
+      this.$router.push('/login')
     }
-  },
+  },  
 };
 </script>
 

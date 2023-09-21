@@ -4,11 +4,18 @@ import Header from '../components/HeaderPrimary.vue';
 import Quiz from '../views/QuizView.vue';
 import NotFound from '../views/NotFoundView.vue';
 import { PhUsers, PhArticle } from '@phosphor-icons/vue';
+//import Cookie from '../cookie';
 
 const links = [
   { path: '/usuarios', name: 'Usuários', icon: PhUsers },
   { path: '/questionarios', name: 'Questionários', icon: PhArticle },
 ];
+
+//try {
+//  var username = Cookie.getAuthUser(Cookie.get('authToken'))
+//} catch (error) {
+//  username = 'Não reconhecido'
+//}
 
 export const routes = [
   {
@@ -18,7 +25,7 @@ export const routes = [
       header: Header,
     },
     props: {
-      header: { links },
+      header: { links},
     },
   },
   {

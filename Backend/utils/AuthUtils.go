@@ -11,13 +11,15 @@ import (
 var jwtKey = []byte("123")
 
 type Claims struct {
-	User string
+	User     string
+	Username string
 	jwt.StandardClaims
 }
 
-func GenerateTokenJWT(User string) (string, error) {
+func GenerateTokenJWT(User string, Username string) (string, error) {
 	claims := Claims{
-		User: User,
+		User:     User,
+		Username: Username,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
 		},

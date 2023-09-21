@@ -21,6 +21,18 @@ func GetUserById(id int64) (user models.User, err error) {
 	return
 }
 
+func GetUserByLogin(login string) (user models.User, err error) {
+	conn, err := db.OpenConnection()
+	if err != nil {
+		return
+	}
+
+	row := conn.First(&user, "email = ? OR telefone = ?", login, login)
+	log.Printf("row: %v", row)
+
+	return
+}
+
 func GetAllUser() (users []models.User, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {

@@ -9,7 +9,7 @@ export default {
       expireAt = '-1'
     } else {
       const date = new Date();
-      date.setTime(date.getTime() + (24 * 60 * 60 * 1000));
+      date.setTime(date.getTime() + (76 * 60 * 60 * 1000));
       expireAt = `expires=${date.toUTCString()}`;
     }
     cookie = `${name}=${value};expires=${expireAt}`

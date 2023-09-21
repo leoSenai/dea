@@ -7,5 +7,8 @@ export default {
     },
     logout() {
         return 'not success'
+    },
+    refreshToken() {
+        return axios.get(this.url + 'refresh-token')
     }
 }

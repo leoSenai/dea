@@ -1,8 +1,6 @@
 <template>
   <div>
-    <button @click="handleClick">
-      click
-    </button>
+    <h1>Home</h1>
   </div>
 </template>
 <script>
@@ -11,6 +9,5 @@ export default {
     return {
     };
   },
-  methods: {}
 };
 </script>

@@ -9,16 +9,26 @@
     <div
       class="logo white"
       @click="goHome"
-    >
+    > 
       <q-img :src="LogoSrc" />
       <h6>Clínica Motivar</h6>
     </div>
-    <div class="user white">
-      <ph-user-circle
-        class="user-icon"
-        regular
-      />
-      <span class="text-body"> {{ username }} </span>
+    <div class="user-header">
+      <div class="user white">
+        <ph-user-circle 
+          class="user-icon" 
+          regular 
+        />
+        <a 
+          class="header-username" 
+          @click="openProfileMenu"
+        ><span class="text-body"> {{ username }} </span></a>
+        <div class="dropdown-main">
+          <ul>
+            <li><a @click="logout">Sair</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </header>
   <div
@@ -95,6 +105,9 @@ export default {
       const th = this;
       th.$api.AuthController.logout()
       this.$router.push('/login')
+    },
+    openProfileMenu(){
+      document.getElementsByClassName('dropdown-main')[0].style.display = 'block'
     }
   },  
 };

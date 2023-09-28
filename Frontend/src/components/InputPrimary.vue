@@ -25,12 +25,6 @@
     <template #append>
       <slot name="after-label" />
     </template>
-
-    <template #error>
-      <span>
-        aaa
-      </span>
-    </template>
   </q-input>
 </template>
 <script>
@@ -84,6 +78,12 @@ export default {
       ];
     },
   },
+  watch: {
+    modelValue() {
+      console.log(this.label)
+      this.model = this.modelValue
+    }
+  }
 };
 </script>
 <style>

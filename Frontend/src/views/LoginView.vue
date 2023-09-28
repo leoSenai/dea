@@ -64,7 +64,7 @@
 
 <script>
 import Cookie from '../cookie'
-import logo from '../assets/imgs/logo.png';
+import logo from '/logo.png';
 import InputTemplate from '../components/InputPrimary.vue';
 import ButtonTemplate from '../components/ButtonPrimary.vue';
 import { PhUser } from '@phosphor-icons/vue';
@@ -156,7 +156,7 @@ export default {
 }
 
 .login-background {
-  background: url('../assets/imgs/login-background.png') no-repeat;
+  background: url(' /login-background.png') no-repeat;
   background-size: cover;
 }
 

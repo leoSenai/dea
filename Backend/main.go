@@ -109,7 +109,7 @@ func main() {
 	r.Get("/proximityhasquiz/get-by-id-patient/{id}", utils.VerifyToken(controller.GetProximityQuizByPatientID))
 	r.Get("/proximityhasquiz/get-by-id-person/{id}", utils.VerifyToken(controller.GetProximityQuizByPersonID))
 	r.Post("/proximityhasquiz/insert", utils.VerifyToken(controller.PostProximityQuiz))
-	r.Post("/proximityhasquiz/update", utils.VerifyToken(controller.PutProximityQuiz))
+	r.Put("/proximityhasquiz/update", utils.VerifyToken(controller.PutProximityQuiz))
 
 	r.Get("/patienthasdoctor/get-by-patient-id/{id}", utils.VerifyToken(controller.GetPatientHasDoctorByPatientId))
 	r.Get("/patienthasdoctor/get-by-doctor-id/{id}", utils.VerifyToken(controller.GetPatientHasDoctorByDoctorId))

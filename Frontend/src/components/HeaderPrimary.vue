@@ -1,64 +1,66 @@
 <template>
-  <header class="bg-primary-700">
-    <button
-      class="hamburguer"
-      @click="toggleSidebar"
-    >
-      <PhList />
-    </button>
-    <div
-      class="logo white"
-      @click="goHome"
-    > 
-      <q-img :src="LogoSrc" />
-      <h6>Clínica Motivar</h6>
-    </div>
-    <div class="user-header">
-      <div class="user white">
-        <ph-user-circle 
-          class="user-icon" 
-          regular 
-        />
-        <a 
-          class="header-username" 
-          @click="openProfileMenu"
-        ><span class="text-body"> {{ username }} </span></a>
-        <div class="dropdown-main">
-          <ul>
-            <li><a @click="logout">Sair</a></li>
-          </ul>
+  <div>
+    <header class="bg-primary-700">
+      <button
+        class="hamburguer"
+        @click="toggleSidebar"
+      >
+        <PhList />
+      </button>
+      <div
+        class="logo white"
+        @click="goHome"
+      > 
+        <q-img :src="LogoSrc" />
+        <h6>Clínica Motivar</h6>
+      </div>
+      <div class="user-header">
+        <div class="user white">
+          <ph-user-circle 
+            class="user-icon" 
+            regular 
+          />
+          <a 
+            class="header-username" 
+            @click="openProfileMenu"
+          ><span class="text-body"> {{ username }} </span></a>
+          <div class="dropdown-main">
+            <ul>
+              <li><a @click="logout">Sair</a></li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
-  </header>
-  <div
-    :class="['sidebar', 'bg-success', isSidebarActive ? 'active' : '']"
-    @blur="hideSidebar"
-  >
-    <template
-      v-for="link in links"
-      :key="link.path"
+    </header>
+    <div
+      :class="['sidebar', 'bg-success', isSidebarActive ? 'active' : '']"
+      @blur="hideSidebar"
     >
-      <router-link
-        :to="link.path"
-        class="link"
-        tabindex="0"
-        @blur="hideSidebar"
+      <template
+        v-for="link in links"
+        :key="link.path"
       >
-        {{ link.name }}
-        <component
-          :is="link.icon"
-          class="link-icon"
-        />
-      </router-link>
-    </template>
-    <a 
-      class="link" 
-      @click="logout"
-    >
-      Sair
-      <PhDoor />
-    </a>
+        <router-link
+          :to="link.path"
+          class="link"
+          tabindex="0"
+          @blur="hideSidebar"
+        >
+          {{ link.name }}
+          <component
+            :is="link.icon"
+            class="link-icon"
+          />
+        </router-link>
+      </template>
+      <a 
+        class="link" 
+        @click="logout"
+      >
+        Sair
+        <PhDoor />
+      </a>
+    </div>
   </div>
 </template>
 
@@ -107,7 +109,13 @@ export default {
       this.$router.push('/login')
     },
     openProfileMenu(){
-      document.getElementsByClassName('dropdown-main')[0].style.display = 'block'
+
+      if(document.getElementsByClassName('dropdown-main')[0].style.display=='block'){
+        document.getElementsByClassName('dropdown-main')[0].style.display = 'none'
+      }else{
+        document.getElementsByClassName('dropdown-main')[0].style.display = 'block'
+      }
+
     }
   },  
 };

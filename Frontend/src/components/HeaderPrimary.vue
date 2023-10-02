@@ -127,6 +127,12 @@ export default {
 </script>
 
 <style scoped>
+
+.dropdown-main a{
+  width: 100%;
+  height: 100%
+}
+
 header {
   position: sticky;
   min-width: 100%;

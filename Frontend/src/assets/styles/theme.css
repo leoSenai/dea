@@ -155,3 +155,10 @@
       background-color: #242424;
   }
 }
+
+@media (prefers-color-scheme: light) {
+  :root {
+      color: var(--neutral-black) !important;
+      background-color: #fff;
+  }
+}

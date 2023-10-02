@@ -116,6 +116,11 @@ export default {
         document.getElementsByClassName('dropdown-main')[0].style.display = 'block'
       }
 
+      var contentElement = document.body.getElementsByClassName('content')[0];
+      contentElement.addEventListener('click', () => {
+        document.getElementsByClassName('dropdown-main')[0].style.display = 'none'
+      })
+
     }
   },  
 };

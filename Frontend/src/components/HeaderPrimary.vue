@@ -5,7 +5,9 @@
         class="hamburguer"
         @click="toggleSidebar"
       >
-        <PhList />
+        <PhList 
+          size="1.4em"
+        />
       </button>
       <div
         class="logo white"
@@ -137,7 +139,6 @@ header {
   position: sticky;
   min-width: 100%;
   z-index: 999;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -208,6 +209,7 @@ header {
   background: none;
   border: none;
   cursor: pointer;
+  color: #fff;
 }
 
 .sidebar {

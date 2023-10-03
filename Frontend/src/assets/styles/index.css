@@ -74,6 +74,7 @@ body {
     list-style: none;
     padding: 5px;
     text-align: center;
+    border-radius: 0px 0px 8px 0px;
     color: #fff;
     text-shadow: none;
     background-color: var(--primary-700);

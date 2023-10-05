@@ -6,6 +6,8 @@
     color="primary"
     :outlined="outlined"
     :dark="dark"
+    :mask="mask"
+    :hint="hint"
     :rules="rulesComputed"
     @update:model-value="(current) => $emit('update:modelValue', current)"
   >
@@ -64,6 +66,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    mask: {
+      type: String,
+      default: '',
+    },
+    hint: {
+      type: String,
+      default: '',
+    }
   },
   emits: ['update:modelValue'],
   data() {

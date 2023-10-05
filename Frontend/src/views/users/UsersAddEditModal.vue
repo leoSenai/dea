@@ -158,65 +158,32 @@
         const th = this;
         th.show = true;
         try {
-          th.$api.ServicesController.getAll().then((responseService) => {
-            th.optionsServices = responseService.data.data.map((service) => ({
-              label: service.Desc,
-              value: service.IdServices,
-            }));
+          const responseService = await th.$api.ServicesController.getAll();
+          th.optionsServices = responseService.data.data.map((service) => ({
+            label: service.Desc,
+            value: service.IdServices,
+          }));
 
-            th.$api.CboController.getAll().then((responseCbo) => {
-              th.optionsCbo = responseCbo.data.data.map((cbo) => ({
-                label: cbo.Desc,
-                value: cbo.IdCbo,
-              }));
+          const responseCbo = await th.$api.CboController.getAll();
+          th.optionsCbo = responseCbo.data.data.map((cbo) => ({
+            label: cbo.Desc,
+            value: cbo.IdCbo,
+          }));
 
-              console.log(th.optionsCbo)
-
-                if (current) {
-                  const model = {
-                    ...current,
-                    TypeUser: th.optionsTypeUser.find(
-                      ({ value }) => value === current?.TypeUser
-                    ),
-                    Active: th.optionsActive.find(
-                      ({ value }) => value === current?.Active
-                    ),
-                    IdCbo: th.optionsCbo.find(
-                      (cbo) => { cbo.value === current?.IdCbo } 
-                    ),
-                    IdService: th.optionsServices.find(
-                      ({ service }) => service?.value === current.IdService
-                    ),
-                  };
-                  console.log('model', model)
-                  th.model = {
-                    ...model,
-                  };
-              }
-            });            
-          });
-         //  const cboresponseService = await th.$api.CboController.getAll();
-          
-          // th.optionsServices = servicesresponseService.data.data.map((service) => ({
-          //   label: service.Desc,
-          //   value: service.IdServices,
-          // }));
-          // const cboData = cboresponseService.data.data;
-
-          // console.log('cb2o', cboData)
-
-          // th.optionsCbo = cboData.map((cbo) => ({
-          //   label: cbo.Desc,
-          //   value: cbo.IdCbo,
-          // }));
-
-          // console.log('options service', this.optionsServices)
-          // console.log('options', this.optionsCbo)
-
+          if (current) {
+            const model = {
+              ...current,
+              TypeUser: th.optionsTypeUser.find(( value ) => value === current?.TypeUser),
+              Active: th.optionsActive.find(( value ) => value === current?.Active),
+              IdCbo: th.optionsCbo.find(( cbo ) => cbo.value === current?.IdCbo),
+              IdService: th.optionsServices.find(( value ) => value === current?.IdService),
+            };
+            console.log('model', model);
+            th.model = { ...model };
+          }
         } catch (error) {
-          console.error('Erro ao buscar dados:', error);
+          console.error('Ocorreu um erro ao buscar os dados.', error);
         }
-
       },
       closeModal() {
         this.show = false;

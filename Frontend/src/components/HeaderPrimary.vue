@@ -55,13 +55,6 @@
           />
         </router-link>
       </template>
-      <a 
-        class="link" 
-        @click="logout"
-      >
-        Sair
-        <PhDoor />
-      </a>
     </div>
   </div>
 </template>

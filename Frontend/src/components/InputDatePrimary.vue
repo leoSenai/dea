@@ -11,8 +11,16 @@
       :rules="rulesComputed"
       mask="##/##/####"
       @update:model-value="(current) => $emit('update:modelValue', current)"
-      @focus="() => showDatePicker = true"
-    />
+      @blur="() => showDatePicker = false"
+    >
+      <template #after-label>
+        <PhCalendarBlank
+          class="calendar-icon"
+          :size="30"
+          @click="() => showDatePicker = !showDatePicker"
+        />
+      </template>
+    </InputPrimary>
     <div
       v-show="showDatePicker"
       class="date-modal"
@@ -21,15 +29,19 @@
         v-model="model"
         :locale="locale"
         mask="DD/MM/YYYY"
-        @update:model-value="() => showDatePicker = false"
       />
     </div>
   </div>
 </template>
 <script>
 import InputPrimary from './InputPrimary.vue';
+import { PhCalendarBlank } from '@phosphor-icons/vue'
 
 export default {
+  components: {
+    InputPrimary,
+    PhCalendarBlank
+  },
   props: {
     label: {
       type: String,
@@ -128,20 +140,7 @@ export default {
       }
     }
   },
-  methods: {
-    toggleShowDatePicker(condition) {
-      if (typeof condition !== 'boolean') {
-        this.showDatePicker = !this.showDatePicker;
-      }
-      else {
-        this.showDatePicker = condition;
-      }
-    },
-    navi(a) {
-      console.log(a);
-    }
-  },
-  components: { InputPrimary }
+  methods: {},
 };
 </script>
 <style scoped>
@@ -162,7 +161,7 @@ export default {
   color: var(--neutral-dark-gray);
 }
 
-.q-field--highlighted .icon,
+.q-field--highlighted .calendar-icon,
 .q-field--highlighted .label {
   color: var(--primary);
 }
@@ -171,5 +170,17 @@ export default {
   position: absolute;
   top: -10%;
   left: 105%;
+}
+
+.calendar-icon {
+  background: white;
+  border-radius: 99999px;
+  padding: .25rem;
+  transition: .2s;
+  cursor: pointer;
+}
+
+.calendar-icon:hover {
+  filter: brightness(0.8);
 }
 </style>

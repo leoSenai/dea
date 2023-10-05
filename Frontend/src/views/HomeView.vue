@@ -40,15 +40,15 @@ export default {
   }
 
   .home-options{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     background-color: var(--primary-700);
     border-radius: 50px;
     width: 30em;
     height: 30em;
     display: flex;
-    opacity: 90%;
+    opacity:  100%;
     justify-content: center;
     align-items: self-end;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
 
   .home-options ul{
@@ -56,10 +56,11 @@ export default {
     height: 85%;
   }
 
+  
   .home-options ul li {
     width: auto;
     color: green;
-    background-color: #fff;
+    background-color: #f5f5f5;
     height:20%;
     margin: 20px;
     text-align: center;
@@ -68,4 +69,16 @@ export default {
     justify-content: center;
     border-radius: 20px;
   }
+
+  @media (max-width: 500px) {
+
+    .home-options{
+      background-color: transparent;
+      box-shadow: none;
+    }
+    .home-options ul li {
+      font-size: 75%;
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    } 
+  } 
 </style>

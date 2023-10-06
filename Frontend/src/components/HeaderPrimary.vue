@@ -16,7 +16,7 @@
         <q-img :src="LogoSrc" />
         <h6>Clínica Motivar</h6>
       </div>
-      <div class="user-header">
+      <div class="user-header" @click="openProfileMenu">
         <div class="user white">
           <ph-user-circle 
             class="user-icon" 
@@ -24,7 +24,6 @@
           />
           <a 
             class="header-username" 
-            @click="openProfileMenu"
           ><span class="text-body"> {{ username }} </span></a>
           <div class="dropdown-main">
             <ul>
@@ -211,5 +210,9 @@ header {
 
 .sidebar.active {
   transform: translateX(0%);
+}
+
+.user-header{
+  cursor: pointer;
 }
 </style>

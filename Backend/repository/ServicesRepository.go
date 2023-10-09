@@ -10,7 +10,7 @@ import (
 )
 
 func GetServicesById(id int64) (services models.Services, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -25,7 +25,7 @@ func GetServicesById(id int64) (services models.Services, err error) {
 }
 
 func PostServices(services models.Services) (err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 
 	if err != nil {
 		return
@@ -37,7 +37,7 @@ func PostServices(services models.Services) (err error) {
 }
 
 func VerifyServicesByDescription(description string) (found bool) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return false
 	}
@@ -54,7 +54,7 @@ func VerifyServicesByDescription(description string) (found bool) {
 }
 
 func GetAllServices() (servicess []models.Services, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -65,7 +65,7 @@ func GetAllServices() (servicess []models.Services, err error) {
 }
 
 func PutServices(services models.Services) (err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 
 	if err != nil {
 		return

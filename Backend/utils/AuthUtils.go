@@ -13,13 +13,15 @@ var jwtKey = []byte("123")
 type Claims struct {
 	User     string
 	Username string
+	Typeuser string
 	jwt.StandardClaims
 }
 
-func GenerateTokenJWT(User string, Username string) (string, error) {
+func GenerateTokenJWT(User string, Username string, typeuser string) (string, error) {
 	claims := Claims{
 		User:     User,
 		Username: Username,
+		Typeuser: typeuser,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
 		},

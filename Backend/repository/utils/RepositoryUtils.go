@@ -7,7 +7,7 @@ import (
 
 func VerifyUserExistanceByDocument(email string) (exist bool) {
 
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}

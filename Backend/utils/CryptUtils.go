@@ -22,7 +22,7 @@ func GenerateEncryptedPassword(password string) (encryptedPassword string, salt 
 }
 
 func IsPasswordValid(login string, password string) (isValid bool) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}

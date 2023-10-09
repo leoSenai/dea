@@ -8,6 +8,7 @@ export default {
     },
     logout() {
         Cookie.delete('authToken')
+        
     },
     parseJwt(tokenStr) {
         const base64Url = tokenStr.split('.')[1];

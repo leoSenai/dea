@@ -1,54 +1,60 @@
 <template>
-  <header class="bg-primary-700">
-    <button
-      class="hamburguer"
-      @click="toggleSidebar"
-    >
-      <PhList />
-    </button>
-    <div
-      class="logo white"
-      @click="goHome"
-    >
-      <q-img :src="LogoSrc" />
-      <h6>Clínica Motivar</h6>
-    </div>
-    <div class="user white">
-      <ph-user-circle
-        class="user-icon"
-        regular
-      />
-      <span class="text-body"> {{ username }} </span>
-    </div>
-  </header>
-  <div
-    :class="['sidebar', 'bg-success', isSidebarActive ? 'active' : '']"
-    @blur="hideSidebar"
-  >
-    <template
-      v-for="link in links"
-      :key="link.path"
-    >
-      <router-link
-        :to="link.path"
-        class="link"
-        tabindex="0"
-        @blur="hideSidebar"
+  <div>
+    <header class="bg-primary-700">
+      <button
+        class="hamburguer"
+        @click="toggleSidebar"
       >
-        {{ link.name }}
-        <component
-          :is="link.icon"
-          class="link-icon"
+        <PhList 
+          size="1.4em"
         />
-      </router-link>
-    </template>
-    <a 
-      class="link" 
-      @click="logout"
+      </button>
+      <div
+        class="logo white"
+        @click="goHome"
+      > 
+        <q-img :src="LogoSrc" />
+        <h6>Clínica Motivar</h6>
+      </div>
+      <div class="user-header" @click="openProfileMenu">
+        <div class="user white">
+          <ph-user-circle 
+            class="user-icon" 
+            regular 
+          />
+          <a 
+            class="header-username" 
+          ><span class="text-body"> {{ username }} </span></a>
+          <div class="dropdown-main">
+            <ul>
+              <li><a @click="logout">Sair</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div
+      :class="['sidebar', 'bg-success', isSidebarActive ? 'active' : '']"
+      @blur="hideSidebar"
     >
-      Sair
-      <PhDoor />
-    </a>
+      <template
+        v-for="link in links"
+        :key="link.path"
+      >
+        <router-link
+          :to="link.path"
+          class="link"
+          tabindex="0"
+          @blur="hideSidebar"
+        >
+          {{ link.name }}
+          <component
+            :is="link.icon"
+            class="link-icon"
+          />
+        </router-link>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -95,17 +101,36 @@ export default {
       const th = this;
       th.$api.AuthController.logout()
       this.$router.push('/login')
+    },
+    openProfileMenu(){
+
+      if(document.getElementsByClassName('dropdown-main')[0].style.display=='block'){
+        document.getElementsByClassName('dropdown-main')[0].style.display = 'none'
+      }else{
+        document.getElementsByClassName('dropdown-main')[0].style.display = 'block'
+      }
+
+      var contentElement = document.body.getElementsByClassName('content')[0];
+      contentElement.addEventListener('click', () => {
+        document.getElementsByClassName('dropdown-main')[0].style.display = 'none'
+      })
+
     }
   },  
 };
 </script>
 
 <style scoped>
+
+.dropdown-main a{
+  width: 100%;
+  height: 100%
+}
+
 header {
   position: sticky;
   min-width: 100%;
   z-index: 999;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -176,6 +201,7 @@ header {
   background: none;
   border: none;
   cursor: pointer;
+  color: #fff;
 }
 
 .sidebar {
@@ -184,5 +210,9 @@ header {
 
 .sidebar.active {
   transform: translateX(0%);
+}
+
+.user-header{
+  cursor: pointer;
 }
 </style>

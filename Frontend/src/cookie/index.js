@@ -22,5 +22,8 @@ export default {
   },
   getAuthUser(tokenStr){
     return AuthController.parseJwt(tokenStr)['Username']
+  },
+  getUserType(tokenStr){
+    return AuthController.parseJwt(tokenStr)['Typeuser']
   }
 }

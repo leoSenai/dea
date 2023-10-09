@@ -7,7 +7,7 @@ import (
 )
 
 func GetProximityQuizByQuizPatientPersonIDs(idQuiz int64, idPatient int64, idPerson int64) (proximityHasQuiz models.ProximityHasQuiz, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return proximityHasQuiz, err
 	}
@@ -20,7 +20,7 @@ func GetProximityQuizByQuizPatientPersonIDs(idQuiz int64, idPatient int64, idPer
 }
 
 func GetProximityQuizByQuizID(quizID int64) ([]models.ProximityHasQuiz, error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func GetProximityQuizByQuizID(quizID int64) ([]models.ProximityHasQuiz, error) {
 }
 
 func GetProximityQuizByPatientID(patientID int64) ([]models.ProximityHasQuiz, error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func GetProximityQuizByPatientID(patientID int64) ([]models.ProximityHasQuiz, er
 }
 
 func GetProximityQuizByPersonID(personID int64) ([]models.ProximityHasQuiz, error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func GetProximityQuizByPersonID(personID int64) ([]models.ProximityHasQuiz, erro
 }
 
 func PostProximityQuiz(proximityHasQuiz models.ProximityHasQuiz) (models.ProximityHasQuiz, error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 
 	if err != nil {
 		return proximityHasQuiz, err
@@ -77,7 +77,7 @@ func PostProximityQuiz(proximityHasQuiz models.ProximityHasQuiz) (models.Proximi
 }
 
 func PutProximityQuiz(proximityHasQuiz models.ProximityHasQuiz) error {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 
 	if err != nil {
 		return err

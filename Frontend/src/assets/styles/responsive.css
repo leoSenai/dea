@@ -16,6 +16,15 @@
   }
 }
 
+@media (max-width: 500px){
+  .heading-6{
+    text-align: center;
+  }
+  .heading-1{
+    text-align: center;
+  }
+}
+
 @media (max-width: 320px) {
   html {
     font-size: 75%;

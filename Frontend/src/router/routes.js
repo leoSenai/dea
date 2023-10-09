@@ -12,12 +12,6 @@ const links = [
   { path: '/questionarios', name: 'Questionários', icon: PhArticle },
 ];
 
-//try {
-//  var username = Cookie.getAuthUser(Cookie.get('authToken'))
-//} catch (error) {
-//  username = 'Não reconhecido'
-//}
-
 export const routes = [
   {
     path: '/',

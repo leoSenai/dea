@@ -7,7 +7,7 @@ import (
 )
 
 func GetQuizById(id int64) (quiz models.Quiz, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -19,7 +19,7 @@ func GetQuizById(id int64) (quiz models.Quiz, err error) {
 }
 
 func GetAllQuiz() (quizs []models.Quiz, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -31,7 +31,7 @@ func GetAllQuiz() (quizs []models.Quiz, err error) {
 }
 
 func PostQuiz(quizPost models.Quiz) (quizBack models.Quiz, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -42,7 +42,7 @@ func PostQuiz(quizPost models.Quiz) (quizBack models.Quiz, err error) {
 }
 
 func PutQuiz(quizPut models.Quiz) (err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}

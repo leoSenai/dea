@@ -3,7 +3,7 @@ package repository
 import "api/db"
 
 func VerifyResponseQuizById(idQuiz int64) (hasQuiz bool, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}

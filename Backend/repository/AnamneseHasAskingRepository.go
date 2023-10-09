@@ -7,7 +7,7 @@ import (
 )
 
 func GetAnamneseHasAskingByAnamneseId(id int64) (anamneseHasAsking []models.AnamneseHasAsking, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -19,7 +19,7 @@ func GetAnamneseHasAskingByAnamneseId(id int64) (anamneseHasAsking []models.Anam
 }
 
 func GetAnamneseHasAskingByAskingId(id int64) (anamneseHasAsking []models.AnamneseHasAsking, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -31,7 +31,7 @@ func GetAnamneseHasAskingByAskingId(id int64) (anamneseHasAsking []models.Anamne
 }
 
 func GetAllAnamneseHasAsking() (anamneseHasAskings []models.AnamneseHasAsking, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -43,7 +43,7 @@ func GetAllAnamneseHasAsking() (anamneseHasAskings []models.AnamneseHasAsking, e
 }
 
 func PostAnamneseHasAsking(anamneseHasAskingPost models.AnamneseHasAsking) (anamneseHasAskingBack models.AnamneseHasAsking, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}

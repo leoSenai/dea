@@ -7,7 +7,7 @@ import (
 )
 
 func GetCboById(id int64) (cbo models.Cbo, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -19,7 +19,7 @@ func GetCboById(id int64) (cbo models.Cbo, err error) {
 }
 
 func GetAllCbo() (cbos []models.Cbo, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -31,7 +31,7 @@ func GetAllCbo() (cbos []models.Cbo, err error) {
 }
 
 func PostCbo(cboPost models.Cbo) (cboBack models.Cbo, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -45,7 +45,7 @@ func PostCbo(cboPost models.Cbo) (cboBack models.Cbo, err error) {
 }
 
 func PutCbo(cboPut models.Cbo) (cboBack models.Cbo, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}

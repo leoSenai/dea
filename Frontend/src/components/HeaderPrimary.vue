@@ -16,7 +16,10 @@
         <q-img :src="LogoSrc" />
         <h6>Clínica Motivar</h6>
       </div>
-      <div class="user-header" @click="openProfileMenu">
+      <div 
+        class="user-header" 
+        @click="openProfileMenu"
+      >
         <div class="user white">
           <ph-user-circle 
             class="user-icon" 

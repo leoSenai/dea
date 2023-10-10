@@ -8,7 +8,6 @@
     </template>
     <template #modal-content>
       <q-form ref="form">
-        {{ model }}
         <div class="row q-mb-sm">
           <input-primary
             v-model="model.Name"
@@ -24,6 +23,7 @@
             class="select row q-pt-sm"
           />
           <input-primary
+            v-if="!model.IdUser"
             v-model="model.Password"
             label="Senha"
             label-color="primary"
@@ -98,7 +98,7 @@
           v-if="model.IdUser"
           size="sm"
           type="submit"
-          @click="updateQuiz"
+          @click="createAndUpdateUser"
         >
           Atualizar
         </button-primary>
@@ -106,7 +106,7 @@
           v-else
           size="sm"
           type="submit"
-          @click="createQuiz"
+          @click="createAndUpdateUser"
         >
           Cadastrar
         </button-primary>
@@ -173,12 +173,12 @@
           if (current) {
             const model = {
               ...current,
-              TypeUser: th.optionsTypeUser.find(( value ) => value === current?.TypeUser),
-              Active: th.optionsActive.find(( value ) => value === current?.Active),
+              TypeUser: th.optionsTypeUser.find(( type ) => type.value === current?.TypeUser),
+              Active: th.optionsActive.find(( active ) => active.value === current?.Active),
               IdCbo: th.optionsCbo.find(( cbo ) => cbo.value === current?.IdCbo),
-              IdService: th.optionsServices.find(( value ) => value === current?.IdService),
+              IdService: th.optionsServices.find(( service ) => service.value === current?.IdServices),
             };
-            console.log('model', model);
+
             th.model = { ...model };
           }
         } catch (error) {
@@ -199,81 +199,90 @@
         };
         this.$emit('close');
       },
-      createQuiz() {
-        // const th = this;
-        // th.$refs.form.validate().then((success) => {
-        //   if (th.questions.some(({ Desc }) => !Desc || Desc.trim() === '')) {
-        //     alert(
-        //       'Não é possível criar questionários com questões sem descrição!'
-        //     );
-        //     return;
-        //   }
-        //   if (success) {
-        //     th.$api.QuizController.insert({
-        //       ...th.model,
-        //       Interval: th.model.Interval.toString(),
-        //     })
-        //       .then(({ data }) => {
-        //         th.model = data.data;
-        //         if (th.model.IdQuiz) {
-        //           th.questions.forEach((question) => {
-        //             const questionDto = {
-        //               IdQuiz: th.model.IdQuiz,
-        //               IdQuestion: question.IdQuestion,
-        //               Desc: question.Desc.trim(),
-        //             };
-        //             th.$api.QuestionController.insert(questionDto)
-        //           });
-        //         }
-        //         return;
-        //       })
-        //       .then(() => {
-        //         th.closeModal();
-        //       })
-        //   }
-        // });
+      createAndUpdateUser() {
+        const th = this;
+        th.$refs.form.validate().then((success) => {
+          success = th.validations();
+
+          if (success) {
+            const IdCbo = th.model.IdCbo.value;
+            const IdServices = th.model.IdService.value;
+            const TypeUser = th.model.TypeUser.value;
+            const Active = th.model.Active.value;
+            const Phone = th.model.Phone.replace(/\D/g, '');
+
+            delete th.model.IdService;
+            
+            if (th.model.IdUser) {
+              th.$api.UsersController.update({
+                ...th.model,
+                IdCbo,
+                IdServices,
+                TypeUser,
+                Active,
+                Phone
+              })
+                .then(({ data }) => {
+                  th.model = data.data;
+                  return;
+                })
+                .then(() => {
+                  th.closeModal();
+                })
+              return;
+            }
+
+            th.$api.UsersController.insert({
+              ...th.model,
+              IdCbo,
+              IdServices,
+              TypeUser,
+              Active,
+              Phone
+            })
+              .then(({ data }) => {
+                th.model = data.data;
+                return;
+              })
+              .then(() => {
+                th.closeModal();
+              })
+          }
+        });
       },
-      updateQuiz() {
-        // const th = this;
-        // th.$refs.form.validate().then((success) => {
-        //   if (success) {
-        //     if (th.questions.some(({ Desc }) => !Desc || Desc.trim() === '')) {
-        //       alert(
-        //         'Não é possível atualizar questionários com questões sem descrição!'
-        //       );
-        //       return;
-        //     }
-        //     th.$api.QuizController.update({
-        //       ...th.model,
-        //       Interval: th.model.Interval.toString(),
-        //     })
-        //       .then(() => {
-        //         th.questions.forEach((question) => {
-        //           const questionDto = {
-        //             IdQuiz: th.model.IdQuiz,
-        //             IdQuestion: question.IdQuestion,
-        //             Desc: question.Desc.trim(),
-        //           };
-        //           if (questionDto.IdQuestion) {
-        //             th.$api.QuestionController.update(questionDto);
-        //           } else {
-        //             th.$api.QuestionController.insert(questionDto)
-        //           }
-        //         });
-        //         return;
-        //       })
-        //       .then(() => {
-        //         th.questionRemoved.forEach(({ IdQuestion }) => {
-        //           th.$api.QuestionController.delete(IdQuestion);
-        //         });
-        //         return;
-        //       })
-        //       .then(() => {
-        //         th.closeModal();
-        //       })
-        //   }
-        // });
-      },
+      validations() {
+        const th = this;
+        if (!th.model.IdUser && th.model.Password.length < 6) {
+            alert('A senha deve conter no mínimo 6 caracteres!');
+            return false;
+          }
+
+          if (th.model.Name.length < 3) {
+            alert('O nome deve conter no mínimo 3 caracteres!');
+            return false;
+          }
+
+          if (th.model.Phone.length < 14) {
+            alert('O telefone deve conter no mínimo 10 caracteres!');
+            return false;
+          }
+
+          if (th.model.Email.length < 3 && !th.model.Email.includes('@')) {
+            alert('O e-mail deve conter no mínimo 3 caracteres e conter @!');
+            return false;
+          }
+
+          if (th.model.IdCbo === '') {
+            alert('Selecione um CBO!');
+            return false;
+          }
+
+          if (th.model.IdService === '') {
+            alert('Selecione um Serviço!');
+            return false;
+          }
+          return true
+      }
     },
   };
   </script>

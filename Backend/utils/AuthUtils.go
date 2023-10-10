@@ -66,6 +66,7 @@ func VerifyToken(next http.HandlerFunc) http.HandlerFunc {
 
 			if !canAcess {
 				ReturnResponseJSON(w, http.StatusUnauthorized, "Permissão Inválida!", "Token not valid")
+				return
 			}
 
 		}
@@ -82,12 +83,14 @@ func verifyPermissionToURL(path string, typeUser string, acessRoles [][]string) 
 		if role[0] == typeUser {
 			roleURLs := strings.Split(role[1], ";")
 			for _, roleURL := range roleURLs {
-				if strings.Contains(roleURL, path) {
-					return true
+				if path == roleURL {
+					canAcess = true
+					return canAcess
 				}
 			}
 		}
 	}
 
-	return false
+	canAcess = false
+	return canAcess
 }

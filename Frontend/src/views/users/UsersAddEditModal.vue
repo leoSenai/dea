@@ -28,6 +28,7 @@
             label="Senha"
             label-color="primary"
             required
+            password
             class="select row q-pt-sm"
           />
           <q-select

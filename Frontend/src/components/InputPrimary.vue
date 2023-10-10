@@ -9,6 +9,7 @@
     :mask="mask"
     :hint="hint"
     :rules="rulesComputed"
+    :type="isPwd ? 'password' : 'text'"
     @update:model-value="(current) => $emit('update:modelValue', current)"
   >
     <template #prepend>
@@ -25,8 +26,15 @@
     </template>
 
     <template #append>
-      <slot name="after-label" />
+      <q-icon
+        v-if="password"
+        :name="isPwd ? 'visibility_off' : 'visibility'"
+        class="cursor-pointer"
+        @click="isPwd = !isPwd"
+      />
+      <slot name="after-label" /> 
     </template>
+    
 
     <template #error>
       <span>
@@ -73,12 +81,17 @@ export default {
     hint: {
       type: String,
       default: '',
-    }
+    },
+    password: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['update:modelValue'],
   data() {
     return {
       model: this.modelValue,
+      isPwd: this.password,
     }
   },
   computed: {
@@ -98,6 +111,9 @@ export default {
     modelValue(newValue) {
       this.model = newValue;
     },
+    password (newValue) {
+      this.isPwd = newValue;
+    }
   },
 };
 </script>

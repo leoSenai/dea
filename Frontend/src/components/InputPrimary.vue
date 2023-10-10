@@ -94,6 +94,11 @@ export default {
       ];
     },
   },
+  watch: {
+    modelValue(newValue) {
+      this.model = newValue;
+    },
+  },
 };
 </script>
 <style>

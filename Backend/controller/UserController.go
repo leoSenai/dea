@@ -65,11 +65,14 @@ func GetAllUser(w http.ResponseWriter, _ *http.Request) {
 
 		usersDto = append(usersDto,
 			dtos.UserDTO{
-				IdUser:   users[i].IdUser,
-				Name:     users[i].Name,
-				Active:   users[i].Active,
-				IdCbo:    users[i].IdCbo,
-				TypeUser: users[i].TypeUser,
+				IdUser:     users[i].IdUser,
+				Name:       users[i].Name,
+				Active:     users[i].Active,
+				IdCbo:      users[i].IdCbo,
+				TypeUser:   users[i].TypeUser,
+				IdServices: users[i].IdServices,
+				Email:      users[i].Email,
+				Phone:      users[i].Phone,
 			},
 		)
 

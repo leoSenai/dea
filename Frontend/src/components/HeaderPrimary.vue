@@ -14,7 +14,7 @@
         @click="goHome"
       > 
         <q-img :src="LogoSrc" />
-        <h6>Clínica Motivar</h6>
+        <h6 class="header-text">Clínica Motivar</h6>
       </div>
       <div 
         class="user-header" 
@@ -26,7 +26,7 @@
             regular 
           />
           <a 
-            class="header-username" 
+            class="header-username header-text" 
           ><span class="text-body"> {{ username }} </span></a>
           <div class="dropdown-main">
             <ul>
@@ -130,6 +130,10 @@ export default {
   height: 100%
 }
 
+.header-text{
+  text-align: center;
+}
+
 header {
   position: sticky;
   min-width: 100%;
@@ -204,6 +208,7 @@ header {
   background: none;
   border: none;
   cursor: pointer;
+  margin-right: 1em;
   color: #fff;
 }
 

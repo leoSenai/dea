@@ -154,11 +154,59 @@
       color: var(--neutral-white) !important;
       background-color: #242424;
   }
+  .card{
+    background-color: #242424 !important;
+    color: #fff;
+    box-shadow: 2px 2px 40px #ffffff70;
+    border: 1px solid #fff;
+  }
+  .card input{
+    color: #fff;
+  }
+  .card span{
+    color: #ffffffb6;
+  }
+  .card button{
+    color: #fff;
+  }
+  .card .q-field__control{
+    background-color: #00000033;
+  }
+  .card .interval-field{
+    background-color: #00000033;
+  }
+  .title-add-quiz button{
+    color: #fff;
+  }
 }
 
 @media (prefers-color-scheme: light) {
   :root {
       color: var(--neutral-black) !important;
       background-color: #fff;
+  }
+  .card{
+    background-color: #fff !important;
+    color: #000;
+    box-shadow: 2px 2px 40px #00000070;
+    border: 1px solid #000;
+  }
+  .card input{
+    color: #000;
+  }
+  .card span{
+    color: #000000b6;
+  }
+  .card button{
+    color: #f7feffd5;
+  }
+  .card .q-field__control{
+    background-color: #f5fbffdc;
+  }
+  .card .interval-field{
+    background-color: #f5fbffdc;
+  }
+  .title-add-quiz button{
+    color: #fff;
   }
 }

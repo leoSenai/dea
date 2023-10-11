@@ -132,6 +132,7 @@ export default {
 
   .card {
     width: 70%;
+    border-radius: 15px;
   }
 }
 </style>

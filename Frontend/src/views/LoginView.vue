@@ -141,12 +141,14 @@ export default {
 
 .login-title {
   font-size: 2rem;
+  color: #fff !important;
 }
 
 .btn-login {
   width: 100%;
   font-size: 1rem;
   font-weight: 500;
+  color: #fff !important
 }
 
 .login-button {

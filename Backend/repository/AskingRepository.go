@@ -10,7 +10,7 @@ import (
 )
 
 func GetAskingById(id int64) (asking models.Asking, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -25,7 +25,7 @@ func GetAskingById(id int64) (asking models.Asking, err error) {
 }
 
 func PostAsking(asking models.Asking) (err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 
 	if err != nil {
 		return
@@ -37,7 +37,7 @@ func PostAsking(asking models.Asking) (err error) {
 }
 
 func VerifyAskingByDescription(description string) (found bool) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return false
 	}
@@ -54,7 +54,7 @@ func VerifyAskingByDescription(description string) (found bool) {
 }
 
 func GetAllAsking() (askings []models.Asking, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -65,7 +65,7 @@ func GetAllAsking() (askings []models.Asking, err error) {
 }
 
 func PutAsking(asking models.Asking) (err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 
 	if err != nil {
 		return

@@ -7,7 +7,7 @@ import (
 )
 
 func GetQuestionById(id int64) (question models.Question, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -19,7 +19,7 @@ func GetQuestionById(id int64) (question models.Question, err error) {
 }
 
 func GetAllQuestion() (questions []models.Question, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -31,7 +31,7 @@ func GetAllQuestion() (questions []models.Question, err error) {
 }
 
 func PostQuestion(questionPost models.Question) (questionBack models.Question, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -44,7 +44,7 @@ func PostQuestion(questionPost models.Question) (questionBack models.Question, e
 }
 
 func PutQuestion(questionPut models.Question) (questionBack models.Question, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -62,7 +62,7 @@ func PutQuestion(questionPut models.Question) (questionBack models.Question, err
 }
 
 func PutQuestionsBulk(questions []models.Question) (insertedQuestions []models.Question, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +93,7 @@ func PutQuestionsBulk(questions []models.Question) (insertedQuestions []models.Q
 }
 
 func GetQuestionsByQuiz(idQuiz int) (questions []models.Question, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func GetQuestionsByQuiz(idQuiz int) (questions []models.Question, err error) {
 }
 
 func DeleteQuestionById(id int64) error {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return err
 	}

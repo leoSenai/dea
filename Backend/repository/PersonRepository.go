@@ -11,7 +11,7 @@ import (
 )
 
 func GetPersonById(id int64) (person models.Person, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -26,7 +26,7 @@ func GetPersonById(id int64) (person models.Person, err error) {
 }
 
 func PostPerson(person models.Person) (models.Person, error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 
 	if err != nil {
 		return person, err
@@ -42,7 +42,7 @@ func PostPerson(person models.Person) (models.Person, error) {
 }
 
 func VerifyPersonByDocument(docNumber string) (found bool) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return false
 	}
@@ -59,7 +59,7 @@ func VerifyPersonByDocument(docNumber string) (found bool) {
 }
 
 func GetAllPerson() (persons []models.Person, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -70,7 +70,7 @@ func GetAllPerson() (persons []models.Person, err error) {
 }
 
 func PutPerson(person models.Person) (err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 
 	if err != nil {
 		return
@@ -94,7 +94,7 @@ func PutPerson(person models.Person) (err error) {
 }
 
 func DeletePersonById(id int64) error {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 
 	if err != nil {
 		return err
@@ -106,7 +106,7 @@ func DeletePersonById(id int64) error {
 }
 
 func GetPersonByDocNumber(docNumber string) (person models.Person, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return person, err
 	}

@@ -10,7 +10,7 @@ import (
 )
 
 func GetDoctorById(id int64) (doctor models.Doctor, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -25,7 +25,7 @@ func GetDoctorById(id int64) (doctor models.Doctor, err error) {
 }
 
 func PostDoctor(doctor models.Doctor) (err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 
 	if err != nil {
 		return
@@ -37,7 +37,7 @@ func PostDoctor(doctor models.Doctor) (err error) {
 }
 
 func VerifyDoctorByCrm(crm string) (found bool) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return false
 	}
@@ -54,7 +54,7 @@ func VerifyDoctorByCrm(crm string) (found bool) {
 }
 
 func GetAllDoctor() (doctors []models.Doctor, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -65,7 +65,7 @@ func GetAllDoctor() (doctors []models.Doctor, err error) {
 }
 
 func PutDoctor(doctor models.Doctor) (err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 
 	if err != nil {
 		return

@@ -86,6 +86,11 @@ export default {
       logo: logo,
     };
   },
+  mounted(){
+    if(!document.getElementsByClassName('content')[0].classList.contains('login-screen')){
+      document.getElementsByClassName('content')[0].classList.add('login-screen')
+    }
+  },
   computed: {
     pageSize() {
       return this.$q.screen.name
@@ -136,12 +141,14 @@ export default {
 
 .login-title {
   font-size: 2rem;
+  color: #fff !important;
 }
 
 .btn-login {
   width: 100%;
   font-size: 1rem;
   font-weight: 500;
+  color: #fff !important
 }
 
 .login-button {

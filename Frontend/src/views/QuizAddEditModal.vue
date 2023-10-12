@@ -259,8 +259,8 @@ export default {
 
 .remove-question {
   position: absolute;
-  top: 30%;
-  right: 3%;
+  top: 1.8em;
+  right: 1em;
   width: 1.5rem;
   height: 1.5rem;
   display: flex;

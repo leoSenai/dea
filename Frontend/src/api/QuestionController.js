@@ -15,6 +15,6 @@ export default {
     return axios.put(this.url + 'update', data)
   },
   delete(id) {
-    return axios.delete(this.url + id)
+    return axios.delete(this.url + 'delete/' + id)
   }
 }

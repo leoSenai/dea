@@ -17,6 +17,13 @@ export default {
     data() {
         return {};
     },
+    mounted(){
+      try{
+        document.getElementsByClassName('content')[0].classList.remove('login-screen')
+      }catch{
+        //do nothing
+      }
+    },
     methods: {
       goLinkMenu(linktag){
         this.$router.push('/'+linktag)

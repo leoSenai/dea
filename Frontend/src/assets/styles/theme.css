@@ -178,6 +178,9 @@
   .title-add-quiz button{
     color: #fff;
   }
+  .close-button svg{
+    fill: #fff !important;
+  }
 }
 
 @media (prefers-color-scheme: light) {

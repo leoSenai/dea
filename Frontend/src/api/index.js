@@ -4,6 +4,8 @@ import QuestionController from './QuestionController'
 import AuthController from './AuthController'
 import ProximityController from './ProximityController'
 import ProximityHasQuizController from './ProximityHasQuizController'
+import PersonController from './PersonController'
+
 export default {
   install: (app, options) => {
     app.config.globalProperties.$api = {
@@ -12,7 +14,8 @@ export default {
       QuizController,
       QuestionController,
       ProximityController,
-      ProximityHasQuizController
+      ProximityHasQuizController,
+      PersonController
     }
     app.provide('api', options)
   },

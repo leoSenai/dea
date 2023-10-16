@@ -63,7 +63,7 @@ export default {
   border-radius: 4px;
 }
 
-.select-input:hover{
+.select-input:hover {
   opacity: .8;
 }
 
@@ -115,6 +115,7 @@ export default {
 :has(.option):hover {
   background: rgba(0, 0, 0, 0.1);
 }
+
 .label {
   color: var(--neutral-dark-gray);
 }
@@ -123,6 +124,7 @@ export default {
   .select-input {
     color: var(--neutral-white);
   }
+
   .option {
     color: var(--neutral-white);
     background: rgba(0, 0, 0, 0.8);

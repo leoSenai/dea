@@ -7,6 +7,7 @@
     :outlined="outlined"
     :dark="dark"
     :rules="rulesComputed"
+    :mask="mask"
     @update:model-value="(current) => $emit('update:modelValue', current)"
   >
     <template #prepend>
@@ -58,6 +59,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    format: {
+      type: String,
+      default: ''
+    }
   },
   emits: ['update:modelValue'],
   data() {
@@ -77,10 +82,24 @@ export default {
         },
       ];
     },
+    mask() {
+      let mask;
+      switch (this.format) {
+        case 'cpf':
+          mask = '###.###.###-##'
+          break
+        case 'cnpj':
+          mask = '##.###.###/####-##'
+          break;
+        default:
+          mask = ''
+          break;
+      }
+      return mask
+    }
   },
   watch: {
     modelValue() {
-      console.log(this.label)
       this.model = this.modelValue
     }
   }

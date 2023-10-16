@@ -10,8 +10,7 @@
       :dark="dark"
       :rules="rulesComputed"
       mask="##/##/####"
-      @update:model-value="(current) => $emit('update:modelValue', current)"
-      @blur="() => showDatePicker = false"
+      @update:model-value="updateModel"
     >
       <template #after-label>
         <PhCalendarBlank
@@ -24,11 +23,13 @@
     <div
       v-show="showDatePicker"
       class="date-modal"
+      @blur="showDatePicker = false"
     >
       <q-date
         v-model="model"
         :locale="locale"
         mask="DD/MM/YYYY"
+        @update:model-value="updateModel"
       />
     </div>
   </div>
@@ -133,14 +134,17 @@ export default {
       };
     },
   },
-  watch: {
-    modelValue() {
-      if (this.modelValue.length === 10) {
+  methods: {
+    updateModel(current) {
+      this.model = current
+      this.$emit('update:modelValue', this.model)
+      if (current.length === 10 || current.length === 0) {
         this.showDatePicker = false
+      } else {
+        this.showDatePicker = true
       }
     }
   },
-  methods: {},
 };
 </script>
 <style scoped>
@@ -170,6 +174,7 @@ export default {
   position: absolute;
   top: -10%;
   left: 105%;
+  z-index: 1;
 }
 
 .calendar-icon {

@@ -17,7 +17,36 @@
           />
         </div>
         <div class="row">
-          <input-date-primary label="Data de Nascimento" />
+          <div class="col ">
+            <input-date-primary
+              v-model="model.BornDate"
+              label="Data de Nascimento"
+            />
+          </div>
+          <div class="col q-ml-sm">
+            <select-primary
+              v-model="model.DocType"
+              :options="docTypes"
+              label="Tipo do Documento"
+            />
+          </div>
+          <div class="col q-ml-sm">
+            <input-primary
+              v-model="model.DocNumber"
+              :format="model.DocType.toLowerCase()"
+              label="Número do Documento"
+              label-color="primary"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <input-primary
+            v-model="model.DescPerson"
+            label="Descreva a proximidade da pessoa para paciente"
+            label-color="primary"
+            type="textarea"
+            autogrow
+          />
         </div>
       </q-form>
     </template>
@@ -54,14 +83,16 @@
 import ModalPrimary from '../../components/ModalPrimary.vue';
 import InputPrimary from '../../components/InputPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
-import InputDatePrimary from '../../components/InputDatePrimary.vue'
+import InputDatePrimary from '../../components/InputDatePrimary.vue';
+import SelectPrimary from '../../components/SelectPrimary.vue';
 
 export default {
   components: {
     ModalPrimary,
     InputPrimary,
     ButtonPrimary,
-    InputDatePrimary
+    InputDatePrimary,
+    SelectPrimary
   },
   emits: ['close'],
   data() {
@@ -75,34 +106,25 @@ export default {
         DocType: '',
         Password: '',
         Salt: '',
-        IdPatient: 0,
         DescPerson: '',
-        Email: ''
+        Email: '',
       },
+      docTypes: ['CPF', 'CNPJ']
     };
+  },
+  computed: {
+    IdPatient: {
+      get() {
+        return this.$route.params.id
+      }
+    }
   },
   methods: {
     openModal(current) {
       const th = this;
       th.show = true;
       if (current) {
-        th.model = { ...current, Interval: +current.Interval };
-        th.$api.QuestionController.getAll()
-          .then(({ data }) => {
-            const filteredQuestions = data.data
-              .filter(({ IdQuiz }) => IdQuiz === th.model.IdQuiz)
-              .map((el) => {
-                return {
-                  IdQuestion: el.IdQuestion,
-                  Desc: el.Desc,
-                  key: el.IdQuestion,
-                };
-              });
-            th.questions =
-              filteredQuestions.length > 0
-                ? filteredQuestions
-                : [{ key: 0, Desc: '' }];
-          })
+        console.log(current)
       }
     },
     closeModal() {
@@ -115,15 +137,21 @@ export default {
         DocType: '',
         Password: '',
         Salt: '',
-        IdPatient: 0,
         DescPerson: '',
-        Email: ''
+        Email: '',
       };
       this.$emit('close');
     },
     createPerson() {
       const th = this;
-      console.log(th)
+      const BornDate = th.model.BornDate.split('/').reverse().join('-')
+      th.$api.PersonController.getByDoc(th.model.DocNumber).then(({ data }) => {
+        if (!data.data) {
+          th.$api.PersonController.insert({ ...th.model, IdPatient: +th.IdPatient, BornDate })
+        } else {
+          th.updatePerson();
+        }
+      })
     },
     updatePerson() {
       const th = this;

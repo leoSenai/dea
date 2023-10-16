@@ -10,5 +10,8 @@ export default {
     },
     insert(data) {
         return axios.post(this.url + 'insert', data)
-    }
+    },
+    getPersonsByIdPatient(id) {
+        return axios.get(this.url + 'get-persons-by-id-patient/' + id)
+    },
 }

@@ -103,7 +103,7 @@ export default {
   methods: {
     load() {
       const th = this;
-      th.$api.ProximityController.getByIdPatient(th.patientId).then(({ data }) => {
+      th.$api.ProximityController.getPersonsByIdPatient(th.patientId).then(({ data }) => {
         th.model = data
       })
     },

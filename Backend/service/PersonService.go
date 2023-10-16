@@ -13,6 +13,16 @@ func GetPersonById(id int64) (person models.Person, err error) {
 	return person, err
 }
 
+func GetPersonNoPasswordById(id int64) (personResultDto dtos.PersonResultDTO, err error) {
+	person, err := repository.GetPersonById(int64(id))
+	if err != nil {
+		return personResultDto, err
+	}
+
+	personResultDto = utils.ConvertPersonToPersonResultDto(person)
+	return personResultDto, nil
+}
+
 func PostPerson(personDto dtos.PersonDTO) (err error) {
 	found := repository.VerifyPersonByDocument(personDto.DocNumber)
 

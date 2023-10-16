@@ -98,6 +98,7 @@ func main() {
 	r.Post("/proximity/insert", utils.VerifyToken(controller.PostProximity))
 	r.Get("/proximity/get-by-id-person/{id}", utils.VerifyToken(controller.GetProximityAllByIdPerson))
 	r.Get("/proximity/get-by-id-patient/{id}", utils.VerifyToken(controller.GetProximityAllByIdPatient))
+	r.Get("/proximity/get-persons-by-id-patient/{id}", utils.VerifyToken(controller.GetPersonNoPasswordProximityAllByIdPatient))
 
 	r.Get("/anamnesehasasking/get-by-anamnese-id/{id}", utils.VerifyToken(controller.GetAnamneseHasAskingByAnamneseId))
 	r.Get("/anamnesehasasking/get-by-asking-id/{id}", utils.VerifyToken(controller.GetAnamneseHasAskingByAskingId))

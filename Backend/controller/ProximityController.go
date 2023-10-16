@@ -101,3 +101,31 @@ func GetProximityAllByIdPatient(w http.ResponseWriter, r *http.Request) {
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Proximidades encontrada com sucesso!", proximitys)
 }
+
+func GetPersonNoPasswordProximityAllByIdPatient(w http.ResponseWriter, r *http.Request) {
+	idParam := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idParam)
+
+	if id <= 0 {
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "ID inválido", "")
+		return
+	}
+
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")
+		return
+	}
+
+	persons, err := service.GetPersonProximityAllByIdPatient(int64(id))
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, err.Error(), "")
+		return
+	}
+
+	if len(persons) == 0 {
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não há proximidades cadastradas a este paciente", "")
+		return
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Proximidades encontrada com sucesso!", persons)
+}

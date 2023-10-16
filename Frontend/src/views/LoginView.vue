@@ -86,14 +86,14 @@ export default {
       logo: logo,
     };
   },
-  mounted(){
-    if(!document.getElementsByClassName('content')[0].classList.contains('login-screen')){
-      document.getElementsByClassName('content')[0].classList.add('login-screen')
-    }
-  },
   computed: {
     pageSize() {
       return this.$q.screen.name
+    }
+  },
+  mounted(){
+    if(!document.getElementsByClassName('content')[0].classList.contains('login-screen')){
+      document.getElementsByClassName('content')[0].classList.add('login-screen')
     }
   },
   methods: {

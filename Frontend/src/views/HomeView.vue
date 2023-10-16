@@ -2,9 +2,24 @@
   <div class="home">
     <div class="home-options">
       <ul>
-        <li class="menu-item" @click="goLinkMenu('pacientes')">Pacientes<PhScooter /></li>
-        <li class="menu-item" @click="goLinkMenu('questionarios')">Questionários<PhBookOpen /></li>
-        <li class="menu-item" @click="goLinkMenu('usuarios')">Usuários<PhPerson /></li>
+        <li
+          class="menu-item"
+          @click="goLinkMenu('pacientes')"
+        >
+          Pacientes<PhScooter />
+        </li>
+        <li
+          class="menu-item"
+          @click="goLinkMenu('questionarios')"
+        >
+          Questionários<PhBookOpen />
+        </li>
+        <li
+          class="menu-item"
+          @click="goLinkMenu('usuarios')"
+        >
+          Usuários<PhPerson />
+        </li>
       </ul>
     </div>
   </div>

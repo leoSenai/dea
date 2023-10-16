@@ -14,7 +14,9 @@
         @click="goHome"
       > 
         <q-img :src="LogoSrc" />
-        <h6 class="header-text">Clínica Motivar</h6>
+        <h6 class="header-text">
+          Clínica Motivar
+        </h6>
       </div>
       <div 
         class="user-header" 

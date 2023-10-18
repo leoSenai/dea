@@ -4,12 +4,14 @@ import Header from '../components/HeaderPrimary.vue';
 import Patients from '../views/PatientsView.vue';
 import InputPrimary from '../components/InputPrimary.vue';
 import NotFound from '../views/NotFoundView.vue';
-import { PhUsers } from '@phosphor-icons/vue';
+import Quiz from '../views/QuizView.vue';
+import { PhUserList, PhUsers } from '@phosphor-icons/vue';
 import { PhArticle } from '@phosphor-icons/vue';
 
 const links = [
   { path: '/usuarios', name: 'Usuários', icon: PhUsers },
   { path: '/questionarios', name: 'Questionários', icon: PhArticle },
+  { path: '/patients', name: 'Pacientes', icon: PhUserList}
 ];
 
 export const routes = [
@@ -37,6 +39,16 @@ export const routes = [
     path: '/login',
     components: {
       default: Login,
+    },
+  },
+  {
+    path: '/questionarios',
+    components: {
+      default: Quiz,
+      header: Header,
+    },
+    props: {
+      header: { links },
     },
   },
   {

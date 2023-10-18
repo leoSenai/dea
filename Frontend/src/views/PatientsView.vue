@@ -5,28 +5,20 @@
         <div class="patients">
           <div class="info-patients flex justify-between">
             <h3 class="patients-title">Pacientes</h3>
-            <buttonPrimary>
+            <buttonPrimary type="button" @click="openAddEditModal()">
               Adicionar
               <PhPlus class="icon-color"></PhPlus>
             </buttonPrimary>
           </div>
           <div class="patients-content q-mt-lg flex" style="gap: 1rem;">
-            <div class="patients-list q-pa-md">
-              <span>Paciente</span>
-            </div>
-            <div class="patients-list q-pa-md">
-              <span>Paciente</span>
-            </div>
-            <div class="patients-list q-pa-md">
-              <span>Paciente</span>
-            </div>
-            <div class="patients-list q-pa-md">
-              <span>Paciente</span>
+            <div v-for="patient in model.data" :key="patient.IdPatient" class="patients-list q-pa-md">
+              <span>{{ patient.Name }}</span>
             </div>
           </div>
-          <div class="btn-modal hidden flex justify-center items-center">
+          <div type="button" @click="openAddEditModal()" class="btn-modal hidden flex justify-center items-center">
             <PhPlus class="icon-color"></PhPlus>
           </div>
+          <PatientsAddEditModal ref="addEdit" @close="load" />
         </div>
       </div>
     </div>
@@ -36,12 +28,42 @@
 <script>
 import buttonPrimary from '../components/ButtonPrimary.vue';
 import { PhPlus } from '@phosphor-icons/vue';
+import PatientsAddEditModal from './PatientsAddEditModal.vue';
 
 export default {
   components: {
     buttonPrimary,
     PhPlus,
+    PatientsAddEditModal,
   },
+  data() {
+    return {
+      model: {
+        data: [],
+        hasError: false,
+        message: ''
+      }
+    };
+  },
+  mounted() {
+    this.load();
+  },
+  methods: {
+    load() {
+      const th = this;
+      th.$api.PatientController.getAll().then(({ data }) => {
+        th.model = data
+      }).catch(({ response }) => {
+        th.model = {
+          ...response.data,
+          hasError: true
+        }
+      })
+    },
+    openAddEditModal(current) {
+      this.$refs.addEdit.openModal(current)
+    }
+  }
 };
 </script>
 

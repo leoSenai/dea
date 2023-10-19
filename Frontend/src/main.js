@@ -6,6 +6,7 @@ import 'toastify-js/src/toastify.css';
 import 'quasar/dist/quasar.css';
 import '@quasar/extras/material-icons/material-icons.css';
 import './style.css';
+import '@quasar/extras/material-icons/material-icons.css'
 
 import { colorTheme } from './assets/styles/theme';
 

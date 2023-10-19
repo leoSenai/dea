@@ -10,7 +10,7 @@ var acessRoles = [][]string{
 		"asking/insert;asking/update;proximity/insert;proximity/get-by-id-person;proximity/get-by-id-patient;anamnesehasasking/get-by-anamnese-id;" +
 		"anamnesehasasking/get-by-asking-id;anamnesehasasking/get-all;anamnesehasasking/insert;proximityhasquiz/get-all;proximityhasquiz/get-by-id-quiz;" +
 		"proximityhasquiz/get-by-id-patient;proximityhasquiz/get-by-id-person;proximityhasquiz/insert;proximityhasquiz/update;" +
-		"patienthasdoctor/get-by-patient-id;patienthasdoctor/get-by-doctor-id;patienthasdoctor/get-all;patienthasdoctor/insert")},
+		"patienthasdoctor/get-by-patient-id;patienthasdoctor/get-by-doctor-id;patienthasdoctor/get-all;patienthasdoctor/insert;patient/reset-password")},
 
 	{"U", ("person/get-by-id;person/get-all;person/insert;person/update;person/get-by-doc;" +
 		"user/get-by-id;user/get-all;user/insert;user/update;cbo/get-by-id;cbo/get-all;cbo/insert;" +

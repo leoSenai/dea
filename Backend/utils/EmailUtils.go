@@ -5,7 +5,14 @@ import (
 	"net/smtp"
 )
 
-func SendEmail(config models.EmailConfig, from, to, subject, body string) error {
+func SendEmail(to, subject, body string) error {
+	config := models.EmailConfig{
+		SMTPServer:   "smtp.gmail.com",
+		SMTPPort:     "587",
+		SMTPUsername: "suportedeanaoresponda@gmail.com",
+		SMTPPassword: "xhyd nrfx vjnc erth",
+	}
+	from := config.SMTPUsername
 	message := "Subject: " + subject + "\r\n" +
 		"From: " + from + "\r\n" +
 		"To: " + to + "\r\n\r\n" +

@@ -154,4 +154,62 @@
       color: var(--neutral-white) !important;
       background-color: #242424;
   }
+  .go-back g path{
+    fill: white;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: var(--neutral-black) !important;
+    background-color: #fff;
+  }
+  .go-back g path{
+    fill: black;
+  }
+  .patientView-header{
+    background-color: #fff !important;
+  }
+  section{
+    background-color: #fff !important;
+  }
+  .nextPersonView{
+    background-color: #fff !important;
+  }
+  .nextPersonView:hover{
+    background-color: #e2ffe4 !important;
+  }
+  .textarea{
+    background-color: rgba(255, 255, 255, 0.671) !important;
+  }
+  .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input{
+    color: black !important;
+  }
+  .q-field__label.no-pointer-events.absolute.ellipsis{
+    color: rgba(0, 0, 0, 0.678);
+  }
+  .btnVoltar{
+    color: white !important; 
+  }
+  .go-back g path{
+    fill: white !important;
+  }
+  .editBtn{
+    color: white !important;
+  }
+  .gerar-laudo{
+    color: white !important
+  }
+  .info-patients button{
+    color: white !important;
+  }
+  .inputEditable{
+    background-color: rgb(244, 253, 255) !important;
+  }
+  .select-quasar{
+    background-color: #e3fffe75 !important;
+  }
+  .q-menu.q-position-engine.scroll.q-menu--square{
+    background-color: rgb(222, 231, 233) !important;
+  }
 }

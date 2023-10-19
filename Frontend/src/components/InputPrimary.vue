@@ -10,7 +10,6 @@
     :hint="hint"
     :rules="rulesComputed"
     :type="isPwd ? 'password' : 'text'"
-    :mask="mask"
     @update:model-value="(current) => $emit('update:modelValue', current)"
   >
     <template #prepend>
@@ -67,10 +66,6 @@ export default {
     rules: {
       type: Array,
       default: () => [],
-    },
-    mask: {
-      type: String,
-      default: '',
     },
     hint: {
       type: String,
@@ -131,11 +126,6 @@ export default {
       this.isPwd = newValue;
     }
   },
-  watch: {
-    modelValue() {
-      this.model = this.modelValue
-    }
-  }
 };
 </script>
 <style>

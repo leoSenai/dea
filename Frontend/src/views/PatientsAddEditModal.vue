@@ -1,0 +1,231 @@
+<template>
+  <modal-primary
+    v-model="show"
+    @close="closeModal"
+  >
+    <template #modal-title>
+      {{ model && model.IdPatients ? "Editar" : 'Cadastrar' }} Pacientes
+    </template>
+    <template #modal-content>
+      <q-form ref="form">
+        <div class="row">
+          <div class="col-12 col-lg-6 q-px-sm">
+            <input-primary
+              v-model="model.Name"
+              label="Nome"
+              label-color="primary"
+              required
+            />
+          </div>
+          <div class="col-12 col-md-6 q-px-sm">
+            <input-primary
+              v-model="model.Email"
+              label="E-mail"
+              label-color="primary"
+              required
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-lg-6 q-px-sm">
+            <input-primary
+              v-model="model.Phone"
+              label="Telefone"
+              label-color="primary"
+              required
+            />
+          </div>
+          <div class="col-12 col-lg-6 q-px-sm">
+            <input-primary
+              v-model="model.Cpf"
+              label="CPF"
+              label-color="primary"
+              required
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 q-px-sm">
+            <input-primary
+              v-model="model.Address"
+              label="Endereço"
+              label-color="primary"
+              required
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-lg-6 q-px-sm">
+            <input-primary
+              v-model="model.BornDate"
+              type="date"
+              label="Data de nascimento"
+              label-color="primary"
+              required
+            />
+          </div>
+          <div class="col-12 col-lg-6 q-px-sm">
+            <input-primary
+              v-model="model.Sex"
+              label="Sexo"
+              label-color="primary"
+              required
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-lg-4 q-px-sm">
+            <input-primary
+              v-model="model.DadName"
+              label="Nome do pai"
+              label-color="primary"
+              required
+            />
+          </div>
+          <div class="col-12 col-lg-4">
+            <input-primary
+              v-model="model.MomName"
+              label="Nome da mãe"
+              label-color="primary"
+              required
+            />
+          </div>
+          <div class="col-12 col-lg-4 q-px-sm">
+            <input-primary
+              v-model="model.Cid10"
+              type="number"
+              label="CID"
+              label-color="primary"
+              required
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-lg-4 q-px-sm">
+            <input-primary
+              v-model="model.Cns"
+              label="CNS"
+              label-color="primary"
+              required
+            />
+          </div>
+          <div class="col-12 col-lg-4 q-px-sm">
+            <input-primary
+              v-model="model.Password"
+              type="password"
+              label="Senha"
+              label-color="primary"
+              required
+            />
+          </div>
+          <div class="col-12 col-lg-4 q-px-sm">
+            <select-primary
+              v-model="model.NewBorn"
+              :label="'Recem nascido?'"
+              :options="['sim', 'não']"
+            />
+          </div>
+        </div>
+      </q-form>
+    </template>
+    <template #modal-actions>
+      <button-primary
+        outlined
+        size="sm"
+        @click="closeModal"
+      >
+        Fechar
+      </button-primary>
+      <button-primary
+        size="sm"
+        type="submit"
+        @click="createPatient"
+      >
+        Cadastrar
+      </button-primary>
+    </template>
+  </modal-primary>
+</template>
+
+<script>
+import ModalPrimary from '../components/ModalPrimary.vue';
+import InputPrimary from '../components/InputPrimary.vue';
+import ButtonPrimary from '../components/ButtonPrimary.vue';
+import SelectPrimary from '../components/SelectPrimary.vue';
+
+export default {
+    components: {
+        ModalPrimary,
+        InputPrimary,
+        ButtonPrimary,
+        SelectPrimary
+    },
+    emits: ['close'],
+    data() {
+        return {
+            show: false,
+            model: {
+              IdPatient: null,
+              Name: '',
+              Email: '',
+              Phone: '',
+              Address: '',
+              Cpf: '',
+              BornDate: null,
+              Sex: '',
+              DadName: '',
+              MomName: '',
+              Cid10: 0,
+              Password: '',
+              Cns: '',
+              NewBorn: 0
+            }
+        };
+    },
+    methods: {
+        openModal() {
+            const th = this;
+            th.show = true;
+        },
+        createPatient(){
+          const th = this;
+              if (!th.model.Name || !th.model.Email || !th.model.Phone || !th.model.Address || !th.model.Cpf 
+              || !th.model.BornDate || !th.model.Sex || !th.model.DadName || !th.model.MomName || !th.model.Cid10 || !th.model.Password || !th.model.Cns || !th.model.NewBorn ){
+              alert(
+               'Certifique-se de preencher todos os campos.'
+              );
+              return
+              }
+              th.model.Cid10 = th.model.Cid10 ? parseInt(th.model.Cid10, 10) : 0
+              if(th.model.NewBorn == 'sim') {
+               th.model.NewBorn = 1
+              } else {
+               th.model.NewBorn = 0
+              }
+              th.$api.PatientController.insert({
+                ...th.model,
+              })
+              .then(({ data }) => {
+              th.model = data.data;
+              if (th.model.IdPatient) {
+                th.patients.forEach((patient) => {
+                  const patientDto = {
+                    IdPatient: th.model.IdPatient,
+                    Desc: patient.Desc.trim(),
+                  };
+                  th.$api.PatientController.insert(patientDto)
+                });
+              }
+              return;
+            })
+            .then(() => {
+              th.closeModal();
+            });
+        },
+        closeModal() {
+            this.show = false;
+            this.$emit('close');
+        },
+    }
+}
+</script>

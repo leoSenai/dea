@@ -27,7 +27,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-12 col-lg-4 q-px-sm">
+          <div class="col-12 col-lg-6 q-px-sm">
             <input-primary
               v-model="model.Phone"
               label="Telefone"
@@ -35,18 +35,20 @@
               required
             />
           </div>
-          <div class="col-12 col-lg-4 q-px-sm">
+          <div class="col-12 col-lg-6 q-px-sm">
             <input-primary
-              v-model="model.Adress"
-              label="CEP"
+              v-model="model.Cpf"
+              label="CPF"
               label-color="primary"
               required
             />
           </div>
-          <div class="col-12 col-lg-4 q-px-sm">
+        </div>
+        <div class="row">
+          <div class="col-12 q-px-sm">
             <input-primary
-              v-model="model.Cpf"
-              label="CPF"
+              v-model="model.Address"
+              label="Endereço"
               label-color="primary"
               required
             />
@@ -99,7 +101,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-12 col-lg-6 q-px-sm">
+          <div class="col-12 col-lg-4 q-px-sm">
             <input-primary
               v-model="model.Cns"
               label="CNS"
@@ -107,7 +109,16 @@
               required
             />
           </div>
-          <div class="col-12 col-lg-6 q-px-sm">
+          <div class="col-12 col-lg-4 q-px-sm">
+            <input-primary
+              v-model="model.Password"
+              type="password"
+              label="Senha"
+              label-color="primary"
+              required
+            />
+          </div>
+          <div class="col-12 col-lg-4 q-px-sm">
             <select-primary
               v-model="model.NewBorn"
               :label="'Recem nascido?'"
@@ -165,35 +176,32 @@ export default {
               DadName: '',
               MomName: '',
               Cid10: 0,
+              Password: '',
               Cns: '',
-              NewBorn: 'não'
+              NewBorn: 0
             }
         };
     },
     methods: {
-        openModal(current) {
+        openModal() {
             const th = this;
             th.show = true;
-            if (current){
-                th.model = { ...current, Interval: +current.Interval };
-                th.$api.PatientController.getAll()
-                 .then(({ data }) => {
-                    const filteredPatients = data.data
-                    .filter(({ IdPatient }) => IdPatient === th.model.IdQuiz)
-                    .map((el) => {
-                        return {
-                            IdPatient: el.Id
-                        };
-                    });
-                    th.patients =
-                    filteredPatients.length > 0
-                    ? filteredPatients
-                    : [{ key: 0}]
-                 })
-            }
         },
         createPatient(){
           const th = this;
+              if (!th.model.Name || !th.model.Email || !th.model.Phone || !th.model.Address || !th.model.Cpf 
+              || !th.model.BornDate || !th.model.Sex || !th.model.DadName || !th.model.MomName || !th.model.Cid10 || !th.model.Password || !th.model.Cns || !th.model.NewBorn ){
+              alert(
+               'Certifique-se de preencher todos os campos.'
+              );
+              return
+              }
+              th.model.Cid10 = th.model.Cid10 ? parseInt(th.model.Cid10, 10) : 0
+              if(th.model.NewBorn == 'sim') {
+               th.model.NewBorn = 1
+              } else {
+               th.model.NewBorn = 0
+              }
               th.$api.PatientController.insert({
                 ...th.model,
               })
@@ -210,13 +218,12 @@ export default {
               }
               return;
             })
+            .then(() => {
+              th.closeModal();
+            });
         },
         closeModal() {
             this.show = false;
-            this.model = {
-                Name: '',
-                IdPatient: null,
-            };
             this.$emit('close');
         },
     }

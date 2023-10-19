@@ -2,6 +2,7 @@ import Home from '../views/HomeView.vue';
 import Login from '../views/LoginView.vue';
 import Header from '../components/HeaderPrimary.vue';
 import Quiz from '../views/QuizView.vue';
+import Proximity from '../views/Proximity/ProximityView.vue';
 import Users from '../views/users/UsersView.vue'
 import NotFound from '../views/NotFoundView.vue';
 import { PhUsers, PhArticle } from '@phosphor-icons/vue';
@@ -20,7 +21,7 @@ export const routes = [
       header: Header,
     },
     props: {
-      header: { links},
+      header: { links },
     },
   },
   {
@@ -50,9 +51,9 @@ export const routes = [
     },
   },
   {
-    path: '/:pathMatch(.*)*',
+    path: '/paciente/:id/pessoas-proximas',
     components: {
-      default: NotFound,
+      default: Proximity,
       header: Header,
     },
     props: {
@@ -68,5 +69,15 @@ export const routes = [
     props: {
       header: { links },
     }
-  }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    components: {
+      default: NotFound,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+  },
 ];

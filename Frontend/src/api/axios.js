@@ -47,7 +47,7 @@ axios.interceptors.response.use((response) => {
 }, ({ response }) => {
   Toastify({
     avatar: '/x-circle-fill.svg',
-    text: response ? response.data.message : 'Ocorreu um erro!',
+    text: response && response.data ? response.data.message : 'Erro não identificado!',
     duration: 3000,
     gravity: 'top',
     position: 'right',

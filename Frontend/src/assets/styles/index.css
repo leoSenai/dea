@@ -2,6 +2,7 @@
 @import url("./theme.css");
 @import url("./responsive.css");
 @import url("./overwrite.css");
+@import url("./transitions.css");
 
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;

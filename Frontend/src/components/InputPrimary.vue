@@ -32,14 +32,7 @@
         class="cursor-pointer"
         @click="isPwd = !isPwd"
       />
-      <slot name="after-label" /> 
-    </template>
-    
-
-    <template #error>
-      <span>
-        aaa
-      </span>
+      <slot name="after-label" />
     </template>
   </q-input>
 </template>
@@ -74,10 +67,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    mask: {
-      type: String,
-      default: '',
-    },
     hint: {
       type: String,
       default: '',
@@ -86,6 +75,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    format: {
+      type: String,
+      default: ''
+    }
   },
   emits: ['update:modelValue'],
   data() {
@@ -106,12 +99,30 @@ export default {
         },
       ];
     },
+    mask() {
+      let mask;
+      switch (this.format) {
+        case 'cpf':
+          mask = '###.###.###-##'
+          break
+        case 'cnpj':
+          mask = '##.###.###/####-##'
+          break;
+        case 'phone':
+          mask = '(##) #####-####'
+          break;
+        default:
+          mask = ''
+          break;
+      }
+      return mask
+    }
   },
   watch: {
     modelValue(newValue) {
       this.model = newValue;
     },
-    password (newValue) {
+    password(newValue) {
       this.isPwd = newValue;
     }
   },

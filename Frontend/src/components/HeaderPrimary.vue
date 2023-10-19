@@ -81,7 +81,7 @@ export default {
   },
   data() {
     return {
-      LogoSrc: 'src/assets/imgs/Logo.png',
+      LogoSrc: '/logo.png',
       isSidebarActive: false,
     };
   },

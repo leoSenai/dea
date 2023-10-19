@@ -166,3 +166,26 @@ func GetPersonByDocNumber(w http.ResponseWriter, r *http.Request) {
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Pessoa encontrada com sucesso", personDto)
 }
+
+func ResetPassword(w http.ResponseWriter, r *http.Request) {
+	var personResetPassword dtos.PersonResetPasswordDTO
+
+	err := json.NewDecoder(r.Body).Decode(&personResetPassword)
+
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")
+		return
+	}
+
+	println(personResetPassword.Email)
+
+	hasReseted, err := service.ResetPassword(personResetPassword)
+
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")
+	}
+
+	// TODO: Send Email
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Senha recriada com sucesso!", hasReseted)
+}

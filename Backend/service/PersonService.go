@@ -87,3 +87,19 @@ func GetPersonByDocNumber(docNumber string) (person models.Person, err error) {
 	person, err = repository.GetPersonByDocNumber(docNumber)
 	return person, err
 }
+
+func ResetPassword(personResetPassword dtos.PersonResetPasswordDTO) (isReseted bool, err error) {
+	person, err := repository.GetPersonById(personResetPassword.IdPerson)
+
+	if err != nil {
+		return false, err
+	}
+
+	err = repository.ResetPassword(person)
+
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}

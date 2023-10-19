@@ -12,3 +12,8 @@ type PersonDTO struct {
 	DescPerson string
 	Email      string
 }
+
+type PersonResetPasswordDTO struct {
+	IdPerson int64
+	Email    string
+}

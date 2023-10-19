@@ -93,9 +93,9 @@
   </modal-primary>
 </template>
 <script>
-import ModalPrimary from '../components/ModalPrimary.vue';
-import InputPrimary from '../components/InputPrimary.vue';
-import ButtonPrimary from '../components/ButtonPrimary.vue';
+import ModalPrimary from '../../components/ModalPrimary.vue';
+import InputPrimary from '../../components/InputPrimary.vue';
+import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import { PhPlus, PhX } from '@phosphor-icons/vue';
 
 export default {

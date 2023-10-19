@@ -3,8 +3,10 @@ import Login from '../views/LoginView.vue';
 import Header from '../components/HeaderPrimary.vue';
 import Quiz from '../views/QuizView.vue';
 import Proximity from '../views/Proximity/ProximityView.vue';
+import Users from '../views/users/UsersView.vue'
 import NotFound from '../views/NotFoundView.vue';
 import { PhUsers, PhArticle } from '@phosphor-icons/vue';
+//import Cookie from '../cookie';
 
 const links = [
   { path: '/usuarios', name: 'Usuários', icon: PhUsers },
@@ -57,6 +59,16 @@ export const routes = [
     props: {
       header: { links },
     },
+  },
+  {
+    path: '/usuarios',
+    components: {
+      default: Users,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    }
   },
   {
     path: '/:pathMatch(.*)*',

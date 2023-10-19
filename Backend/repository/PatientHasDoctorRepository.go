@@ -7,7 +7,7 @@ import (
 )
 
 func GetPatientHasDoctorByPatientId(id int64) (patientHasDoctor []models.PatientHasDoctor, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -19,7 +19,7 @@ func GetPatientHasDoctorByPatientId(id int64) (patientHasDoctor []models.Patient
 }
 
 func GetPatientHasDoctorByDoctorId(id int64) (patientHasDoctor []models.PatientHasDoctor, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -31,7 +31,7 @@ func GetPatientHasDoctorByDoctorId(id int64) (patientHasDoctor []models.PatientH
 }
 
 func GetAllPatientHasDoctor() (patientHasDoctors []models.PatientHasDoctor, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -43,7 +43,7 @@ func GetAllPatientHasDoctor() (patientHasDoctors []models.PatientHasDoctor, err 
 }
 
 func PostPatientHasDoctor(patientHasDoctorPost models.PatientHasDoctor) (patientHasDoctorBack models.PatientHasDoctor, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}

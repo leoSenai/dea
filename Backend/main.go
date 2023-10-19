@@ -83,7 +83,7 @@ func main() {
 	r.Put("/question/update", utils.VerifyToken(controller.PutQuestion))
 	r.Put("/question/update-bulk", utils.VerifyToken(controller.PutQuestionsBulk))
 	r.Put("/question/get-by-quiz/{idQuiz}", utils.VerifyToken(controller.GetQuestionsByQuiz))
-	r.Delete("/question/{id}", utils.VerifyToken(controller.DeleteQuestionById))
+	r.Delete("/question/delete/{id}", utils.VerifyToken(controller.DeleteQuestionById))
 
 	r.Get("/anamnese/get-by-id/{id}", utils.VerifyToken(controller.GetAnamneseById))
 	r.Get("/anamnese/get-all", utils.VerifyToken(controller.GetAllAnamnese))
@@ -105,7 +105,7 @@ func main() {
 	r.Get("/anamnesehasasking/get-all", utils.VerifyToken(controller.GetAllAnamneseHasAsking))
 	r.Post("/anamnesehasasking/insert", utils.VerifyToken(controller.PostAnamneseHasAsking))
 
-	r.Get("/proximityhasquiz/get", utils.VerifyToken(controller.GetProximityQuizByQuizPatientPersonIDs))
+	r.Get("/proximityhasquiz/get-all", utils.VerifyToken(controller.GetProximityQuizByQuizPatientPersonIDs))
 	r.Get("/proximityhasquiz/get-by-id-quiz/{id}", utils.VerifyToken(controller.GetProximityQuizByQuizID))
 	r.Get("/proximityhasquiz/get-by-id-patient/{id}", utils.VerifyToken(controller.GetProximityQuizByPatientID))
 	r.Get("/proximityhasquiz/get-by-id-person/{id}", utils.VerifyToken(controller.GetProximityQuizByPersonID))

@@ -43,3 +43,54 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+.header-username{
+    color: aliceblue;
+    font-size: 110%;
+    position: static;
+}
+
+.header-username:hover{
+    color: #fff;
+    font-weight:bolder;
+    text-shadow: 2px 2px 2px #000;
+    cursor: pointer;
+}
+
+.dropdown-main{
+    position:absolute;
+    display: none;
+    float: right;
+    margin: 0px;
+    margin-top: 90px;
+    margin-right: 10px;
+    border-radius: 0px 0px 8px 0px;
+    border-bottom: none;
+    background-color: var(--primary-700);
+    width: -webkit-fill-available;
+    box-shadow: -2px -2px 10px #000;
+}
+
+.dropdown-main li{
+    list-style: none;
+    padding: 5px;
+    text-align: center;
+    border-radius: 0px 0px 8px 0px;
+    color: #fff;
+    text-shadow: none;
+    background-color: var(--primary-700);
+}
+
+.dropdown-main li:hover{
+    text-shadow: 1px 1px 1px #fff;
+    background-color: rgba(30, 87, 30, 0.342);
+}
+
+.dropdown-main li a{
+    color: #fff;
+}
+
+.user-header{
+    position:static;
+    display: grid;
+}

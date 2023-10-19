@@ -67,9 +67,12 @@ axios.interceptors.response.use((response) => {
     },
   }).showToast();
 
-  if (response.status === 401) {
+  if (response.status === 401 && !response.data.message.includes('Permissão Inválida')) {
     Cookie.delete('authToken');
     router.push('/login')
+  }else if(response.status === 401){
+    router.push('/')
+    return
   }
 
   return response ? response : { data: null };

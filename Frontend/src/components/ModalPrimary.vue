@@ -84,7 +84,8 @@ export default {
   display: flex;
   flex-direction: column;
   background: #fff;
-  height: calc(100vh - 13rem);
+  height: fit-content;
+  max-height: calc(100vh - 13rem);
   width: 100%;
   border-radius: 4px;
   padding: 1rem;
@@ -137,6 +138,7 @@ export default {
 
   .card {
     width: 70%;
+    border-radius: 15px;
   }
 }
 </style>

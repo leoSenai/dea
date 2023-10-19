@@ -1,58 +1,78 @@
 <template>
-  <header class="bg-primary-700">
-    <button
-      class="hamburguer"
-      @click="toggleSidebar"
-    >
-      <PhList />
-    </button>
-    <div
-      class="logo white"
-      @click="goHome"
-    >
-      <q-img :src="LogoSrc" />
-      <h6>Clínica Motivar</h6>
-    </div>
-    <div class="user white">
-      <ph-user-circle
-        class="user-icon"
-        regular
-      />
-      <span class="text-body">Usuário</span>
-    </div>
-  </header>
-  <div
-    :class="['sidebar', 'bg-success', isSidebarActive ? 'active' : '']"
-    @blur="hideSidebar"
-  >
-    <template
-      v-for="link in links"
-      :key="link.path"
-    >
-      <router-link
-        :to="link.path"
-        class="link"
-        tabindex="0"
-        @blur="hideSidebar"
+  <div>
+    <header class="bg-primary-700">
+      <button
+        class="hamburguer"
+        @click="toggleSidebar"
       >
-        {{ link.name }}
-        <component
-          :is="link.icon"
-          class="link-icon"
+        <PhList 
+          size="1.4em"
         />
-      </router-link>
-    </template>
+      </button>
+      <div
+        class="logo white"
+        @click="goHome"
+      > 
+        <q-img :src="LogoSrc" />
+        <h6 class="header-text">Clínica Motivar</h6>
+      </div>
+      <div 
+        class="user-header" 
+        @click="openProfileMenu"
+      >
+        <div class="user white">
+          <ph-user-circle 
+            class="user-icon" 
+            regular 
+          />
+          <a 
+            class="header-username header-text" 
+          ><span class="text-body"> {{ username }} </span></a>
+          <div class="dropdown-main">
+            <ul>
+              <li><a @click="logout">Sair</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div
+      :class="['sidebar', 'bg-success', isSidebarActive ? 'active' : '']"
+      @blur="hideSidebar"
+    >
+      <template
+        v-for="link in links"
+        :key="link.path"
+      >
+        <router-link
+          :to="link.path"
+          class="link"
+          tabindex="0"
+          @blur="hideSidebar"
+        >
+          {{ link.name }}
+          <component
+            :is="link.icon"
+            class="link-icon"
+          />
+        </router-link>
+      </template>
+    </div>
   </div>
 </template>
 
 <script>
-import { PhUserCircle, PhList } from '@phosphor-icons/vue';
+import { PhUserCircle, PhList, PhDoor } from '@phosphor-icons/vue';
+import ButtonPrimary from '../components/ButtonPrimary.vue'
+import cookie from '../cookie';
 
 export default {
   components: {
     PhUserCircle,
     PhList,
-  },
+    ButtonPrimary,
+    PhDoor
+},
   props: {
     links: {
       type: Array,
@@ -65,6 +85,11 @@ export default {
       isSidebarActive: false,
     };
   },
+  computed: {
+    username(){
+      return cookie.getAuthUser(cookie.get('authToken'))
+    }
+  },
   methods: {
     toggleSidebar() {
       this.isSidebarActive = !this.isSidebarActive;
@@ -74,17 +99,45 @@ export default {
     },
     goHome() {
       this.$router.push('/')
+    },
+    logout(){
+      const th = this;
+      th.$api.AuthController.logout()
+      this.$router.push('/login')
+    },
+    openProfileMenu(){
+
+      if(document.getElementsByClassName('dropdown-main')[0].style.display=='block'){
+        document.getElementsByClassName('dropdown-main')[0].style.display = 'none'
+      }else{
+        document.getElementsByClassName('dropdown-main')[0].style.display = 'block'
+      }
+
+      var contentElement = document.body.getElementsByClassName('content')[0];
+      contentElement.addEventListener('click', () => {
+        document.getElementsByClassName('dropdown-main')[0].style.display = 'none'
+      })
+
     }
-  },
+  },  
 };
 </script>
 
 <style scoped>
+
+.dropdown-main a{
+  width: 100%;
+  height: 100%
+}
+
+.header-text{
+  text-align: center;
+}
+
 header {
   position: sticky;
   min-width: 100%;
   z-index: 999;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -155,6 +208,8 @@ header {
   background: none;
   border: none;
   cursor: pointer;
+  margin-right: 1em;
+  color: #fff;
 }
 
 .sidebar {
@@ -163,5 +218,9 @@ header {
 
 .sidebar.active {
   transform: translateX(0%);
+}
+
+.user-header{
+  cursor: pointer;
 }
 </style>

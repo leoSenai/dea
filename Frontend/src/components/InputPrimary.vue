@@ -91,6 +91,9 @@ export default {
         case 'cnpj':
           mask = '##.###.###/####-##'
           break;
+        case 'phone':
+          mask = '(##) #####-####'
+          break;
         default:
           mask = ''
           break;

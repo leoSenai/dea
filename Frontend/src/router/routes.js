@@ -9,7 +9,6 @@ import { PhUsers, PhArticle } from '@phosphor-icons/vue';
 const links = [
   { path: '/usuarios', name: 'Usuários', icon: PhUsers },
   { path: '/questionarios', name: 'Questionários', icon: PhArticle },
-  { path: '/paciente/1/pessoas-proximas', name: 'Apaga Depois!!', icon: PhArticle },
 ];
 
 export const routes = [

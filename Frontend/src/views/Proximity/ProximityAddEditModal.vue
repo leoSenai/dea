@@ -16,6 +16,25 @@
             required
           />
         </div>
+        <div class="row q-mb-sm">
+          <div class="col">
+            <input-primary
+              v-model="model.Email"
+              label="E-mail"
+              label-color="primary"
+              required
+            />
+          </div>
+          <div class="col q-ml-sm">
+            <input-primary
+              v-model="model.Phone"
+              label="Telefone"
+              format="phone"
+              label-color="primary"
+              required
+            />
+          </div>
+        </div>
         <div class="row">
           <div class="col ">
             <input-date-primary
@@ -33,7 +52,7 @@
           <div class="col q-ml-sm">
             <input-primary
               v-model="model.DocNumber"
-              :format="model.DocType.toLowerCase()"
+              :format="model.DocType ? model.DocType.toLowerCase() : 'cpf'"
               label="Número do Documento"
               label-color="primary"
             />
@@ -124,7 +143,8 @@ export default {
       const th = this;
       th.show = true;
       if (current) {
-        console.log(current)
+        current.BornDate = current.BornDate.split('-').reverse().join('/')
+        th.model = current
       }
     },
     closeModal() {
@@ -145,9 +165,12 @@ export default {
     createPerson() {
       const th = this;
       const BornDate = th.model.BornDate.split('/').reverse().join('-')
-      th.$api.PersonController.getByDoc(th.model.DocNumber).then(({ data }) => {
+      const DocNumber = th.model.DocNumber.replaceAll('.', '').replaceAll('-', '').replaceAll('/', '')
+      th.$api.PersonController.getByDoc(DocNumber).then(({ data }) => {
         if (!data.data) {
-          th.$api.PersonController.insert({ ...th.model, IdPatient: +th.IdPatient, BornDate })
+          th.$api.PersonController.insert({ ...th.model, IdPatient: +th.IdPatient, BornDate, DocNumber }).then(() => {
+            th.closeModal()
+          })
         } else {
           th.updatePerson();
         }
@@ -155,7 +178,11 @@ export default {
     },
     updatePerson() {
       const th = this;
-      console.log(th)
+      const BornDate = th.model.BornDate.split('/').reverse().join('-')
+      const DocNumber = th.model.DocNumber.replaceAll('.', '').replaceAll('-', '').replaceAll('/', '')
+      th.$api.PersonController.update({ ...th.model, IdPatient: +th.IdPatient, BornDate, DocNumber }).then(() => {
+        th.closeModal()
+      })
     },
   },
 };

@@ -8,6 +8,11 @@
     :behavior="$q.platform.is.ios === true ? 'dialog' : 'menu'"
     borderless
   >
+    <template #selected-item="{ opt }">
+      <div class="q-pl-md">
+        {{ opt }}
+      </div>
+    </template>
     <template #label>
       <span class="label">
         {{ label }}
@@ -69,6 +74,7 @@ export default {
 
 .label {
   margin-left: 1rem;
+  padding-left: 1rem;
 }
 
 .icon {

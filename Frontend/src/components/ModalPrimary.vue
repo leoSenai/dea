@@ -1,29 +1,32 @@
 <template>
-  <div
-    v-if="modelValue"
-    :class="['modal', isMobile ? 'mobile' : '']"
-  >
-    <q-card class="card">
-      <div
-        class="close-button"
-        @click="close"
-      >
-        <PhX
-          size="1rem"
-          color="black"
-        />
-      </div>
-      <h5 class="modal-title">
-        <slot name="modal-title" />
-      </h5>
-      <q-card-section class="modal-content">
-        <slot name="modal-content" />
-      </q-card-section>
-      <q-card-actions class="modal-actions">
-        <slot name="modal-actions" />
-      </q-card-actions>
-    </q-card>
-  </div>
+  <Transition :name="isMobile ? 'bottom-to-top' : 'bounce'">
+    <div
+      v-if="modelValue"
+      :class="['modal', isMobile ? 'mobile' : '']"
+    >
+      <q-card class="card">
+        <div
+          class="close-button"
+          @click="close"
+        >
+          <PhX
+            class="close-icon"
+            size="1.5rem"
+            color="black"
+          />
+        </div>
+        <h5 class="modal-title">
+          <slot name="modal-title" />
+        </h5>
+        <q-card-section class="modal-content">
+          <slot name="modal-content" />
+        </q-card-section>
+        <q-card-actions class="modal-actions">
+          <slot name="modal-actions" />
+        </q-card-actions>
+      </q-card>
+    </div>
+  </Transition>
 </template>
 <script>
 import { PhX } from '@phosphor-icons/vue';
@@ -101,8 +104,6 @@ export default {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-radius: 99999px;
-  padding: .25rem;
 }
 
 .modal-content {
@@ -113,8 +114,13 @@ export default {
   flex: 1;
 }
 
-.close-button:hover {
+.close-button:hover .close-icon {
   background: rgba(0, 0, 0, .15);
+}
+
+.close-icon {
+  border-radius: 99999px;
+  padding: .25rem;
 }
 
 .modal-actions {

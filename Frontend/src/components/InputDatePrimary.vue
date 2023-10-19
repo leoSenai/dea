@@ -20,18 +20,20 @@
         />
       </template>
     </InputPrimary>
-    <div
-      v-show="showDatePicker"
-      class="date-modal"
-      @blur="showDatePicker = false"
-    >
-      <q-date
-        v-model="model"
-        :locale="locale"
-        mask="DD/MM/YYYY"
-        @update:model-value="updateModel"
-      />
-    </div>
+    <Transition name="left-to-right">
+      <div
+        v-show="showDatePicker"
+        class="date-modal"
+        @blur="showDatePicker = false"
+      >
+        <q-date
+          v-model="model"
+          :locale="locale"
+          mask="DD/MM/YYYY"
+          @update:model-value="updateModel"
+        />
+      </div>
+    </Transition>
   </div>
 </template>
 <script>

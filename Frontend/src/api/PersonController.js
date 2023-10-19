@@ -15,6 +15,6 @@ export default {
     return axios.post(this.url + 'insert', data)
   },
   update(data) {
-    return axios.post(this.url + 'update', data)
+    return axios.put(this.url + 'update', data)
   }
 }

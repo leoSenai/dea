@@ -1,6 +1,6 @@
 <template>
-  <div class="quiz-content">
-    <div class="quiz-title">
+  <div class="proximity-content">
+    <div class="proximity-title">
       <div
         v-if="isMobile"
         class="title-go-back"
@@ -17,7 +17,7 @@
       </div>
       <div
         v-if="!isMobile"
-        class="title-add-quiz"
+        class="title-add-proximity"
       >
         <button
           type="button"
@@ -30,23 +30,23 @@
     </div>
     <div
       v-if="model.hasError"
-      class="error quiz"
+      class="error proximity"
     >
       {{ model.message }}
     </div>
     <div
-      v-for="quiz in model.data"
+      v-for="proximity in model.data"
       v-else
-      :key="quiz.IdQuiz"
-      class="row quiz"
+      :key="proximity.Idproximity"
+      class="row proximity"
     >
       <p>
-        {{ quiz.Name }}
+        {{ proximity.Name }}
       </p>
-      <div class="quiz-actions">
+      <div class="proximity-actions">
         <button
           type="button"
-          @click="openAddEditModal(quiz)"
+          @click="openAddEditModal(proximity)"
         >
           <PhPencil />
         </button>
@@ -54,7 +54,7 @@
     </div>
     <div
       v-if="isMobile"
-      class="add-quiz"
+      class="add-proximity"
     >
       <button
         type="button"
@@ -117,7 +117,7 @@ export default {
 }
 </script>
 <style>
-.quiz-content {
+.proximity-content {
   padding: 3rem 1.5rem;
   width: 100%;
   display: flex;
@@ -125,13 +125,13 @@ export default {
   gap: .75rem;
 }
 
-.quiz-title {
+.proximity-title {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.title-add-quiz button {
+.title-add-proximity button {
   background: var(--primary);
   border-radius: 8px;
   border: none;
@@ -144,7 +144,7 @@ export default {
   cursor: pointer;
 }
 
-.title-add-quiz button:hover {
+.title-add-proximity button:hover {
   filter: brightness(0.8);
 }
 
@@ -158,7 +158,7 @@ export default {
   justify-content: center;
 }
 
-.quiz-title:has(.title-go-back) {
+.proximity-title:has(.title-go-back) {
   justify-content: flex-start;
   align-items: center;
   gap: 1rem;
@@ -170,13 +170,13 @@ export default {
   padding: 1rem;
 }
 
-.add-quiz {
+.add-proximity {
   position: absolute;
   bottom: 1rem;
   right: 1rem;
 }
 
-.add-quiz button {
+.add-proximity button {
   background: var(--primary);
   border-radius: 99999px;
   font-size: 2rem;
@@ -189,12 +189,12 @@ export default {
   transition: .2s;
 }
 
-.add-quiz button:hover {
+.add-proximity button:hover {
   filter: brightness(0.8);
   cursor: pointer;
 }
 
-.quiz {
+.proximity {
   border: 1px solid;
   padding: 1rem;
   border-radius: 4px;
@@ -203,11 +203,11 @@ export default {
   align-items: center;
 }
 
-.quiz p {
+.proximity p {
   margin: 0;
 }
 
-.quiz button {
+.proximity button {
   border: none;
   background: none;
   cursor: pointer;
@@ -219,7 +219,7 @@ export default {
   border-radius: 9999px;
 }
 
-.quiz button:hover {
+.proximity button:hover {
   background: var(--neutral-dark-gray);
 }
 </style>

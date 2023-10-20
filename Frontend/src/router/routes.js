@@ -1,5 +1,6 @@
 import Home from '../views/HomeView.vue';
 import Login from '../views/LoginView.vue';
+import PatientView from '../views/PatientView.vue'
 import Header from '../components/HeaderPrimary.vue';
 import Patients from '../views/PatientsView.vue';
 import Proximity from '../views/Proximity/ProximityView.vue';
@@ -7,6 +8,7 @@ import Users from '../views/users/UsersView.vue'
 import InputPrimary from '../components/InputPrimary.vue';
 import NotFound from '../views/NotFoundView.vue';
 import Quiz from '../views/quiz/QuizView.vue';
+
 import { PhUserList, PhUsers } from '@phosphor-icons/vue';
 import { PhArticle } from '@phosphor-icons/vue';
 
@@ -21,6 +23,16 @@ export const routes = [
     path: '/',
     components: {
       default: Home,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+  },
+  {
+    path: '/patientView',
+    components: {
+      default: PatientView,
       header: Header,
     },
     props: {

@@ -11,8 +11,9 @@
             </buttonPrimary>
           </div>
           <div class="patients-content q-mt-lg flex" style="gap: 1rem;">
-            <div v-for="patient in model.data" :key="patient.IdPatient" class="patients-list q-pa-md">
-              <span>{{ patient.Name }}</span>
+            <div v-for="patient in model.data" :key="patient.IdPatient" class="patients-list">
+              <span @click="openViewPatient(patient.IdPatient)">{{ patient.Name }}</span>
+              <PhPencil class="edit-button" width="25px" @click="openEditPatient(patient.IdPatient)"></PhPencil>
             </div>
           </div>
           <div type="button" @click="openAddEditModal()" class="btn-modal hidden flex justify-center items-center">
@@ -27,13 +28,14 @@
 
 <script>
 import buttonPrimary from '../components/ButtonPrimary.vue';
-import { PhPlus } from '@phosphor-icons/vue';
+import { PhPlus, PhPencil } from '@phosphor-icons/vue';
 import PatientsAddEditModal from './PatientsAddEditModal.vue';
 
 export default {
   components: {
     buttonPrimary,
     PhPlus,
+    PhPencil,
     PatientsAddEditModal,
   },
   data() {
@@ -62,12 +64,24 @@ export default {
     },
     openAddEditModal(current) {
       this.$refs.addEdit.openModal(current)
+    },
+    openViewPatient(id){
+      this.$router.push('/patientView?id='+id)
+    },
+    openEditPatient(id){
+      this.$router.push('/patientView?id='+ id +'&edit=true')
     }
   }
 };
 </script>
 
 <style scoped>
+
+.edit-button{
+  height: 110%;
+  margin-right: 12px;
+  cursor: pointer;
+}
 .row {
   width: 100%;
 }
@@ -90,9 +104,14 @@ export default {
   border: 0.094rem solid var(--neutral-dark-gray);
   width: 100%;
   border-radius: 0.25rem;
+  display: flex;
+  justify-content: space-between;
 }
 
-.patients-list span {
+.patients-list span{
+  width: -webkit-fill-available;
+  cursor: pointer;
+  padding: 15px;
   font-weight: bold;
   font-size: 1.25rem;
 }

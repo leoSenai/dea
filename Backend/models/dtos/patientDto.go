@@ -3,6 +3,7 @@ package dtos
 type PatientDTO struct {
 	IdPatient int
 	Name      string
+	Email     string
 	Cpf       string
 	Address   string
 	Phone     string

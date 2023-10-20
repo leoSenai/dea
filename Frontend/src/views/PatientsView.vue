@@ -112,7 +112,6 @@ export default {
   width: -webkit-fill-available;
   cursor: pointer;
   padding: 15px;
-  font-weight: bold;
   font-size: 1.25rem;
 }
 

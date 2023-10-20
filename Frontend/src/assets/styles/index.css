@@ -88,6 +88,8 @@ body {
 
 .dropdown-main li a{
     color: #fff;
+    width: 100%;
+    display: block;
 }
 
 .user-header{

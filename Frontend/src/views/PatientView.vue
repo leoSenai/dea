@@ -100,7 +100,7 @@ export default {
                 Cid10: null,
                 Active: null,
             },
-            campoAnamneseDesabilitado: true,
+            campoAnamneseDesabilitado: false,
             anamneseText: '',
         }
     },
@@ -134,7 +134,6 @@ export default {
         var element = document.getElementsByClassName('editIcon')[0]
         var elementAlterPassword = document.getElementsByClassName('alter-password')[0]
         if(edit!==undefined && edit=='true'){ //Quando para editar
-            th.campoAnamneseDesabilitado = true
                 element.style.display = 'none'
                 elementAlterPassword.style.display = 'block'
                 th.edit = true;
@@ -144,7 +143,6 @@ export default {
                 document.getElementsByClassName('patientView-header')[0].style.display = 'block'
         }else{ //Quando para salvar
             th.edit = false;
-            th.campoAnamneseDesabilitado = true
         }
 
         //faz requisição para pegar info do paciente
@@ -163,7 +161,6 @@ export default {
             var element = document.getElementsByClassName('editIcon')[0]
             var elementAlterPassword = document.getElementsByClassName('alter-password')[0]
             if(th.edit==false && th.editOrSave=='Editar'){ //Quando for para editar
-                th.campoAnamneseDesabilitado = true
                 element.style.display = 'none'
                 elementAlterPassword.style.display = 'block'
                 th.edit = true;
@@ -172,7 +169,6 @@ export default {
                 document.getElementsByClassName('patient-info-editable')[0].style.display = 'block'
                 document.getElementsByClassName('patientView-header')[0].style.display = 'block'
             }else if(th.edit==true && th.editOrSave=='Salvar'){ //Quando for para salvar
-                th.campoAnamneseDesabilitado = true
                 element = document.getElementsByClassName('editIcon')[0]
                 element.style.display = 'block'
                 elementAlterPassword.style.display = 'none'
@@ -228,7 +224,7 @@ export default {
     }
     .inputEditable{
         background-color: #00000063;
-        height: 35px;
+        
         margin-bottom: 10px;
     }
     .patient-info-editable{
@@ -381,6 +377,9 @@ export default {
 .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input{
         color: white !important;
 }
+.patientView-content .q-field__native.q-placeholder{
+    padding-left: 10px;
+}
 .q-field__label.no-pointer-events.absolute.ellipsis{
     color: rgba(255, 255, 255, 0.678);
 }
@@ -388,19 +387,15 @@ export default {
     color: var(--primary) !important;
     border-color: var(--primary);
 }
-input.q-field__native.q-placeholder{
-    height: 35px;
-}
 
 .patient-info-editable .q-field__control.relative-position.row.no-wrap{
-    height: 35px;
     border: 1px solid #0000001c;
 }
 .q-menu.q-position-engine.scroll.q-menu--square{
     background-color: #272727;
 }
 .select-quasar span{
-    margin-left: 5px;
-    margin-top: 5px;
+    margin-left: 10px;
+    margin-top: 10px;
 }
 </style>

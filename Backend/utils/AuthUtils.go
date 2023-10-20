@@ -83,7 +83,7 @@ func verifyPermissionToURL(path string, typeUser string, acessRoles [][]string) 
 		if role[0] == typeUser {
 			roleURLs := strings.Split(role[1], ";")
 			for _, roleURL := range roleURLs {
-				if path == roleURL {
+				if strings.Contains(path, roleURL) {
 					canAcess = true
 					return canAcess
 				}

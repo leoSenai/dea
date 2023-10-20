@@ -66,10 +66,10 @@ export default {
       this.$refs.addEdit.openModal(current)
     },
     openViewPatient(id){
-      this.$router.push('/patientView?id='+id)
+      this.$router.push('/pacienteInfo?id='+id)
     },
     openEditPatient(id){
-      this.$router.push('/patientView?id='+ id +'&edit=true')
+      this.$router.push('/pacienteInfo?id='+ id +'&edit=true')
     }
   }
 };

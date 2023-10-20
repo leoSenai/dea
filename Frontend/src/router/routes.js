@@ -15,7 +15,7 @@ import { PhArticle } from '@phosphor-icons/vue';
 const links = [
   { path: '/usuarios', name: 'Usuários', icon: PhUsers },
   { path: '/questionarios', name: 'Questionários', icon: PhArticle },
-  { path: '/patients', name: 'Pacientes', icon: PhUserList}
+  { path: '/pacientes', name: 'Pacientes', icon: PhUserList}
 ];
 
 export const routes = [
@@ -30,7 +30,7 @@ export const routes = [
     },
   },
   {
-    path: '/patientView',
+    path: '/pacienteInfo',
     components: {
       default: PatientView,
       header: Header,
@@ -86,7 +86,7 @@ export const routes = [
     }
   },
   {
-    path: '/patients',
+    path: '/pacientes',
     components: {
       default: Patients,
       header: Header,

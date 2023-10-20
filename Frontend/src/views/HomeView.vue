@@ -4,7 +4,7 @@
       <ul>
         <li
           class="menu-item"
-          @click="goLinkMenu('patients')"
+          @click="goLinkMenu('pacientes')"
         >
           Pacientes<PhScooter />
         </li>

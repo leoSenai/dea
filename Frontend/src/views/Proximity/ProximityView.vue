@@ -46,8 +46,20 @@
       <div class="proximity-actions">
         <button
           type="button"
+          @click="resetPassword(proximity)"
+        >
+          <q-tooltip>
+            Redefinir Senha
+          </q-tooltip>
+          <PhFingerprintSimple />
+        </button>
+        <button
+          type="button"
           @click="openAddEditModal(proximity)"
         >
+          <q-tooltip>
+            Editar
+          </q-tooltip>
           <PhPencil />
         </button>
       </div>
@@ -70,7 +82,7 @@
   />
 </template>
 <script>
-import { PhPlus, PhPencil, PhCaretLeft } from '@phosphor-icons/vue';
+import { PhPlus, PhPencil, PhCaretLeft, PhFingerprintSimple } from '@phosphor-icons/vue';
 import ProximityAddEditModal from './ProximityAddEditModal.vue';
 
 export default {
@@ -78,7 +90,8 @@ export default {
     PhPlus,
     ProximityAddEditModal,
     PhPencil,
-    PhCaretLeft
+    PhCaretLeft,
+    PhFingerprintSimple
   },
   data() {
     return {
@@ -112,6 +125,9 @@ export default {
     },
     goBack() {
       this.$router.push('/paciente/id')
+    },
+    resetPassword({ IdPerson, Email }) {
+      this.$api.PersonController.resetPassword({ IdPerson, Email })
     }
   },
 }
@@ -221,5 +237,10 @@ export default {
 
 .proximity button:hover {
   background: var(--neutral-dark-gray);
+}
+
+.proximity-actions {
+  display: flex;
+  align-items: center;
 }
 </style>

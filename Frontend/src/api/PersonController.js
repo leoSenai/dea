@@ -16,5 +16,8 @@ export default {
   },
   update(data) {
     return axios.put(this.url + 'update', data)
+  },
+  resetPassword(data) {
+    return axios.put(this.url + 'reset-password', data)
   }
 }

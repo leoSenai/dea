@@ -10,6 +10,11 @@ func GetUserById(id int64) (user models.User, err error) {
 	return user, err
 }
 
+func GetUserByLogin(login string) (user models.User, err error) {
+	user, err = repository.GetUserByLogin(login)
+	return user, err
+}
+
 func GetAllUser() (user []models.User, err error) {
 	users, err := repository.GetAllUser()
 	return users, err

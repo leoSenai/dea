@@ -1,29 +1,32 @@
 <template>
-  <div
-    v-if="modelValue"
-    class="modal"
-  >
-    <q-card class="card">
-      <div
-        class="close-button"
-        @click="close"
-      >
-        <PhX
-          size="1rem"
-          color="black"
-        />
-      </div>
-      <h5 class="modal-title">
-        <slot name="modal-title" />
-      </h5>
-      <q-card-section class="modal-content">
-        <slot name="modal-content" />
-      </q-card-section>
-      <q-card-actions class="modal-actions">
-        <slot name="modal-actions" />
-      </q-card-actions>
-    </q-card>
-  </div>
+  <Transition :name="isMobile ? 'bottom-to-top' : 'bounce'">
+    <div
+      v-if="modelValue"
+      :class="['modal', isMobile ? 'mobile' : '']"
+    >
+      <q-card class="card">
+        <div
+          class="close-button"
+          @click="close"
+        >
+          <PhX
+            class="close-icon"
+            size="1.5rem"
+            color="black"
+          />
+        </div>
+        <h5 class="modal-title">
+          <slot name="modal-title" />
+        </h5>
+        <q-card-section class="modal-content">
+          <slot name="modal-content" />
+        </q-card-section>
+        <q-card-actions class="modal-actions">
+          <slot name="modal-actions" />
+        </q-card-actions>
+      </q-card>
+    </div>
+  </Transition>
 </template>
 <script>
 import { PhX } from '@phosphor-icons/vue';
@@ -39,6 +42,11 @@ export default {
     }
   },
   emits: ['update:modelValue', 'close'],
+  computed: {
+    isMobile() {
+      return this.$q.screen.xs || this.$q.screen.sm
+    }
+  },
   methods: {
     close() {
       this.$emit('update:modelValue', false)
@@ -65,7 +73,10 @@ export default {
   gap: 2rem;
 
   z-index: 1;
+}
 
+.modal.mobile {
+  padding: 0;
 }
 
 .card {
@@ -73,10 +84,17 @@ export default {
   display: flex;
   flex-direction: column;
   background: #fff;
-  height: calc(100vh - 13rem);
+  height: fit-content;
+  max-height: calc(100vh - 13rem);
   width: 100%;
   border-radius: 4px;
   padding: 1rem;
+}
+
+.mobile .card {
+  height: 100%;
+  border-radius: 0;
+
 }
 
 .close-button {
@@ -87,8 +105,6 @@ export default {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-radius: 99999px;
-  padding: .25rem;
 }
 
 .modal-content {
@@ -99,8 +115,13 @@ export default {
   flex: 1;
 }
 
-.close-button:hover {
+.close-button:hover .close-icon {
   background: rgba(0, 0, 0, .15);
+}
+
+.close-icon {
+  border-radius: 99999px;
+  padding: .25rem;
 }
 
 .modal-actions {
@@ -117,6 +138,7 @@ export default {
 
   .card {
     width: 70%;
+    border-radius: 15px;
   }
 }
 </style>

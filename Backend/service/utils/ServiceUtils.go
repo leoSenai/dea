@@ -18,3 +18,16 @@ func ConvertPersonDTOToPerson(personDto dtos.PersonDTO) models.Person {
 	}
 	return person
 }
+
+func ConvertPersonToPersonResultDto(person models.Person) dtos.PersonResultDTO {
+	personDto := dtos.PersonResultDTO{
+		IdPerson:  person.IdPerson,
+		Name:      person.Name,
+		BornDate:  person.BornDate,
+		DocNumber: person.DocNumber,
+		DocType:   person.DocType,
+		Email:     person.Email,
+		Phone:     person.Phone,
+	}
+	return personDto
+}

@@ -1,5 +1,18 @@
 import axios from 'axios';
 import Toastify from 'toastify-js';
+import Cookie from '../cookie';
+import router from '../router';
+
+axios.defaults.baseURL = import.meta.env.VITE_API_URL_DEV
+
+axios.interceptors.request.use(config => {
+  config.headers = {
+    Authorization: `; ${document.cookie}`.split('; authToken=').pop().split(';').shift()
+  }
+  return config
+}, (err) => {
+  return Promise.reject(err);
+})
 
 axios.interceptors.response.use((response) => {
   if (
@@ -9,7 +22,7 @@ axios.interceptors.response.use((response) => {
     !response.config.url.includes('question')
   ) {
     Toastify({
-      avatar: '/public/check-circle-fill.svg',
+      avatar: '/check-circle-fill.svg',
       text: response.data.message,
       duration: 3000,
       gravity: 'top',
@@ -26,33 +39,43 @@ axios.interceptors.response.use((response) => {
       },
       offset: {
         x: 0,
-        y: 65,
-      },
-    }).showToast();
-  } else if (response.status >= 400 && response.status < 600) {
-    Toastify({
-      avatar: '/public/x-circle-fill.svg',
-      text: response.data.message,
-      duration: 3000,
-      gravity: 'top',
-      position: 'right',
-      style: {
-        background:
-          'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
-        color: 'white',
-        boxShadow:
-          '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '.25rem',
-      },
-      offset: {
-        x: 0,
-        y: 65,
+        y: location.href.includes('login') ? 0 : 65,
       },
     }).showToast();
   }
   return response;
+}, ({ response }) => {
+  Toastify({
+    avatar: '/x-circle-fill.svg',
+    text: response && response.data ? response.data.message : 'Erro não identificado!',
+    duration: 3000,
+    gravity: 'top',
+    position: 'right',
+    style: {
+      background:
+        'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
+      color: 'white',
+      boxShadow:
+        '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '.25rem',
+    },
+    offset: {
+      x: 0,
+      y: location.href.includes('login') ? 0 : 65,
+    },
+  }).showToast();
+
+  if (response.status === 401 && !response.data.message.includes('Permissão Inválida')) {
+    Cookie.delete('authToken');
+    router.push('/login')
+  }else if(response.status === 401){
+    router.push('/')
+    return
+  }
+
+  return response ? response : { data: null };
 });
 
 export default axios;

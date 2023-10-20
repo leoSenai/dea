@@ -6,7 +6,10 @@
     color="primary"
     :outlined="outlined"
     :dark="dark"
+    :mask="mask"
+    :hint="hint"
     :rules="rulesComputed"
+    :type="isPwd ? 'password' : 'text'"
     @update:model-value="(current) => $emit('update:modelValue', current)"
   >
     <template #prepend>
@@ -23,13 +26,13 @@
     </template>
 
     <template #append>
+      <q-icon
+        v-if="password"
+        :name="isPwd ? 'visibility_off' : 'visibility'"
+        class="cursor-pointer"
+        @click="isPwd = !isPwd"
+      />
       <slot name="after-label" />
-    </template>
-
-    <template #error>
-      <span>
-        aaa
-      </span>
     </template>
   </q-input>
 </template>
@@ -64,11 +67,24 @@ export default {
       type: Array,
       default: () => [],
     },
+    hint: {
+      type: String,
+      default: '',
+    },
+    password: {
+      type: Boolean,
+      default: false,
+    },
+    format: {
+      type: String,
+      default: ''
+    }
   },
   emits: ['update:modelValue'],
   data() {
     return {
       model: this.modelValue,
+      isPwd: this.password,
     }
   },
   computed: {
@@ -83,6 +99,32 @@ export default {
         },
       ];
     },
+    mask() {
+      let mask;
+      switch (this.format) {
+        case 'cpf':
+          mask = '###.###.###-##'
+          break
+        case 'cnpj':
+          mask = '##.###.###/####-##'
+          break;
+        case 'phone':
+          mask = '(##) #####-####'
+          break;
+        default:
+          mask = ''
+          break;
+      }
+      return mask
+    }
+  },
+  watch: {
+    modelValue(newValue) {
+      this.model = newValue;
+    },
+    password(newValue) {
+      this.isPwd = newValue;
+    }
   },
 };
 </script>

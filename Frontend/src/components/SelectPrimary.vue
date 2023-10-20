@@ -8,6 +8,11 @@
     :behavior="$q.platform.is.ios === true ? 'dialog' : 'menu'"
     borderless
   >
+    <template #selected-item="{ opt }">
+      <div class="q-pl-md">
+        {{ opt }}
+      </div>
+    </template>
     <template #label>
       <span class="label">
         {{ label }}
@@ -63,12 +68,13 @@ export default {
   border-radius: 4px;
 }
 
-.select-input:hover{
+.select-input:hover {
   opacity: .8;
 }
 
 .label {
   margin-left: 1rem;
+  padding-left: 1rem;
 }
 
 .icon {
@@ -115,6 +121,7 @@ export default {
 :has(.option):hover {
   background: rgba(0, 0, 0, 0.1);
 }
+
 .label {
   color: var(--neutral-dark-gray);
 }
@@ -123,6 +130,7 @@ export default {
   .select-input {
     color: var(--neutral-white);
   }
+
   .option {
     color: var(--neutral-white);
     background: rgba(0, 0, 0, 0.8);

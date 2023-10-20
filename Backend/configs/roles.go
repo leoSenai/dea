@@ -1,7 +1,7 @@
 package configs
 
 var acessRoles = [][]string{
-	{"A", ("person/get-by-id;person/get-all;person/insert;person/update;person/get-by-doc;person/reset-password/;" +
+	{"A", ("person/get-by-id;person/get-all;person/insert;person/update;person/get-by-doc;person/reset-password;" +
 		"user/get-by-id;user/get-all;user/insert;user/update;cbo/get-by-id;cbo/get-all;cbo/insert;" +
 		"cbo/update;patient/get-by-id;patient/get-all;patient/insert;patient/update;doctor/get-by-id;doctor/get-all;" +
 		"doctor/insert;doctor/update;services/get-by-id;services/get-all;services/insert;services/update;" +
@@ -12,7 +12,7 @@ var acessRoles = [][]string{
 		"proximityhasquiz/get-by-id-patient;proximityhasquiz/get-by-id-person;proximityhasquiz/insert;proximityhasquiz/update;" +
 		"patienthasdoctor/get-by-patient-id;patienthasdoctor/get-by-doctor-id;patienthasdoctor/get-all;patienthasdoctor/insert")},
 
-	{"U", ("person/get-by-id;person/get-all;person/insert;person/update;person/get-by-doc;person/reset-password/;" +
+	{"U", ("person/get-by-id;person/get-all;person/insert;person/update;person/get-by-doc;person/reset-password;" +
 		"user/get-by-id;user/get-all;user/insert;user/update;cbo/get-by-id;cbo/get-all;cbo/insert;" +
 		"cbo/update;patient/get-by-id;patient/get-all;patient/insert;patient/update;doctor/get-by-id;doctor/get-all;" +
 		"doctor/insert;doctor/update;services/get-by-id;services/get-all;services/insert;services/update;" +

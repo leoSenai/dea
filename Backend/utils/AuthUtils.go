@@ -17,14 +17,16 @@ type Claims struct {
 	User     string
 	Username string
 	Typeuser string
+	UserId   int
 	jwt.StandardClaims
 }
 
-func GenerateTokenJWT(User string, Username string, typeuser string) (string, error) {
+func GenerateTokenJWT(User string, Username string, Typeuser string, UserId int) (string, error) {
 	claims := Claims{
 		User:     User,
 		Username: Username,
-		Typeuser: typeuser,
+		Typeuser: Typeuser,
+		UserId:   UserId,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
 		},

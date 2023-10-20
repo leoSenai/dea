@@ -18,6 +18,18 @@ func GetAnamneseById(id int64) (anamnese models.Anamnese, err error) {
 	return
 }
 
+func GetAnamneseByIdUserPatient(idUser int64, idPatient int64) (anamnese models.Anamnese, err error) {
+	conn, err := db.GetDB()
+	if err != nil {
+		return
+	}
+
+	row := conn.Where("usuario_idusuario = ? AND paciente_idpaciente = ?", idUser, idPatient).Find(&anamnese)
+	log.Printf("row: %v", row)
+
+	return
+}
+
 func GetAllAnamnese() (anamneses []models.Anamnese, err error) {
 	conn, err := db.GetDB()
 	if err != nil {

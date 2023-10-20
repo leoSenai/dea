@@ -73,6 +73,7 @@
 <script>
 import ButtonPrimary from '../components/ButtonPrimary.vue';
 import { PhPencil } from '@phosphor-icons/vue';
+import cookie from '../cookie';
 
 export default {
   components: {
@@ -189,6 +190,15 @@ export default {
             th.$api.PatientController.update(
                 th.model
             )
+            var idUser = cookie.getUserId(cookie.get('authToken'))
+            var idPatient = th.model.IdPatient
+            th.$api.AnamneseController.getByIdUserPatient({'IdUser': idUser, 'IdPatient': idPatient}).then((response)=>{
+                if(response.statusText==='No Content'){
+                    //Not Found so insert
+                }else{
+                    //Found so update
+                }
+            })
 
         },
         changePassword(id){

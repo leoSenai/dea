@@ -88,6 +88,7 @@ func main() {
 	r.Delete("/question/delete/{id}", utils.VerifyToken(controller.DeleteQuestionById))
 
 	r.Get("/anamnese/get-by-id/{id}", utils.VerifyToken(controller.GetAnamneseById))
+	r.Get("/anamnese/get-by-id-user-patient/{idUser}/{idPatient}", utils.VerifyToken(controller.GetAnamneseByIdUserPatient))
 	r.Get("/anamnese/get-all", utils.VerifyToken(controller.GetAllAnamnese))
 	r.Post("/anamnese/insert", utils.VerifyToken(controller.PostAnamnese))
 	r.Put("/anamnese/update", utils.VerifyToken(controller.PutAnamnese))

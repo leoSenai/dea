@@ -37,9 +37,9 @@ func PostLogin(w http.ResponseWriter, r *http.Request) {
 
 	var userInfo models.User
 
-	userInfo, err = service.GetUserByLogin(login.User)
+	userInfo, _ = service.GetUserByLogin(login.User)
 
-	token, err := utils.GenerateTokenJWT(login.User, userInfo.Name, userInfo.TypeUser)
+	token, _ := utils.GenerateTokenJWT(login.User, userInfo.Name, userInfo.TypeUser, userInfo.IdUser)
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Credenciais válidas!", token)
 }

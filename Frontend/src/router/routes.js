@@ -1,16 +1,21 @@
 import Home from '../views/HomeView.vue';
 import Login from '../views/LoginView.vue';
+import PatientView from '../views/Patient/PatientView.vue'
 import Header from '../components/HeaderPrimary.vue';
-import Quiz from '../views/QuizView.vue';
+import Patients from '../views/Patient/PatientsView.vue';
 import Proximity from '../views/Proximity/ProximityView.vue';
 import Users from '../views/users/UsersView.vue'
+import InputPrimary from '../components/InputPrimary.vue';
 import NotFound from '../views/NotFoundView.vue';
-import { PhUsers, PhArticle } from '@phosphor-icons/vue';
-//import Cookie from '../cookie';
+import Quiz from '../views/quiz/QuizView.vue';
+
+import { PhUserList, PhUsers } from '@phosphor-icons/vue';
+import { PhArticle } from '@phosphor-icons/vue';
 
 const links = [
   { path: '/usuarios', name: 'Usuários', icon: PhUsers },
   { path: '/questionarios', name: 'Questionários', icon: PhArticle },
+  { path: '/pacientes', name: 'Pacientes', icon: PhUserList}
 ];
 
 export const routes = [
@@ -18,6 +23,16 @@ export const routes = [
     path: '/',
     components: {
       default: Home,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+  },
+  {
+    path: '/pacienteInfo',
+    components: {
+      default: PatientView,
       header: Header,
     },
     props: {
@@ -69,6 +84,28 @@ export const routes = [
     props: {
       header: { links },
     }
+  },
+  {
+    path: '/pacientes',
+    components: {
+      default: Patients,
+      header: Header,
+      input: InputPrimary
+    },
+    props: {
+      header: { links },
+    },
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    components: {
+      default: NotFound,
+      header: Header,
+      input: InputPrimary
+    },
+    props: {
+      header: { links },
+    },
   },
   {
     path: '/:pathMatch(.*)*',

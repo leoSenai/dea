@@ -1,89 +1,106 @@
 <template>
-  <div class="proximity-content">
-    <div class="proximity-title">
+  <div>
+    <div>
+      <div
+        class="btnVoltar"
+        onclick="window.history.back()"
+      >
+        <svg
+          class="go-back"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 129 129"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          enable-background="new 0 0 129 129"
+        >
+          <g>
+            <path
+              d="m88.6,121.3c0.8,0.8 1.8,1.2 2.9,1.2s2.1-0.4 2.9-1.2c1.6-1.6 1.6-4.2 0-5.8l-51-51 51-51c1.6-1.6 1.6-4.2 0-5.8s-4.2-1.6-5.8,0l-54,53.9c-1.6,1.6-1.6,4.2 0,5.8l54,53.9z"
+            />
+          </g>
+        </svg>
+        <span>Voltar</span>
+      </div>
+    </div>
+    <div class="proximity-content">
+      <div class="proximity-title">
+        <div class="title">
+          <h4>Pessoas próximas de {{ patientModel.Name }}</h4>
+        </div>
+        <div
+          v-if="!isMobile"
+          class="title-add-proximity"
+        >
+          <button
+            type="button"
+            @click="openAddEditModal()"
+          >
+            Adicionar
+            <PhPlus />
+          </button>
+        </div>
+      </div>
+      <div
+        v-if="model.hasError"
+        class="error proximity"
+      >
+        {{ model.message }}
+      </div>
+      <div
+        v-for="proximity in model.data"
+        v-else
+        :key="proximity.Idproximity"
+        class="row proximity"
+      >
+        <p>
+          {{ proximity.Name }}
+        </p>
+        <div class="proximity-actions">
+          <button
+            type="button"
+            @click="resetPassword(proximity)"
+          >
+            <q-tooltip>
+              Redefinir Senha
+            </q-tooltip>
+            <PhFingerprintSimple />
+          </button>
+          <button
+            type="button"
+            @click="openAddEditModal(proximity)"
+          >
+            <PhPencil />
+          </button>
+        </div>
+      </div>
       <div
         v-if="isMobile"
-        class="title-go-back"
-      >
-        <button
-          type="button"
-          @click="goBack()"
-        >
-          <PhCaretLeft />
-        </button>
-      </div>
-      <div class="title">
-        <h4>Pessoas próximas de jorginho</h4>
-      </div>
-      <div
-        v-if="!isMobile"
-        class="title-add-proximity"
+        class="add-proximity"
       >
         <button
           type="button"
           @click="openAddEditModal()"
         >
-          Adicionar
           <PhPlus />
         </button>
       </div>
     </div>
-    <div
-      v-if="model.hasError"
-      class="error proximity"
-    >
-      {{ model.message }}
-    </div>
-    <div
-      v-for="proximity in model.data"
-      v-else
-      :key="proximity.Idproximity"
-      class="row proximity"
-    >
-      <p>
-        {{ proximity.Name }}
-      </p>
-      <div class="proximity-actions">
-        <button
-          type="button"
-          @click="resetPassword(proximity)"
-        >
-          <q-tooltip>
-            Redefinir Senha
-          </q-tooltip>
-          <PhFingerprintSimple />
-        </button>
-        <button
-          type="button"
-          @click="openAddEditModal(proximity)"
-        >
-          <q-tooltip>
-            Editar
-          </q-tooltip>
-          <PhPencil />
-        </button>
-      </div>
-    </div>
-    <div
-      v-if="isMobile"
-      class="add-proximity"
-    >
-      <button
-        type="button"
-        @click="openAddEditModal()"
-      >
-        <PhPlus />
-      </button>
-    </div>
+    <ProximityAddEditModal
+      ref="addEdit"
+      @close="load"
+    />
   </div>
-  <ProximityAddEditModal
-    ref="addEdit"
-    @close="load"
-  />
 </template>
 <script>
 import { PhPlus, PhPencil, PhCaretLeft, PhFingerprintSimple } from '@phosphor-icons/vue';
 import ProximityAddEditModal from './ProximityAddEditModal.vue';
+
+/* 
+
+DESC: Mostra as pessoas próximas do paciente, assim como
+suas informações, e há a possibilidade de editar as informações.
+
+*/
 
 export default {
   components: {
@@ -98,17 +115,20 @@ export default {
       model: {
         data: [],
         hasError: false,
-        message: ''
+        message: '',
       },
-    }
+      patientModel: {
+        Name: '',
+      }
+    };
   },
   computed: {
     isMobile() {
-      return this.$q.screen.xs || this.$q.screen.sm
+      return this.$q.screen.xs || this.$q.screen.sm;
     },
     patientId() {
-      return this.$router.currentRoute.value.params.id
-    }
+      return this.$router.currentRoute.value.params.id;
+    },
   },
   mounted() {
     this.load();
@@ -116,12 +136,18 @@ export default {
   methods: {
     load() {
       const th = this;
-      th.$api.ProximityController.getPersonsByIdPatient(th.patientId).then(({ data }) => {
-        th.model = data
+      th.$api.ProximityController.getPersonsByIdPatient(th.patientId).then(
+        ({ data }) => {
+          th.model = data;
+        }
+      );
+      th.$api.PatientController.getById(th.patientId).then((response) => {
+        console.log(response)
+        th.patientModel.Name = response.data.data.Name
       })
     },
     openAddEditModal(current) {
-      this.$refs.addEdit.openModal(current)
+      this.$refs.addEdit.openModal(current);
     },
     goBack() {
       this.$router.push('/paciente/id')
@@ -130,15 +156,33 @@ export default {
       this.$api.PersonController.resetPassword({ IdPerson, Email })
     }
   },
-}
+};
 </script>
 <style>
+.go-back {
+  width: auto;
+  margin-right: 5px;
+  height: 18px;
+}
+
+.btnVoltar {
+  margin-left: 1em;
+  margin-top: 1em;
+  margin-bottom: 10px;
+  width: fit-content;
+  border-radius: 15px;
+  padding: 10px;
+  display: flex;
+  background-color: var(--primary);
+  cursor: pointer;
+}
+
 .proximity-content {
-  padding: 3rem 1.5rem;
+  padding: 0rem 1.5rem;
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: .75rem;
+  gap: 0.75rem;
 }
 
 .proximity-title {
@@ -154,9 +198,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: .2s;
-  gap: .5rem;
-  padding: .5rem 1rem;
+  transition: 0.2s;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
   cursor: pointer;
 }
 
@@ -202,7 +246,7 @@ export default {
   justify-content: center;
   width: 3rem;
   height: 3rem;
-  transition: .2s;
+  transition: 0.2s;
 }
 
 .add-proximity button:hover {
@@ -219,6 +263,10 @@ export default {
   align-items: center;
 }
 
+.proximity:hover {
+  background-color: rgba(200, 255, 172, 0.041);
+}
+
 .proximity p {
   margin: 0;
 }
@@ -227,11 +275,11 @@ export default {
   border: none;
   background: none;
   cursor: pointer;
-  padding: .5rem;
+  padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: .1s;
+  transition: 0.1s;
   border-radius: 9999px;
 }
 
@@ -242,5 +290,4 @@ export default {
 .proximity-actions {
   display: flex;
   align-items: center;
-}
-</style>
+}</style>

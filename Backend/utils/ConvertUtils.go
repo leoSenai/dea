@@ -15,6 +15,7 @@ func ConvertPersonDTOToPerson(personDto dtos.PersonDTO) models.Person {
 		Password:  personDto.Password,
 		Salt:      personDto.Salt,
 		Email:     personDto.Email,
+		Phone:     personDto.Phone,
 	}
 	return person
 }

@@ -10,6 +10,11 @@ func GetAnamneseById(id int64) (anamnese models.Anamnese, err error) {
 	return anamnese, err
 }
 
+func GetAnamneseByIdUserPatient(idUser int64, idPatient int64) (anamnese models.Anamnese, err error) {
+	anamnese, err = repository.GetAnamneseByIdUserPatient(idUser, idPatient)
+	return anamnese, err
+}
+
 func GetAllAnamnese() (anamnese []models.Anamnese, err error) {
 	anamneses, err := repository.GetAllAnamnese()
 	return anamneses, err

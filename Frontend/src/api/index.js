@@ -8,6 +8,8 @@ import ServicesController from './ServicesController'
 import ProximityController from './ProximityController'
 import ProximityHasQuizController from './ProximityHasQuizController'
 import PersonController from './PersonController'
+import PatientController from './PatientController'
+import AnamneseController from './AnamneseController'
 
 export default {
   install: (app, options) => {
@@ -21,7 +23,9 @@ export default {
       ServicesController,
       ProximityController,
       ProximityHasQuizController,
-      PersonController
+      PersonController,
+      PatientController,
+      AnamneseController
     }
     app.provide('api', options)
   },

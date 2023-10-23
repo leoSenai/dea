@@ -27,7 +27,6 @@ func GetPersonById(id int64) (person models.Person, err error) {
 
 func PostPerson(person models.Person) (models.Person, error) {
 	conn, err := db.GetDB()
-
 	if err != nil {
 		return person, err
 	}

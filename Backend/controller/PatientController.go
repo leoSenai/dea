@@ -37,6 +37,7 @@ func GetPatientById(w http.ResponseWriter, r *http.Request) {
 	var patientDto dtos.PatientDTO = dtos.PatientDTO{
 		IdPatient: patient.IdPatient,
 		Name:      patient.Name,
+		Email:     patient.Email,
 		Cpf:       patient.Cpf,
 		Address:   patient.Address,
 		Phone:     patient.Phone,

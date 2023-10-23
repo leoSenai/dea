@@ -4,7 +4,7 @@
     @close="closeModal"
   >
     <template #modal-title>
-      {{ model && model.IdQuiz ? 'Editar' : 'Cadastrar' }} Usuário
+      {{ model && model.IdUser ? 'Editar' : 'Cadastrar' }} Usuário
     </template>
     <template #modal-content>
       <q-form ref="form">

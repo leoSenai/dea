@@ -154,6 +154,9 @@
       color: var(--neutral-white) !important;
       background-color: #242424;
   }
+  .go-back g path{
+    fill: white;
+  }
   .card{
     background-color: #242424 !important;
     color: #fff;
@@ -175,11 +178,17 @@
   .card .interval-field{
     background-color: #00000033;
   }
+  .q-icon.cursor-pointer, .q-icon.q-select__dropdown-icon{
+    color: white !important;
+  }
   .title-add-quiz button{
     color: #fff;
   }
   .close-button svg{
     fill: #fff !important;
+  }
+  .q-field__messages.col{
+    color: rgba(255, 255, 255, 0.644) !important;
   }
 }
 
@@ -187,6 +196,64 @@
   :root {
       color: var(--neutral-black) !important;
       background-color: #fff;
+  }
+  .q-icon.cursor-pointer, .q-icon.q-select__dropdown-icon{
+    color: black !important;
+  }
+  .go-back g path{
+    fill: black;
+  }
+  .patientView-header{
+    background-color: #fff !important;
+  }
+  section{
+    background-color: #fff !important;
+  }
+  .nextPersonView{
+    background-color: #fff !important;
+  }
+  .q-field__messages.col{
+    color: black !important;
+  }
+  .nextPersonView:hover{
+    background-color: #e2ffe4 !important;
+  }
+  .textarea{
+    background-color: rgba(255, 255, 255, 0.671) !important;
+  }
+  .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input{
+    color: black !important;
+  }
+  .login-form .q-field__native.q-placeholder, .q-field__prefix, .q-field__suffix, .q-field__input{
+    color: white !important;
+  }
+
+  .q-field__label.no-pointer-events.absolute.ellipsis{
+    color: rgba(0, 0, 0, 0.678);
+  }
+  .btnVoltar{
+    color: white !important; 
+  }
+  .go-back g path{
+    fill: white !important;
+  }
+  .editBtn{
+    color: white !important;
+  }
+  .gerar-laudo{
+    color: white !important
+  }
+  .info-patients button{
+    color: white !important;
+  }
+  .inputEditable{
+    background-color: #e3ffe575 !important;
+  }
+  .select-quasar{
+    background-color: #e3ffe575 !important;
+  }
+  .q-menu.q-position-engine.scroll.q-menu--square{
+    background-color: rgb(222, 231, 233) !important;
   }
   .card{
     background-color: #fff !important;
@@ -203,13 +270,26 @@
   .card button{
     color: #f7feffd5;
   }
+  .title-add-user button{
+    color: white;
+  }
   .card .q-field__control{
     background-color: #f5fbffdc;
   }
   .card .interval-field{
     background-color: #f5fbffdc;
   }
+  .card .col.q-ml-sm .q-field.q-select{
+    border: 1px solid #000;
+    border-radius: 4px;
+  }
   .title-add-quiz button{
     color: #fff;
+  }
+  .title-add-proximity button{
+    color: white;
+  }
+  .proximity:hover, .user:hover, .quiz:hover, .patients-list:hover{
+    background-color: rgba(176, 253, 193, 0.151) !important;
   }
 }

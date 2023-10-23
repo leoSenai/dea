@@ -60,11 +60,13 @@
         </div>
         <div class="row">
           <input-primary
+            :disable="descPersonDisabled"
             v-model="model.DescPerson"
             label="Descreva a proximidade da pessoa para paciente"
             label-color="primary"
             type="textarea"
             autogrow
+            
           />
         </div>
       </q-form>
@@ -117,9 +119,11 @@ export default {
   data() {
     return {
       show: false,
+      descPersonDisabled: false,
       model: {
         IdPerson: 0,
         Name: '',
+        Phone: '',
         BornDate: '',
         DocNumber: '',
         DocType: '',
@@ -146,12 +150,14 @@ export default {
         current.BornDate = current.BornDate.split('-').reverse().join('/')
         th.model = current
       }
+      th.descPersonDisabled = th.model.IdPerson ? true : false
     },
     closeModal() {
       this.show = false;
       this.model = {
         IdPerson: 0,
         Name: '',
+        Phone: '',
         BornDate: '',
         DocNumber: '',
         DocType: '',
@@ -164,11 +170,11 @@ export default {
     },
     createPerson() {
       const th = this;
-      const BornDate = th.model.BornDate.split('/').reverse().join('-')
+      th.model.BornDate = th.model.BornDate.split('/').reverse().join('-')
       const DocNumber = th.model.DocNumber.replaceAll('.', '').replaceAll('-', '').replaceAll('/', '')
       th.$api.PersonController.getByDoc(DocNumber).then(({ data }) => {
         if (!data.data) {
-          th.$api.PersonController.insert({ ...th.model, IdPatient: +th.IdPatient, BornDate, DocNumber }).then(() => {
+          th.$api.PersonController.insert({ ...th.model, IdPatient: +th.IdPatient}).then(() => {
             th.closeModal()
           })
         } else {
@@ -178,9 +184,10 @@ export default {
     },
     updatePerson() {
       const th = this;
-      const BornDate = th.model.BornDate.split('/').reverse().join('-')
-      const DocNumber = th.model.DocNumber.replaceAll('.', '').replaceAll('-', '').replaceAll('/', '')
-      th.$api.PersonController.update({ ...th.model, IdPatient: +th.IdPatient, BornDate, DocNumber }).then(() => {
+      th.model.BornDate = th.model.BornDate.split('/').reverse().join('-')
+      th.model.DocNumber = th.model.DocNumber.replaceAll('.', '').replaceAll('-', '').replaceAll('/', '')
+      const modelPerson = th.model
+      th.$api.PersonController.update({ ...modelPerson, IdPatient: +th.IdPatient}).then(() => {
         th.closeModal()
       })
     },

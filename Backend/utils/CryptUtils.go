@@ -21,6 +21,21 @@ func GenerateEncryptedPassword(password string) (encryptedPassword string, salt 
 	return encryptedPassword, salt
 }
 
+func GenerateRandomPassword(length int) (string, error) {
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" // Caracteres permitidos
+	randomBytes := make([]byte, length)
+	_, err := rand.Read(randomBytes)
+	if err != nil {
+		return "", err
+	}
+
+	for i := 0; i < length; i++ {
+		randomBytes[i] = charset[int(randomBytes[i])%len(charset)]
+	}
+
+	return string(randomBytes), nil
+}
+
 func IsPasswordValid(login string, password string) (isValid bool) {
 	conn, err := db.GetDB()
 	if err != nil {
@@ -40,6 +55,8 @@ func IsPasswordValid(login string, password string) (isValid bool) {
 	sha256o.Write([]byte(passwordSalted))
 	encryptedPassword := hex.EncodeToString(sha256o.Sum(nil))
 
+	print("Teste: 1 " + user.Password)
+	print("Teste: 2 " + encryptedPassword)
 	if encryptedPassword == user.Password {
 		return true
 	} else {

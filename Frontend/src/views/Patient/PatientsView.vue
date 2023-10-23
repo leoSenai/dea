@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import buttonPrimary from '../components/ButtonPrimary.vue';
+import buttonPrimary from '../../components/ButtonPrimary.vue';
 import { PhPlus, PhPencil } from '@phosphor-icons/vue';
 import PatientsAddEditModal from './PatientsAddEditModal.vue';
 
@@ -66,10 +66,10 @@ export default {
       this.$refs.addEdit.openModal(current)
     },
     openViewPatient(id){
-      this.$router.push('/pacienteInfo?id='+id)
+      this.$router.push('pacienteInfo?id='+id)
     },
     openEditPatient(id){
-      this.$router.push('/pacienteInfo?id='+ id +'&edit=true')
+      this.$router.push('pacienteInfo?id='+ id +'&edit=true')
     }
   }
 };

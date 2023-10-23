@@ -148,10 +148,10 @@
 </template>
 
 <script>
-import ModalPrimary from '../components/ModalPrimary.vue';
-import InputPrimary from '../components/InputPrimary.vue';
-import ButtonPrimary from '../components/ButtonPrimary.vue';
-import SelectPrimary from '../components/SelectPrimary.vue';
+import ModalPrimary from '../../components/ModalPrimary.vue';
+import InputPrimary from '../../components/InputPrimary.vue';
+import ButtonPrimary from '../../components/ButtonPrimary.vue';
+import SelectPrimary from '../../components/SelectPrimary.vue';
 
 export default {
     components: {

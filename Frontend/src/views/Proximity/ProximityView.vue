@@ -214,6 +214,10 @@ export default {
   align-items: center;
 }
 
+.proximity:hover {
+  background-color: rgba(200, 255, 172, 0.041);
+}
+
 .proximity p {
   margin: 0;
 }

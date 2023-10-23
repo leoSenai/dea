@@ -71,9 +71,9 @@
     </div>
 </template>
 <script>
-import ButtonPrimary from '../components/ButtonPrimary.vue';
+import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import { PhPencil } from '@phosphor-icons/vue';
-import cookie from '../cookie';
+import cookie from '../../cookie';
 
 /*
 

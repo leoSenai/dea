@@ -185,7 +185,5 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")
 	}
 
-	// TODO: Send Email
-
 	utils.ReturnResponseJSON(w, http.StatusOK, "Senha recriada com sucesso!", hasReseted)
 }

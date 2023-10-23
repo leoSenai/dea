@@ -4,7 +4,7 @@ import (
 	"api/models"
 	"api/models/dtos"
 	"api/repository"
-	"api/service/utils"
+	"api/utils"
 	"fmt"
 )
 
@@ -95,10 +95,24 @@ func ResetPassword(personResetPassword dtos.PersonResetPasswordDTO) (isReseted b
 		return false, err
 	}
 
-	err = repository.ResetPassword(person)
+	password, err := utils.GenerateRandomPassword(8)
+
+	person.Password = password
+
+	err = repository.PutPerson(person)
 
 	if err != nil {
 		return false, err
+	}
+
+	to := person.Email
+
+	subject := "DEA - Nova senha de acesso"
+	body := "Sua nova senha: " + password + "\n\n"
+
+	err = utils.SendEmail(to, subject, body)
+	if err != nil {
+		return false, fmt.Errorf("erro ao enviar e-mail de reset de senha do paciente")
 	}
 
 	return true, nil

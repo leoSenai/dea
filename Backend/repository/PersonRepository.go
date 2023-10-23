@@ -119,27 +119,3 @@ func GetPersonByDocNumber(docNumber string) (person models.Person, err error) {
 
 	return person, nil
 }
-
-func ResetPassword(person models.Person) error {
-	conn, err := db.GetDB()
-
-	if err != nil {
-		return err
-	}
-
-	passwordEncrypted, salt := utils.GenerateEncryptedPassword(person.Password)
-	person.Password = passwordEncrypted
-	person.Salt = salt
-
-	result := conn.Where("idpessoa = ?", person.IdPerson).Updates(person)
-
-	if result.Error != nil {
-		return result.Error
-	}
-
-	if result.RowsAffected == 0 {
-		return fmt.Errorf("Nenhum dado foi atualizado")
-	}
-
-	return nil
-}

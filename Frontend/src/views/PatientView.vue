@@ -1,7 +1,7 @@
 <template>
     <div class="patient-content">
         <div class="patientView-content">
-            <div class="btnVoltar" onclick="window.history.back()">
+            <div class="btnVoltar" @click="goBack()">
                 <svg class="go-back" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129">
                     <g>
                         <path d="m88.6,121.3c0.8,0.8 1.8,1.2 2.9,1.2s2.1-0.4 2.9-1.2c1.6-1.6 1.6-4.2 0-5.8l-51-51 51-51c1.6-1.6 1.6-4.2 0-5.8s-4.2-1.6-5.8,0l-54,53.9c-1.6,1.6-1.6,4.2 0,5.8l54,53.9z"/>
@@ -47,7 +47,7 @@
             </div>
         </div>
         <section>
-            <button-primary class="nextPersonView">Ver pessoas próximas
+            <button-primary @click="showNextPersons()" class="nextPersonView">Ver pessoas próximas
                 <svg class="goNext" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129">
                     <g>
                         <path d="m88.6,121.3c0.8,0.8 1.8,1.2 2.9,1.2s2.1-0.4 2.9-1.2c1.6-1.6 1.6-4.2 0-5.8l-51-51 51-51c1.6-1.6 1.6-4.2 0-5.8s-4.2-1.6-5.8,0l-54,53.9c-1.6,1.6-1.6,4.2 0,5.8l54,53.9z"/>
@@ -60,7 +60,7 @@
                 class="textarea"
                 label="Escreva a anamnese"
                 type="textarea"
-                v-model="anamneseText"
+                v-model="anamneseModel.Notes"
                 :rows="15"
             />
             <q-checkbox v-model="analiseConclusiva" class="analiseConclusiva">Análise conclusiva</q-checkbox>
@@ -75,11 +75,20 @@ import ButtonPrimary from '../components/ButtonPrimary.vue';
 import { PhPencil } from '@phosphor-icons/vue';
 import cookie from '../cookie';
 
+/*
+
+DESC: Esta página mostra as informações dos pacientes mais detalhadamente,
+assim como sua anamnese, a qual é salva junto ao editar as informações do paciente.
+Também tem a função de ver aspessoas próximas do paciente, quando clicado em ver
+pessoas próximas, abre a tela de ProximityView.
+
+*/
+
 export default {
   components: {
     ButtonPrimary,
     PhPencil,
-  },
+},
   data() {
       return{
             opcoesSimNao: ['Sim', 'Não'],
@@ -101,11 +110,17 @@ export default {
                 Cid10: null,
                 Active: null,
             },
+            anamneseModel: {
+                IdAnamnese: null,
+                IdPatient: null,
+                IdUser: null,
+                Notes: '',
+                Indicative: 0,
+            },
             campoAnamneseDesabilitado: false,
-            anamneseText: '',
         }
     },
-    mounted() {
+    mounted() { 
 
         const th = this;
       
@@ -127,6 +142,7 @@ export default {
 
         // Obtendo o valor do parâmetro 'id'
         const id = params['id'];
+        th.model.IdPatient= id
 
         // Obtendo o valor do parâmetro 'edit'
         const edit = params['edit'];
@@ -151,6 +167,23 @@ export default {
             th.model = data.data
             th.opcaoNewBorn = th.model.NewBorn==1 ? 'Sim' : 'Não';
             th.opcaoAtivo = th.model.Active=='1' ? 'Sim' : 'Não';
+        })
+
+        var idUser = cookie.getUserId(cookie.get('authToken'))
+        th.$api.AnamneseController.getByIdUserPatient({'IdUser': idUser, 'IdPatient': id}).then((response)=>{
+            if(response.statusText!=='No Content'){
+                //Found so update
+                var data = response.data.data
+
+                //Bind the anamnese object
+                th.anamneseModel.Notes = data.Notes
+                th.anamneseModel.IdAnamnese = data.IdAnamnese
+                th.anamneseModel.IdPatient = data.IdPatient
+                th.anamneseModel.IdUser = data.IdUser
+                if(data.Indicative !== 0){
+                    th.campoAnamneseDesabilitado = true
+                }
+            }
         })
 
     },
@@ -180,6 +213,9 @@ export default {
                 document.getElementsByClassName('patientView-header')[0].style.display = 'flex'
 
                 this.savePatientData()
+                if(this.campoAnamneseDesabilitado==false){
+                    this.saveAnamnese()
+                }
 
             }
 
@@ -190,16 +226,13 @@ export default {
             th.$api.PatientController.update(
                 th.model
             )
-            var idUser = cookie.getUserId(cookie.get('authToken'))
-            var idPatient = th.model.IdPatient
-            th.$api.AnamneseController.getByIdUserPatient({'IdUser': idUser, 'IdPatient': idPatient}).then((response)=>{
-                if(response.statusText==='No Content'){
-                    //Not Found so insert
-                }else{
-                    //Found so update
-                }
-            })
 
+        },
+        saveAnamnese(){
+            const th = this
+            th.anamneseModel.IdPatient = th.model.IdPatient
+            th.anamneseModel.IdUser = cookie.getUserId(cookie.get('authToken'))
+            th.$api.AnamneseController.update(th.anamneseModel)
         },
         changePassword(id){
             alert(id+' - FUTURA IMPLEMENTACAO')
@@ -213,8 +246,7 @@ export default {
             }
         },
         gerarLaudo(){
-            const th = this
-            alert(th.model.Active)
+            //const th = this
         },
         changeAtivoValue(){
             const th = this
@@ -223,7 +255,17 @@ export default {
             }else{
                 th.model.Active = 0
             }
-        }
+        },
+        showNextPersons(){
+            
+            this.$router.push('/paciente/'+this.model.IdPatient+'/pessoas-proximas')
+
+        },
+        goBack(){
+            var contentElement = document.getElementsByClassName('content')[0];
+            contentElement.style.overflow = 'hidden';
+            window.history.back()
+        }  
     },
 };
 </script>

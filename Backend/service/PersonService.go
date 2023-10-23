@@ -13,13 +13,14 @@ func GetPersonById(id int64) (person models.Person, err error) {
 	return person, err
 }
 
-func GetPersonNoPasswordById(id int64) (personResultDto dtos.PersonResultDTO, err error) {
+func GetPersonNoPasswordById(id int64, desc string) (personResultDto dtos.PersonResultDTO, err error) {
 	person, err := repository.GetPersonById(int64(id))
 	if err != nil {
 		return personResultDto, err
 	}
 
 	personResultDto = utils.ConvertPersonToPersonResultDto(person)
+	personResultDto.DescPerson = desc
 	return personResultDto, nil
 }
 
@@ -72,13 +73,13 @@ func PutPerson(personUpdate dtos.PersonDTO) (err error) {
 		return err
 	}
 
-	if personUpdate.IdPatient != 0 && personUpdate.DescPerson != "" {
+	/*if personUpdate.IdPatient != 0 && personUpdate.DescPerson != "" {
 		proximity := models.Proximity{IdPatient: personUpdate.IdPatient, IdPerson: personUpdate.IdPerson, Desc: personUpdate.DescPerson}
-		err = repository.PostProximity(proximity)
+		err = repository.PutProximity(proximity)
 		if err != nil {
 			return fmt.Errorf("Não foi possivel cadastrar a proximidade!")
 		}
-	}
+	}*/
 
 	return
 }

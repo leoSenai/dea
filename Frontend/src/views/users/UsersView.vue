@@ -170,9 +170,14 @@
     padding: 1rem;
     border-radius: 4px;
     display: flex;
+    cursor:text;
     justify-content: space-between;
     align-items: center;
   }
+
+  .user:hover{
+  background-color: rgba(200, 255, 172, 0.041);
+}
   
   .user p {
     margin: 0;

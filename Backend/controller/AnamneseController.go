@@ -122,7 +122,12 @@ func PutAnamnese(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	anamnese, err = service.PutAnamnese(anamnese)
+	if anamnese.IdAnamnese == 0 {
+		anamnese, err = service.PostAnamnese(anamnese)
+	} else {
+		anamnese, err = service.PutAnamnese(anamnese)
+	}
+
 	if err != nil {
 
 		log.Printf("Cannot do Put: %s", err.Error())

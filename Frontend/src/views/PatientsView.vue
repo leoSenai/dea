@@ -92,7 +92,9 @@ export default {
 
 .patients {
   height: 89.5vh;
-  width: 965px;
+  width: 100%;
+  padding: 2rem;
+  padding-top: 0;
   margin-top: 5rem;
 }
 
@@ -101,11 +103,16 @@ export default {
 }
 
 .patients-list {
-  border: 0.094rem solid var(--neutral-dark-gray);
+  border: 1px solid;
   width: 100%;
   border-radius: 0.25rem;
+  padding: 0.5rem;
   display: flex;
   justify-content: space-between;
+}
+
+.patients-list:hover{
+  background-color: rgba(200, 255, 172, 0.041);
 }
 
 .patients-list span{
@@ -113,6 +120,7 @@ export default {
   cursor: pointer;
   padding: 15px;
   font-size: 1.25rem;
+  font-weight: 300;
 }
 
 .btn-modal {
@@ -135,8 +143,13 @@ export default {
     margin-top: 0rem;
   }
 
-  .info-patients {
+  .info-patients button{
     display: none;
+  }
+
+  .info-patients .patients-title{
+    padding-left: 2rem;
+    margin-top: 4%;
   }
 
   .patients-content {

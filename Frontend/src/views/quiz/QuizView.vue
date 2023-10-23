@@ -162,7 +162,6 @@ export default {
 
 .add-quiz button:hover {
   filter: brightness(0.8);
-  cursor: pointer;
 }
 
 .quiz {
@@ -170,8 +169,13 @@ export default {
   padding: 1rem;
   border-radius: 4px;
   display: flex;
+  cursor:text;
   justify-content: space-between;
   align-items: center;
+}
+
+.quiz:hover{
+  background-color: rgba(200, 255, 172, 0.041);
 }
 
 .quiz p {

@@ -58,7 +58,7 @@ func GetPersonProximityAllByIdPatient(id int64) (persons []dtos.PersonResultDTO,
 	}
 
 	for _, proximity := range proximitys {
-		person, err := GetPersonNoPasswordById(proximity.IdPerson)
+		person, err := GetPersonNoPasswordById(proximity.IdPerson, proximity.Desc)
 		if err != nil || person.IdPerson == 0 {
 			return nil, fmt.Errorf("Erro ao buscar pessoa relacionada!")
 		}

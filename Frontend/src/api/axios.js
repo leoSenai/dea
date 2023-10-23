@@ -39,7 +39,7 @@ axios.interceptors.response.use((response) => {
       },
       offset: {
         x: 0,
-        y: location.href.includes('login') ? 0 : 65,
+        y: 70,
       },
     }).showToast();
   }

@@ -60,13 +60,12 @@
         </div>
         <div class="row">
           <input-primary
-            :disable="descPersonDisabled"
             v-model="model.DescPerson"
+            :disable="descPersonDisabled"
             label="Descreva a proximidade da pessoa para paciente"
             label-color="primary"
             type="textarea"
             autogrow
-            
           />
         </div>
       </q-form>

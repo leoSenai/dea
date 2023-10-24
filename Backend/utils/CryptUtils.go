@@ -3,6 +3,7 @@ package utils
 import (
 	"api/db"
 	"api/models"
+	"api/models/dtos"
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
@@ -36,13 +37,13 @@ func GenerateRandomPassword(length int) (string, error) {
 	return string(randomBytes), nil
 }
 
-func IsPasswordValid(login string, password string) bool {
+func IsPasswordValid(login string, password string) (string, bool) {
 	conn, err := db.GetDB()
 	if err != nil {
-		return false
+		return "", false
 	}
 
-	var userDynamic UserDynamic
+	var userDynamic dtos.UserDynamic
 	var userFound, personFound, patientFound bool
 
 	var userVerify models.User
@@ -59,28 +60,37 @@ func IsPasswordValid(login string, password string) bool {
 		if !personFound {
 			patientFound = conn.First(&patient, "email = ? OR telefone = ?", userVerify.Name, userVerify.Name).Error == nil
 			if !patientFound {
-				return false
+				return "", false
 			}
-			userDynamic = UserDynamic{
+			userDynamic = dtos.UserDynamic{
+				Id:       int(patient.IdPatient),
 				Email:    patient.Email,
 				Phone:    patient.Phone,
 				Password: patient.Password,
 				Salt:     patient.Salt,
+				Name:     patient.Name,
+				TypeUser: "PA",
 			}
 		} else {
-			userDynamic = UserDynamic{
+			userDynamic = dtos.UserDynamic{
+				Id:       int(person.IdPerson),
 				Email:    person.Email,
 				Phone:    person.Phone,
 				Password: person.Password,
 				Salt:     person.Salt,
+				Name:     person.Name,
+				TypeUser: "PR",
 			}
 		}
 	} else {
-		userDynamic = UserDynamic{
+		userDynamic = dtos.UserDynamic{
+			Id:       user.IdUser,
 			Email:    user.Email,
 			Phone:    user.Phone,
 			Password: user.Password,
 			Salt:     user.Salt,
+			Name:     user.Name,
+			TypeUser: user.TypeUser,
 		}
 	}
 
@@ -90,7 +100,9 @@ func IsPasswordValid(login string, password string) bool {
 	sha256o.Write([]byte(passwordSalted))
 	encryptedPassword := hex.EncodeToString(sha256o.Sum(nil))
 
-	return encryptedPassword == userDynamic.Password
+	token, err := GenerateTokenJWT(userDynamic.Email, userDynamic.Name, userDynamic.TypeUser, userDynamic.Id)
+
+	return token, encryptedPassword == userDynamic.Password
 }
 
 func generateSalt() (salt string) {
@@ -100,11 +112,4 @@ func generateSalt() (salt string) {
 	salt = hex.EncodeToString(saltByte)
 
 	return salt
-}
-
-type UserDynamic struct {
-	Email    string
-	Phone    string
-	Password string
-	Salt     string
 }

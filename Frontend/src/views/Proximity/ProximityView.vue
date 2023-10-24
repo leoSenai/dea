@@ -92,7 +92,7 @@
   </div>
 </template>
 <script>
-import { PhPlus, PhPencil, PhCaretLeft, PhFingerprintSimple } from '@phosphor-icons/vue';
+import { PhPlus, PhPencil, PhFingerprintSimple } from '@phosphor-icons/vue';
 import ProximityAddEditModal from './ProximityAddEditModal.vue';
 
 /* 
@@ -107,7 +107,6 @@ export default {
     PhPlus,
     ProximityAddEditModal,
     PhPencil,
-    PhCaretLeft,
     PhFingerprintSimple
   },
   data() {
@@ -290,4 +289,5 @@ export default {
 .proximity-actions {
   display: flex;
   align-items: center;
-}</style>
+}
+</style>

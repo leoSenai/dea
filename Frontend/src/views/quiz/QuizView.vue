@@ -39,6 +39,12 @@
         >
           <PhPencil />
         </button>
+        <button
+          type="button"
+          @click="openAddQuizPersons(quiz)"
+        >
+          <PhUser />
+        </button>
       </div>
     </div>
     <div
@@ -52,22 +58,29 @@
         <PhPlus />
       </button>
     </div>
+    <QuizAddEditModal
+      ref="addEdit"
+      @close="load"
+    />
+    <QuizPersonsAddEditModal
+      ref="addPersons"
+      @close="load"
+    />
   </div>
-  <QuizAddEditModal
-    ref="addEdit"
-    @close="load"
-  />
 </template>
 <script>
-import { PhPlus, PhPencil } from '@phosphor-icons/vue';
+import { PhPlus, PhPencil, PhUser } from '@phosphor-icons/vue';
 import QuizAddEditModal from './QuizAddEditModal.vue';
+import QuizPersonsAddEditModal from './QuizPersonsAddEditModal.vue';
 
 export default {
   components: {
     PhPlus,
     QuizAddEditModal,
-    PhPencil
-  },
+    QuizPersonsAddEditModal,
+    PhPencil,
+    PhUser
+},
   data() {
     return {
       model: {
@@ -99,11 +112,18 @@ export default {
     },
     openAddEditModal(current) {
       this.$refs.addEdit.openModal(current)
+    },
+    openAddQuizPersons(current){
+      this.$refs.addPersons.openModal(current)
     }
   },
 }
 </script>
 <style>
+.quiz-actions{
+  display: flex;
+  gap: 0.6em;
+}
 .quiz-content {
   padding: 3rem 1.5rem;
   width: 100%;

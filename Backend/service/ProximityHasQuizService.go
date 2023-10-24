@@ -38,7 +38,7 @@ func PostProximityQuiz(proximityHasQuiz models.ProximityHasQuiz) (err error) {
 		return fmt.Errorf("Já esta relacionado no banco de dados")
 	}
 
-	proximityHasQuiz.AnsweredIn = time.Now()
+	proximityHasQuiz.AnsweredIn = time.Now().Local().String()
 
 	proximityHasQuiz, err = repository.PostProximityQuiz(proximityHasQuiz)
 
@@ -52,7 +52,7 @@ func PutProximityQuiz(proximityHasQuiz models.ProximityHasQuiz) (err error) {
 	}
 
 	if existingProximityHasQuiz.IdQuiz != 0 {
-		proximityHasQuiz.AnsweredIn = time.Now()
+		proximityHasQuiz.AnsweredIn = time.Now().Local().String()
 		err := repository.PutProximityQuiz(proximityHasQuiz)
 		return err
 	} else {

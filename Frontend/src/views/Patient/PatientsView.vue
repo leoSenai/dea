@@ -4,22 +4,58 @@
       <div class="flex justify-center items-center">
         <div class="patients">
           <div class="info-patients flex justify-between">
-            <h3 class="patients-title">Pacientes</h3>
-            <buttonPrimary type="button" @click="openAddEditModal()">
+            <h3 class="patients-title">
+              Pacientes
+            </h3>
+            <buttonPrimary 
+              type="button"
+              @click="openAddEditModal()"
+            >
               Adicionar
-              <PhPlus class="icon-color"></PhPlus>
+              <PhPlus class="icon-color" />
             </buttonPrimary>
           </div>
-          <div class="patients-content q-mt-lg flex" style="gap: 1rem;">
-            <div v-for="patient in model.data" :key="patient.IdPatient" class="patients-list">
+          <div 
+            class="patients-content q-mt-lg flex" 
+            style="gap: 1rem;"
+          >
+            <div 
+              v-for="patient in model.data"
+              :key="patient.IdPatient"
+              class="patients-list"
+            >
               <span @click="openViewPatient(patient.IdPatient)">{{ patient.Name }}</span>
-              <PhPencil class="edit-button" width="25px" @click="openEditPatient(patient.IdPatient)"></PhPencil>
+              <div class="patients-actions">
+                <button
+                  type="button"
+                  @click="resetPassword(patient)"
+                >
+                  <q-tooltip>
+                    Redefinir Senha
+                  </q-tooltip>
+                  <PhFingerprintSimple />
+                </button>
+                <button
+                  class="edit-button"
+                  type="button"
+                  @click="openAddEditModal(patient.IdPatient)"
+                >
+                  <PhPencil />
+                </button>
+              </div>
             </div>
           </div>
-          <div type="button" @click="openAddEditModal()" class="btn-modal hidden flex justify-center items-center">
-            <PhPlus class="icon-color"></PhPlus>
+          <div 
+            class="btn-modal hidden flex justify-center items-center"
+            type="button"
+            @click="openAddEditModal()"
+          >
+            <PhPlus class="icon-color" />
           </div>
-          <PatientsAddEditModal ref="addEdit" @close="load" />
+          <PatientsAddEditModal 
+            ref="addEdit"
+            @close="load" 
+          />
         </div>
       </div>
     </div>
@@ -28,7 +64,7 @@
 
 <script>
 import buttonPrimary from '../../components/ButtonPrimary.vue';
-import { PhPlus, PhPencil } from '@phosphor-icons/vue';
+import { PhPlus, PhPencil, PhFingerprintSimple } from '@phosphor-icons/vue';
 import PatientsAddEditModal from './PatientsAddEditModal.vue';
 
 export default {
@@ -36,7 +72,8 @@ export default {
     buttonPrimary,
     PhPlus,
     PhPencil,
-    PatientsAddEditModal,
+    PatientsAddEditModal, 
+    PhFingerprintSimple
   },
   data() {
     return {
@@ -70,6 +107,10 @@ export default {
     },
     openEditPatient(id){
       this.$router.push('pacienteInfo?id='+ id +'&edit=true')
+    },
+    resetPassword ({IdPatient}) {
+      const th = this;
+      th.$api.PatientController.resetPassword(IdPatient)
     }
   }
 };
@@ -135,6 +176,24 @@ export default {
 
 .btn-modal>.icon-color {
   font-size: 2.5rem;
+}
+
+.patients-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.patients-actions button {
+  border: none;
+  background: none;
+  padding: .25rem;
+  height: 1.5rem;
+  border-radius: 9999px;
+}
+
+.patients-actions button:hover {
+  background: var(--neutral-dark-gray);
 }
 
 @media screen and (max-width: 992px) {

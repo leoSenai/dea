@@ -2,17 +2,17 @@
 port = "9000"
 
 # FOR LOCAL DATABASE
-[database]
-host="localhost"
-port="3306"
-user="root"
-pass="root"
-name="dea"
+#[database]
+#host="localhost"
+#port="3306"
+#user="root"
+#pass="root"
+#name="dea"
 
 # FOR SENAI DATABASE
-#[database]
-#host="10.3.76.89"
-#port="3306"
-#user="adsAll"
-#pass="123456"
-#name="dea"
+[database]
+host="10.3.76.89"
+port="3306"
+user="adsAll"
+pass="123456"
+name="dea"

@@ -44,3 +44,20 @@
     transform: translateX(0px);
   }
 }
+
+.top-to-bottom-enter-active {
+  animation: top-to-bottom .5s;
+}
+.top-to-bottom-leave-active {
+  animation: top-to-bottom .5s reverse;
+}
+@keyframes top-to-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(-200%) ;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}

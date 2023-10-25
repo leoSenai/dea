@@ -14,5 +14,8 @@ export default {
   },
   update(data) {
     return axios.put(appUrl + 'update', data)
+  },
+  resetPassword(id) {
+    return axios.put(appUrl + 'reset-password', { 'patient_id': id })
   }
 }

@@ -4,16 +4,69 @@
     @close="closeModal"
   >
     <template #modal-title>
-      Filiados a este questionário
+      Filiados ao questionário '{{ model.Name }}'
     </template>
     <template #modal-content>
       <q-form ref="form">
         <div 
-          v-for="(proximity) in proximitysHasQuiz"
-          :key="proximity.IdQuiz"
+          v-for="(person) in personsList"
+          :key="person.IdPerson"
           class="row q-mb-sm quiz"
         >
-          <span>{{ "em construcao" }}</span>
+          <span>{{ person.Name + ' (pessoa próxima)' }}</span>
+          <button
+            v-if="personsList.length > 0"
+            type="button"
+            class="remove-person rounded-full"
+            @click="removePerson(person)"
+          >
+            <b>X</b>
+          </button>
+        </div>
+        <div 
+          v-for="(patient) in patientsList"
+          :key="patient.IdPatient"
+          class="row q-mb-sm quiz"
+        >
+          <span>{{ patient.Name + ' (paciente)' }}</span>
+          <button
+            v-if="patientsList.length > 0"
+            type="button"
+            class="remove-patient rounded-full"
+            @click="removePatient(patient)"
+          >
+            <b>X</b>
+          </button>
+        </div>
+        <div 
+          v-for="(filiated) in filiatedsToAdd"
+          :key="filiated.type=='patient' ? filiated.IdPatient : filiated.IdPerson"
+          class="row q-mb-sm quiz"
+        >
+          <span>{{ filiated.Name + (filiated.type=='patient' ? ' (paciente)' : ' (pessoa próxima)') }}</span>
+          <button
+            v-if="filiateds.length > 0"
+            type="button"
+            class="remove-patient rounded-full"
+            @click="removeFiliatedToAdd(filiated)"
+          >
+            <b>X</b>
+          </button>
+        </div>
+        <div class="row addFiliated">
+          <button-primary
+            class="fill-content"
+            outlined
+            @click="addFiliated"
+          >
+            Adicionar filiação
+            <template #after-label>
+              <PhPlus
+                class="primary"
+                weight="bold"
+              />
+            </template>
+          </button-primary>
         </div>
       </q-form>
     </template>
@@ -85,7 +138,18 @@ export default {
         Answers: '',
         AnsweredIn: '',
       }],
+      patientsList: [],
+      personsList: [],
       patientRemoved: [],
+      personRemoved: [],
+      filiateds: [/*{
+        IdPatient: 0,
+        IdPerson: 0,
+        IdQuiz: 0,
+        Finished: 0,
+        AnsweredIn: '',
+      }*/],
+      filiatedsToAdd: [],
     };
   },
   mounted(){
@@ -103,7 +167,11 @@ export default {
         //PROCURA PESSOAS PROXIMAS QUE TENHAM FILIACAO COM O QUIZ
         th.$api.ProximityHasQuizController.getByIdQuiz(th.model.IdQuiz).then(({ data }) => {
           if(data.data!==''){
+           
             const filteredProximityHasQuiz = data.data.map((el) => {
+
+              el
+
               return {
                 ProximityIdPatient: el.ProximityIdPatient,
                 ProximityIdPerson: el.ProximityIdPerson,
@@ -113,16 +181,27 @@ export default {
                 AnsweredIn: el.AnsweredIn
               };
             });
+            
             th.proximitysHasQuiz =
             filteredProximityHasQuiz.length > 0
               ? filteredProximityHasQuiz
               : [];
+
+            for(let i in th.proximitysHasQuiz){
+
+              th.$api.PersonController.getById(th.proximitysHasQuiz[i].ProximityIdPerson).then(({data})=> {
+                th.personsList.push(data.data)
+              });
+
+            }
+
           }
         });
 
         //PROCURA PACIENTES QUE TENHAM FILIACAO COM O QUIZ
         th.$api.PatientHasQuizController.getByIdQuiz(th.model.IdQuiz).then(({ data }) => {
           if(data.data!==''){
+            
             const filteredPatientHasQuiz = data.data.map((el) => {
               return {
                 IdPatient: el.IdPatient,
@@ -132,23 +211,51 @@ export default {
                 AnsweredIn: el.AnsweredIn
               };
             });
+            
             th.patientsHasQuiz =
             filteredPatientHasQuiz.length > 0
               ? filteredPatientHasQuiz
               : [];
-          }
-        });
 
+              for(let i in th.patientsHasQuiz){
+
+                th.$api.PatientController.getById(th.patientsHasQuiz[i].IdPatient).then(({data})=> {
+                  th.patientsList.push(data.data)
+                });
+
+              }
+            }
+        });
+      }
+
+      
+
+    },
+    addFiliated() {
+      if (this.filiateds.length>0) {
+        this.questions.push({
+          
+        });
       }
     },
-    addQuestion() {
-      if (!this.questions.includes('')) {
-        this.questions.push({
-          Desc: '',
-          IdQuestion: null,
-          key: this.questions[this.questions.length - 1].key + 1,
-        });
-      }
+    removeFiliatedToAdd(){
+
+    },
+    removePatient(patient) {
+      const th = this
+      var indexToRemove = th.patientsList.findIndex((pat) => {
+        return pat.IdPatient === patient.IdPatient;
+      });
+      th.patientsList.splice(indexToRemove, 1)
+      th.patientRemoved.push(patient)
+    },
+    removePerson(person) {
+      const th = this
+      var indexToRemove = th.personsList.findIndex((per) => {
+        return per.IdPerson === person.IdPerson;
+      });
+      th.patientsList.splice(indexToRemove, 1)
+      th.personRemoved.push(person)
     },
     closeModal() {
       this.show = false;
@@ -159,6 +266,8 @@ export default {
       };
       this.proximitysHasQuiz = [];
       this.patientsHasQuiz = [];
+      this.personsList = [];
+      this.patientsList = [];
       this.$emit('close');
     },
     createQuizPerson() {
@@ -239,7 +348,32 @@ export default {
   },
 };
 </script>
-  <style scoped>
+<style scoped>
+.addFiliated {
+  margin-top: 20px;
+}
+.remove-person, .remove-patient{
+  position: absolute;
+  right: 1em;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--neutral-dark-gray);
+  flex: 1;
+  text-align: end;
+  cursor: pointer;
+  transition: 0.3s;
+  background: #fff;
+  border: none;
+  border: 1px solid var(--neutral-dark-gray);
+  border-radius: 99999px;
+  cursor: pointer;
+  z-index: 1;
+  padding: 4px
+}
+
 .fill-content {
   width: 100%;
 }

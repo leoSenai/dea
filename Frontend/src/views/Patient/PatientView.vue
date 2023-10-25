@@ -115,7 +115,7 @@
         </svg>
       </button-primary>
       <h5>Anamnese</h5>
-      <q-input
+      <q-editor
         v-model="anamneseModel.Notes"
         :disable="campoAnamneseDesabilitado"
         class="textarea"

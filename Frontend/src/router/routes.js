@@ -5,11 +5,13 @@ import Quiz from '../views/QuizView.vue';
 import Users from '../views/users/UsersView.vue'
 import NotFound from '../views/NotFoundView.vue';
 import { PhUsers, PhArticle } from '@phosphor-icons/vue';
+import Anamnesis from '../views/AnamnesisView.vue';
 //import Cookie from '../cookie';
 
 const links = [
   { path: '/usuarios', name: 'Usuários', icon: PhUsers },
   { path: '/questionarios', name: 'Questionários', icon: PhArticle },
+  { path: '/anamnesis', name: 'Anamnese', icon: PhArticle }
 ];
 
 export const routes = [
@@ -63,6 +65,16 @@ export const routes = [
     path: '/usuarios',
     components: {
       default: Users,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    }
+  },
+  {
+    path: '/anamnesis',
+    components: {
+      default: Anamnesis,
       header: Header,
     },
     props: {

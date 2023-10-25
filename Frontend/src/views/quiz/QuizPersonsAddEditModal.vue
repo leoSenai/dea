@@ -170,7 +170,7 @@ export default {
            
             const filteredProximityHasQuiz = data.data.map((el) => {
 
-              el
+              
 
               return {
                 ProximityIdPatient: el.ProximityIdPatient,

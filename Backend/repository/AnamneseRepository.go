@@ -60,3 +60,16 @@ func PutAnamnese(anamnesePut models.Anamnese) (anamneseBack models.Anamnese, err
 
 	return
 }
+
+func GetAnamneseByIdAndPatientId(userId, patientId int64) (anamnese models.Anamnese, err error) {
+	conn, err := db.GetDB()
+	if err != nil {
+		return
+	}
+
+	row := conn.Where("usuario_idusuario = ? AND paciente_idpaciente = ?", userId, patientId).First(&anamnese)
+	log.Printf("row: %v", row)
+
+	return
+}
+

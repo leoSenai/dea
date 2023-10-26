@@ -1,25 +1,12 @@
 <template>
   <div class="patient-content">
     <div class="patientView-content">
-      <div 
-        class="btnVoltar" 
-        @click="goBack()"
+      <div
+        class="back-page"
+        onclick="goBack"
       >
-        <svg
-          class="go-back"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 129 129"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          enable-background="new 0 0 129 129"
-        >
-          <g>
-            <path
-              d="m88.6,121.3c0.8,0.8 1.8,1.2 2.9,1.2s2.1-0.4 2.9-1.2c1.6-1.6 1.6-4.2 0-5.8l-51-51 51-51c1.6-1.6 1.6-4.2 0-5.8s-4.2-1.6-5.8,0l-54,53.9c-1.6,1.6-1.6,4.2 0,5.8l54,53.9z"
-            />
-          </g>
-        </svg>
-        <span>Voltar</span>
+        <PhCaretLeft color="#656565" />
+        Voltar
       </div>
       <div class="patientView-header">
         <div class="patient-info-editable">
@@ -99,20 +86,7 @@
         @click="showNextPersons()" 
       >
         Ver pessoas próximas
-        <svg
-          class="goNext"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 129 129"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          enable-background="new 0 0 129 129"
-        >
-          <g>
-            <path
-              d="m88.6,121.3c0.8,0.8 1.8,1.2 2.9,1.2s2.1-0.4 2.9-1.2c1.6-1.6 1.6-4.2 0-5.8l-51-51 51-51c1.6-1.6 1.6-4.2 0-5.8s-4.2-1.6-5.8,0l-54,53.9c-1.6,1.6-1.6,4.2 0,5.8l54,53.9z"
-            />
-          </g>
-        </svg>
+        <PhCaretRight />
       </button-primary>
       <h5>Anamnese</h5>
       <q-editor
@@ -142,14 +116,16 @@
 </template>
 <script>
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
-import { PhPencil } from '@phosphor-icons/vue';
+import { PhCaretLeft, PhCaretRight, PhPencil } from '@phosphor-icons/vue';
 import cookie from '../../cookie';
 
 export default {
   components: {
     ButtonPrimary,
     PhPencil,
-  },
+    PhCaretLeft,
+    PhCaretRight
+},
   data() {
     return {
       opcoesSimNao: ['Sim', 'Não'],
@@ -345,13 +321,10 @@ export default {
 </script>
 <style scoped>
 .select-quasar {
-  background-color: #00000063;
   margin-bottom: 10px;
 }
 
 .inputEditable {
-  background-color: #00000063;
-
   margin-bottom: 10px;
 }
 
@@ -410,7 +383,6 @@ export default {
 .textarea {
   border-radius: 10px;
   border: 2px solid green;
-  background-color: rgba(26, 26, 26, 0.671);
   min-height: 30vh;
   padding: 10px;
   font-family: Arial, Helvetica, sans-serif;
@@ -423,15 +395,16 @@ h5 {
 
 .nextPersonView {
   border: 1px solid var(--primary);
-  background-color: rgba(26, 26, 26, 0.671);
+  background-color: var(--neutral-light-gray);
   color: green;
   margin: 10px;
   width: -webkit-fill-available;
   margin-bottom: 20px;
+  transition: .5s;
 }
 
 .nextPersonView:hover {
-  background-color: rgba(43, 43, 43, 0.671);
+  filter: brightness(0.8);
 }
 
 .patient-content {
@@ -449,7 +422,6 @@ h5 {
 
 section {
   display: block;
-  background-color: #1f1e1e;
   width: 99%;
   height: fit-content;
   margin-top: 2px;
@@ -482,7 +454,6 @@ section {
   width: 99%;
   height: auto;
   padding: 20px;
-  background-color: #1f1e1e;
   margin-left: 0.5%;
   margin-right: 0.5%;
   font-family: 'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial,
@@ -505,49 +476,15 @@ section {
   margin-left: -10px;
 }
 
-.btnVoltar {
-  margin-left: 0.5%;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  width: fit-content;
-  border-radius: 15px;
-  padding: 10px;
+.back-page {
   display: flex;
-  background-color: var(--primary);
+  align-items: center;
+  margin-top: 1.5rem;
   cursor: pointer;
-}
-</style>
-<style>
-.q-field__native,
-.q-field__prefix,
-.q-field__suffix,
-.q-field__input {
-  color: white !important;
+  transition: 1.5s;
 }
 
-.patientView-content .q-field__native.q-placeholder {
-  padding-left: 10px;
-}
-
-.q-field__label.no-pointer-events.absolute.ellipsis {
-  color: rgba(255, 255, 255, 0.678);
-}
-
-.q-checkbox__bg {
-  color: var(--primary) !important;
-  border-color: var(--primary);
-}
-
-.patient-info-editable .q-field__control.relative-position.row.no-wrap {
-  border: 1px solid #0000001c;
-}
-
-.q-menu.q-position-engine.scroll.q-menu--square {
-  background-color: #272727;
-}
-
-.select-quasar span {
-  margin-left: 10px;
-  margin-top: 10px;
+.back-page:hover {
+  filter: brightness(0.2);
 }
 </style>

@@ -13,7 +13,7 @@
           @click="openAddEditModal()"
         >
           Adicionar
-          <PhPlus />
+          <PhPlus color="white" />
         </button>
       </div>
     </div>
@@ -37,7 +37,7 @@
           type="button"
           @click="openAddEditModal(user)"
         >
-          <PhPencil />
+          <PhPencil color="black" />
         </button>
       </div>
     </div>
@@ -49,7 +49,7 @@
         type="button"
         @click="openAddEditModal()"
       >
-        <PhPlus />
+        <PhPlus color="white" />
       </button>
     </div>
   </div>

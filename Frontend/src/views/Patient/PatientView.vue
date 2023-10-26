@@ -3,67 +3,12 @@
     <div class="patientView-content">
       <div
         class="back-page"
-        onclick="goBack"
+        @click="goBack"
       >
         <PhCaretLeft color="#656565" />
         Voltar
       </div>
       <div class="patientView-header">
-        <div class="patient-info-editable">
-          <q-input
-            v-model="model.Name"
-            class="inputEditable"
-            placeholder="Nome"
-          />
-          <q-input
-            v-model="model.Email"
-            class="inputEditable"
-            placeholder="Email"
-          />
-          <q-input
-            v-model="model.Address"
-            class="inputEditable"
-            placeholder="Endereço"
-          />
-          <q-input
-            v-model="model.Phone"
-            class="inputEditable"
-            placeholder="Telefone"
-          />
-          <!--RECEM NASCIDO SELECT-->
-          <q-select
-            v-model="opcaoNewBorn"
-            class="select-quasar"
-            :options="opcoesSimNao"
-            label="&nbsp Recém nascido?"
-            placeholder="Selecione uma opção"
-            @update:model-value="changeNewBornValue()"
-          />
-          <q-input
-            v-model="model.Cid10"
-            type="number"
-            class="inputEditable"
-            placeholder="CID10"
-          />
-          <!--ATIVO SELECT-->
-          <q-select
-            v-model="opcaoAtivo"
-            class="select-quasar"
-            :options="opcoesSimNao"
-            label="&nbsp Ativo?"
-            placeholder="Selecione uma opção"
-            @update:model-value="changeAtivoValue()"
-          />
-          <p class="alter-password">
-            <a
-              style="font-size: 12px"
-              class="change-pass"
-              @click="changePassword(model.IdPatient)"
-            >
-              Alterar senha
-            </a>
-          </p>
-        </div>
         <div class="patient-info">
           <h4>{{ model.Name }}</h4>
           <p>{{ model.Cpf }}</p>
@@ -112,19 +57,22 @@
         </button-primary>
       </div>
     </section>
+    <PatientsAddEditModal />
   </div>
 </template>
 <script>
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import { PhCaretLeft, PhCaretRight, PhPencil } from '@phosphor-icons/vue';
 import cookie from '../../cookie';
+import PatientsAddEditModal from './PatientsAddEditModal.vue';
 
 export default {
   components: {
     ButtonPrimary,
     PhPencil,
     PhCaretLeft,
-    PhCaretRight
+    PhCaretRight,
+    PatientsAddEditModal
 },
   data() {
     return {
@@ -157,121 +105,19 @@ export default {
       campoAnamneseDesabilitado: false,
     };
   },
-  mounted() {
-    const th = this;
-
-    var contentElement = document.getElementsByClassName('content')[0];
-    contentElement.style.overflow = 'auto';
-
-    const urlString = window.location.href;
-
-    // Analisando a string manualmente
-    const params = {};
-    const urlParts = urlString.split('?');
-    if (urlParts.length > 1) {
-      const queryParams = urlParts[1].split('&');
-      queryParams.forEach((param) => {
-        const [key, value] = param.split('=');
-        params[key] = value;
-      });
-    }
-
-    // Obtendo o valor do parâmetro 'id'
-    const id = params['id'];
-    th.model.IdPatient = id;
-
-    // Obtendo o valor do parâmetro 'edit'
-    const edit = params['edit'];
-
-    //Style shits
-    var element = document.getElementsByClassName('editIcon')[0];
-    var elementAlterPassword =
-      document.getElementsByClassName('alter-password')[0];
-    if (edit !== undefined && edit == 'true') {
-      //Quando para editar
-      element.style.display = 'none';
-      elementAlterPassword.style.display = 'block';
-      th.edit = true;
-      th.editOrSave = 'Salvar';
-      document.getElementsByClassName('patient-info')[0].style.display = 'none';
-      document.getElementsByClassName(
-        'patient-info-editable'
-      )[0].style.display = 'block';
-      document.getElementsByClassName('patientView-header')[0].style.display =
-        'block';
-    } else {
-      //Quando para salvar
-      th.edit = false;
-    }
-
-    //faz requisição para pegar info do paciente
-    th.$api.PatientController.getById(id).then(({ data }) => {
-      th.model = data.data;
-      th.opcaoNewBorn = th.model.NewBorn == 1 ? 'Sim' : 'Não';
-      th.opcaoAtivo = th.model.Active == '1' ? 'Sim' : 'Não';
-    });
-
-    var idUser = cookie.getUserId(cookie.get('authToken'));
-    th.$api.AnamneseController.getByIdUserPatient({
-      IdUser: idUser,
-      IdPatient: id,
-    }).then((response) => {
-      if (response.statusText !== 'No Content') {
-        //Found so update
-        var data = response.data.data;
-
-        //Bind the anamnese object
-        th.anamneseModel.Notes = data.Notes;
-        th.anamneseModel.IdAnamnese = data.IdAnamnese;
-        th.anamneseModel.IdPatient = data.IdPatient;
-        th.anamneseModel.IdUser = data.IdUser;
-        if (data.Indicative !== 0) {
-          th.campoAnamneseDesabilitado = true;
-        }
-      }
-    });
+  mounted () {
+    const th = this
+    const idPatient = th.$router.currentRoute.value.query.id
+    th.$api.PatientController.getById(idPatient).then(({data}) => {
+      th.model = { ...data.data }
+    })
   },
   methods: {
+    goBack () {
+      this.$router.push('/pacientes')
+    },
     editPatient(id) {
-      console.log(id);
-      //Style shits
-      const th = this;
-      var element = document.getElementsByClassName('editIcon')[0];
-      var elementAlterPassword =
-        document.getElementsByClassName('alter-password')[0];
-      if (th.edit == false && th.editOrSave == 'Editar') {
-        //Quando for para editar
-        element.style.display = 'none';
-        elementAlterPassword.style.display = 'block';
-        th.edit = true;
-        th.editOrSave = 'Salvar';
-        document.getElementsByClassName('patient-info')[0].style.display =
-          'none';
-        document.getElementsByClassName(
-          'patient-info-editable'
-        )[0].style.display = 'block';
-        document.getElementsByClassName('patientView-header')[0].style.display =
-          'block';
-      } else if (th.edit == true && th.editOrSave == 'Salvar') {
-        //Quando for para salvar
-        element = document.getElementsByClassName('editIcon')[0];
-        element.style.display = 'block';
-        elementAlterPassword.style.display = 'none';
-        th.edit = false;
-        th.editOrSave = 'Editar';
-        document.getElementsByClassName('patient-info')[0].style.display =
-          'block';
-        document.getElementsByClassName(
-          'patient-info-editable'
-        )[0].style.display = 'none';
-        document.getElementsByClassName('patientView-header')[0].style.display =
-          'flex';
-
-        this.savePatientData();
-        if (this.campoAnamneseDesabilitado == false) {
-          this.saveAnamnese();
-        }
-      }
+      console.log(id)
     },
     savePatientData() {
       const th = this;
@@ -310,11 +156,6 @@ export default {
       this.$router.push(
         '/paciente/' + this.model.IdPatient + '/pessoas-proximas'
       );
-    },
-    goBack() {
-      var contentElement = document.getElementsByClassName('content')[0];
-      contentElement.style.overflow = 'hidden';
-      window.history.back();
     },
   },
 };

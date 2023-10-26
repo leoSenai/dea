@@ -41,7 +41,7 @@
                 <button
                   class="edit-button"
                   type="button"
-                  @click="openAddEditModal(patient.IdPatient)"
+                  @click="openAddEditModal(patient)"
                 >
                   <PhPencil color="black" />
                 </button>

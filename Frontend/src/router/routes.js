@@ -4,10 +4,10 @@ import PatientView from '../views/Patient/PatientView.vue'
 import Header from '../components/HeaderPrimary.vue';
 import Patients from '../views/Patient/PatientsView.vue';
 import Proximity from '../views/Proximity/ProximityView.vue';
-import Users from '../views/users/UsersView.vue'
+import Users from '../views/Users/UsersView.vue'
 import InputPrimary from '../components/InputPrimary.vue';
 import NotFound from '../views/NotFoundView.vue';
-import Quiz from '../views/quiz/QuizView.vue';
+import Quiz from '../views/Quiz/QuizView.vue';
 
 import { PhUserList, PhUsers } from '@phosphor-icons/vue';
 import { PhArticle } from '@phosphor-icons/vue';
@@ -27,6 +27,7 @@ export const routes = [
     },
     props: {
       header: { links },
+      default: { links }
     },
   },
   {
@@ -47,6 +48,7 @@ export const routes = [
     },
     props: {
       header: { links },
+      default: { links }
     },
   },
   {

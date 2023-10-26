@@ -1,24 +1,12 @@
 <template>
   <div class="home">
     <div class="home-options">
-      <button
-        class="menu-item"
-        @click="goLinkMenu('pacientes')"
-      >
-        Pacientes<PhScooter weight="bold" />
-      </button>
-      <button
-        class="menu-item"
-        @click="goLinkMenu('questionarios')"
-      >
-        Questionários<PhBookOpen weight="bold" />
-      </button>
-      <button
-        class="menu-item"
-        @click="goLinkMenu('usuarios')"
-      >
-        Usuários<PhPerson weight="bold" />
-      </button>
+      <template v-for="link in links" :key="link.path">
+        <router-link :to="link.path" class="link" tabindex="0" @blur="hideSidebar">
+          {{ link.name }}
+          <component :is="link.icon" class="link-icon" />
+        </router-link>
+      </template>
     </div>
   </div>
 </template>
@@ -27,6 +15,12 @@ import { PhBookOpen, PhPerson, PhScooter } from '@phosphor-icons/vue';
 
 export default {
   components: { PhScooter, PhBookOpen, PhPerson },
+  props: {
+    links: {
+      type: Array,
+      required: true,
+    },
+  },
   data() {
     return {};
   },
@@ -56,9 +50,9 @@ export default {
   border-radius: 4px;
   background: var(--primary-700);
   padding: 3rem 1rem;
-} 
+}
 
-.home-options button {
+.link {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,10 +62,11 @@ export default {
   border: 1px solid white;
   background: var(--primary-700);
   cursor: pointer;
-  transition: .2s;
+  transition: 0.2s;
+  color: white;
 }
 
-.home-options button:hover {
+.link:hover {
   filter: brightness(0.8);
 }
 </style>

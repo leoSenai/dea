@@ -4,11 +4,11 @@
       <div class="title">
         <h3>Questionários</h3>
       </div>
-      <div
+      <div 
         v-if="!isMobile"
         class="title-add-quiz"
       >
-        <button
+        <button 
           type="button"
           @click="openAddEditModal()"
         >
@@ -23,7 +23,7 @@
     >
       {{ model.message }}
     </div>
-    <div
+    <div 
       v-for="quiz in model.data"
       v-else
       :key="quiz.IdQuiz"
@@ -47,7 +47,7 @@
         </button>
       </div>
     </div>
-    <div
+    <div 
       v-if="isMobile"
       class="add-quiz"
     >
@@ -60,7 +60,7 @@
     </div>
     <QuizAddEditModal
       ref="addEdit"
-      @close="load"
+      @close="load" 
     />
     <QuizPersonsAddEditModal
       ref="addPersons"
@@ -80,7 +80,7 @@ export default {
     QuizPersonsAddEditModal,
     PhPencil,
     PhUser
-},
+  },
   data() {
     return {
       model: {
@@ -113,17 +113,18 @@ export default {
     openAddEditModal(current) {
       this.$refs.addEdit.openModal(current)
     },
-    openAddQuizPersons(current){
+    openAddQuizPersons(current) {
       this.$refs.addPersons.openModal(current)
     }
   },
 }
 </script>
 <style>
-.quiz-actions{
+.quiz-actions {
   display: flex;
   gap: 0.6em;
 }
+
 .quiz-content {
   padding: 3rem 1.5rem;
   width: 100%;
@@ -147,7 +148,8 @@ export default {
   justify-content: center;
   transition: .2s;
   gap: .5rem;
-  padding: .5rem 1rem;
+  padding: 1rem 2rem;
+  color: white;
   cursor: pointer;
 }
 
@@ -185,16 +187,17 @@ export default {
 }
 
 .quiz {
-  border: 1px solid;
+  border: 1px solid var(--neutral-dark-gray);
+  color: var(--neutral-dark-gray);
   padding: 1rem;
   border-radius: 4px;
   display: flex;
-  cursor:text;
+  cursor: text;
   justify-content: space-between;
   align-items: center;
 }
 
-.quiz:hover{
+.quiz:hover {
   background-color: rgba(200, 255, 172, 0.041);
 }
 
@@ -215,6 +218,6 @@ export default {
 }
 
 .quiz button:hover {
-  background: var(--neutral-dark-gray);
+  background: var(--neutral-gray);
 }
 </style>

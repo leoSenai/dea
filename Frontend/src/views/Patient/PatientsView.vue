@@ -144,7 +144,8 @@ export default {
 }
 
 .patients-list {
-  border: 1px solid;
+  border: 1px solid var(--neutral-dark-gray);
+  color: var(--neutral-dark-gray);
   width: 100%;
   border-radius: 0.25rem;
   padding: 0.5rem;
@@ -190,10 +191,15 @@ export default {
   padding: .25rem;
   height: 1.5rem;
   border-radius: 9999px;
+  cursor: pointer;
 }
 
 .patients-actions button:hover {
-  background: var(--neutral-dark-gray);
+  background: var(--neutral-gray);
+}
+
+.info-patients button {
+  color: white;
 }
 
 @media screen and (max-width: 992px) {

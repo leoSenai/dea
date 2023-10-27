@@ -10,7 +10,7 @@
       <q-form ref="form">
         <div 
           v-for="(filiated) in filiateds"
-          :key="filiated.IdFiliated"
+          :key="filiated.Name"
           class="row q-mb-sm quiz"
         >
           <span>{{ filiated.Name + (filiated.Type==='Patient' ? ' (paciente)' : ' (pessoa próxima)') }}</span>
@@ -23,16 +23,34 @@
             <b>X</b>
           </button>
         </div>
-        <div class="select-filiated">
+        <div
+          v-for="(filiated, i) in filiatedsToAdd"
+          v-show="addFiliatedQSelectVisible"
+          :key="i"
+          class="select-filiated"
+        >
           <q-select
-            v-model="filiatedToAdd"
+            v-model="filiatedsToAdd[i].Name"
             :options="filiatedToAddList"
+            option-label="Name"
             label="&nbsp Adicionar filiado"
             placeholder="Selecione uma opção"
-            class="select-quasar"
+            class="select-quasar newFiliated"
+            max-options="3"
+            @update:model-value="updateFiliatedToAddList(filiatedsToAdd[i].Name)"
           />
+          <button
+            v-if="filiateds.length > 0"
+            type="button"
+            class="remove-person rounded-full"
+            @click="closeAddQSelect()"
+          >
+            <b>X</b>
+          </button>
         </div>
-        <div class="row addFiliated">
+        <div
+          class="row addFiliated"
+        >
           <button-primary
             class="fill-content"
             outlined
@@ -62,16 +80,9 @@
           v-if="model.IdQuiz"
           size="sm"
           type="submit"
+          @click="updateQuizFiliated"
         >
           Atualizar lista
-        </button-primary>
-        <button-primary
-          v-else
-          size="sm"
-          type="submit"
-          @click="createQuizPerson"
-        >
-          Cadastrar
         </button-primary>
       </div>
     </template>
@@ -95,8 +106,8 @@ export default {
   data() {
     return {
       addFiliatedQSelectVisible: false,
-      filiatedToAdd: '',
       filiatedToAddList: [],
+      filiatedToRemoveList: [],
       show: false,
       model: {
         Name: '',
@@ -125,18 +136,37 @@ export default {
       patientRemoved: [],
       personRemoved: [],
       filiatedsRemoved: [],
-      filiateds: [/*{
-        IdFiliated: ,
-        IdQuiz: 0,
-        Finished: 0,
-        Answers: '',
-        AnsweredIn: '',
-        Type: '',
-      }*/],
+      filiateds: [],
       filiatedsToAdd: [],
     };
   },
   methods: {
+    closeAddQSelect(){
+      this.filiatedsToAdd = []
+    },
+    updateFiliatedToAddList(filiated_obj){
+      const th = this
+
+      //filiated_obj.Name
+      //filiated_obj.Type
+
+      var indexToRemove = th.filiatedToAddList.findIndex((fili) => {
+        return (fili.Name === filiated_obj.Name && fili.Type === filiated_obj.Type);
+      });
+      if(indexToRemove!=-1){console.log(indexToRemove) // se achou o filiado na filiatedToAddList, remove-o
+        th.filiatedToAddList.splice(indexToRemove, 1)
+        th.filiatedToRemoveList.push(filiated_obj)
+        th.filiateds.push(filiated_obj)
+      }
+
+      th.addFiliatedQSelectVisible = false
+      th.filiatedsToAdd = []
+      //th.filiatedToAddList = []
+      th.filiatedToRemoveList = []
+      th.patientRemoved = []
+      th.personRemoved = []
+
+    },
     openModal(current) {
 
       const th = this;
@@ -232,76 +262,73 @@ export default {
               }
             }
         });
-
-        //PROCURA TODOS PACIENTES E ADICIONA A LISTA DE FILIADOS PARA ADICIONAR
-        th.$api.PatientController.getAll().then(({ data }) => {
-
-          var patientList =  data.data //array com os objetos pacientes
-          var alreadyIncluded;
-          //adapt each object to a filiated model and push to 'filiatedToAddList'
-          for(let i in patientList){
-
-            alreadyIncluded = false
-            for(let l=0;l<th.filiateds.length;l++){
-              if(th.filiateds[l].IdFiliated===patientList[i].IdPatient && th.filiateds[l].Type === 'Patient'){
-                alreadyIncluded = true;
-              }
-            }
-
-            if(!alreadyIncluded){
-              th.filiatedToAddList.push({
-                Name: patientList[i].Name,
-                IdFiliated: patientList[i].IdPatient,
-                IdQuiz: th.model.IdQuiz,
-                Finished: 0,
-                Answers: '',
-                AnsweredIn: '',
-                Type: 'Patient',
-  
-              })
-            }
-          }
-        });
-
-        //PROCURA TODOS PACIENTES E ADICIONA A LISTA DE FILIADOS PARA ADICIONAR
-        th.$api.PersonController.getAll().then(({ data }) => {
-
-          var personList =  data.data //array com os objetos pacientes
-          var alreadyIncluded;
-          //adapt each object to a filiated model and push to 'filiatedToAddList'
-          for(let i in personList){
-
-            alreadyIncluded = false
-            for(let l=0;l<th.filiateds.length;l++){ 
-              //TODO: NAO TA FUNFANDO
-              if(th.filiateds[l].IdFiliated===personList[i].IdPerson && th.filiateds[l].Type === 'Person'){
-                alreadyIncluded = true; 
-              }
-            }
-
-            if(!alreadyIncluded){
-              th.filiatedToAddList.push({
-                Name: personList[i].Name,
-                IdFiliated: personList[i].IdPerson,
-                IdQuiz: th.model.IdQuiz,
-                Finished: 0,
-                Answers: '',
-                AnsweredIn: '',
-                Type: 'Person',
-
-              })
-            }
-          }
-        });
-
       }
     },
     addFiliated() {
       const th = this
+      if(th.filiatedsToAdd.length==1){
+        return
+      }
       th.addFiliatedQSelectVisible = true
+      th.filiatedsToAdd.push({ Name: '' })
+
+      if(th.filiatedToAddList.length===0){
+
+        //PROCURA TODOS PACIENTES E ADICIONA A LISTA DE FILIADOS PARA ADICIONAR
+        th.$api.PatientController.getAll().then(({ data }) => {
+  
+          var patientList =  data.data //array com os objetos pacientes
+          var alreadyIncluded;
+          //adapt each object to a filiated model and push to 'filiatedToAddList'
+          for(var i in patientList){
+  
+            alreadyIncluded = false
+            for(var l=0;l<th.filiateds.length;l++){
+              if(th.filiateds[l].Name==patientList[i].Name && th.filiateds[l].Type == 'Patient'){
+                alreadyIncluded = true;
+              }
+            }
+  
+            if(!alreadyIncluded){
+              th.filiatedToAddList.push({Name: patientList[i].Name, Type: 'Patient', IdQuiz: th.model.IdQuiz, IdFiliated: patientList[i].IdPatient})
+            }
+          }
+        });
+  
+        //PROCURA TODOS PESSOAS E ADICIONA A LISTA DE FILIADOS PARA ADICIONAR
+        th.$api.PersonController.getAll().then(({ data }) => {
+  
+          var personList =  data.data //array com os objetos pacientes
+          var alreadyIncluded;
+          //adapt each object to a filiated model and push to 'filiatedToAddList'
+          for(let i in personList){
+  
+            alreadyIncluded = false
+            for(let l=0;l<th.filiateds.length;l++){ 
+              if(th.filiateds[l].Name==personList[i].Name && th.filiateds[l].Type == 'Person'){
+                alreadyIncluded = true; 
+              }
+            }
+  
+            if(!alreadyIncluded){
+              th.filiatedToAddList.push({Name: personList[i].Name, Type: 'Person', IdQuiz: th.model.IdQuiz, IdFiliated: personList[i].IdPerson})
+            }
+          }
+        });
+      }
+
+      //AGORA TEMOS JA A LISTA DE PACIENTES/PESSOAPROX PARA ADD NOVO
+      //ANTES DE CONTINUAR: FAZER UPDATE DA LISTA DE DE ADD caso o maluco resolver excluir algum, ou add, enquanto tem outros q-selects em aberto.
+
     },
     removeFiliated(filiated){
+      console.log('filiado removendo...')
+
       const th = this
+      if(filiated.Name == ''){
+        return
+      }
+      console.log(filiated)
       if(filiated.Type==='Patient'){
         th.removePatient(filiated)
       }else{
@@ -311,32 +338,40 @@ export default {
     removePatient(filiated) {
 
       const th = this
-      //var indexToRemove = th.patientsList.findIndex((pat) => {
-      //  return pat.IdPatient === filiated.IdFiliated;
-      //});
-      //th.patientsList.splice(indexToRemove, 1)
-      th.patientRemoved.push(filiated)
+      var indexToRemove = th.filiatedToAddList.findIndex((fili) => {
+        return fili.Name === filiated.Name;
+      });
+      if(indexToRemove==-1){
+        th.filiatedToAddList.push({Name: filiated.Name, Type: filiated.Type, IdQuiz: th.model.IdQuiz})
+        th.patientRemoved.push(filiated)
+      }
 
       var index2Remove = th.filiateds.findIndex((fili) => {
-        return (fili.IdFiliated === filiated.IdFiliated && fili.Type==='Patient');
+        return (fili.Name === filiated.Name && fili.Type==='Patient');
       });
-      th.filiateds.splice(index2Remove, 1)
-      th.filiatedsRemoved.push(filiated)
+      if(index2Remove!=-1){
+        th.filiateds.splice(index2Remove, 1)
+        th.filiatedsRemoved.push(filiated)
+      }
 
     },
     removePerson(filiated) {
       const th = this
-      //var indexToRemove = th.personsList.findIndex((per) => {
-      //  return per.IdPerson === filiated.IdFiliated;
-      //});
-      //th.personsList.splice(indexToRemove, 1)
-      th.personRemoved.push(filiated)
+      var indexToRemove = th.filiatedToAddList.findIndex((fili) => {
+        return fili.Name === filiated.Name;
+      });
+      if(indexToRemove==-1){
+        th.filiatedToAddList.push({Name: filiated.Name, Type: filiated.Type, IdQuiz: th.model.IdQuiz})
+        th.personRemoved.push(filiated)
+      }
 
       var index2Remove = th.filiateds.findIndex((fili) => {
-        return (fili.IdFiliated === filiated.IdFiliated && fili.Type==='Person');
+        return (fili.Name === filiated.Name && fili.Type==='Person');
       });
-      th.filiateds.splice(index2Remove, 1)
-      th.filiatedsRemoved.push(filiated)
+      if(index2Remove!=-1){
+        th.filiateds.splice(index2Remove, 1)
+        th.filiatedsRemoved.push(filiated)
+      }
 
     },
     closeModal() {
@@ -357,47 +392,37 @@ export default {
       this.filiatedsRemoved = [];
       this.filiatedsToAdd = [];
       this.filiatedToAddList = [];
-      this.filiatedToAdd = '';
       this.$emit('close');
     },
-    createQuizPerson() {
+    updateQuizFiliated() {
+      
       const th = this;
-      th.$refs.form.validate().then((success) => {
-        if (th.questions.some(({ Desc }) => !Desc || Desc.trim() === '')) {
-          alert(
-            'Não é possível criar questionários com questões sem descrição!'
-          );
-          return;
-        }
-        if (success) {
-          th.$api.QuizController.insert({
-            ...th.model,
-            Interval: th.model.Interval.toString(),
-          })
-            .then(({ data }) => {
-              th.model = data.data;
-              if (th.model.IdQuiz) {
-                th.questions.forEach((question) => {
-                  const questionDto = {
-                    IdQuiz: th.model.IdQuiz,
-                    IdQuestion: question.IdQuestion,
-                    Desc: question.Desc.trim(),
-                  };
-                  th.$api.QuestionController.insert(questionDto);
-                });
-              }
-              return;
-            })
-            .then(() => {
-              th.closeModal();
-            });
-        }
-      });
+      const filiateds = th.filiateds
+
+      console.log(filiateds)
+
+      //th.filiateds = [{Name: '', Type: '', IdQuiz: 0}]
+      th.$api.PatientHasQuizController.update(filiateds)
+      th.$api.ProximityHasQuizController.update(filiateds)
+
     },
   },
 };
 </script>
 <style scoped>
+.select-filiated{
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  z-index: 0;
+}
+
+.newFiliated{
+  border: #fff solid 1px;
+  border-radius: 5px;
+  width: -webkit-fill-available;
+  z-index: 0;
+}
 .addFiliated {
   margin-top: 20px;
 }
@@ -473,4 +498,8 @@ export default {
   justify-content: space-between;
 }
 </style>
-  
+<style>
+  .select-filiated .q-field__append.q-field__marginal.row.no-wrap.items-center.q-anchor--skip{
+    padding-right: 3rem !important;
+  }
+</style>

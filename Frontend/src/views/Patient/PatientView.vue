@@ -1,74 +1,137 @@
 <template>
-    <div class="patient-content">
-        <div class="patientView-content">
-            <div class="btnVoltar" @click="goBack()">
-                <svg class="go-back" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129">
-                    <g>
-                        <path d="m88.6,121.3c0.8,0.8 1.8,1.2 2.9,1.2s2.1-0.4 2.9-1.2c1.6-1.6 1.6-4.2 0-5.8l-51-51 51-51c1.6-1.6 1.6-4.2 0-5.8s-4.2-1.6-5.8,0l-54,53.9c-1.6,1.6-1.6,4.2 0,5.8l54,53.9z"/>
-                    </g>
-                </svg>
-                <span>Voltar</span>
-            </div>
-            <div class="patientView-header">
-                <div class="patient-info-editable">
-                    <q-input v-model="model.Name" class="inputEditable" placeholder="  Nome"></q-input>
-                    <q-input v-model="model.Email" class="inputEditable" placeholder="  Email"></q-input>
-                    <q-input v-model="model.Address" class="inputEditable" placeholder="  Endereço"></q-input>
-                    <q-input v-model="model.Phone" class="inputEditable" placeholder="  Telefone"></q-input>
-                    <!--RECEM NASCIDO SELECT-->
-                    <q-select
-                        class="select-quasar"
-                        v-model="opcaoNewBorn"
-                        @update:modelValue="changeNewBornValue()"
-                        :options="opcoesSimNao"
-                        label="&nbsp Recém nascido?"
-                        placeholder="Selecione uma opção"
-                    />
-                    <q-input v-model="model.Cid10" type="number" class="inputEditable" placeholder=" CID10"></q-input>
-                    <!--ATIVO SELECT-->
-                    <q-select
-                        class="select-quasar"
-                        v-model="opcaoAtivo"
-                        @update:modelValue="changeAtivoValue()"
-                        :options="opcoesSimNao"
-                        label="&nbsp Ativo?"
-                        placeholder="Selecione uma opção"
-                    />
-                    <p class="alter-password"><a style="font-size:12px;" class="change-pass" @click="changePassword(model.IdPatient)">Alterar senha</a></p>
-                </div>
-                <div class="patient-info">
-                    <h4>{{ model.Name }}</h4>
-                    <p>{{ model.Cpf }}</p>
-                    <p>{{ model.Email }}</p>
-                </div>
-                <div class="edit-button-div">
-                    <button-primary class="editBtn" @click="editPatient(model.IdPatient)"><PhPencil class="editIcon"/>{{ editOrSave}}</button-primary>
-                </div>
-            </div>
+  <div class="patient-content">
+    <div class="patientView-content">
+      <div
+        class="btnVoltar"
+        @click="goBack()"
+      >
+        <svg
+          class="go-back"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 129 129"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          enable-background="new 0 0 129 129"
+        >
+          <g>
+            <path d="m88.6,121.3c0.8,0.8 1.8,1.2 2.9,1.2s2.1-0.4 2.9-1.2c1.6-1.6 1.6-4.2 0-5.8l-51-51 51-51c1.6-1.6 1.6-4.2 0-5.8s-4.2-1.6-5.8,0l-54,53.9c-1.6,1.6-1.6,4.2 0,5.8l54,53.9z" />
+          </g>
+        </svg>
+        <span>Voltar</span>
+      </div>
+      <div class="patientView-header">
+        <div class="patient-info-editable">
+          <q-input
+            v-model="model.Name"
+            class="inputEditable"
+            placeholder="  Nome"
+          />
+          <q-input
+            v-model="model.Email"
+            class="inputEditable"
+            placeholder="  Email"
+          />
+          <q-input
+            v-model="model.Address"
+            class="inputEditable"
+            placeholder="  Endereço"
+          />
+          <q-input
+            v-model="model.Phone"
+            class="inputEditable"
+            placeholder="  Telefone"
+          />
+          <!--RECEM NASCIDO SELECT-->
+          <q-select
+            v-model="opcaoNewBorn"
+            class="select-quasar"
+            :options="opcoesSimNao"
+            label="&nbsp Recém nascido?"
+            placeholder="Selecione uma opção"
+            @update:model-value="changeNewBornValue()"
+          />
+          <q-input
+            v-model="model.Cid10"
+            type="number"
+            class="inputEditable"
+            placeholder=" CID10"
+          />
+          <!--ATIVO SELECT-->
+          <q-select
+            v-model="opcaoAtivo"
+            class="select-quasar"
+            :options="opcoesSimNao"
+            label="&nbsp Ativo?"
+            placeholder="Selecione uma opção"
+            @update:model-value="changeAtivoValue()"
+          />
+          <p class="alter-password">
+            <a
+              style="font-size:12px;"
+              class="change-pass"
+              @click="changePassword(model.IdPatient)"
+            >Alterar senha</a>
+          </p>
         </div>
-        <section>
-            <button-primary @click="showNextPersons()" class="nextPersonView">Ver pessoas próximas
-                <svg class="goNext" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129">
-                    <g>
-                        <path d="m88.6,121.3c0.8,0.8 1.8,1.2 2.9,1.2s2.1-0.4 2.9-1.2c1.6-1.6 1.6-4.2 0-5.8l-51-51 51-51c1.6-1.6 1.6-4.2 0-5.8s-4.2-1.6-5.8,0l-54,53.9c-1.6,1.6-1.6,4.2 0,5.8l54,53.9z"/>
-                    </g>
-                </svg>
-            </button-primary>
-            <h5>Anamnese</h5>
-            <q-input
-                :disable="campoAnamneseDesabilitado"
-                class="textarea"
-                label="Escreva a anamnese"
-                type="textarea"
-                v-model="anamneseModel.Notes"
-                :rows="15"
-            />
-            <q-checkbox v-model="analiseConclusiva" class="analiseConclusiva">Análise conclusiva</q-checkbox>
-            <div class="gerar-laudo-div">
-                <button-primary class="gerar-laudo" @click="gerarLaudo()">Gerar Laudo</button-primary>
-            </div>
-        </section>
+        <div class="patient-info">
+          <h4>{{ model.Name }}</h4>
+          <p>{{ model.Cpf }}</p>
+          <p>{{ model.Email }}</p>
+        </div>
+        <div class="edit-button-div">
+          <button-primary
+            class="editBtn"
+            @click="editPatient(model.IdPatient)"
+          >
+            <PhPencil class="editIcon" />{{ editOrSave }}
+          </button-primary>
+        </div>
+      </div>
     </div>
+    <section>
+      <button-primary
+        class="nextPersonView"
+        @click="showNextPersons()"
+      >
+        Ver pessoas próximas
+        <svg
+          class="goNext"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 129 129"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          enable-background="new 0 0 129 129"
+        >
+          <g>
+            <path d="m88.6,121.3c0.8,0.8 1.8,1.2 2.9,1.2s2.1-0.4 2.9-1.2c1.6-1.6 1.6-4.2 0-5.8l-51-51 51-51c1.6-1.6 1.6-4.2 0-5.8s-4.2-1.6-5.8,0l-54,53.9c-1.6,1.6-1.6,4.2 0,5.8l54,53.9z" />
+          </g>
+        </svg>
+      </button-primary>
+      <h5>Anamnese</h5>
+      <q-input
+        v-model="anamneseModel.Notes"
+        :disable="campoAnamneseDesabilitado"
+        class="textarea"
+        label="Escreva a anamnese"
+        type="textarea"
+        :rows="15"
+      />
+      <q-checkbox
+        v-model="analiseConclusiva"
+        class="analiseConclusiva"
+      >
+        Análise conclusiva
+      </q-checkbox>
+      <div class="gerar-laudo-div">
+        <button-primary
+          class="gerar-laudo"
+          @click="gerarLaudo()"
+        >
+          Gerar Laudo
+        </button-primary>
+      </div>
+    </section>
+  </div>
 </template>
 <script>
 import ButtonPrimary from '../../components/ButtonPrimary.vue';

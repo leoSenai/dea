@@ -98,7 +98,6 @@ export default {
         }
       );
       th.$api.PatientController.getById(th.patientId).then((response) => {
-        console.log(response)
         th.patientModel.Name = response.data.data.Name
       })
     },

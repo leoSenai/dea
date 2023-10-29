@@ -11,7 +11,7 @@ var acessRoles = [][]string{
 		"anamnesehasasking/get-by-asking-id;anamnesehasasking/get-all;anamnesehasasking/insert;proximityhasquiz/get-all;proximityhasquiz/get-by-id-quiz;" +
 		"proximityhasquiz/get-by-id-patient;proximityhasquiz/get-by-id-person;proximityhasquiz/insert;proximityhasquiz/update;" +
 		"patienthasdoctor/get-by-patient-id;patienthasdoctor/get-by-doctor-id;patienthasdoctor/get-all;patienthasdoctor/insert;anamnese/get-by-id-user-patient;" +
-		"proximity/get-persons-by-id-patient")},
+		"proximity/get-persons-by-id-patient;filiateds/update")},
 
 	{"U", ("person/get-by-id;person/get-all;person/insert;person/update;person/get-by-doc;" +
 		"user/get-by-id;user/get-all;user/insert;user/update;cbo/get-by-id;cbo/get-all;cbo/insert;" +
@@ -23,7 +23,7 @@ var acessRoles = [][]string{
 		"anamnesehasasking/get-by-asking-id;anamnesehasasking/get-all;anamnesehasasking/insert;proximityhasquiz/get-all;proximityhasquiz/get-by-id-quiz;" +
 		"proximityhasquiz/get-by-id-patient;proximityhasquiz/get-by-id-person;proximityhasquiz/insert;proximityhasquiz/update;" +
 		"patienthasdoctor/get-by-patient-id;patienthasdoctor/get-by-doctor-id;patienthasdoctor/get-all;patienthasdoctor/insert;anamnese/get-by-id-user-patient;" +
-		"proximity/get-persons-by-id-patient")},
+		"proximity/get-persons-by-id-patient;filiateds/update")},
 
 	{"P", ("user/get-by-id;user/get-all;" +
 		"patient/get-by-id;patient/get-all;doctor/get-by-id;doctor/get-all;" +

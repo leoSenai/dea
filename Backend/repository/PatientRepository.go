@@ -19,6 +19,18 @@ func GetPatientById(id int64) (patient models.Patient, err error) {
 	return
 }
 
+func GetPatientByName(name string) (patient models.Patient, err error) {
+	conn, err := db.GetDB()
+	if err != nil {
+		return
+	}
+
+	row := conn.First(&patient, "nome = ?", name)
+	log.Printf("row: %v", row)
+
+	return
+}
+
 func GetAllPatient() (patients []models.Patient, err error) {
 	conn, err := db.GetDB()
 	if err != nil {

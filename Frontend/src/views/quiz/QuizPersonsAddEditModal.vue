@@ -4,10 +4,13 @@
     @close="closeModal"
   >
     <template #modal-title>
-      Filiados ao questionário '{{ model.Name }}'
+      Filiados ao questionário <i>{{ model.Name }}</i> em aberto:
     </template>
     <template #modal-content>
       <q-form ref="form">
+        <p v-show="filiateds.length == 0">
+          Nenhum paciente ou pessoa próxima relacionado ao questionário.
+        </p>
         <div 
           v-for="(filiated) in filiateds"
           :key="filiated.Name"
@@ -82,7 +85,7 @@
           type="submit"
           @click="updateQuizFiliated"
         >
-          Atualizar lista
+          Atualizar lista {{ filiatedsLen }}
         </button-primary>
       </div>
     </template>
@@ -91,6 +94,7 @@
   <script>
 import ModalPrimary from '../../components/ModalPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
+import { PhPlus } from '@phosphor-icons/vue';
 
 //TODO: toda la mierda
 
@@ -101,11 +105,13 @@ export default {
   components: {
     ModalPrimary,
     ButtonPrimary,
+    PhPlus,
   },
   emits: ['close'],
   data() {
     return {
       addFiliatedQSelectVisible: false,
+      noneFiliatedsMessageVisible: true,
       filiatedToAddList: [],
       filiatedToRemoveList: [],
       show: false,
@@ -153,10 +159,17 @@ export default {
       var indexToRemove = th.filiatedToAddList.findIndex((fili) => {
         return (fili.Name === filiated_obj.Name && fili.Type === filiated_obj.Type);
       });
-      if(indexToRemove!=-1){console.log(indexToRemove) // se achou o filiado na filiatedToAddList, remove-o
+      if(indexToRemove!=-1){// se achou o filiado na filiatedToAddList, remove-o
         th.filiatedToAddList.splice(indexToRemove, 1)
         th.filiatedToRemoveList.push(filiated_obj)
         th.filiateds.push(filiated_obj)
+      }
+
+      var index2Remove = th.filiatedsRemoved.findIndex((fili) => {
+        return (fili.Name === filiated_obj.Name && fili.Type === filiated_obj.Type);
+      });
+      if(index2Remove!=-1){
+        th.filiatedsRemoved.splice(index2Remove, 1)
       }
 
       th.addFiliatedQSelectVisible = false
@@ -174,7 +187,6 @@ export default {
 
       if (current) {
         th.model = { ...current, Interval: +current.Interval };
-
         //PROCURA PESSOAS PROXIMAS QUE TENHAM FILIACAO COM O QUIZ
         th.$api.ProximityHasQuizController.getByIdQuiz(th.model.IdQuiz).then(({ data }) => {
           if(data.data!==''){
@@ -316,19 +328,13 @@ export default {
           }
         });
       }
-
-      //AGORA TEMOS JA A LISTA DE PACIENTES/PESSOAPROX PARA ADD NOVO
-      //ANTES DE CONTINUAR: FAZER UPDATE DA LISTA DE DE ADD caso o maluco resolver excluir algum, ou add, enquanto tem outros q-selects em aberto.
-
     },
     removeFiliated(filiated){
-      console.log('filiado removendo...')
 
       const th = this
       if(filiated.Name == ''){
         return
       }
-      console.log(filiated)
       if(filiated.Type==='Patient'){
         th.removePatient(filiated)
       }else{
@@ -398,13 +404,12 @@ export default {
       
       const th = this;
       const filiateds = th.filiateds
-
-      console.log(filiateds)
+      const filiatedsRemoved = th.filiatedsRemoved
 
       //th.filiateds = [{Name: '', Type: '', IdQuiz: 0}]
-      th.$api.PatientHasQuizController.update(filiateds)
-      th.$api.ProximityHasQuizController.update(filiateds)
-
+      //th.filiatedsRemoved = [{Name: '', Type: '', IdQuiz: 0}]
+      th.$api.FiliatedsController.update({Filiateds: filiateds, filiatedsRemoved: filiatedsRemoved})
+      th.closeModal()
     },
   },
 };

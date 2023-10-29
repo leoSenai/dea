@@ -123,6 +123,8 @@ func main() {
 	r.Post("/patienthasquiz/insert", utils.VerifyToken(controller.PostPatientQuiz))
 	r.Put("/patienthasquiz/update", utils.VerifyToken(controller.PutPatientQuiz))
 
+	r.Put("/filiateds/update", utils.VerifyToken(controller.PutFiliateds))
+
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {
 		log.Println("Server not initialized")

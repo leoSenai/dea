@@ -1,57 +1,88 @@
 <template>
-  <header class="bg-primary-700">
-    <button
-      class="hamburguer"
-      @click="toggleSidebar"
-    >
-      <PhList />
-    </button>
-    <div
-      class="logo white"
-      @click="goHome"
-    >
-      <q-img :src="LogoSrc" />
-      <h6>Clínica Motivar</h6>
-    </div>
-    <div class="user white">
-      <ph-user-circle
-        class="user-icon"
-        regular
-      />
-      <span class="text-body">Usuário</span>
-    </div>
-  </header>
-  <div
-    :class="['sidebar', 'bg-success', isSidebarActive ? 'active' : '']"
-    @blur="hideSidebar"
-  >
-    <template
-      v-for="link in links"
-      :key="link.path"
-    >
-      <router-link
-        :to="link.path"
-        class="link"
-        tabindex="0"
-        @blur="hideSidebar"
+  <div>
+    <header class="bg-primary-700">
+      <button
+        class="hamburguer"
+        @click="toggleSidebar"
       >
-        {{ link.name }}
-        <component
-          :is="link.icon"
-          class="link-icon"
-        />
-      </router-link>
-    </template>
+        <PhList size="1.4em" />
+      </button>
+      <div
+        class="logo white"
+        @click="goHome"
+      >
+        <q-img :src="LogoSrc" />
+        <h6 class="header-text">
+          Clínica Motivar
+        </h6>
+      </div>
+      <div
+        class="user-header"
+        @click="openProfileMenu"
+      >
+        <div :class="['user', 'white', showExitDropDown ? 'user-dropdown-active' : '']">
+          <ph-user-circle
+            class="user-icon"
+            regular
+          />
+          <span class="text-body"> {{ username }} </span>
+          <Transition name="top-to-bottom">
+            <div
+              v-show="showExitDropDown"
+              class="dropdown-exit"
+            >
+              <button
+                type="button"
+                @click="logout"
+              >
+                <PhSignOut
+                  weight="bold"
+                  size="16"
+                />
+                Sair
+              </button>
+            </div>
+          </Transition>
+        </div>
+      </div>
+    </header>
+    <div
+      :class="['sidebar', 'bg-success', isSidebarActive ? 'active' : '']"
+      @blur="hideSidebar"
+    >
+      <template
+        v-for="link in links"
+        :key="link.path"
+      >
+        <router-link
+          :to="link.path"
+          class="link"
+          tabindex="0"
+          @blur="hideSidebar"
+        >
+          {{ link.name }}
+          <component
+            :is="link.icon"
+            class="link-icon"
+          />
+        </router-link>
+      </template>
+    </div>
   </div>
 </template>
 
 <script>
-import { PhUserCircle, PhList } from '@phosphor-icons/vue';
+import { PhUserCircle, PhList, PhDoor, PhSignOut } from '@phosphor-icons/vue';
+import ButtonPrimary from '../components/ButtonPrimary.vue';
+import cookie from '../cookie';
 
 export default {
   components: {
     PhUserCircle,
     PhList,
+    ButtonPrimary,
+    PhDoor,
+    PhSignOut
   },
   props: {
     links: {
@@ -61,9 +92,15 @@ export default {
   },
   data() {
     return {
-      LogoSrc: 'src/assets/imgs/Logo.png',
+      LogoSrc: '/logo.png',
       isSidebarActive: false,
+      showExitDropDown: false
     };
+  },
+  computed: {
+    username() {
+      return cookie.getAuthUser(cookie.get('authToken'));
+    },
   },
   methods: {
     toggleSidebar() {
@@ -73,18 +110,29 @@ export default {
       this.isSidebarActive = false;
     },
     goHome() {
-      this.$router.push('/')
-    }
+      this.$router.push('/');
+    },
+    logout() {
+      const th = this;
+      th.$api.AuthController.logout();
+      this.$router.push('/login');
+    },
+    openProfileMenu() {
+      this.showExitDropDown = !this.showExitDropDown
+    },
   },
 };
 </script>
 
 <style scoped>
+.header-text {
+  text-align: center;
+}
+
 header {
   position: sticky;
   min-width: 100%;
   z-index: 999;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -141,10 +189,6 @@ header {
   color: white;
 }
 
-.link:hover {
-  background: rgba(0, 0, 0, 0.1);
-}
-
 .link-icon {
   font-size: 1.25rem;
 }
@@ -155,6 +199,8 @@ header {
   background: none;
   border: none;
   cursor: pointer;
+  margin-right: 1em;
+  color: #fff;
 }
 
 .sidebar {
@@ -163,5 +209,40 @@ header {
 
 .sidebar.active {
   transform: translateX(0%);
+}
+
+.user-header {
+  cursor: pointer;
+  position: relative;
+}
+
+.user.user-dropdown-active {
+  border-radius: 4px 4px 0 0;
+}
+
+.dropdown-exit {
+  position: absolute;
+  bottom: -4.25rem;
+  left: 0;
+  width: 100%;
+  display: flex;
+}
+
+.dropdown-exit button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: var(--primary-700);
+  border: none;
+  padding: .5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.dropdown-exit button:hover {
+  filter: brightness(0.8);
 }
 </style>

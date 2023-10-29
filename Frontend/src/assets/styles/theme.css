@@ -148,10 +148,3 @@
 .bg-warn-600 {
   background: var(--others-yellow-600) !important;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-      color: var(--neutral-white) !important;
-      background-color: #242424;
-  }
-}

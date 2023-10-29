@@ -5,9 +5,9 @@ import (
 	"api/repository"
 )
 
-func PostLogin(login models.Login) (err error) {
+func PostLogin(login models.Login) (token string, err error) {
 
-	err = repository.VerifyLoginCredentials(login)
+	token, err = repository.VerifyLoginCredentials(login)
 
-	return err
+	return token, err
 }

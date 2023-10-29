@@ -37,6 +37,39 @@ func GetAnamneseById(w http.ResponseWriter, r *http.Request) {
 	utils.ReturnResponseJSON(w, http.StatusOK, "Anamnese encontrada com sucesso!", anamnese)
 }
 
+func GetAnamneseByIdUserPatient(w http.ResponseWriter, r *http.Request) {
+	idUserParam := chi.URLParam(r, "idUser")
+	idPatientParam := chi.URLParam(r, "idPatient")
+	idUser, err := strconv.Atoi(idUserParam)
+	if err != nil {
+		log.Printf("Cannot parse ID User: %s", err.Error())
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi especificado o id do usuário procurado.", "")
+
+		return
+	}
+	idPatient, err := strconv.Atoi(idPatientParam)
+	if err != nil {
+		log.Printf("Cannot parse ID Patient: %s", err.Error())
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi especificado o id do paciente procurado.", "")
+
+		return
+	}
+
+	anamnese, err := service.GetAnamneseByIdUserPatient(int64(idUser), int64(idPatient))
+	if err != nil {
+		log.Printf("Cannot find Get: %s", err.Error())
+
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível encontrar a anamnese, houve um erro interno no servidor.", "")
+
+		return
+	} else if anamnese.IdAnamnese == 0 {
+		utils.ReturnResponseJSON(w, http.StatusNoContent, "Não foi possível encontrar a anamnese.", "")
+		return
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Anamnese encontrada com sucesso!", anamnese)
+}
+
 func GetAllAnamnese(w http.ResponseWriter, _ *http.Request) {
 	anamneses, err := service.GetAllAnamnese()
 	if err != nil {
@@ -89,7 +122,12 @@ func PutAnamnese(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	anamnese, err = service.PutAnamnese(anamnese)
+	if anamnese.IdAnamnese == 0 {
+		anamnese, err = service.PostAnamnese(anamnese)
+	} else {
+		anamnese, err = service.PutAnamnese(anamnese)
+	}
+
 	if err != nil {
 
 		log.Printf("Cannot do Put: %s", err.Error())

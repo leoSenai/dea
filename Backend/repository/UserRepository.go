@@ -10,7 +10,7 @@ import (
 )
 
 func GetUserById(id int64) (user models.User, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -21,8 +21,20 @@ func GetUserById(id int64) (user models.User, err error) {
 	return
 }
 
+func GetUserByLogin(login string) (user models.User, err error) {
+	conn, err := db.GetDB()
+	if err != nil {
+		return
+	}
+
+	row := conn.First(&user, "email = ? OR telefone = ?", login, login)
+	log.Printf("row: %v", row)
+
+	return
+}
+
 func GetAllUser() (users []models.User, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -34,7 +46,7 @@ func GetAllUser() (users []models.User, err error) {
 }
 
 func PostUser(userPost models.User) (userBack models.User, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
@@ -58,7 +70,7 @@ func PostUser(userPost models.User) (userBack models.User, err error) {
 }
 
 func PutUser(userPut models.User) (userBack models.User, err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}

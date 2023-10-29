@@ -1,6 +1,6 @@
 <template>
   <div class="row login-container">
-    <div :class="[isMobileScreen ? 'col-12' : 'col-5']">
+    <div :class="[pageSize === 'xs' ? 'col-12' : 'col-5']">
       <div class="login">
         <div class="login-logo">
           <img
@@ -11,7 +11,10 @@
         <h3 class="login-title">
           Clínica Motivar
         </h3>
-        <form @submit.prevent="submitForm">
+        <form
+          :class="pageSize === 'xl' || pageSize === 'lg' || pageSize === 'md' ? 'w-70' : ''"
+          @submit.prevent="submitForm"
+        >
           <div class="login-form">
             <InputTemplate
               v-model="model.user"
@@ -51,7 +54,7 @@
       </div>
     </div>
     <div
-      v-if="!isMobileScreen"
+      v-if="pageSize !== 'xs'"
       class="col-7"
     >
       <div class="login-background" />
@@ -61,7 +64,7 @@
 
 <script>
 import Cookie from '../cookie'
-import logo from '../assets/imgs/logo.png';
+import logo from '/logo.png';
 import InputTemplate from '../components/InputPrimary.vue';
 import ButtonTemplate from '../components/ButtonPrimary.vue';
 import { PhUser } from '@phosphor-icons/vue';
@@ -84,8 +87,13 @@ export default {
     };
   },
   computed: {
-    isMobileScreen() {
-      return this.$q.screen.xs
+    pageSize() {
+      return this.$q.screen.name
+    }
+  },
+  mounted() {
+    if (!document.getElementsByClassName('content')[0].classList.contains('login-screen')) {
+      document.getElementsByClassName('content')[0].classList.add('login-screen')
     }
   },
   methods: {
@@ -94,7 +102,12 @@ export default {
       th.$api.AuthController.login(th.model).then(({ data }) => {
         if (data) {
           Cookie.set({ name: 'authToken', value: data.data })
-          this.$router.push('/')
+          var userType = Cookie.getUserType(Cookie.get('authToken'))
+          if(userType=='A' || userType == 'U'){
+            this.$router.push('/')
+          }else if(userType == 'P'){
+            this.$router.push('/')
+          }
         }
       })
     }
@@ -104,6 +117,10 @@ export default {
 </script>
 
 <style scoped>
+.w-70 {
+  width: 70%;
+}
+
 .login-container {
   width: 100%;
   max-height: 100vh;
@@ -129,12 +146,14 @@ export default {
 
 .login-title {
   font-size: 2rem;
+  color: #fff !important;
 }
 
 .btn-login {
   width: 100%;
   font-size: 1rem;
   font-weight: 500;
+  color: #fff !important
 }
 
 .login-button {
@@ -149,7 +168,7 @@ export default {
 }
 
 .login-background {
-  background: url('../assets/imgs/login-background.png') no-repeat;
+  background: url(' /login-background.png') no-repeat;
   background-size: cover;
 }
 

@@ -17,8 +17,8 @@ func PostLogin(w http.ResponseWriter, r *http.Request) {
 		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")
 		return
 	}
-
-	err = service.PostLogin(login)
+	var token string
+	token, err = service.PostLogin(login)
 	if err != nil {
 		var status int
 		var message string
@@ -34,8 +34,6 @@ func PostLogin(w http.ResponseWriter, r *http.Request) {
 		utils.ReturnResponseJSON(w, status, message, "")
 		return
 	}
-
-	token, err := utils.GenerateTokenJWT(login.User)
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Credenciais válidas!", token)
 }

@@ -9,6 +9,7 @@ axios.interceptors.request.use(config => {
   config.headers = {
     Authorization: `; ${document.cookie}`.split('; authToken=').pop().split(';').shift()
   }
+  console.log(config)
   return config
 }, (err) => {
   return Promise.reject(err);
@@ -39,7 +40,7 @@ axios.interceptors.response.use((response) => {
       },
       offset: {
         x: 0,
-        y: location.href.includes('login') ? 0 : 65,
+        y: 70,
       },
     }).showToast();
   }
@@ -47,7 +48,7 @@ axios.interceptors.response.use((response) => {
 }, ({ response }) => {
   Toastify({
     avatar: '/x-circle-fill.svg',
-    text: response ? response.data.message : 'Ocorreu um erro!',
+    text: response && response.data ? response.data.message : 'Erro não identificado!',
     duration: 3000,
     gravity: 'top',
     position: 'right',
@@ -67,9 +68,12 @@ axios.interceptors.response.use((response) => {
     },
   }).showToast();
 
-  if (response.status === 401) {
+  if (response.status === 401 && !response.data.message.includes('Permissão Inválida')) {
     Cookie.delete('authToken');
     router.push('/login')
+  } else if (response.status === 401) {
+    router.push('/')
+    return
   }
 
   return response ? response : { data: null };

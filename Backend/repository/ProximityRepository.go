@@ -9,7 +9,7 @@ import (
 )
 
 func PostProximity(proximity models.Proximity) (err error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 
 	if err != nil {
 		return
@@ -21,7 +21,7 @@ func PostProximity(proximity models.Proximity) (err error) {
 }
 
 func GetProximityByIdPersonAndIdPatient(proximity models.Proximity) (found bool) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 
 	if err != nil {
 		return
@@ -38,7 +38,7 @@ func GetProximityByIdPersonAndIdPatient(proximity models.Proximity) (found bool)
 }
 
 func GetProximityAllByIdPerson(id int64) ([]models.Proximity, error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func GetProximityAllByIdPerson(id int64) ([]models.Proximity, error) {
 }
 
 func GetProximityAllByIdPatient(id int64) ([]models.Proximity, error) {
-	conn, err := db.OpenConnection()
+	conn, err := db.GetDB()
 	if err != nil {
 		return nil, err
 	}

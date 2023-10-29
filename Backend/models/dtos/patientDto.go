@@ -1,8 +1,9 @@
 package dtos
 
 type PatientDTO struct {
-	IdPatient int
+	IdPatient int64
 	Name      string
+	Email     string
 	Cpf       string
 	Address   string
 	Phone     string

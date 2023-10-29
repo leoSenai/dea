@@ -37,6 +37,7 @@ func GetPatientById(w http.ResponseWriter, r *http.Request) {
 	var patientDto dtos.PatientDTO = dtos.PatientDTO{
 		IdPatient: patient.IdPatient,
 		Name:      patient.Name,
+		Email:     patient.Email,
 		Cpf:       patient.Cpf,
 		Address:   patient.Address,
 		Phone:     patient.Phone,
@@ -127,4 +128,34 @@ func PutPatient(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Dados do paciente atualizados com sucesso!", "")
+}
+
+func ResetPasswordPatient(w http.ResponseWriter, r *http.Request) {
+	var request struct {
+		PatientID int64 `json:"patient_id"`
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi possível processar a solicitação.", "")
+		return
+	}
+
+	patient, err := service.GetPatientById(request.PatientID)
+	if err != nil {
+		log.Printf("Erro ao buscar paciente: %v", err.Error())
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Erro interno ao buscar o paciente.", "")
+		return
+	} else if patient.IdPatient == 0 {
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Paciente não encontrado com o ID fornecido.", "")
+		return
+	}
+
+	err = service.ResetPasswordPatient(patient)
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Erro interno ao atualizar a senha do paciente.", "")
+		return
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Senha do paciente redefinida com sucesso.", "")
 }

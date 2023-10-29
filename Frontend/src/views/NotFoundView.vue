@@ -15,17 +15,23 @@
   <div
     v-if="!isMobile"
     class="background-404"
+    :style="{ background: `url(${Background}) no-repeat bottom right` }"
   />
 </template>
 <script>
+import Background from '/404-background.svg'
 import ButtonPrimary from '../components/ButtonPrimary.vue'
 export default {
   components: {
     ButtonPrimary
   },
+  data() {
+    return {
+      Background
+    }
+  },
   computed: {
     isMobile() {
-      console.log(this.$q.screen)
       return this.$q.screen.xs || this.$q.screen.sm
     }
   },
@@ -53,6 +59,5 @@ export default {
   height: 100%;
   bottom: 5rem;
   right: 5rem;
-  background: url('../assets/imgs/404-background.svg') no-repeat bottom right;
 }
 </style>

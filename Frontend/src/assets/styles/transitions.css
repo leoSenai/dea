@@ -1,0 +1,63 @@
+.bounce-enter-active {
+  animation: bounce-in .5s;
+}
+.bounce-leave-active {
+  animation: bounce-in .5s reverse;
+}
+@keyframes bounce-in {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.bottom-to-top-enter-active {
+  animation: bottom-to-top .5s;
+}
+.bottom-to-top-leave-active {
+  animation: bottom-to-top .5s reverse;
+}
+@keyframes bottom-to-top {
+  from {
+    transform: translateY(200%) ;
+  }
+  to {
+    transform: translateY(0%);
+  }
+}
+
+.left-to-right-enter-active {
+  animation: left-to-right .5s;
+}
+.left-to-right-leave-active {
+  animation: left-to-right .5s reverse;
+}
+@keyframes left-to-right {
+  from {
+    opacity: 0;
+    transform: translateX(-20px) ;
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+.top-to-bottom-enter-active {
+  animation: top-to-bottom .5s;
+}
+.top-to-bottom-leave-active {
+  animation: top-to-bottom .5s reverse;
+}
+@keyframes top-to-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(-200%) ;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}

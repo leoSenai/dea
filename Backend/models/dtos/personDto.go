@@ -8,7 +8,13 @@ type PersonDTO struct {
 	DocType    string
 	Password   string
 	Salt       string
+	Phone      string
 	IdPatient  int64
 	DescPerson string
 	Email      string
+}
+
+type PersonResetPasswordDTO struct {
+	IdPerson int64
+	Email    string
 }

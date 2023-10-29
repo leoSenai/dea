@@ -1,3 +1,5 @@
+import AuthController from '../api/AuthController'
+
 export default {
   get(name) {
     return `; ${document.cookie}`.split(`; ${name}=`).pop().split(';').shift()
@@ -17,5 +19,14 @@ export default {
   },
   delete(name) {
     this.set({ name, value: '', isDeleting: true })
+  },
+  getAuthUser(tokenStr){
+    return AuthController.parseJwt(tokenStr)['Username']
+  },
+  getUserType(tokenStr){
+    return AuthController.parseJwt(tokenStr)['Typeuser']
+  },
+  getUserId(tokenStr){
+    return AuthController.parseJwt(tokenStr)['UserId']
   }
 }

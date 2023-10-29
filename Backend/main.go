@@ -46,6 +46,7 @@ func main() {
 	r.Post("/person/insert", utils.VerifyToken(controller.PostPerson))
 	r.Put("/person/update", utils.VerifyToken(controller.PutPerson))
 	r.Get("/person/get-by-doc/{docNumber}", utils.VerifyToken(controller.GetPersonByDocNumber))
+	r.Put("/person/reset-password", utils.VerifyToken(controller.ResetPassword))
 
 	r.Get("/user/get-by-id/{id}", utils.VerifyToken(controller.GetUserById))
 	r.Get("/user/get-all", utils.VerifyToken(controller.GetAllUser))
@@ -61,6 +62,7 @@ func main() {
 	r.Get("/patient/get-all", utils.VerifyToken(controller.GetAllPatient))
 	r.Post("/patient/insert", utils.VerifyToken(controller.PostPatient))
 	r.Put("/patient/update", utils.VerifyToken(controller.PutPatient))
+	r.Put("/patient/reset-password", utils.VerifyToken(controller.ResetPasswordPatient))
 
 	r.Get("/doctor/get-by-id/{id}", utils.VerifyToken(controller.GetDoctorById))
 	r.Get("/doctor/get-all", utils.VerifyToken(controller.GetAllDoctor))
@@ -83,9 +85,10 @@ func main() {
 	r.Put("/question/update", utils.VerifyToken(controller.PutQuestion))
 	r.Put("/question/update-bulk", utils.VerifyToken(controller.PutQuestionsBulk))
 	r.Put("/question/get-by-quiz/{idQuiz}", utils.VerifyToken(controller.GetQuestionsByQuiz))
-	r.Delete("/question/{id}", utils.VerifyToken(controller.DeleteQuestionById))
+	r.Delete("/question/delete/{id}", utils.VerifyToken(controller.DeleteQuestionById))
 
 	r.Get("/anamnese/get-by-id/{id}", utils.VerifyToken(controller.GetAnamneseById))
+	r.Get("/anamnese/get-by-id-user-patient/{idUser}/{idPatient}", utils.VerifyToken(controller.GetAnamneseByIdUserPatient))
 	r.Get("/anamnese/get-all", utils.VerifyToken(controller.GetAllAnamnese))
 	r.Post("/anamnese/insert", utils.VerifyToken(controller.PostAnamnese))
 	r.Put("/anamnese/update", utils.VerifyToken(controller.PutAnamnese))
@@ -98,23 +101,29 @@ func main() {
 	r.Post("/proximity/insert", utils.VerifyToken(controller.PostProximity))
 	r.Get("/proximity/get-by-id-person/{id}", utils.VerifyToken(controller.GetProximityAllByIdPerson))
 	r.Get("/proximity/get-by-id-patient/{id}", utils.VerifyToken(controller.GetProximityAllByIdPatient))
+	r.Get("/proximity/get-persons-by-id-patient/{id}", utils.VerifyToken(controller.GetPersonNoPasswordProximityAllByIdPatient))
 
 	r.Get("/anamnesehasasking/get-by-anamnese-id/{id}", utils.VerifyToken(controller.GetAnamneseHasAskingByAnamneseId))
 	r.Get("/anamnesehasasking/get-by-asking-id/{id}", utils.VerifyToken(controller.GetAnamneseHasAskingByAskingId))
 	r.Get("/anamnesehasasking/get-all", utils.VerifyToken(controller.GetAllAnamneseHasAsking))
 	r.Post("/anamnesehasasking/insert", utils.VerifyToken(controller.PostAnamneseHasAsking))
 
-	r.Get("/proximityhasquiz/get", utils.VerifyToken(controller.GetProximityQuizByQuizPatientPersonIDs))
+	r.Get("/proximityhasquiz/get-all", utils.VerifyToken(controller.GetProximityQuizByQuizPatientPersonIDs))
 	r.Get("/proximityhasquiz/get-by-id-quiz/{id}", utils.VerifyToken(controller.GetProximityQuizByQuizID))
 	r.Get("/proximityhasquiz/get-by-id-patient/{id}", utils.VerifyToken(controller.GetProximityQuizByPatientID))
 	r.Get("/proximityhasquiz/get-by-id-person/{id}", utils.VerifyToken(controller.GetProximityQuizByPersonID))
 	r.Post("/proximityhasquiz/insert", utils.VerifyToken(controller.PostProximityQuiz))
-	r.Post("/proximityhasquiz/update", utils.VerifyToken(controller.PutProximityQuiz))
+	r.Put("/proximityhasquiz/update", utils.VerifyToken(controller.PutProximityQuiz))
 
 	r.Get("/patienthasdoctor/get-by-patient-id/{id}", utils.VerifyToken(controller.GetPatientHasDoctorByPatientId))
 	r.Get("/patienthasdoctor/get-by-doctor-id/{id}", utils.VerifyToken(controller.GetPatientHasDoctorByDoctorId))
 	r.Get("/patienthasdoctor/get-all", utils.VerifyToken(controller.GetAllPatientHasDoctor))
 	r.Post("/patienthasdoctor/insert", utils.VerifyToken(controller.PostPatientHasDoctor))
+
+	r.Get("/patienthasquiz/get-by-id-quiz/{id}", utils.VerifyToken(controller.GetProximityQuizByQuizID))
+	r.Get("/patienthasquiz/get-by-id-patient/{id}", utils.VerifyToken(controller.GetProximityQuizByPatientID))
+	r.Post("/patienthasquiz/insert", utils.VerifyToken(controller.PostProximityQuiz))
+	r.Put("/patienthasquiz/update", utils.VerifyToken(controller.PutProximityQuiz))
 
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {

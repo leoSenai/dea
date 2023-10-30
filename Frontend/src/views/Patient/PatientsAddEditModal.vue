@@ -1,10 +1,7 @@
 <template>
-  <modal-primary
-    v-model="show"
-    @close="closeModal"
-  >
+  <modal-primary v-model="show" @close="closeModal">
     <template #modal-title>
-      {{ model && model.IdPatients ? "Editar" : 'Cadastrar' }} Pacientes
+      {{ model && model.IdPatient ? 'Editar' : 'Cadastrar' }} Pacientes
     </template>
     <template #modal-content>
       <q-form ref="form">
@@ -122,14 +119,14 @@
             <select-primary
               v-model="model.NewBorn"
               :label="'Recem nascido?'"
-              :options="['sim', 'não']"
+              :options="['Sim', 'Não']"
             />
           </div>
         </div>
       </q-form>
     </template>
     <template #modal-actions>
-      <button-primary
+      <button-primary 
         outlined
         size="sm"
         @click="closeModal"
@@ -137,11 +134,20 @@
         Fechar
       </button-primary>
       <button-primary
-        size="sm"
+        v-if="!model.IdPatient"
+        size="sm" 
         type="submit"
         @click="createPatient"
       >
         Cadastrar
+      </button-primary>
+      <button-primary
+        v-else
+        size="sm" 
+        type="submit"
+        @click="updatePatient"
+      >
+        Editar
       </button-primary>
     </template>
   </modal-primary>
@@ -154,78 +160,115 @@ import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import SelectPrimary from '../../components/SelectPrimary.vue';
 
 export default {
-    components: {
-        ModalPrimary,
-        InputPrimary,
-        ButtonPrimary,
-        SelectPrimary
+  components: {
+    ModalPrimary,
+    InputPrimary,
+    ButtonPrimary,
+    SelectPrimary,
+  },
+  emits: ['close'],
+  data() {
+    return {
+      show: false,
+      model: {
+        IdPatient: null,
+        Name: '',
+        Email: '',
+        Phone: '',
+        Address: '',
+        Cpf: '',
+        BornDate: null,
+        Sex: '',
+        DadName: '',
+        MomName: '',
+        Cid10: 0,
+        Password: '',
+        Cns: '',
+        NewBorn: '',
+      },
+    };
+  },
+  methods: {
+    openModal(current) {
+      const th = this;
+      th.show = true;
+      if (current) {
+        this.model = { ...current, NewBorn: current.NewBorn ? 'Sim' : 'Não' };
+      }
     },
-    emits: ['close'],
-    data() {
-        return {
-            show: false,
-            model: {
-              IdPatient: null,
-              Name: '',
-              Email: '',
-              Phone: '',
-              Address: '',
-              Cpf: '',
-              BornDate: null,
-              Sex: '',
-              DadName: '',
-              MomName: '',
-              Cid10: 0,
-              Password: '',
-              Cns: '',
-              NewBorn: 0
-            }
-        };
-    },
-    methods: {
-        openModal() {
-            const th = this;
-            th.show = true;
-        },
-        createPatient(){
-          const th = this;
-              if (!th.model.Name || !th.model.Email || !th.model.Phone || !th.model.Address || !th.model.Cpf 
-              || !th.model.BornDate || !th.model.Sex || !th.model.DadName || !th.model.MomName || !th.model.Cid10 || !th.model.Password || !th.model.Cns || !th.model.NewBorn ){
-              alert(
-               'Certifique-se de preencher todos os campos.'
-              );
-              return
-              }
-              th.model.Cid10 = th.model.Cid10 ? parseInt(th.model.Cid10, 10) : 0
-              if(th.model.NewBorn == 'sim') {
-               th.model.NewBorn = 1
-              } else {
-               th.model.NewBorn = 0
-              }
-              th.$api.PatientController.insert({
-                ...th.model,
-              })
-              .then(({ data }) => {
-              th.model = data.data;
-              if (th.model.IdPatient) {
-                th.patients.forEach((patient) => {
-                  const patientDto = {
-                    IdPatient: th.model.IdPatient,
-                    Desc: patient.Desc.trim(),
-                  };
-                  th.$api.PatientController.insert(patientDto)
-                });
-              }
-              return;
-            })
-            .then(() => {
-              th.closeModal();
+    createPatient() {
+      const th = this;
+      if (
+        !th.model.Name ||
+        !th.model.Email ||
+        !th.model.Phone ||
+        !th.model.Address ||
+        !th.model.Cpf ||
+        !th.model.BornDate ||
+        !th.model.Sex ||
+        !th.model.DadName ||
+        !th.model.MomName ||
+        !th.model.Cid10 ||
+        !th.model.Password ||
+        !th.model.Cns ||
+        !th.model.NewBorn
+      ) {
+        alert('Certifique-se de preencher todos os campos.');
+        return;
+      }
+      th.model.Cid10 = th.model.Cid10 ? parseInt(th.model.Cid10, 10) : 0;
+      if (th.model.NewBorn === 'Sim') {
+        th.model.NewBorn = 1;
+      } else {
+        th.model.NewBorn = 0;
+      }
+      th.$api.PatientController.insert({
+        ...th.model,
+      })
+        .then(({ data }) => {
+          th.model = data.data;
+          if (th.model.IdPatient) {
+            th.patients.forEach((patient) => {
+              const patientDto = {
+                IdPatient: th.model.IdPatient,
+                Desc: patient.Desc.trim(),
+              };
+              th.$api.PatientController.insert(patientDto);
             });
-        },
-        closeModal() {
-            this.show = false;
-            this.$emit('close');
-        },
-    }
-}
+          }
+          return;
+        })
+        .then(() => {
+          th.closeModal();
+        });
+    },
+    updatePatient() {
+      const th =this;
+
+      th.$api.PatientController.update({
+        ...th.model,
+      })
+        .then(({ data }) => {
+          th.model = data.data;
+          if (th.model.IdPatient) {
+            th.patients.forEach((patient) => {
+              const patientDto = {
+                IdPatient: th.model.IdPatient,
+                Desc: patient.Desc.trim(),
+              };
+              th.$api.PatientController.insert(patientDto);
+            });
+          }
+          return;
+        })
+        .then(() => {
+          th.closeModal();
+        });
+    },
+    closeModal() {
+      this.show = false;
+      this.$emit('close');
+    },
+  },
+};
 </script>

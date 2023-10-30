@@ -6,13 +6,13 @@ import (
 	"errors"
 )
 
-func VerifyLoginCredentials(login models.Login) (err error) {
+func VerifyLoginCredentials(login models.Login) (token string, err error) {
 
-	isValid := utils.IsPasswordValid(login.User, login.Password)
+	token, isValid := utils.IsPasswordValid(login.User, login.Password)
 
 	if !isValid {
 		err = errors.New("as credenciais sao invalidas")
 	}
 
-	return err
+	return token, err
 }

@@ -266,6 +266,7 @@ export default {
     },
     closeModal() {
       this.show = false;
+      this.model=[]
       this.$emit('close');
     },
   },

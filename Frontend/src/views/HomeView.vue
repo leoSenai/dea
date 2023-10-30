@@ -24,6 +24,16 @@ export default {
   data() {
     return {};
   },
+  mounted() {
+    try{
+      var contentLoginScreen = document.body.getElementsByClassName('login-screen')
+      if(contentLoginScreen.length!=0){
+        contentLoginScreen[0].classList.remove('login-screen')
+      }
+    }finally{
+      //
+    }
+  },
   methods: {
     goLinkMenu(linktag) {
       this.$router.push('/' + linktag);

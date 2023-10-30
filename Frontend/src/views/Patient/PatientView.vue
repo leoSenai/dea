@@ -106,7 +106,15 @@ export default {
         Indicative: 0,
       },
       campoAnamneseDesabilitado: false,
-    };
+      countdown: 5,
+      countdownInterval: null
+    }
+  },
+  watch: {
+    'anamneseModel.Notes' () {
+      clearInterval(this.countdownInterval)
+      this.startSaveCountdown()
+    },
   },
   mounted () {
     const th = this
@@ -157,6 +165,24 @@ export default {
       this.$router.push(
         '/paciente/' + this.model.IdPatient + '/pessoas-proximas'
       );
+    },
+    goBack() {
+      var contentElement = document.getElementsByClassName('content')[0];
+      contentElement.style.overflow = 'hidden';
+      window.history.back();
+    },
+    startSaveCountdown() {
+      this.countdownInterval = setInterval(() => {
+        if (this.countdown === 0) {
+          clearInterval(this.countdownInterval);
+          this.saveAnamnese()
+          this.resetSaveCountdown()
+        }
+        this.countdown -= 1
+      }, 1000);
+    },
+    resetSaveCountdown() {
+      this.countdown = 5;
     },
     load () {
       const th = this;

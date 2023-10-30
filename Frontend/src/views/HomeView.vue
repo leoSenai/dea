@@ -57,7 +57,7 @@ export default {
   flex-direction: column;
   gap: 1rem;
   width: 30rem;
-  border-radius: 4px;
+  border-radius: 15px;
   background: var(--primary-700);
   padding: 3rem 1rem;
 }

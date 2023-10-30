@@ -56,7 +56,7 @@ func GetProximityQuizByQuizID(w http.ResponseWriter, r *http.Request) {
 	proximityHasQuiz, err = service.GetProximityQuizByQuizID(int64(id))
 
 	if len(proximityHasQuiz) == 0 {
-		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não existem relacionamento para este questionario", "")
+		utils.ReturnResponseJSON(w, http.StatusNoContent, "Não existem pessoas próximas para este questionario", "")
 		return
 	}
 

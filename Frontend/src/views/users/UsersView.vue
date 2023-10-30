@@ -13,7 +13,7 @@
           @click="openAddEditModal()"
         >
           Adicionar
-          <PhPlus />
+          <PhPlus color="white" />
         </button>
       </div>
     </div>
@@ -37,7 +37,7 @@
           type="button"
           @click="openAddEditModal(user)"
         >
-          <PhPencil />
+          <PhPencil color="black" />
         </button>
       </div>
     </div>
@@ -49,7 +49,7 @@
         type="button"
         @click="openAddEditModal()"
       >
-        <PhPlus />
+        <PhPlus color="white" />
       </button>
     </div>
   </div>
@@ -127,7 +127,8 @@ export default {
   justify-content: center;
   transition: .2s;
   gap: .5rem;
-  padding: .5rem 1rem;
+  padding: 1rem 2rem;
+  color: white;
   cursor: pointer;
 }
 
@@ -166,7 +167,8 @@ export default {
 }
 
 .user {
-  border: 1px solid;
+  border: 1px solid var(--neutral-dark-gray);
+  color: var(--neutral-dark-gray);
   padding: 1rem;
   border-radius: 4px;
   display: flex;
@@ -191,6 +193,6 @@ export default {
 }
 
 .user button:hover {
-  background: var(--neutral-dark-gray);
+  background: var(--neutral-gray);
 }
 </style>

@@ -12,7 +12,10 @@
               @click="openAddEditModal()"
             >
               Adicionar
-              <PhPlus class="icon-color" />
+              <PhPlus 
+                class="icon-color" 
+                color="white" 
+              />
             </buttonPrimary>
           </div>
           <div 
@@ -33,14 +36,14 @@
                   <q-tooltip>
                     Redefinir Senha
                   </q-tooltip>
-                  <PhFingerprintSimple />
+                  <PhFingerprintSimple color="black" />
                 </button>
                 <button
                   class="edit-button"
                   type="button"
-                  @click="openAddEditModal(patient.IdPatient)"
+                  @click="openAddEditModal(patient)"
                 >
-                  <PhPencil />
+                  <PhPencil color="black" />
                 </button>
               </div>
             </div>
@@ -50,7 +53,10 @@
             type="button"
             @click="openAddEditModal()"
           >
-            <PhPlus class="icon-color" />
+            <PhPlus 
+              class="icon-color" 
+              color="white"
+            />
           </div>
           <PatientsAddEditModal 
             ref="addEdit"
@@ -144,7 +150,8 @@ export default {
 }
 
 .patients-list {
-  border: 1px solid;
+  border: 1px solid var(--neutral-dark-gray);
+  color: var(--neutral-dark-gray);
   width: 100%;
   border-radius: 0.25rem;
   padding: 0.5rem;
@@ -190,10 +197,15 @@ export default {
   padding: .25rem;
   height: 1.5rem;
   border-radius: 9999px;
+  cursor: pointer;
 }
 
 .patients-actions button:hover {
-  background: var(--neutral-dark-gray);
+  background: var(--neutral-gray);
+}
+
+.info-patients button {
+  color: white;
 }
 
 @media screen and (max-width: 992px) {

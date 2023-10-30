@@ -1,82 +1,14 @@
 <template>
   <div class="patient-content">
     <div class="patientView-content">
-      <div 
-        class="btnVoltar" 
-        @click="goBack()"
+      <div
+        class="back-page"
+        @click="goBack"
       >
-        <svg
-          class="go-back"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 129 129"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          enable-background="new 0 0 129 129"
-        >
-          <g>
-            <path
-              d="m88.6,121.3c0.8,0.8 1.8,1.2 2.9,1.2s2.1-0.4 2.9-1.2c1.6-1.6 1.6-4.2 0-5.8l-51-51 51-51c1.6-1.6 1.6-4.2 0-5.8s-4.2-1.6-5.8,0l-54,53.9c-1.6,1.6-1.6,4.2 0,5.8l54,53.9z"
-            />
-          </g>
-        </svg>
-        <span>Voltar</span>
+        <PhCaretLeft color="#656565" />
+        Voltar
       </div>
       <div class="patientView-header">
-        <div class="patient-info-editable">
-          <q-input
-            v-model="model.Name"
-            class="inputEditable"
-            placeholder="Nome"
-          />
-          <q-input
-            v-model="model.Email"
-            class="inputEditable"
-            placeholder="Email"
-          />
-          <q-input
-            v-model="model.Address"
-            class="inputEditable"
-            placeholder="Endereço"
-          />
-          <q-input
-            v-model="model.Phone"
-            class="inputEditable"
-            placeholder="Telefone"
-          />
-          <!--RECEM NASCIDO SELECT-->
-          <q-select
-            v-model="opcaoNewBorn"
-            class="select-quasar"
-            :options="opcoesSimNao"
-            label="&nbsp Recém nascido?"
-            placeholder="Selecione uma opção"
-            @update:model-value="changeNewBornValue()"
-          />
-          <q-input
-            v-model="model.Cid10"
-            type="number"
-            class="inputEditable"
-            placeholder="CID10"
-          />
-          <!--ATIVO SELECT-->
-          <q-select
-            v-model="opcaoAtivo"
-            class="select-quasar"
-            :options="opcoesSimNao"
-            label="&nbsp Ativo?"
-            placeholder="Selecione uma opção"
-            @update:model-value="changeAtivoValue()"
-          />
-          <p class="alter-password">
-            <a
-              style="font-size: 12px"
-              class="change-pass"
-              @click="changePassword(model.IdPatient)"
-            >
-              Alterar senha
-            </a>
-          </p>
-        </div>
         <div class="patient-info">
           <h4>{{ model.Name }}</h4>
           <p>{{ model.Cpf }}</p>
@@ -85,7 +17,7 @@
         <div class="edit-button-div">
           <button-primary
             class="editBtn" 
-            @click="editPatient(model.IdPatient)"
+            @click="editPatient"
           >
             <PhPencil class="editIcon" />
             {{ editOrSave }}
@@ -99,20 +31,7 @@
         @click="showNextPersons()" 
       >
         Ver pessoas próximas
-        <svg
-          class="goNext"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 129 129"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          enable-background="new 0 0 129 129"
-        >
-          <g>
-            <path
-              d="m88.6,121.3c0.8,0.8 1.8,1.2 2.9,1.2s2.1-0.4 2.9-1.2c1.6-1.6 1.6-4.2 0-5.8l-51-51 51-51c1.6-1.6 1.6-4.2 0-5.8s-4.2-1.6-5.8,0l-54,53.9c-1.6,1.6-1.6,4.2 0,5.8l54,53.9z"
-            />
-          </g>
-        </svg>
+        <PhCaretRight />
       </button-primary>
       <h5>Anamnese</h5>
       <q-editor
@@ -138,18 +57,26 @@
         </button-primary>
       </div>
     </section>
+    <PatientsAddEditModal 
+      ref="addEdit"
+      @close="load" 
+    />
   </div>
 </template>
 <script>
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
-import { PhPencil } from '@phosphor-icons/vue';
+import { PhCaretLeft, PhCaretRight, PhPencil } from '@phosphor-icons/vue';
 import cookie from '../../cookie';
+import PatientsAddEditModal from './PatientsAddEditModal.vue';
 
 export default {
   components: {
     ButtonPrimary,
     PhPencil,
-  },
+    PhCaretLeft,
+    PhCaretRight,
+    PatientsAddEditModal
+},
   data() {
     return {
       opcoesSimNao: ['Sim', 'Não'],
@@ -189,121 +116,17 @@ export default {
       this.startSaveCountdown()
     },
   },
-  mounted() {
-    const th = this;
-
-    var contentElement = document.getElementsByClassName('content')[0];
-    contentElement.style.overflow = 'auto';
-
-    const urlString = window.location.href;
-
-    // Analisando a string manualmente
-    const params = {};
-    const urlParts = urlString.split('?');
-    if (urlParts.length > 1) {
-      const queryParams = urlParts[1].split('&');
-      queryParams.forEach((param) => {
-        const [key, value] = param.split('=');
-        params[key] = value;
-      });
-    }
-
-    // Obtendo o valor do parâmetro 'id'
-    const id = params['id'];
-    th.model.IdPatient = id;
-
-    // Obtendo o valor do parâmetro 'edit'
-    const edit = params['edit'];
-
-    //Style shits
-    var element = document.getElementsByClassName('editIcon')[0];
-    var elementAlterPassword =
-      document.getElementsByClassName('alter-password')[0];
-    if (edit !== undefined && edit == 'true') {
-      //Quando para editar
-      element.style.display = 'none';
-      elementAlterPassword.style.display = 'block';
-      th.edit = true;
-      th.editOrSave = 'Salvar';
-      document.getElementsByClassName('patient-info')[0].style.display = 'none';
-      document.getElementsByClassName(
-        'patient-info-editable'
-      )[0].style.display = 'block';
-      document.getElementsByClassName('patientView-header')[0].style.display =
-        'block';
-    } else {
-      //Quando para salvar
-      th.edit = false;
-    }
-
-    //faz requisição para pegar info do paciente
-    th.$api.PatientController.getById(id).then(({ data }) => {
-      th.model = data.data;
-      th.opcaoNewBorn = th.model.NewBorn == 1 ? 'Sim' : 'Não';
-      th.opcaoAtivo = th.model.Active == '1' ? 'Sim' : 'Não';
-    });
-
-    var idUser = cookie.getUserId(cookie.get('authToken'));
-    th.$api.AnamneseController.getByIdUserPatient({
-      IdUser: idUser,
-      IdPatient: id,
-    }).then((response) => {
-      if (response.statusText !== 'No Content') {
-        //Found so update
-        var data = response.data.data;
-
-        //Bind the anamnese object
-        th.anamneseModel.Notes = data.Notes;
-        th.anamneseModel.IdAnamnese = data.IdAnamnese;
-        th.anamneseModel.IdPatient = data.IdPatient;
-        th.anamneseModel.IdUser = data.IdUser;
-        if (data.Indicative !== 0) {
-          th.campoAnamneseDesabilitado = true;
-        }
-      }
-    });
+  mounted () {
+    const th = this
+    th.load()
   },
   methods: {
-    editPatient(id) {
-      console.log(id);
-      //Style shits
+    goBack () {
+      this.$router.push('/pacientes')
+    },
+    editPatient() {
       const th = this;
-      var element = document.getElementsByClassName('editIcon')[0];
-      var elementAlterPassword =
-        document.getElementsByClassName('alter-password')[0];
-      if (th.edit == false && th.editOrSave == 'Editar') {
-        //Quando for para editar
-        element.style.display = 'none';
-        elementAlterPassword.style.display = 'block';
-        th.edit = true;
-        th.editOrSave = 'Salvar';
-        document.getElementsByClassName('patient-info')[0].style.display =
-          'none';
-        document.getElementsByClassName(
-          'patient-info-editable'
-        )[0].style.display = 'block';
-        document.getElementsByClassName('patientView-header')[0].style.display =
-          'block';
-      } else if (th.edit == true && th.editOrSave == 'Salvar') {
-        //Quando for para salvar
-        element = document.getElementsByClassName('editIcon')[0];
-        element.style.display = 'block';
-        elementAlterPassword.style.display = 'none';
-        th.edit = false;
-        th.editOrSave = 'Editar';
-        document.getElementsByClassName('patient-info')[0].style.display =
-          'block';
-        document.getElementsByClassName(
-          'patient-info-editable'
-        )[0].style.display = 'none';
-        document.getElementsByClassName('patientView-header')[0].style.display =
-          'flex';
-
-        this.savePatientData();
-        if (this.campoAnamneseDesabilitado == false) {
-          this.saveAnamnese();
-        }
-      }
+      th.$refs.addEdit.openModal(th.model)
     },
     savePatientData() {
       const th = this;
@@ -361,18 +184,22 @@ export default {
     resetSaveCountdown() {
       this.countdown = 5;
     },
+    load () {
+      const th = this;
+      const idPatient = th.$router.currentRoute.value.query.id
+      th.$api.PatientController.getById(idPatient).then(({data}) => {
+        th.model = { ...data.data }
+      })
+    }
   },
 };
 </script>
 <style scoped>
 .select-quasar {
-  background-color: #00000063;
   margin-bottom: 10px;
 }
 
 .inputEditable {
-  background-color: #00000063;
-
   margin-bottom: 10px;
 }
 
@@ -431,7 +258,6 @@ export default {
 .textarea {
   border-radius: 10px;
   border: 2px solid green;
-  background-color: rgba(26, 26, 26, 0.671);
   min-height: 30vh;
   padding: 10px;
   font-family: Arial, Helvetica, sans-serif;
@@ -444,20 +270,21 @@ h5 {
 
 .nextPersonView {
   border: 1px solid var(--primary);
-  background-color: rgba(26, 26, 26, 0.671);
+  background-color: var(--neutral-light-gray);
   color: green;
   margin: 10px;
   width: -webkit-fill-available;
   margin-bottom: 20px;
+  transition: .5s;
 }
 
 .nextPersonView:hover {
-  background-color: rgba(43, 43, 43, 0.671);
+  filter: brightness(0.8);
 }
 
 .patient-content {
   width: 99%;
-  height: auto;
+  overflow-y: auto;
   padding: 20px;
   padding-top: 0;
   margin-left: 0.5%;
@@ -470,7 +297,6 @@ h5 {
 
 section {
   display: block;
-  background-color: #1f1e1e;
   width: 99%;
   height: fit-content;
   margin-top: 2px;
@@ -503,7 +329,6 @@ section {
   width: 99%;
   height: auto;
   padding: 20px;
-  background-color: #1f1e1e;
   margin-left: 0.5%;
   margin-right: 0.5%;
   font-family: 'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial,
@@ -526,49 +351,15 @@ section {
   margin-left: -10px;
 }
 
-.btnVoltar {
-  margin-left: 0.5%;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  width: fit-content;
-  border-radius: 15px;
-  padding: 10px;
+.back-page {
   display: flex;
-  background-color: var(--primary);
+  align-items: center;
+  margin-top: 1.5rem;
   cursor: pointer;
-}
-</style>
-<style>
-.q-field__native,
-.q-field__prefix,
-.q-field__suffix,
-.q-field__input {
-  color: white !important;
+  transition: 1.5s;
 }
 
-.patientView-content .q-field__native.q-placeholder {
-  padding-left: 10px;
-}
-
-.q-field__label.no-pointer-events.absolute.ellipsis {
-  color: rgba(255, 255, 255, 0.678);
-}
-
-.q-checkbox__bg {
-  color: var(--primary) !important;
-  border-color: var(--primary);
-}
-
-.patient-info-editable .q-field__control.relative-position.row.no-wrap {
-  border: 1px solid #0000001c;
-}
-
-.q-menu.q-position-engine.scroll.q-menu--square {
-  background-color: #272727;
-}
-
-.select-quasar span {
-  margin-left: 10px;
-  margin-top: 10px;
+.back-page:hover {
+  filter: brightness(0.2);
 }
 </style>

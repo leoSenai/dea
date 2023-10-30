@@ -2,24 +2,11 @@
   <div>
     <div>
       <div
-        class="btnVoltar"
+        class="back-page"
         onclick="window.history.back()"
       >
-        <svg
-          class="go-back"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 129 129"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          enable-background="new 0 0 129 129"
-        >
-          <g>
-            <path
-              d="m88.6,121.3c0.8,0.8 1.8,1.2 2.9,1.2s2.1-0.4 2.9-1.2c1.6-1.6 1.6-4.2 0-5.8l-51-51 51-51c1.6-1.6 1.6-4.2 0-5.8s-4.2-1.6-5.8,0l-54,53.9c-1.6,1.6-1.6,4.2 0,5.8l54,53.9z"
-            />
-          </g>
-        </svg>
-        <span>Voltar</span>
+        <PhCaretLeft color="#656565" />
+        Voltar
       </div>
     </div>
     <div class="proximity-content">
@@ -63,13 +50,13 @@
             <q-tooltip>
               Redefinir Senha
             </q-tooltip>
-            <PhFingerprintSimple />
+            <PhFingerprintSimple color="black" />
           </button>
           <button
             type="button"
             @click="openAddEditModal(proximity)"
           >
-            <PhPencil />
+            <PhPencil color="black" />
           </button>
         </div>
       </div>
@@ -81,7 +68,7 @@
           type="button"
           @click="openAddEditModal()"
         >
-          <PhPlus />
+          <PhPlus color="white" />
         </button>
       </div>
     </div>
@@ -92,7 +79,7 @@
   </div>
 </template>
 <script>
-import { PhPlus, PhPencil, PhFingerprintSimple } from '@phosphor-icons/vue';
+import { PhPlus, PhPencil, PhFingerprintSimple, PhCaretLeft } from '@phosphor-icons/vue';
 import ProximityAddEditModal from './ProximityAddEditModal.vue';
 
 /* 
@@ -107,7 +94,8 @@ export default {
     PhPlus,
     ProximityAddEditModal,
     PhPencil,
-    PhFingerprintSimple
+    PhFingerprintSimple,
+    PhCaretLeft
   },
   data() {
     return {
@@ -141,7 +129,6 @@ export default {
         }
       );
       th.$api.PatientController.getById(th.patientId).then((response) => {
-        console.log(response)
         th.patientModel.Name = response.data.data.Name
       })
     },
@@ -164,16 +151,17 @@ export default {
   height: 18px;
 }
 
-.btnVoltar {
-  margin-left: 1em;
-  margin-top: 1em;
-  margin-bottom: 10px;
-  width: fit-content;
-  border-radius: 15px;
-  padding: 10px;
+.back-page {
   display: flex;
-  background-color: var(--primary);
+  align-items: center;
+  margin-top: 1.5rem;
+  margin-left: 1.5rem;
   cursor: pointer;
+  transition: 1.5s;
+}
+
+.back-page:hover {
+  filter: brightness(0.2);
 }
 
 .proximity-content {

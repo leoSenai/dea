@@ -1,45 +1,64 @@
-@import url("./typography.css");
-@import url("./theme.css");
-@import url("./responsive.css");
-@import url("./overwrite.css");
-@import url("./transitions.css");
+@import url('./typography.css');
+@import url('./theme.css');
+@import url('./responsive.css');
+@import url('./overwrite.css');
+@import url('./transitions.css');
 
 :root {
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    font-weight: 400;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
 
-    color-scheme: light dark;
-    color: rgba(255, 255, 255, 1);
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 1);
 
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background: white;
+  color: var(--neutral-dark-gray);
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 #app {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 a {
-    text-decoration: none;
-    color: black;
+  text-decoration: none;
+  color: black;
 }
 
 body {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+}
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--neutral-light-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--neutral-dark-gray);
+  border-radius: 99999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

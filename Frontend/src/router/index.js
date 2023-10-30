@@ -11,7 +11,7 @@ router.beforeEach((to) => {
   if (!authToken && to.path !== '/login') {
     return { path: '/login' }
   } else if (authToken && to.path === '/login') {
-    return { path: '/' }
+    return { path: '/home' }
   }
 });
 

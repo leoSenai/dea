@@ -110,7 +110,7 @@ export default {
       this.isSidebarActive = false;
     },
     goHome() {
-      this.$router.push('/');
+      this.$router.push('/home');
     },
     logout() {
       const th = this;

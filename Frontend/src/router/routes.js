@@ -20,7 +20,7 @@ const links = [
 
 export const routes = [
   {
-    path: '/',
+    path: '/home',
     components: {
       default: Home,
       header: Header,
@@ -38,17 +38,6 @@ export const routes = [
     },
     props: {
       header: { links },
-    },
-  },
-  {
-    path: '/home',
-    components: {
-      default: Home,
-      header: Header,
-    },
-    props: {
-      header: { links },
-      default: { links }
     },
   },
   {

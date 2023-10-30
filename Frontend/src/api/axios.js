@@ -72,7 +72,7 @@ axios.interceptors.response.use((response) => {
     Cookie.delete('authToken');
     router.push('/login')
   } else if (response.status === 401) {
-    router.push('/')
+    router.push('/home')
     return
   }
 

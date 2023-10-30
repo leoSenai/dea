@@ -1,10 +1,21 @@
 <template>
   <div class="home">
     <div class="home-options">
-      <template v-for="link in links" :key="link.path">
-        <router-link :to="link.path" class="link" tabindex="0" @blur="hideSidebar">
+      <template
+        v-for="link in links"
+        :key="link.path"
+      >
+        <router-link
+          :to="link.path"
+          class="link"
+          tabindex="0"
+          @blur="hideSidebar"
+        >
           {{ link.name }}
-          <component :is="link.icon" class="link-icon" />
+          <component
+            :is="link.icon"
+            class="link-icon"
+          />
         </router-link>
       </template>
     </div>

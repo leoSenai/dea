@@ -187,6 +187,15 @@ export default {
       th.$api.PatientController.getById(idPatient).then(({data}) => {
         th.model = { ...data.data }
       })
+
+      th.getAnamneseInfo()
+    },
+    getAnamneseInfo(){
+      const th = this;
+      const idPatient = th.$router.currentRoute.value.query.id
+      th.$api.AnamneseController.getByIdUserPatient({IdPatient: idPatient, IdUser: cookie.getUserId(cookie.get('authToken'))}).then(({data}) => {
+        th.anamneseModel = { ...data.data }
+      })
     }
   },
 };

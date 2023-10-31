@@ -13,6 +13,9 @@
           <h4>{{ model.Name }}</h4>
           <p>{{ model.Cpf }}</p>
           <p>{{ model.Email }}</p>
+          <p class="reset-password" @click="resetPassword">
+            Redefinir Senha
+          </p>
         </div>
         <div class="edit-button-div">
           <button-primary
@@ -164,6 +167,10 @@ export default {
       th.$api.PatientController.getById(idPatient).then(({data}) => {
         th.model = { ...data.data }
       })
+    },
+    resetPassword () {
+      const th = this;
+      th.$api.PatientController.resetPassword(th.model.IdPatient)
     }
   },
 };
@@ -335,5 +342,16 @@ section {
 
 .back-page:hover {
   filter: brightness(0.2);
+}
+
+p.reset-password {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: .875rem;
+  cursor: pointer;
+}
+
+p.reset-password:hover {
+  filter: brightness(0.8);
 }
 </style>

@@ -82,7 +82,7 @@
               required
             />
           </div>
-          <div class="col-12 col-lg-4">
+          <div class="col-12 col-lg-4 q-px-sm">
             <input-primary
               v-model="model.MomName"
               label="Nome da mãe"

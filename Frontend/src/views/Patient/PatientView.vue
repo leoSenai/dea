@@ -121,9 +121,6 @@ export default {
     th.load()
   },
   methods: {
-    goBack () {
-      this.$router.push('/pacientes')
-    },
     editPatient() {
       const th = this;
       th.$refs.addEdit.openModal(th.model)
@@ -169,7 +166,7 @@ export default {
     goBack() {
       var contentElement = document.getElementsByClassName('content')[0];
       contentElement.style.overflow = 'hidden';
-      window.history.back();
+      this.$router.push('/pacientes')
     },
     startSaveCountdown() {
       this.countdownInterval = setInterval(() => {

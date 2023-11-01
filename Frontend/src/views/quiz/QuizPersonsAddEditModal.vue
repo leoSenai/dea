@@ -14,7 +14,7 @@
         <div 
           v-for="(filiated) in filiateds"
           :key="filiated.Name"
-          class="row q-mb-sm quiz"
+          class="row q-mb-sm quiz filiatedsModal"
         >
           <span>{{ filiated.Name + (filiated.Type==='Patient' ? ' (paciente)' : ' (pessoa próxima)') }}</span>
           <button
@@ -420,6 +420,10 @@ export default {
   align-items: center;
   margin-bottom: 8px;
   z-index: 0;
+}
+
+.filiatedsModal{
+  padding: 16px;
 }
 
 .newFiliated{

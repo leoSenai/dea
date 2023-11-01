@@ -13,11 +13,17 @@
           <h4>{{ model.Name }}</h4>
           <p>{{ model.Cpf }}</p>
           <p>{{ model.Email }}</p>
+          <p
+            class="reset-password"
+            @click="resetPassword"
+          >
+            Redefinir Senha
+          </p>
         </div>
         <div class="edit-button-div">
           <button-primary
             class="editBtn" 
-            @click="editPatient(model.IdPatient)"
+            @click="editPatient"
           >
             <PhPencil class="editIcon" />
             {{ editOrSave }}
@@ -57,7 +63,10 @@
         </button-primary>
       </div>
     </section>
-    <PatientsAddEditModal />
+    <PatientsAddEditModal 
+      ref="addEdit"
+      @close="load" 
+    />
   </div>
 </template>
 <script>
@@ -103,21 +112,24 @@ export default {
         Indicative: 0,
       },
       campoAnamneseDesabilitado: false,
-    };
+      countdown: 5,
+      countdownInterval: null
+    }
+  },
+  watch: {
+    'anamneseModel.Notes' () {
+      clearInterval(this.countdownInterval)
+      this.startSaveCountdown()
+    },
   },
   mounted () {
     const th = this
-    const idPatient = th.$router.currentRoute.value.query.id
-    th.$api.PatientController.getById(idPatient).then(({data}) => {
-      th.model = { ...data.data }
-    })
+    th.load()
   },
   methods: {
-    goBack () {
-      this.$router.push('/pacientes')
-    },
-    editPatient(id) {
-      console.log(id)
+    editPatient() {
+      const th = this;
+      th.$refs.addEdit.openModal(th.model)
     },
     savePatientData() {
       const th = this;
@@ -157,6 +169,44 @@ export default {
         '/paciente/' + this.model.IdPatient + '/pessoas-proximas'
       );
     },
+    goBack() {
+      var contentElement = document.getElementsByClassName('content')[0];
+      contentElement.style.overflow = 'hidden';
+      this.$router.push('/pacientes')
+    },
+    startSaveCountdown() {
+      this.countdownInterval = setInterval(() => {
+        if (this.countdown === 0) {
+          clearInterval(this.countdownInterval);
+          this.saveAnamnese()
+          this.resetSaveCountdown()
+        }
+        this.countdown -= 1
+      }, 1000);
+    },
+    resetSaveCountdown() {
+      this.countdown = 5;
+    },
+    load () {
+      const th = this;
+      const idPatient = th.$router.currentRoute.value.query.id
+      th.$api.PatientController.getById(idPatient).then(({data}) => {
+        th.model = { ...data.data }
+      })
+
+      th.getAnamneseInfo()
+    },
+    getAnamneseInfo(){
+      const th = this;
+      const idPatient = th.$router.currentRoute.value.query.id
+      th.$api.AnamneseController.getByIdUserPatient({IdPatient: idPatient, IdUser: cookie.getUserId(cookie.get('authToken'))}).then(({data}) => {
+        th.anamneseModel = { ...data.data }
+      })
+    },
+    resetPassword () {
+      const th = this;
+      th.$api.PatientController.resetPassword(th.model.IdPatient)
+    }
   },
 };
 </script>
@@ -250,7 +300,7 @@ h5 {
 
 .patient-content {
   width: 99%;
-  height: auto;
+  overflow-y: auto;
   padding: 20px;
   padding-top: 0;
   margin-left: 0.5%;
@@ -327,5 +377,16 @@ section {
 
 .back-page:hover {
   filter: brightness(0.2);
+}
+
+p.reset-password {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: .875rem;
+  cursor: pointer;
+}
+
+p.reset-password:hover {
+  filter: brightness(0.8);
 }
 </style>

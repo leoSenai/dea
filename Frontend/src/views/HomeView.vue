@@ -35,6 +35,16 @@ export default {
   data() {
     return {};
   },
+  mounted() {
+    try{
+      var contentLoginScreen = document.body.getElementsByClassName('login-screen')
+      if(contentLoginScreen.length!=0){
+        contentLoginScreen[0].classList.remove('login-screen')
+      }
+    }finally{
+      //
+    }
+  },
   methods: {
     goLinkMenu(linktag) {
       this.$router.push('/' + linktag);
@@ -58,7 +68,7 @@ export default {
   flex-direction: column;
   gap: 1rem;
   width: 30rem;
-  border-radius: 4px;
+  border-radius: 15px;
   background: var(--primary-700);
   padding: 3rem 1rem;
 }

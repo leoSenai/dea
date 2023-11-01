@@ -9,7 +9,6 @@ axios.interceptors.request.use(config => {
   config.headers = {
     Authorization: `; ${document.cookie}`.split('; authToken=').pop().split(';').shift()
   }
-  console.log(config)
   return config
 }, (err) => {
   return Promise.reject(err);

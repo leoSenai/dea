@@ -31,7 +31,7 @@ func GetPatientQuizByQuizID(w http.ResponseWriter, r *http.Request) {
 	patientHasQuiz, err = service.GetPatientQuizByQuizID(int64(id))
 
 	if len(patientHasQuiz) == 0 {
-		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não existem relacionamento para este questionario", "")
+		utils.ReturnResponseJSON(w, http.StatusNoContent, "Não existem pacientes para este questionario", "")
 		return
 	}
 

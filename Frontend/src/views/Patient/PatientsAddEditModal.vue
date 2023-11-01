@@ -1,5 +1,8 @@
 <template>
-  <modal-primary v-model="show" @close="closeModal">
+  <modal-primary
+    v-model="show" 
+    @close="closeModal"
+  >
     <template #modal-title>
       {{ model && model.IdPatient ? 'Editar' : 'Cadastrar' }} Pacientes
     </template>
@@ -79,7 +82,7 @@
               required
             />
           </div>
-          <div class="col-12 col-lg-4">
+          <div class="col-12 col-lg-4 q-px-sm">
             <input-primary
               v-model="model.MomName"
               label="Nome da mãe"
@@ -102,15 +105,6 @@
             <input-primary
               v-model="model.Cns"
               label="CNS"
-              label-color="primary"
-              required
-            />
-          </div>
-          <div class="col-12 col-lg-4 q-px-sm">
-            <input-primary
-              v-model="model.Password"
-              type="password"
-              label="Senha"
               label-color="primary"
               required
             />
@@ -182,7 +176,6 @@ export default {
         DadName: '',
         MomName: '',
         Cid10: 0,
-        Password: '',
         Cns: '',
         NewBorn: '',
       },
@@ -243,7 +236,13 @@ export default {
         });
     },
     updatePatient() {
-      const th =this;
+      const th = this;
+
+      if (th.model.NewBorn === 'Sim') {
+        th.model.NewBorn = 1;
+      } else {
+        th.model.NewBorn = 0;
+      }
 
       th.$api.PatientController.update({
         ...th.model,
@@ -267,6 +266,7 @@ export default {
     },
     closeModal() {
       this.show = false;
+      this.model=[]
       this.$emit('close');
     },
   },

@@ -13,6 +13,11 @@ func GetPersonById(id int64) (person models.Person, err error) {
 	return person, err
 }
 
+func GetPersonByName(name string) (person models.Person, err error) {
+	person, err = repository.GetPersonByName(name)
+	return person, err
+}
+
 func GetPersonNoPasswordById(id int64, desc string) (personResultDto dtos.PersonResultDTO, err error) {
 	person, err := repository.GetPersonById(int64(id))
 	if err != nil {

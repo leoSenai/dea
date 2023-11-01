@@ -12,6 +12,16 @@ func GetPatientById(id int64) (patient models.Patient, err error) {
 	return patient, err
 }
 
+func GetAllPatientsByUserID(id int64) (patients []models.Patient, err error) {
+	patients, err = repository.GetAllPatientsByUserID(id)
+	return patients, err
+}
+
+func GetPatientByName(name string) (patient models.Patient, err error) {
+	patient, err = repository.GetPatientByName(name)
+	return patient, err
+}
+
 func GetAllPatient() (patients []models.Patient, err error) {
 	patients, err = repository.GetAllPatient()
 	return patients, err

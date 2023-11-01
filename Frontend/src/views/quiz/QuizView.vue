@@ -29,10 +29,16 @@
       :key="quiz.IdQuiz"
       class="row quiz"
     >
-      <p>
+      <p @click="openViewModal(quiz)">
         {{ quiz.Name }}
       </p>
       <div class="quiz-actions">
+        <button
+          type="button"
+          @click="openViewModal(quiz)"
+        >
+          <PhEye color="black" />
+        </button>
         <button
           type="button"
           @click="openAddEditModal(quiz)"
@@ -66,21 +72,28 @@
       ref="addPersons"
       @close="load"
     />
+    <QuizViewModal
+      ref="viewQuiz"
+      @close="load"
+    />
   </div>
 </template>
 <script>
-import { PhPlus, PhPencil, PhUser } from '@phosphor-icons/vue';
+import { PhPlus, PhPencil, PhUser, PhEye } from '@phosphor-icons/vue';
 import QuizAddEditModal from './QuizAddEditModal.vue';
 import QuizPersonsAddEditModal from './QuizPersonsAddEditModal.vue';
+import QuizViewModal from './QuizViewModal.vue'
 
 export default {
   components: {
     PhPlus,
     QuizAddEditModal,
     QuizPersonsAddEditModal,
+    QuizViewModal,
     PhPencil,
-    PhUser
-  },
+    PhUser,
+    PhEye
+},
   data() {
     return {
       model: {
@@ -115,6 +128,9 @@ export default {
     },
     openAddQuizPersons(current) {
       this.$refs.addPersons.openModal(current)
+    },
+    openViewModal(currentQuiz){
+      this.$refs.viewQuiz.openModal(currentQuiz)
     }
   },
 }
@@ -123,6 +139,9 @@ export default {
 .quiz-actions {
   display: flex;
   gap: 0.6em;
+  width: 20%;
+  justify-content: flex-end;
+  padding-right: 1rem;
 }
 
 .quiz-content {
@@ -189,7 +208,7 @@ export default {
 .quiz {
   border: 1px solid var(--neutral-dark-gray);
   color: var(--neutral-dark-gray);
-  padding: 1rem;
+  padding: 0;
   border-radius: 4px;
   display: flex;
   cursor: text;
@@ -203,6 +222,13 @@ export default {
 
 .quiz p {
   margin: 0;
+  width: 80%;
+  height: 100%;
+  padding-left: 1rem;
+  align-items: center;
+  display: flex;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .quiz button {
@@ -215,9 +241,15 @@ export default {
   justify-content: center;
   transition: .1s;
   border-radius: 9999px;
+  z-index: 1;
 }
 
 .quiz button:hover {
   background: var(--neutral-gray);
+}
+
+.row.quiz{
+  z-index: 0;
+  cursor: pointer;
 }
 </style>

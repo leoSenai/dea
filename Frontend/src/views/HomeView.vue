@@ -2,7 +2,7 @@
   <div class="home">
     <div class="home-options">
       <template
-        v-for="link in links"
+        v-for="link in linksData"
         :key="link.path"
       >
         <router-link
@@ -23,6 +23,7 @@
 </template>
 <script>
 import { PhBookOpen, PhPerson, PhScooter } from '@phosphor-icons/vue';
+import Cookie from '../cookie'
 
 export default {
   components: { PhScooter, PhBookOpen, PhPerson },
@@ -33,22 +34,37 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      userType: '',
+      linksData: []
+    };
   },
-  mounted() {
-    try{
-      var contentLoginScreen = document.body.getElementsByClassName('login-screen')
-      if(contentLoginScreen.length!=0){
-        contentLoginScreen[0].classList.remove('login-screen')
-      }
-    }finally{
-      //
-    }
+  mounted () {
+    this.getData()
+    this.naoSeiOqFaz()
   },
   methods: {
-    goLinkMenu(linktag) {
+    goLinkMenu (linktag) {
       this.$router.push('/' + linktag);
     },
+    getData () {
+      this.userType = Cookie.getUserType(Cookie.get('authToken'))
+      this.linksData = this.getLinksDataByUserType()
+    },
+    getLinksDataByUserType () {
+      return this.userType === 'P' ? this.links.filter(link => link.path === '/questionarios') : this.links
+    },
+    naoSeiOqFaz () {
+      try{
+        const contentLoginScreen = document.body.getElementsByClassName('login-screen')
+        console.log('contentLoginScreen', contentLoginScreen)
+        if(contentLoginScreen.length != 0){
+          contentLoginScreen[0].classList.remove('login-screen')
+        }
+      } finally {
+        //
+      }
+    }
   },
 };
 </script>

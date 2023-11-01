@@ -13,7 +13,10 @@
           <h4>{{ model.Name }}</h4>
           <p>{{ model.Cpf }}</p>
           <p>{{ model.Email }}</p>
-          <p class="reset-password" @click="resetPassword">
+          <p
+            class="reset-password"
+            @click="resetPassword"
+          >
             Redefinir Senha
           </p>
         </div>

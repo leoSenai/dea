@@ -39,6 +39,13 @@
         Ver pessoas próximas
         <PhCaretRight />
       </button-primary>
+      <button-primary
+        class="nextPersonView" 
+        @click="viewQuizzes()"
+      >
+        Questionários
+        <PhCaretRight />
+      </button-primary>
       <h5>Anamnese</h5>
       <q-editor
         v-model="anamneseModel.Notes"
@@ -81,7 +88,7 @@ export default {
     PhPencil,
     PhCaretLeft,
     PhCaretRight,
-    PatientsAddEditModal
+    PatientsAddEditModal,
 },
   data() {
     return {
@@ -127,6 +134,11 @@ export default {
     th.load()
   },
   methods: {
+    viewQuizzes() {
+      this.$router.push(
+        '/paciente/' + this.model.IdPatient + '/questionarios'
+      );
+    },
     editPatient() {
       const th = this;
       th.$refs.addEdit.openModal(th.model)
@@ -249,6 +261,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 0.5rem;
 }
 
 .edit-button-div .editBtn {
@@ -351,6 +364,7 @@ section {
     sans-serif;
   display: flex;
   justify-content: space-between;
+  gap: 10px;
 }
 
 .patientView-header section {

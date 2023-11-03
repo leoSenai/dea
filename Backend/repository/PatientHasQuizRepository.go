@@ -50,7 +50,7 @@ func GetPatientQuizByPatientID(patientID int64) ([]models.PatientHasQuiz, error)
 
 	var patientHasQuizzes []models.PatientHasQuiz
 
-	if err := conn.Where("proximidade_paciente_idpaciente = ?", patientID).Find(&patientHasQuizzes).Error; err != nil {
+	if err := conn.Where("paciente_idpaciente = ?", patientID).Find(&patientHasQuizzes).Error; err != nil {
 		return nil, err
 	}
 

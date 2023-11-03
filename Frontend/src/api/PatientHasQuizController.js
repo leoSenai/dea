@@ -8,6 +8,9 @@ export default {
     getByIdPatient(id) {
         return axios.get(this.url + 'get-by-id-patient/' + id)
     },
+    getByIdQuizPatient(idquiz, idpatient) {
+        return axios.get(this.url + 'get-by-id-quiz-patient/' + idquiz + '/' + idpatient) 
+    },
     insert(data) {
         return axios.insert(this.url + 'insert', data)
     },

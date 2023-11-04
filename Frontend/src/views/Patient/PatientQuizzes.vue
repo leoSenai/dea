@@ -1,5 +1,14 @@
 <template>
-  <div class="quiz-content">
+  <div class="patient-quiz-content">
+    <div>
+      <div
+        class="back-page"
+        onclick="window.history.back()"
+      >
+        <PhCaretLeft color="#656565" />
+        Voltar
+      </div>
+    </div>
     <div class="quiz-title">
       <div class="title">
         <h3>Questionários de {{ patient.Name }}</h3>
@@ -58,12 +67,13 @@
   </div>
 </template>
   <script>
-  import { PhPlus, PhEye } from '@phosphor-icons/vue';
+  import { PhPlus, PhEye, PhCaretLeft } from '@phosphor-icons/vue';
   import QuizViewModal from './PatientQuizViewModal.vue'
   
   export default {
     components: {
       PhPlus,
+      PhCaretLeft,
       QuizViewModal,
       PhEye
   },
@@ -136,12 +146,22 @@
     padding-right: 1rem;
   }
   
-  .quiz-content {
+  .patient-quiz-content {
     padding: 3rem 1.5rem;
+    padding-top: 0;
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: .75rem;
+  }
+
+  .back-page {
+    display: flex;
+    align-items: center;
+    margin-top: 1.5rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+    transition: 1.5s;
   }
   
   .quiz-title {

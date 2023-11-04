@@ -48,10 +48,17 @@
             :label="`Pergunta ${i + 1}`"
             label-color="primary"
           />
-          <div style="display: flex; width: 100%;gap: 5px;">
-            <p style="width: auto;">Resposta:</p>
+          <div
+            v-if="question.Answer!=''"
+            style="display: flex; width: 100%;gap: 5px;"
+          >
+            <p style="width: auto;">
+              Resposta: {{ question.Answer }}/{{ model.Interval }}
+            </p>
             <q-slider
               v-model="question.Answer"
+              class="q-slide answer"
+              style="justify-content: center;"
               :disable="true"
               :min="0"
               :max="model.Interval"
@@ -102,7 +109,7 @@
           Created: null,
           Updated: null,
         },
-        questions: [{ key: 0, Desc: '', IdQuestion: null }],
+        questions: [{ key: 0, Desc: '', IdQuestion: null, Answer: ''}],
       };
     },
     methods: {
@@ -127,7 +134,7 @@
                   return {
                     IdQuestion: el.IdQuestion,
                     Desc: el.Desc,
-                    Answer: answers[index],
+                    Answer: answers[index]==undefined ? '' : answers[index],
                     key: el.IdQuestion,
                   };
                 });
@@ -138,21 +145,40 @@
             })
         }
       },
+      goBack() {
+        this.$router.push('/pacienteInfo?id='+this.patient.IdPatient)
+      },
       closeModal() {
         this.show = false;
         this.model = {
           Name: '',
           IdQuiz: null,
-          Interval: 5,
+          Answer: '',
+          Interval: 5,  
         };
         this.$emit('close');
       },
     },
   };
   </script>
+<style>
+  .q-slide.answer .q-slider__track{
+    background: linear-gradient(to right, red, yellow 50%, #04df04) !important;
+  }
+  .q-slide.answer .q-slider__selection{
+    background: transparent;
+  }
+  .q-slide.answer .text-primary{
+    color: blue !important;
+  }
+</style>
   <style scoped>
   .fill-content {
     width: 100%;
+  }
+
+  p{
+    margin: 0;
   }
   
   .question {

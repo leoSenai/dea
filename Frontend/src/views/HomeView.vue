@@ -41,7 +41,7 @@ export default {
   },
   mounted () {
     this.getData()
-    this.naoSeiOqFaz()
+    this.fixScreenSize()
   },
   methods: {
     goLinkMenu (linktag) {
@@ -54,10 +54,9 @@ export default {
     getLinksDataByUserType () {
       return this.userType === 'P' ? this.links.filter(link => link.path === '/questionarios') : this.links
     },
-    naoSeiOqFaz () {
+    fixScreenSize () {
       try{
         const contentLoginScreen = document.body.getElementsByClassName('login-screen')
-        console.log('contentLoginScreen', contentLoginScreen)
         if(contentLoginScreen.length != 0){
           contentLoginScreen[0].classList.remove('login-screen')
         }

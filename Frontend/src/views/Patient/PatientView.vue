@@ -39,7 +39,24 @@
         Ver pessoas próximas
         <PhCaretRight />
       </button-primary>
-      <h5>Anamnese</h5>
+      <button-primary
+        class="nextPersonView" 
+        @click="viewQuizzes()"
+      >
+        Questionários
+        <PhCaretRight />
+      </button-primary>
+      <div style="display: flex; align-items: center;">
+        <h5>Anamnese</h5><p
+          id="loading-gif"
+          style="display: none; margin: 0;"
+        >
+          <img
+            src="/src/assets/imgs/loading.gif"
+            style="width: 50px; height: 50px;"
+          >
+        </p>
+      </div>
       <q-editor
         v-model="anamneseModel.Notes"
         :disable="campoAnamneseDesabilitado"
@@ -81,7 +98,7 @@ export default {
     PhPencil,
     PhCaretLeft,
     PhCaretRight,
-    PatientsAddEditModal
+    PatientsAddEditModal,
 },
   data() {
     return {
@@ -118,6 +135,7 @@ export default {
   },
   watch: {
     'anamneseModel.Notes' () {
+      document.getElementById('loading-gif').style.display = 'block';
       clearInterval(this.countdownInterval)
       this.startSaveCountdown()
     },
@@ -127,6 +145,11 @@ export default {
     th.load()
   },
   methods: {
+    viewQuizzes() {
+      this.$router.push(
+        '/paciente/' + this.model.IdPatient + '/questionarios'
+      );
+    },
     editPatient() {
       const th = this;
       th.$refs.addEdit.openModal(th.model)
@@ -141,6 +164,8 @@ export default {
       th.anamneseModel.IdPatient = th.model.IdPatient;
       th.anamneseModel.IdUser = cookie.getUserId(cookie.get('authToken'));
       th.$api.AnamneseController.update(th.anamneseModel);
+      //desaparece loading
+      document.getElementById('loading-gif').style.display = 'none';
     },
     changePassword(id) {
       alert(id + ' - FUTURA IMPLEMENTACAO');
@@ -200,7 +225,7 @@ export default {
       const th = this;
       const idPatient = th.$router.currentRoute.value.query.id
       th.$api.AnamneseController.getByIdUserPatient({IdPatient: idPatient, IdUser: cookie.getUserId(cookie.get('authToken'))}).then(({data}) => {
-        th.anamneseModel = { ...data.data }
+        data.data==undefined ? console.log('Anamnese pronta para ser criada.') : th.anamneseModel = { ...data.data }
       })
     },
     resetPassword () {
@@ -249,6 +274,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 0.5rem;
 }
 
 .edit-button-div .editBtn {
@@ -351,6 +377,7 @@ section {
     sans-serif;
   display: flex;
   justify-content: space-between;
+  gap: 10px;
 }
 
 .patientView-header section {

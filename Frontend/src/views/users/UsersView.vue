@@ -35,6 +35,15 @@
       <div class="user-actions">
         <button
           type="button"
+          @click="resetPassword(user)"
+        >
+          <q-tooltip>
+            Redefinir Senha
+          </q-tooltip>
+          <PhFingerprintSimple color="black" />
+        </button>
+        <button
+          type="button"
           @click="openViewModal(user)"
         >
           <PhEye color="black" />
@@ -69,7 +78,7 @@
   </div>
 </template>
 <script>
-import { PhPlus, PhPencil, PhEye } from '@phosphor-icons/vue';
+import { PhPlus, PhPencil, PhEye, PhFingerprintSimple } from '@phosphor-icons/vue';
 import UsersAddEditModal from './UsersAddEditModal.vue';
 import ViewUserModal from './UserViewModal.vue'
 
@@ -79,7 +88,8 @@ export default {
     ViewUserModal,
     PhEye,
     PhPencil,
-    UsersAddEditModal
+    UsersAddEditModal,
+    PhFingerprintSimple
   },
   data() {
     return {
@@ -115,6 +125,10 @@ export default {
     },
     openAddEditModal(current) {
       this.$refs.addEdit.openModal(current)
+    },
+    resetPassword ({IdUser}) {
+      const th = this;
+      th.$api.UsersController.resetPassword(IdUser)
     }
   },
 }

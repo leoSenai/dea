@@ -52,6 +52,7 @@ func main() {
 	r.Get("/user/get-all", utils.VerifyToken(controller.GetAllUser))
 	r.Post("/user/insert", utils.VerifyToken(controller.PostUser))
 	r.Put("/user/update", utils.VerifyToken(controller.PutUser))
+	r.Put("/user/reset-password", utils.VerifyToken(controller.ResetPasswordUser))
 
 	r.Get("/cbo/get-by-id/{id}", utils.VerifyToken(controller.GetCboById))
 	r.Get("/cbo/get-all", utils.VerifyToken(controller.GetAllCbo))

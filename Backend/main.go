@@ -121,6 +121,7 @@ func main() {
 	r.Post("/patienthasdoctor/insert", utils.VerifyToken(controller.PostPatientHasDoctor))
 
 	r.Get("/patienthasquiz/get-by-id-quiz/{id}", utils.VerifyToken(controller.GetPatientQuizByQuizID))
+	r.Get("/patienthasquiz/get-by-id-quiz-patient/{idquiz}/{idpatient}", utils.VerifyToken(controller.GetPatientQuizByQuizPatientID))
 	r.Get("/patienthasquiz/get-by-id-patient/{id}", utils.VerifyToken(controller.GetPatientQuizByPatientID))
 	r.Post("/patienthasquiz/insert", utils.VerifyToken(controller.PostPatientQuiz))
 	r.Put("/patienthasquiz/update", utils.VerifyToken(controller.PutPatientQuiz))

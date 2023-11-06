@@ -154,7 +154,7 @@ export default {
   color: var(--neutral-dark-gray);
   width: 100%;
   border-radius: 0.25rem;
-  padding: 0.5rem;
+  padding: 0;
   display: flex;
   justify-content: space-between;
 }
@@ -166,7 +166,7 @@ export default {
 .patients-list span{
   width: -webkit-fill-available;
   cursor: pointer;
-  padding: 15px;
+  padding: 0.8em;
   font-size: 1.25rem;
   font-weight: 300;
 }

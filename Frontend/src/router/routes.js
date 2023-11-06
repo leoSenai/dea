@@ -4,6 +4,7 @@ import PatientView from '../views/Patient/PatientView.vue'
 import Header from '../components/HeaderPrimary.vue';
 import Patients from '../views/Patient/PatientsView.vue';
 import Proximity from '../views/Proximity/ProximityView.vue';
+import PatientQuizzes from '../views/Patient/PatientQuizzes.vue'
 import Users from '../views/Users/UsersView.vue'
 import InputPrimary from '../components/InputPrimary.vue';
 import NotFound from '../views/NotFoundView.vue';
@@ -60,6 +61,16 @@ export const routes = [
     path: '/paciente/:id/pessoas-proximas',
     components: {
       default: Proximity,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+  },
+  {
+    path: '/paciente/:id/questionarios',
+    components: {
+      default: PatientQuizzes,
       header: Header,
     },
     props: {

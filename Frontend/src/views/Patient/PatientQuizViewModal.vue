@@ -34,14 +34,8 @@
           :key="question.key"
           class="question row q-mb-sm"
         >
-          <button
-            v-if="questions.length > 1"
-            class="remove-question rounded-full"
-            @click="removeQuestion(i)"
-          >
-            <PhX weight="bold" />
-          </button>
           <input-primary
+            v-if="question.Answer==''"
             v-model="question.Desc"
             :disable="true"
             :name="`${i}`"
@@ -51,21 +45,15 @@
           <div
             v-if="question.Answer!=''"
             style="display: flex; width: 100%;gap: 5px;"
-          >
-            <p style="width: auto;">
-              Resposta: {{ question.Answer }}/{{ model.Interval }}
-            </p>
-            <q-slider
-              v-model="question.Answer"
-              class="q-slide answer"
-              style="justify-content: center;"
-              :disable="true"
-              :min="0"
-              :max="model.Interval"
-              :step="1"
-              label
-              color="primary"
-            />
+          >  
+            <QuestionPrimary
+              :model-value="parseInt(question.Answer)"
+              :answer-range="model.Interval"
+              :question-number="question.key"
+              :is-answered="false"
+            >
+              <i>{{ question.Desc }}</i>
+            </QuestionPrimary>
           </div>
         </div>
       </q-form>
@@ -85,17 +73,17 @@
   </modal-primary>
 </template>
   <script>
-  import ModalPrimary from '../../components/ModalPrimary.vue';
-  import InputPrimary from '../../components/InputPrimary.vue';
-  import ButtonPrimary from '../../components/ButtonPrimary.vue';
-  import { PhX } from '@phosphor-icons/vue';
+import ModalPrimary from '../../components/ModalPrimary.vue';
+import InputPrimary from '../../components/InputPrimary.vue';
+import ButtonPrimary from '../../components/ButtonPrimary.vue';
+import QuestionPrimary from '../../components/QuestionPrimary.vue';
 
   export default {
     components: {
       ModalPrimary,
       InputPrimary,
       ButtonPrimary,
-      PhX,
+      QuestionPrimary,
     },
     emits: ['close'],
     data() {

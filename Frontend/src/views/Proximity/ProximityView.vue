@@ -45,6 +45,12 @@
         <div class="proximity-actions">
           <button
             type="button"
+            @click="openViewModal(proximity)"
+          >
+            <PhTable color="black" />
+          </button>
+          <button
+            type="button"
             @click="resetPassword(proximity)"
           >
             <q-tooltip>
@@ -57,6 +63,12 @@
             @click="openAddEditModal(proximity)"
           >
             <PhPencil color="black" />
+          </button>
+          <button
+            type="button"
+            @click="openViewModal(proximity)"
+          >
+            <PhEye color="black" />
           </button>
         </div>
       </div>
@@ -76,11 +88,16 @@
       ref="addEdit"
       @close="load"
     />
+    <ProximityViewModal
+      ref="viewModal"
+      @close="load"
+    />
   </div>
 </template>
 <script>
-import { PhPlus, PhPencil, PhFingerprintSimple, PhCaretLeft } from '@phosphor-icons/vue';
+import { PhPlus, PhPencil, PhFingerprintSimple, PhCaretLeft, PhEye, PhTable } from '@phosphor-icons/vue';
 import ProximityAddEditModal from './ProximityAddEditModal.vue';
+import ProximityViewModal from './ProximityViewModal.vue'
 
 /* 
 
@@ -93,10 +110,13 @@ export default {
   components: {
     PhPlus,
     ProximityAddEditModal,
+    ProximityViewModal,
     PhPencil,
     PhFingerprintSimple,
-    PhCaretLeft
-  },
+    PhCaretLeft,
+    PhEye,
+    PhTable
+},
   data() {
     return {
       model: {
@@ -140,6 +160,9 @@ export default {
     },
     resetPassword({ IdPerson, Email }) {
       this.$api.PersonController.resetPassword({ IdPerson, Email })
+    },
+    openViewModal(current) {
+      this.$refs.viewModal.openModal(current);
     }
   },
 };

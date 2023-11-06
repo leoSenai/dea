@@ -34,32 +34,37 @@
         {{ model.message }}
       </div>
       <div
-        v-for="proximity in model.data"
         v-else
-        :key="proximity.Idproximity"
-        class="row proximity"
+        class="proximity-list"
       >
-        <p>
-          {{ proximity.Name }}
-        </p>
-        <div class="proximity-actions">
-          <button
-            type="button"
-            @click="resetPassword(proximity)"
-          >
-            <q-tooltip>
-              Redefinir Senha
-            </q-tooltip>
-            <PhFingerprintSimple color="black" />
-          </button>
-          <button
-            type="button"
-            @click="openAddEditModal(proximity)"
-          >
-            <PhPencil color="black" />
-          </button>
+        <div
+          v-for="proximity in model.data"
+          :key="proximity.Idproximity"
+          class="row proximity"
+        >
+          <p>
+            {{ proximity.Name }}
+          </p>
+          <div class="proximity-actions">
+            <button
+              type="button"
+              @click="resetPassword(proximity)"
+            >
+              <q-tooltip>
+                Redefinir Senha
+              </q-tooltip>
+              <PhFingerprintSimple color="black" />
+            </button>
+            <button
+              type="button"
+              @click="openAddEditModal(proximity)"
+            >
+              <PhPencil color="black" />
+            </button>
+          </div>
         </div>
       </div>
+
       <div
         v-if="isMobile"
         class="add-proximity"
@@ -239,6 +244,15 @@ export default {
 .add-proximity button:hover {
   filter: brightness(0.8);
   cursor: pointer;
+}
+
+.proximity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 70vh;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .proximity {

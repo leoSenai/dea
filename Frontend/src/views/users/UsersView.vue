@@ -24,38 +24,43 @@
       {{ model.message }}
     </div>
     <div
-      v-for="user in model.data"
       v-else
-      :key="user.Id"
-      class="row user"
+      class="user-list"
     >
-      <p @click="openViewModal(user)">
-        {{ user.Name }}
-      </p>
-      <div class="user-actions">
-        <button
-          type="button"
-          @click="resetPassword(user)"
-        >
-          <q-tooltip>
-            Redefinir Senha
-          </q-tooltip>
-          <PhFingerprintSimple color="black" />
-        </button>
-        <button
-          type="button"
-          @click="openViewModal(user)"
-        >
-          <PhEye color="black" />
-        </button>
-        <button
-          type="button"
-          @click="openAddEditModal(user)"
-        >
-          <PhPencil color="black" />
-        </button>
+      <div
+        v-for="user in model.data"
+        :key="user.Id"
+        class="row user"
+      >
+        <p @click="openViewModal(user)">
+          {{ user.Name }}
+        </p>
+        <div class="user-actions">
+          <button
+            type="button"
+            @click="resetPassword(user)"
+          >
+            <q-tooltip>
+              Redefinir Senha
+            </q-tooltip>
+            <PhFingerprintSimple color="black" />
+          </button>
+          <button
+            type="button"
+            @click="openViewModal(user)"
+          >
+            <PhEye color="black" />
+          </button>
+          <button
+            type="button"
+            @click="openAddEditModal(user)"
+          >
+            <PhPencil color="black" />
+          </button>
+        </div>
       </div>
     </div>
+
     <div
       v-if="isMobile"
       class="add-user"
@@ -215,6 +220,15 @@ export default {
 .add-user button:hover {
   filter: brightness(0.8);
   cursor: pointer;
+}
+
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 70vh;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .user {

@@ -29,10 +29,16 @@
       :key="user.Id"
       class="row user"
     >
-      <p>
+      <p @click="openViewModal(user)">
         {{ user.Name }}
       </p>
       <div class="user-actions">
+        <button
+          type="button"
+          @click="openViewModal(user)"
+        >
+          <PhEye color="black" />
+        </button>
         <button
           type="button"
           @click="openAddEditModal(user)"
@@ -52,19 +58,26 @@
         <PhPlus color="white" />
       </button>
     </div>
+    <UsersAddEditModal
+      ref="addEdit"
+      @close="load"
+    />
+    <ViewUserModal
+      ref="viewUser"
+      @close="load"
+    />
   </div>
-  <UsersAddEditModal
-    ref="addEdit"
-    @close="load"
-  />
 </template>
 <script>
-import { PhPlus, PhPencil } from '@phosphor-icons/vue';
+import { PhPlus, PhPencil, PhEye } from '@phosphor-icons/vue';
 import UsersAddEditModal from './UsersAddEditModal.vue';
+import ViewUserModal from './UserViewModal.vue'
 
 export default {
   components: {
     PhPlus,
+    ViewUserModal,
+    PhEye,
     PhPencil,
     UsersAddEditModal
   },
@@ -86,6 +99,9 @@ export default {
     this.load();
   },
   methods: {
+    openViewModal(currentUser){
+      this.$refs.viewUser.openModal(currentUser)
+    },
     load() {
       const th = this;
       th.$api.UsersController.getAll().then(({ data }) => {
@@ -116,6 +132,27 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.row.user{
+  padding: 0;
+  width: 100%;
+  display: flex;
+  cursor: pointer;
+}
+
+.row.user p{
+  padding: 1em;
+  width: -webkit-fill-available;
+}
+
+.row.user .user-actions{
+  position: auto;
+  display: flex;
+  padding-right: 1em;
+  width: auto;
+  height: auto;
+  margin-left: -60%;
 }
 
 .title-add-user button {
@@ -169,7 +206,7 @@ export default {
 .user {
   border: 1px solid var(--neutral-dark-gray);
   color: var(--neutral-dark-gray);
-  padding: 1rem;
+  padding: 0.8rem;
   border-radius: 4px;
   display: flex;
   justify-content: space-between;
@@ -194,5 +231,10 @@ export default {
 
 .user button:hover {
   background: var(--neutral-gray);
+}
+
+.user-actions{
+  display: flex;
+  gap: 1em;
 }
 </style>

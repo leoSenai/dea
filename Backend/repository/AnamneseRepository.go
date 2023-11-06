@@ -62,7 +62,6 @@ func PutAnamnese(anamnesePut models.Anamnese) (anamneseBack models.Anamnese, err
 	}
 
 	anamneseBack = anamnesePut
-	anamneseBack.IdAnamnese = 0
 
 	if anamnesePut.IdAnamnese != 0 {
 		row := conn.Table("anamnese").Where("idanamnese = ?", anamnesePut.IdAnamnese).Updates(&anamneseBack)

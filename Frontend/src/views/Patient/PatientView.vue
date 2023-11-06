@@ -89,7 +89,7 @@
 <script>
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import { PhCaretLeft, PhCaretRight, PhPencil } from '@phosphor-icons/vue';
-import cookie from '../../cookie';
+import cookie from '../../utils/cookie';
 import PatientsAddEditModal from './PatientsAddEditModal.vue';
 
 export default {
@@ -225,7 +225,9 @@ export default {
       const th = this;
       const idPatient = th.$router.currentRoute.value.query.id
       th.$api.AnamneseController.getByIdUserPatient({IdPatient: idPatient, IdUser: cookie.getUserId(cookie.get('authToken'))}).then(({data}) => {
-        data.data==undefined ? console.log('Anamnese pronta para ser criada.') : th.anamneseModel = { ...data.data }
+        if (data.data) {
+          th.anamneseModel = { ...data.data }
+        }
       })
     },
     resetPassword () {

@@ -74,7 +74,7 @@
 <script>
 import { PhUserCircle, PhList, PhDoor, PhSignOut } from '@phosphor-icons/vue';
 import ButtonPrimary from '../components/ButtonPrimary.vue';
-import cookie from '../cookie';
+import cookie from '../utils/cookie';
 
 export default {
   components: {

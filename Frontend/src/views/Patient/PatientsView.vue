@@ -109,10 +109,10 @@ export default {
       this.$refs.addEdit.openModal(current)
     },
     openViewPatient(id){
-      this.$router.push('pacienteInfo?id='+id)
+      this.$router.push('paciente?id='+id)
     },
     openEditPatient(id){
-      this.$router.push('pacienteInfo?id='+ id +'&edit=true')
+      this.$router.push('paciente?id='+ id +'&edit=true')
     },
     resetPassword ({IdPatient}) {
       const th = this;

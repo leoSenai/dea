@@ -9,15 +9,24 @@ import Users from '../views/Users/UsersView.vue'
 import InputPrimary from '../components/InputPrimary.vue';
 import NotFound from '../views/NotFoundView.vue';
 import Quiz from '../views/Quiz/QuizView.vue';
+import Cookie from '../cookie'
 
 import { PhUserList, PhUsers } from '@phosphor-icons/vue';
 import { PhArticle } from '@phosphor-icons/vue';
 
-const links = [
+const userType = Cookie.getUserType(Cookie.get('authToken'))
+
+const closedPeopleLinks = [
+  { path: '/questionarios', name: 'Questionários', icon: PhArticle }
+]
+
+const allUserLinks = [
   { path: '/usuarios', name: 'Usuários', icon: PhUsers },
   { path: '/questionarios', name: 'Questionários', icon: PhArticle },
   { path: '/pacientes', name: 'Pacientes', icon: PhUserList}
-];
+]
+
+const links = userType === 'P' ? closedPeopleLinks : allUserLinks
 
 export const routes = [
   {

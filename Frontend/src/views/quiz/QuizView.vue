@@ -177,6 +177,14 @@ export default {
   background-color: rgba(255, 255, 255, 0.548);
 }
 
+.login-form .row:hover{
+  background-color: transparent !important;
+}
+
+.login-form .row{
+  background-color: transparent !important;
+}
+
 .row:hover{
   background-color: rgba(255, 255, 255, 0.932) !important;
 }

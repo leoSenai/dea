@@ -147,7 +147,7 @@ export default {
   background-position-x:center;
   background-position-y: center;
   height: 100%;
-}
+} 
 
 .container {
   height: 100%;

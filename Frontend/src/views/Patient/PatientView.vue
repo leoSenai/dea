@@ -400,6 +400,7 @@ section {
   margin-top: 1.5rem;
   cursor: pointer;
   transition: 1.5s;
+  width: fit-content;
 }
 
 .back-page:hover {

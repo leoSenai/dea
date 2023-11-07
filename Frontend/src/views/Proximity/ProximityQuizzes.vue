@@ -11,7 +11,7 @@
     </div>
     <div class="quiz-title">
       <div class="title">
-        <h3>Questionários de {{ patient.Name }}</h3>
+        <h3>Questionários de {{ person.Name }}</h3>
       </div>
       <div 
         v-if="!isMobile"
@@ -25,7 +25,7 @@
       {{ model.message }}
     </div>
     <div v-if="model.data.length==0">
-      <i>Não há questionários vinculados a este paciente.</i>
+      <i>Não há questionários vinculados a esta pessoa próxima.</i>
     </div>
     <div 
       v-for="quiz in model.data"
@@ -71,7 +71,7 @@
 </template>
   <script>
   import { PhPlus, PhEye, PhCaretLeft } from '@phosphor-icons/vue';
-  import QuizViewModal from './PatientQuizViewModal.vue'
+  import QuizViewModal from './ProximityQuizViewModal.vue'
   
   export default {
     components: {
@@ -88,7 +88,7 @@
           message: '',
         },
         quizzes: [],
-        patient: []
+        person: []
       }
     },
     computed: {
@@ -103,13 +103,13 @@
       load() {
         const th = this;
 
-        var idPatient = this.$router.currentRoute.value.params.id;
+        var idPerson = this.$router.currentRoute.value.params.id;
 
-        th.$api.PatientController.getById(idPatient).then((data)=>{
-          th.patient = data.data.data
+        th.$api.PersonController.getById(idPerson).then((data)=>{
+          th.person = data.data.data
         })
 
-        th.$api.PatientHasQuizController.getByIdPatient(idPatient).then(async ({ data }) => {
+        th.$api.ProximityHasQuizController.getByIdPerson(idPerson).then(async ({ data }) => {
 
             th.quizzes = data.data.map((item) => {
                 return {IdQuiz: item.IdQuiz, Finished: item.Finished};
@@ -135,7 +135,7 @@
         th.model.data.push(data.data.data)
       },
       openViewModal(currentQuiz){
-        this.$refs.viewQuiz.openModal(currentQuiz, this.patient)
+        this.$refs.viewQuiz.openModal(currentQuiz, this.person)
       }
     },
   }

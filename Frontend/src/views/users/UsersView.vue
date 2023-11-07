@@ -23,6 +23,9 @@
     >
       {{ model.message }}
     </div>
+    <div v-if="model.data.length==0">
+      <i>Não há usuários cadastrados até o momento.</i>
+    </div>
     <div
       v-for="user in model.data"
       v-else

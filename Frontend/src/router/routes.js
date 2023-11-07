@@ -5,6 +5,7 @@ import Header from '../components/HeaderPrimary.vue';
 import Patients from '../views/Patient/PatientsView.vue';
 import Proximity from '../views/Proximity/ProximityView.vue';
 import PatientQuizzes from '../views/Patient/PatientQuizzes.vue'
+import ProximityQuizzes from '../views/Proximity/ProximityQuizzes.vue' 
 import Users from '../views/Users/UsersView.vue'
 import InputPrimary from '../components/InputPrimary.vue';
 import NotFound from '../views/NotFoundView.vue';
@@ -82,6 +83,16 @@ export const routes = [
     path: '/paciente/:id/questionarios',
     components: {
       default: PatientQuizzes,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+  },
+  {
+    path: '/pessoas-proximas/:id/questionarios',
+    components: {
+      default: ProximityQuizzes,
       header: Header,
     },
     props: {

@@ -36,7 +36,7 @@
       <div
         v-for="proximity in model.data"
         v-else
-        :key="proximity.Idproximity"
+        :key="proximity.IdPerson"
         class="row proximity"
       >
         <p>
@@ -45,7 +45,7 @@
         <div class="proximity-actions">
           <button
             type="button"
-            @click="openViewModal(proximity)"
+            @click="viewQuizzes(proximity.IdPerson)"
           >
             <PhTable color="black" />
           </button>
@@ -141,6 +141,11 @@ export default {
     this.load();
   },
   methods: {
+    viewQuizzes(idProximity) {
+      this.$router.push(
+        '/pessoas-proximas/' + idProximity + '/questionarios'
+      );
+    },
     load() {
       const th = this;
       th.$api.ProximityController.getPersonsByIdPatient(th.patientId).then(
@@ -180,6 +185,7 @@ export default {
   margin-top: 1.5rem;
   margin-left: 1.5rem;
   cursor: pointer;
+  width: fit-content;
   transition: 1.5s;
 }
 
@@ -266,7 +272,7 @@ export default {
 
 .proximity {
   border: 1px solid;
-  padding: 1rem;
+  padding: 0.8rem;
   border-radius: 4px;
   display: flex;
   justify-content: space-between;

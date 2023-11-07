@@ -185,7 +185,7 @@ export default {
   cursor: pointer;
   padding: 0.8em;
   font-size: 1.25rem;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .btn-modal {

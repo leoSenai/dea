@@ -302,9 +302,9 @@ h5 {
 }
 
 .nextPersonView {
-  border: 1px solid var(--primary);
-  background-color: var(--neutral-light-gray);
-  color: green;
+  border: 1px solid;
+  background-color: var(--primary);
+  color: white;
   margin: 10px;
   width: -webkit-fill-available;
   margin-bottom: 20px;
@@ -312,7 +312,11 @@ h5 {
 }
 
 .nextPersonView:hover {
-  filter: brightness(0.8);
+  background-color: #45852a;
+}
+
+.nextPersonView button:hover{
+  background-color: #45852a;
 }
 
 .patient-content {
@@ -383,7 +387,7 @@ section {
 
 .patientView-header p {
   margin: 0;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .editIcon {

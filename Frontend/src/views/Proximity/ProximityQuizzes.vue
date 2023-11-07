@@ -156,13 +156,18 @@
     display: flex;
     flex-direction: column;
     gap: .75rem;
+    background-size: 50% !important;
+    background: url(../../assets/imgs/home-background.svg) no-repeat;
+    background-position-x:center;
+    background-position-y: center;
+    height: 100%;
   }
 
   .back-page {
     display: flex;
     align-items: center;
     margin-top: 1.5rem;
-    margin-left: 0.5rem;
+    margin-left: 1.5rem;
     cursor: pointer;
     width: fit-content;
     transition: 1.5s;

@@ -166,6 +166,19 @@ export default {
   display: flex;
   flex-direction: column;
   gap: .75rem;
+  background: url(../../assets/imgs/home-background.svg) no-repeat;
+  background-position-x:center;
+  background-position-y: center;
+  height: 100%;
+  background-size: 50%;
+}
+
+.row{
+  background-color: rgba(255, 255, 255, 0.548);
+}
+
+.row:hover{
+  background-color: rgba(255, 255, 255, 0.932) !important;
 }
 
 .quiz-title {

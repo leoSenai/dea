@@ -152,8 +152,17 @@ export default {
   padding: 3rem 1.5rem;
   width: 100%;
   display: flex;
+  background: url(../../assets/imgs/home-background.svg) no-repeat;
   flex-direction: column;
+  background-position-x:center;
+  background-position-y: center;
+  background-size: 50%;
+  height: 100%;
   gap: .75rem;
+}
+
+.row{
+  background-color: rgba(255, 255, 255, 0.548);
 }
 
 .user-title {

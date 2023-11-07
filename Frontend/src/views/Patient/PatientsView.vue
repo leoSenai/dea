@@ -141,6 +141,12 @@ export default {
 
 .row {
   width: 100%;
+  background-color: rgba(255, 255, 255, 0.548);
+  background-size: 50% !important;
+  background: url(../../assets/imgs/home-background.svg) no-repeat;
+  background-position-x:center;
+  background-position-y: center;
+  height: 100%;
 }
 
 .container {
@@ -152,7 +158,7 @@ export default {
   width: 100%;
   padding: 2rem;
   padding-top: 0;
-  margin-top: 5rem;
+  margin-top: 3.9rem;
 }
 
 .patients-title {
@@ -165,12 +171,13 @@ export default {
   width: 100%;
   border-radius: 0.25rem;
   padding: 0;
+  background-color: rgba(255, 255, 255, 0.548);
   display: flex;
   justify-content: space-between;
 }
 
 .patients-list:hover{
-  background-color: rgba(200, 255, 172, 0.041);
+  background-color: rgba(255, 255, 255, 0.89);
 }
 
 .patients-list span{
@@ -234,8 +241,6 @@ export default {
   }
 
   .patients-content {
-    padding-left: 2rem;
-    padding-right: 2rem;
     max-height: 70vh;
     overflow-y: auto;
   }

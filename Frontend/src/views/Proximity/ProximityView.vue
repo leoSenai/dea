@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="background">
     <div>
       <div
         class="back-page"
@@ -189,6 +189,14 @@ export default {
   width: auto;
   margin-right: 5px;
   height: 18px;
+}
+
+.background{
+  background-size: 50% !important;
+  background: url(../../assets/imgs/home-background.svg) no-repeat;
+  background-position-x:center;
+  background-position-y: center;
+  height: 100%;
 }
 
 .row.proximity{

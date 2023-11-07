@@ -137,6 +137,14 @@ export default {
   padding-right: 1rem;
 }
 
+.card .row{
+  background-color: transparent;
+}
+
+.card div.row:hover{
+  background-color: transparent !important;
+}
+
 .patient-quiz-content {
   padding: 3rem 1.5rem;
   padding-top: 0;
@@ -144,6 +152,11 @@ export default {
   display: flex;
   flex-direction: column;
   gap: .75rem;
+  background-size: 50% !important;
+  background: url(../../assets/imgs/home-background.svg) no-repeat;
+  background-position-x:center;
+  background-position-y: center;
+  height: 100%;
 }
 
 .back-page {

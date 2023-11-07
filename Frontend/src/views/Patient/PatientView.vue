@@ -326,6 +326,11 @@ h5 {
     sans-serif;
   display: block;
   justify-content: space-between;
+  background-size: 50% !important;
+  background: url(../../assets/imgs/home-background.svg) no-repeat;
+  background-position-x:center;
+  background-position-y: center;
+  height: 100%;
 }
 
 section {

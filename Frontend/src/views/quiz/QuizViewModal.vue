@@ -34,13 +34,6 @@
           :key="question.key"
           class="question row q-mb-sm"
         >
-          <button
-            v-if="questions.length > 1"
-            class="remove-question rounded-full"
-            @click="removeQuestion(i)"
-          >
-            <PhX weight="bold" />
-          </button>
           <input-primary
             v-model="question.Desc"
             :disable="true"
@@ -69,14 +62,12 @@
   import ModalPrimary from '../../components/ModalPrimary.vue';
   import InputPrimary from '../../components/InputPrimary.vue';
   import ButtonPrimary from '../../components/ButtonPrimary.vue';
-  import { PhX } from '@phosphor-icons/vue';
 
   export default {
     components: {
       ModalPrimary,
       InputPrimary,
       ButtonPrimary,
-      PhX,
     },
     emits: ['close'],
     data() {

@@ -29,33 +29,39 @@
     <div 
       v-for="quiz in model.data"
       v-else
-      :key="quiz.IdQuiz"
-      class="row quiz"
+      class="quiz-list"
     >
-      <p @click="openViewModal(quiz)">
-        {{ quiz.Name }}
-      </p>
-      <div class="quiz-actions">
-        <button
-          type="button"
-          @click="openViewModal(quiz)"
-        >
-          <PhEye color="black" />
-        </button>
-        <button
-          type="button"
-          @click="openAddEditModal(quiz)"
-        >
-          <PhPencil color="black" />
-        </button>
-        <button
-          type="button"
-          @click="openAddQuizPersons(quiz)"
-        >
-          <PhUser color="black" />
-        </button>
+      <div 
+        v-for="quiz in model.data"
+        :key="quiz.IdQuiz"
+        class="row quiz"
+      >
+        <p @click="openViewModal(quiz)">
+          {{ quiz.Name }}
+        </p>
+        <div class="quiz-actions">
+          <button
+            type="button"
+            @click="openViewModal(quiz)"
+          >
+            <PhEye color="black" />
+          </button>
+          <button
+            type="button"
+            @click="openAddEditModal(quiz)"
+          >
+            <PhPencil color="black" />
+          </button>
+          <button
+            type="button"
+            @click="openAddQuizPersons(quiz)"
+          >
+            <PhUser color="black" />
+          </button>
+        </div>
       </div>
     </div>
+
     <div 
       v-if="isMobile"
       class="add-quiz"
@@ -206,6 +212,15 @@ export default {
 
 .add-quiz button:hover {
   filter: brightness(0.8);
+}
+
+.quiz-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 70vh;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .quiz {

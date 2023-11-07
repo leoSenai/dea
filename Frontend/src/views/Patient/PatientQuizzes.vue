@@ -13,7 +13,7 @@
       <div class="title">
         <h3>Questionários de {{ patient.Name }}</h3>
       </div>
-      <div 
+      <div
         v-if="!isMobile"
         class="title-add-quiz"
       />
@@ -45,118 +45,167 @@
         </button>
       </div>
     </div>
-    <div 
-      v-if="isMobile"
-      class="add-quiz"
-    >
-      <button
-        type="button"
-        @click="openAddEditModal()"
-      >
-        <PhPlus color="white" />
-      </button>
-    </div>
     <QuizAddEditModal
       ref="addEdit"
-      @close="load" 
-    />
-    <QuizPersonsAddEditModal
-      ref="addPersons"
       @close="load"
     />
-    <QuizViewModal
-      ref="viewQuiz"
-    />
+    <QuizViewModal ref="viewQuiz" />
   </div>
 </template>
-  <script>
-  import { PhPlus, PhEye, PhCaretLeft } from '@phosphor-icons/vue';
-  import QuizViewModal from './PatientQuizViewModal.vue'
-  
-  export default {
-    components: {
-      PhPlus,
-      PhCaretLeft,
-      QuizViewModal,
-      PhEye
+<script>
+import { PhEye, PhCaretLeft } from '@phosphor-icons/vue';
+import QuizViewModal from './PatientQuizViewModal.vue'
+
+export default {
+  components: {
+    PhCaretLeft,
+    QuizViewModal,
+    PhEye
   },
-    data() {
-      return {
-        model: {
-          data: [],
-          hasError: false,
-          message: '',
-        },
-        quizzes: [],
-        patient: []
-      }
-    },
-    computed: {
-      isMobile() {
-        return this.$q.screen.xs || this.$q.screen.sm
-      }
-    },
-    mounted() {
-      this.load();
-    },
-    methods: {
-      load() {
-        const th = this;
-
-        var idPatient = this.$router.currentRoute.value.params.id;
-
-        th.$api.PatientController.getById(idPatient).then((data)=>{
-          th.patient = data.data.data
-        })
-
-        th.$api.PatientHasQuizController.getByIdPatient(idPatient).then(async ({ data }) => {
-
-            th.quizzes = data.data.map((item) => {
-                return {IdQuiz: item.IdQuiz, Finished: item.Finished};
-            })
-
-            for(var id in th.quizzes){
-            
-              var result = await th.$api.QuizController.getById(th.quizzes[id].IdQuiz)
-              await th.loadQuiz(result, id)
-
-            }
-
-        })
+  data() {
+    return {
+      model: {
+        data: [],
+        hasError: false,
+        message: '',
       },
-      loadQuiz(data, id){
-        const th = this
-        var quizFinished = th.quizzes[id].Finished
-        if(quizFinished == 0){
-          data.data.data.Name += ' - EM ABERTO'
-        }else{
-          data.data.data.Name += ' - RESPONDIDO'
+      quizzes: [],
+      patient: []
+    }
+  },
+  computed: {
+    isMobile() {
+      return this.$q.screen.xs || this.$q.screen.sm
+    }
+  },
+  mounted() {
+    this.load();
+  },
+  methods: {
+    load() {
+      const th = this;
+
+      var idPatient = this.$router.currentRoute.value.params.id;
+
+      th.$api.PatientController.getById(idPatient).then((data) => {
+        th.patient = data.data.data
+      })
+
+      th.$api.PatientHasQuizController.getByIdPatient(idPatient).then(async ({ data }) => {
+
+        if (data.data) {
+
+          th.quizzes = data.data.map((item) => {
+            return { IdQuiz: item.IdQuiz, Finished: item.Finished };
+          })
+
+          for (var id in th.quizzes) {
+
+            var result = await th.$api.QuizController.getById(th.quizzes[id].IdQuiz)
+            th.loadQuiz(result, id)
+          }
         }
-        th.model.data.push(data.data.data)
-      },
-      openViewModal(currentQuiz){
-        this.$refs.viewQuiz.openModal(currentQuiz, this.patient)
-      }
+
+      })
     },
-  }
-  </script>
-  <style>
-  .quiz-actions {
-    display: flex;
-    gap: 0.6em;
-    width: 20%;
-    justify-content: flex-end;
-    padding-right: 1rem;
-  }
-  
-  .patient-quiz-content {
-    padding: 3rem 1.5rem;
-    padding-top: 0;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: .75rem;
-  }
+    loadQuiz(data, id) {
+      const th = this
+      var quizFinished = th.quizzes[id].Finished
+      if (quizFinished == 0) {
+        data.data.data.Name += ' - EM ABERTO'
+      } else {
+        data.data.data.Name += ' - RESPONDIDO'
+      }
+      th.model.data.push(data.data.data)
+    },
+    openViewModal(currentQuiz) {
+      console.log(this.$refs)
+      this.$refs.viewQuiz.openModal(currentQuiz, this.patient)
+    }
+  },
+}
+</script>
+<style>
+.quiz-actions {
+  display: flex;
+  gap: 0.6em;
+  width: 20%;
+  justify-content: flex-end;
+  padding-right: 1rem;
+}
+
+.patient-quiz-content {
+  padding: 3rem 1.5rem;
+  padding-top: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.back-page {
+  display: flex;
+  align-items: center;
+  margin-top: 1.5rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  transition: 1.5s;
+}
+
+.quiz-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.error {
+  border: 1px solid var(--neutral-dark-gray);
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.quiz {
+  border: 1px solid var(--neutral-dark-gray);
+  color: var(--neutral-dark-gray);
+  padding: 0;
+  border-radius: 4px;
+  display: flex;
+  cursor: text;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quiz:hover {
+  background-color: rgba(200, 255, 172, 0.041);
+}
+
+.quiz p {
+  margin: 0;
+  width: 80%;
+  height: 100%;
+  padding-left: 1rem;
+  align-items: center;
+  display: flex;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.quiz button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: .5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .1s;
+  border-radius: 9999px;
+  z-index: 1;
+}
+
+.quiz button:hover {
+  background: var(--neutral-gray);
+}
 
   .back-page {
     display: flex;

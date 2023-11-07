@@ -34,7 +34,6 @@
         {{ model.message }}
       </div>
       <div
-        v-for="proximity in model.data"
         v-else
         :key="proximity.IdPerson"
         class="row proximity"
@@ -276,6 +275,15 @@ export default {
 .add-proximity button:hover {
   filter: brightness(0.8);
   cursor: pointer;
+}
+
+.proximity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 70vh;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .proximity {

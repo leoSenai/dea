@@ -27,29 +27,43 @@
       <i>Não há usuários cadastrados até o momento.</i>
     </div>
     <div
-      v-for="user in model.data"
       v-else
-      :key="user.Id"
-      class="row user"
+      class="user-list"
     >
-      <p @click="openViewModal(user)">
-        {{ user.Name }}
-      </p>
-      <div class="user-actions">
-        <button
-          type="button"
-          @click="openViewModal(user)"
-        >
-          <PhEye color="black" />
-        </button>
-        <button
-          type="button"
-          @click="openAddEditModal(user)"
-        >
-          <PhPencil color="black" />
-        </button>
+      <div
+        v-for="user in model.data"
+        :key="user.Id"
+        class="row user"
+      >
+        <p @click="openViewModal(user)">
+          {{ user.Name }}
+        </p>
+        <div class="user-actions">
+          <button
+            type="button"
+            @click="resetPassword(user)"
+          >
+            <q-tooltip>
+              Redefinir Senha
+            </q-tooltip>
+            <PhFingerprintSimple color="black" />
+          </button>
+          <button
+            type="button"
+            @click="openViewModal(user)"
+          >
+            <PhEye color="black" />
+          </button>
+          <button
+            type="button"
+            @click="openAddEditModal(user)"
+          >
+            <PhPencil color="black" />
+          </button>
+        </div>
       </div>
     </div>
+
     <div
       v-if="isMobile"
       class="add-user"
@@ -72,7 +86,7 @@
   </div>
 </template>
 <script>
-import { PhPlus, PhPencil, PhEye } from '@phosphor-icons/vue';
+import { PhPlus, PhPencil, PhEye, PhFingerprintSimple } from '@phosphor-icons/vue';
 import UsersAddEditModal from './UsersAddEditModal.vue';
 import ViewUserModal from './UserViewModal.vue'
 
@@ -82,7 +96,8 @@ export default {
     ViewUserModal,
     PhEye,
     PhPencil,
-    UsersAddEditModal
+    UsersAddEditModal,
+    PhFingerprintSimple
   },
   data() {
     return {
@@ -118,6 +133,10 @@ export default {
     },
     openAddEditModal(current) {
       this.$refs.addEdit.openModal(current)
+    },
+    resetPassword ({IdUser}) {
+      const th = this;
+      th.$api.UsersController.resetPassword(IdUser)
     }
   },
 }
@@ -204,6 +223,15 @@ export default {
 .add-user button:hover {
   filter: brightness(0.8);
   cursor: pointer;
+}
+
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 70vh;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .user {

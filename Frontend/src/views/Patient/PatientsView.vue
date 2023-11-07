@@ -20,7 +20,6 @@
           </div>
           <div 
             class="patients-content q-mt-lg flex" 
-            style="gap: 1rem;"
           >
             <div 
               v-for="patient in model.data"
@@ -226,6 +225,10 @@ export default {
   .patients-content {
     padding-left: 2rem;
     padding-right: 2rem;
+    gap: 1rem;
+    max-height: 70vh;
+    height: 100%;
+    overflow-y: auto;
   }
 
   .btn-modal {

@@ -23,14 +23,14 @@
     >
       {{ model.message }}
     </div>
-    <div v-if="model.data.length==0">
+    <div v-if="model.data.Quizzes==undefined">
       <i>Não há questionários criados até o momento.</i>
     </div>
     <div 
       class="quiz-list"
     >
       <div 
-        v-for="quiz in model.data"
+        v-for="quiz in model.data.Quizzes"
         :key="quiz.IdQuiz"
         class="row quiz"
       >
@@ -48,6 +48,7 @@
             <PhEye color="black" />
           </button>
           <button
+            v-show="!finished(quiz)"
             type="button"
             @click="openAddEditModal(quiz)"
           >
@@ -128,6 +129,9 @@ export default {
     this.load();
   },
   methods: {
+    finished(quiz){
+      return this.model.data.FinishedQuizzes.map((el)=>{return el.IdQuiz==quiz.IdQuiz}).includes(true)
+    },
     load() {
       const th = this;
       th.$api.QuizController.getAll().then(({ data }) => {

@@ -39,7 +39,7 @@
         :key="proximity.IdPerson"
         class="row proximity"
       >
-        <p>
+        <p @click="openViewModal(proximity)">
           {{ proximity.Name }}
         </p>
         <div class="proximity-actions">
@@ -179,6 +179,14 @@ export default {
   height: 18px;
 }
 
+.row.proximity{
+  padding: 0;
+  position: static;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+
 .back-page {
   display: flex;
   align-items: center;
@@ -285,6 +293,11 @@ export default {
 
 .proximity p {
   margin: 0;
+  padding: 0.8rem;
+  width: 100%;
+  z-index: 1;
+  display: block;
+  position: relative;
 }
 
 .proximity button {
@@ -304,7 +317,10 @@ export default {
 }
 
 .proximity-actions {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  margin-left: -75%;
+  z-index: 4;
+  position: relative;
 }
 </style>

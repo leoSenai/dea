@@ -13,12 +13,6 @@
           <h4>{{ model.Name }}</h4>
           <p>{{ model.Cpf }}</p>
           <p>{{ model.Email }}</p>
-          <p
-            class="reset-password"
-            @click="resetPassword"
-          >
-            Redefinir Senha
-          </p>
         </div>
         <div class="edit-button-div">
           <button-primary
@@ -166,9 +160,6 @@ export default {
       th.$api.AnamneseController.update(th.anamneseModel);
       //desaparece loading
       document.getElementById('loading-gif').style.display = 'none';
-    },
-    changePassword(id) {
-      alert(id + ' - FUTURA IMPLEMENTACAO');
     },
     changeNewBornValue() {
       const th = this;

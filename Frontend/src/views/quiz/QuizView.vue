@@ -27,8 +27,6 @@
       <i>Não há questionários criados até o momento.</i>
     </div>
     <div 
-      v-for="quiz in model.data"
-      v-else
       class="quiz-list"
     >
       <div 

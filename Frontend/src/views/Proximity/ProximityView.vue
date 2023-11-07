@@ -33,7 +33,11 @@
       >
         {{ model.message }}
       </div>
+      <div v-if="model.data.length==0">
+        <i>Não há pessoas próximas vinculadas a este paciente.</i>
+      </div>
       <div
+        v-for="proximity in model.data"
         v-else
         :key="proximity.IdPerson"
         class="row proximity"
@@ -160,7 +164,7 @@ export default {
       this.$refs.addEdit.openModal(current);
     },
     goBack() {
-      this.$router.push('/paciente/id')
+      this.$router.push('/pacienteInfo?id='+this.patientId)
     },
     resetPassword({ IdPerson, Email }) {
       this.$api.PersonController.resetPassword({ IdPerson, Email })

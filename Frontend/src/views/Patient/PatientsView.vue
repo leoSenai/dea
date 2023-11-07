@@ -128,6 +128,11 @@ export default {
   margin-right: 12px;
   cursor: pointer;
 }
+
+.patients-content{
+  gap: 1em;
+}
+
 .row {
   width: 100%;
 }
@@ -225,9 +230,7 @@ export default {
   .patients-content {
     padding-left: 2rem;
     padding-right: 2rem;
-    gap: 1rem;
     max-height: 70vh;
-    height: 100%;
     overflow-y: auto;
   }
 

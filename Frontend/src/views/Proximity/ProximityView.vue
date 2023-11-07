@@ -35,36 +35,42 @@
       </div>
       <div
         v-else
-        class="proximity-list"
+        :key="proximity.IdPerson"
+        class="row proximity"
       >
-        <div
-          v-for="proximity in model.data"
-          :key="proximity.Idproximity"
-          class="row proximity"
-        >
-          <p>
-            {{ proximity.Name }}
-          </p>
-          <div class="proximity-actions">
-            <button
-              type="button"
-              @click="resetPassword(proximity)"
-            >
-              <q-tooltip>
-                Redefinir Senha
-              </q-tooltip>
-              <PhFingerprintSimple color="black" />
-            </button>
-            <button
-              type="button"
-              @click="openAddEditModal(proximity)"
-            >
-              <PhPencil color="black" />
-            </button>
-          </div>
+        <p @click="openViewModal(proximity)">
+          {{ proximity.Name }}
+        </p>
+        <div class="proximity-actions">
+          <button
+            type="button"
+            @click="viewQuizzes(proximity.IdPerson)"
+          >
+            <PhTable color="black" />
+          </button>
+          <button
+            type="button"
+            @click="resetPassword(proximity)"
+          >
+            <q-tooltip>
+              Redefinir Senha
+            </q-tooltip>
+            <PhFingerprintSimple color="black" />
+          </button>
+          <button
+            type="button"
+            @click="openAddEditModal(proximity)"
+          >
+            <PhPencil color="black" />
+          </button>
+          <button
+            type="button"
+            @click="openViewModal(proximity)"
+          >
+            <PhEye color="black" />
+          </button>
         </div>
       </div>
-
       <div
         v-if="isMobile"
         class="add-proximity"
@@ -81,11 +87,16 @@
       ref="addEdit"
       @close="load"
     />
+    <ProximityViewModal
+      ref="viewModal"
+      @close="load"
+    />
   </div>
 </template>
 <script>
-import { PhPlus, PhPencil, PhFingerprintSimple, PhCaretLeft } from '@phosphor-icons/vue';
+import { PhPlus, PhPencil, PhFingerprintSimple, PhCaretLeft, PhEye, PhTable } from '@phosphor-icons/vue';
 import ProximityAddEditModal from './ProximityAddEditModal.vue';
+import ProximityViewModal from './ProximityViewModal.vue'
 
 /* 
 
@@ -98,10 +109,13 @@ export default {
   components: {
     PhPlus,
     ProximityAddEditModal,
+    ProximityViewModal,
     PhPencil,
     PhFingerprintSimple,
-    PhCaretLeft
-  },
+    PhCaretLeft,
+    PhEye,
+    PhTable
+},
   data() {
     return {
       model: {
@@ -126,6 +140,11 @@ export default {
     this.load();
   },
   methods: {
+    viewQuizzes(idProximity) {
+      this.$router.push(
+        '/pessoas-proximas/' + idProximity + '/questionarios'
+      );
+    },
     load() {
       const th = this;
       th.$api.ProximityController.getPersonsByIdPatient(th.patientId).then(
@@ -145,6 +164,9 @@ export default {
     },
     resetPassword({ IdPerson, Email }) {
       this.$api.PersonController.resetPassword({ IdPerson, Email })
+    },
+    openViewModal(current) {
+      this.$refs.viewModal.openModal(current);
     }
   },
 };
@@ -156,12 +178,21 @@ export default {
   height: 18px;
 }
 
+.row.proximity{
+  padding: 0;
+  position: static;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+
 .back-page {
   display: flex;
   align-items: center;
   margin-top: 1.5rem;
   margin-left: 1.5rem;
   cursor: pointer;
+  width: fit-content;
   transition: 1.5s;
 }
 
@@ -257,7 +288,7 @@ export default {
 
 .proximity {
   border: 1px solid;
-  padding: 1rem;
+  padding: 0.8rem;
   border-radius: 4px;
   display: flex;
   justify-content: space-between;
@@ -270,6 +301,11 @@ export default {
 
 .proximity p {
   margin: 0;
+  padding: 0.8rem;
+  width: 100%;
+  z-index: 1;
+  display: block;
+  position: relative;
 }
 
 .proximity button {
@@ -289,7 +325,10 @@ export default {
 }
 
 .proximity-actions {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  margin-left: -75%;
+  z-index: 4;
+  position: relative;
 }
 </style>

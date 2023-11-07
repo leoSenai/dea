@@ -202,7 +202,6 @@ export default {
         !th.model.DadName ||
         !th.model.MomName ||
         !th.model.Cid10 ||
-        !th.model.Password ||
         !th.model.Cns ||
         !th.model.NewBorn
       ) {

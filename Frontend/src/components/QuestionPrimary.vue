@@ -47,7 +47,10 @@
                   borderColor: modelValue === answer.value ? answer.color : '',
                 }"
               >
-                <PhCheck v-if="answer.value === modelValue" color="white" />
+                <PhCheck
+                  v-if="answer.value === modelValue"
+                  color="white"
+                />
               </label>
             </div>
           </template>

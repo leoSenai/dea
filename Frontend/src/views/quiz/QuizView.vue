@@ -23,7 +23,11 @@
     >
       {{ model.message }}
     </div>
-    <div
+    <div v-if="model.data.length==0">
+      <i>Não há questionários criados até o momento.</i>
+    </div>
+    <div 
+      v-for="quiz in model.data"
       v-else
       class="quiz-list"
     >

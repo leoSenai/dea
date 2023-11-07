@@ -52,12 +52,18 @@
             type="button"
             @click="openViewModal(user)"
           >
+            <q-tooltip>
+              Visualizar
+            </q-tooltip>
             <PhEye color="black" />
           </button>
           <button
             type="button"
             @click="openAddEditModal(user)"
           >
+            <q-tooltip>
+              Editar
+            </q-tooltip>
             <PhPencil color="black" />
           </button>
         </div>

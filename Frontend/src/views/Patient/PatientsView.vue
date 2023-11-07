@@ -21,6 +21,9 @@
           <div 
             class="patients-content q-mt-lg flex" 
           >
+            <div v-if="model.data.length==0">
+              <i>Não há pacientes cadastrados ainda.</i>
+            </div>
             <div 
               v-for="patient in model.data"
               :key="patient.IdPatient"
@@ -42,6 +45,9 @@
                   type="button"
                   @click="openAddEditModal(patient)"
                 >
+                  <q-tooltip>
+                    Visualizar
+                  </q-tooltip>
                   <PhPencil color="black" />
                 </button>
               </div>

@@ -45,7 +45,7 @@
           <div
             v-if="question.Answer!=''"
             style="display: flex; width: 100%;gap: 5px;"
-          >  
+          > 
             <QuestionPrimary
               :model-value="parseInt(question.Answer)"
               :answer-range="model.Interval"

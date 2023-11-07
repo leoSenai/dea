@@ -50,6 +50,9 @@
             type="button"
             @click="viewQuizzes(proximity.IdPerson)"
           >
+            <q-tooltip>
+              Questionários
+            </q-tooltip>
             <PhTable color="black" />
           </button>
           <button
@@ -65,12 +68,18 @@
             type="button"
             @click="openAddEditModal(proximity)"
           >
+            <q-tooltip>
+              Editar
+            </q-tooltip>
             <PhPencil color="black" />
           </button>
           <button
             type="button"
             @click="openViewModal(proximity)"
           >
+            <q-tooltip>
+              Visualizar
+            </q-tooltip>
             <PhEye color="black" />
           </button>
         </div>

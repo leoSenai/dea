@@ -42,18 +42,27 @@
             type="button"
             @click="openViewModal(quiz)"
           >
+            <q-tooltip>
+              Visualizar
+            </q-tooltip>
             <PhEye color="black" />
           </button>
           <button
             type="button"
             @click="openAddEditModal(quiz)"
           >
+            <q-tooltip>
+              Editar
+            </q-tooltip>
             <PhPencil color="black" />
           </button>
           <button
             type="button"
             @click="openAddQuizPersons(quiz)"
           >
+            <q-tooltip>
+              Filiados
+            </q-tooltip>
             <PhUser color="black" />
           </button>
         </div>

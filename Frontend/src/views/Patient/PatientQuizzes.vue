@@ -41,6 +41,9 @@
           type="button"
           @click="openViewModal(quiz)"
         >
+          <q-tooltip>
+            Visualizar
+          </q-tooltip>
           <PhEye color="black" />
         </button>
       </div>

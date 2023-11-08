@@ -4,7 +4,7 @@
     @close="closeModal"
   >
     <template #modal-title>
-      Vizualizar questionário
+      Vizualizar questionário de {{ person.Name }}
     </template>
     <template #modal-content>
       <q-form ref="form">
@@ -35,12 +35,26 @@
           class="question row q-mb-sm"
         >
           <input-primary
+            v-if="question.Answer==''"
             v-model="question.Desc"
             :disable="true"
             :name="`${i}`"
             :label="`Pergunta ${i + 1}`"
             label-color="primary"
           />
+          <div
+            v-if="question.Answer!=''"
+            style="display: flex; width: 100%;gap: 5px;"
+          > 
+            <QuestionPrimary
+              :model-value="parseInt(question.Answer)"
+              :answer-range="model.Interval"
+              :question-number="question.key"
+              :is-answered="false"
+            >
+              <i>{{ question.Desc }}</i>
+            </QuestionPrimary>
+          </div>
         </div>
       </q-form>
     </template>
@@ -59,20 +73,23 @@
   </modal-primary>
 </template>
   <script>
-  import ModalPrimary from '../../components/ModalPrimary.vue';
-  import InputPrimary from '../../components/InputPrimary.vue';
-  import ButtonPrimary from '../../components/ButtonPrimary.vue';
+import ModalPrimary from '../../components/ModalPrimary.vue';
+import InputPrimary from '../../components/InputPrimary.vue';
+import ButtonPrimary from '../../components/ButtonPrimary.vue';
+import QuestionPrimary from '../../components/QuestionPrimary.vue';
 
   export default {
     components: {
       ModalPrimary,
       InputPrimary,
       ButtonPrimary,
+      QuestionPrimary,
     },
     emits: ['close'],
     data() {
       return {
         show: false,
+        person: [],
         model: {
           Name: '',
           IdQuiz: null,
@@ -80,23 +97,32 @@
           Created: null,
           Updated: null,
         },
-        questions: [{ key: 0, Desc: '', IdQuestion: null }],
+        questions: [{ key: 0, Desc: '', IdQuestion: null, Answer: ''}],
       };
     },
     methods: {
-      openModal(current) {
+      openModal(current, person) {
         const th = this;
+        th.person = person
         th.show = true;
         if (current) {
           th.model = { ...current, Interval: +current.Interval };
           th.$api.QuestionController.getAll()
-            .then(({ data }) => {
+            .then(async ({ data }) => {
+
+              var awnsers = await th.$api.ProximityHasQuizController.getByIdQuizPerson(th.model.IdQuiz, person.IdPerson)
+              var answers = awnsers.data.data[0].Answers.split(';')
+              console.log(awnsers.data.data[0].Answers)
+              console.log('-------')
+
               const filteredQuestions = data.data
                 .filter(({ IdQuiz }) => IdQuiz === th.model.IdQuiz)
-                .map((el) => {
+                .map((el, index) => {
+
                   return {
                     IdQuestion: el.IdQuestion,
                     Desc: el.Desc,
+                    Answer: answers[index]==undefined ? '' : answers[index],
                     key: el.IdQuestion,
                   };
                 });
@@ -107,21 +133,41 @@
             })
         }
       },
+      goBack() {
+        const th = this
+        this.$router.push('/pessoas-proximas/'+th.person.IdPerson+'/questionarios')
+      },
       closeModal() {
         this.show = false;
         this.model = {
           Name: '',
           IdQuiz: null,
-          Interval: 5,
+          Answer: '',
+          Interval: 5,  
         };
         this.$emit('close');
       },
     },
   };
   </script>
+<style>
+  .q-slide.answer .q-slider__track{
+    background: linear-gradient(to right, red, yellow 50%, #04df04) !important;
+  }
+  .q-slide.answer .q-slider__selection{
+    background: transparent;
+  }
+  .q-slide.answer .text-primary{
+    color: blue !important;
+  }
+</style>
   <style scoped>
   .fill-content {
     width: 100%;
+  }
+
+  p{
+    margin: 0;
   }
   
   .question {

@@ -101,7 +101,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-12 col-lg-4 q-px-sm">
+          <div class="col-12 col-lg-8 q-px-sm">
             <input-primary
               v-model="model.Cns"
               label="CNS"
@@ -202,7 +202,6 @@ export default {
         !th.model.DadName ||
         !th.model.MomName ||
         !th.model.Cid10 ||
-        !th.model.Password ||
         !th.model.Cns ||
         !th.model.NewBorn
       ) {

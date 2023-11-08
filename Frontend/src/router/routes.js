@@ -18,7 +18,7 @@ import { PhArticle } from '@phosphor-icons/vue';
 const authToken = Cookie.get('authToken')
 const userType = authToken ? Cookie.getUserType(authToken) : ''
 
-const closedPeopleLinks = [
+const closePeopleLinks = [
   { path: '/questionarios', name: 'Questionários', icon: PhArticle }
 ]
 
@@ -28,7 +28,7 @@ const allUserLinks = [
   { path: '/pacientes', name: 'Pacientes', icon: PhUserList}
 ]
 
-const links = userType === 'P' ? closedPeopleLinks : allUserLinks
+const links = userType === 'P' ? closePeopleLinks : allUserLinks
 
 export const routes = [
   {

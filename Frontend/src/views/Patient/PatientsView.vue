@@ -7,22 +7,22 @@
             <h3 class="patients-title">
               Pacientes
             </h3>
-            <buttonPrimary 
+            <buttonPrimary
               type="button"
               @click="openAddEditModal()"
             >
               Adicionar
-              <PhPlus 
-                class="icon-color" 
-                color="white" 
+              <PhPlus
+                class="icon-color"
+                color="white"
               />
             </buttonPrimary>
           </div>
           <div class="patients-content q-mt-lg flex">
-            <div v-if="model.data.length==0">
+            <div v-if="model.data.length == 0">
               <i>Não há pacientes cadastrados ainda.</i>
             </div>
-            <div 
+            <div
               v-for="patient in model.data"
               :key="patient.IdPatient"
               class="patients-list"
@@ -51,19 +51,19 @@
               </div>
             </div>
           </div>
-          <div 
+          <div
             class="btn-modal hidden flex justify-center items-center"
             type="button"
             @click="openAddEditModal()"
           >
-            <PhPlus 
-              class="icon-color" 
+            <PhPlus
+              class="icon-color"
               color="white"
             />
           </div>
-          <PatientsAddEditModal 
+          <PatientsAddEditModal
             ref="addEdit"
-            @close="load" 
+            @close="load"
           />
         </div>
       </div>
@@ -81,7 +81,7 @@ export default {
     buttonPrimary,
     PhPlus,
     PhPencil,
-    PatientsAddEditModal, 
+    PatientsAddEditModal,
     PhFingerprintSimple
   },
   data() {
@@ -111,13 +111,13 @@ export default {
     openAddEditModal(current) {
       this.$refs.addEdit.openModal(current)
     },
-    openViewPatient(id){
-      this.$router.push('paciente?id='+id)
+    openViewPatient(id) {
+      this.$router.push('paciente?id=' + id)
     },
-    openEditPatient(id){
-      this.$router.push('paciente?id='+ id +'&edit=true')
+    openEditPatient(id) {
+      this.$router.push('paciente?id=' + id + '&edit=true')
     },
-    resetPassword ({IdPatient}) {
+    resetPassword({ IdPatient }) {
       const th = this;
       th.$api.PatientController.resetPassword(IdPatient)
     }
@@ -126,14 +126,13 @@ export default {
 </script>
 
 <style scoped>
-
-.edit-button{
+.edit-button {
   height: 110%;
   margin-right: 12px;
   cursor: pointer;
 }
 
-.patients-content{
+.patients-content {
   gap: 1em;
 }
 
@@ -142,10 +141,10 @@ export default {
   background-color: rgba(255, 255, 255, 0.548);
   background-size: 50% !important;
   background: url(../../assets/imgs/home-background.svg) no-repeat;
-  background-position-x:center;
+  background-position-x: center;
   background-position-y: center;
   height: 100%;
-} 
+}
 
 .container {
   height: 100%;
@@ -174,11 +173,11 @@ export default {
   justify-content: space-between;
 }
 
-.patients-list:hover{
+.patients-list:hover {
   background-color: rgba(255, 255, 255, 0.89);
 }
 
-.patients-list span{
+.patients-list span {
   width: -webkit-fill-available;
   cursor: pointer;
   padding: 0.8em;
@@ -223,32 +222,30 @@ export default {
   color: white;
 }
 
-@media screen and (max-width: 992px) {
 
-  .patients {
-    margin-top: 0rem;
-  }
+.patients {
+  margin-top: 0rem;
+}
 
-  .info-patients button{
-    display: none;
-  }
+.info-patients button {
+  display: none;
+}
 
-  .info-patients .patients-title{
-    padding-left: 2rem;
-    margin-top: 4%;
-  }
+.info-patients .patients-title {
+  padding-left: 2rem;
+  margin-top: 4%;
+}
 
-  .patients-content {
-    padding-left: 2rem;
-    padding-right: 2rem;
-    gap: 1rem;
-    max-height: 70vh;
-    height: 100%;
-    overflow-y: auto;
-  }
+.patients-content {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  gap: 1rem;
+  max-height: 60vh;
+  height: 100%;
+  overflow-y: auto;
+}
 
-  .btn-modal {
-    display: flex !important;
-  }
+.btn-modal {
+  display: flex !important;
 }
 </style>

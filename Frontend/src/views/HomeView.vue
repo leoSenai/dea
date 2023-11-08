@@ -49,10 +49,7 @@ export default {
     },
     getData () {
       this.userType = Cookie.getUserType(Cookie.get('authToken'))
-      this.linksData = this.getLinksDataByUserType()
-    },
-    getLinksDataByUserType () {
-      return this.userType === 'P' ? this.links.filter(link => link.path === '/questionarios') : this.links
+      this.linksData = this.links
     },
     fixScreenSize () {
       try{

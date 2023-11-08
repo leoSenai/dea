@@ -164,6 +164,7 @@ export default {
   data() {
     return {
       show: false,
+      aaa: 0,
       model: {
         IdPatient: null,
         Name: '',

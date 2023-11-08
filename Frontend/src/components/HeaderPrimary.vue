@@ -165,6 +165,7 @@ header {
 }
 
 .sidebar {
+  box-shadow: none;
   position: fixed;
   z-index: 999;
   min-height: 100%;
@@ -209,6 +210,7 @@ header {
 
 .sidebar.active {
   transform: translateX(0%);
+  box-shadow: 4px 3px 12px black;
 }
 
 .user-header {

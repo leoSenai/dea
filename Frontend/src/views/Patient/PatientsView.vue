@@ -18,9 +18,10 @@
               />
             </buttonPrimary>
           </div>
-          <div 
-            class="patients-content q-mt-lg flex" 
-          >
+          <div class="patients-content q-mt-lg flex">
+            <div v-if="model.data.length==0">
+              <i>Não há pacientes cadastrados ainda.</i>
+            </div>
             <div 
               v-for="patient in model.data"
               :key="patient.IdPatient"
@@ -42,6 +43,9 @@
                   type="button"
                   @click="openAddEditModal(patient)"
                 >
+                  <q-tooltip>
+                    Visualizar
+                  </q-tooltip>
                   <PhPencil color="black" />
                 </button>
               </div>
@@ -128,9 +132,20 @@ export default {
   margin-right: 12px;
   cursor: pointer;
 }
+
+.patients-content{
+  gap: 1em;
+}
+
 .row {
   width: 100%;
-}
+  background-color: rgba(255, 255, 255, 0.548);
+  background-size: 50% !important;
+  background: url(../../assets/imgs/home-background.svg) no-repeat;
+  background-position-x:center;
+  background-position-y: center;
+  height: 100%;
+} 
 
 .container {
   height: 100%;
@@ -141,7 +156,7 @@ export default {
   width: 100%;
   padding: 2rem;
   padding-top: 0;
-  margin-top: 5rem;
+  margin-top: 3.9rem;
 }
 
 .patients-title {
@@ -154,12 +169,13 @@ export default {
   width: 100%;
   border-radius: 0.25rem;
   padding: 0;
+  background-color: rgba(255, 255, 255, 0.548);
   display: flex;
   justify-content: space-between;
 }
 
 .patients-list:hover{
-  background-color: rgba(200, 255, 172, 0.041);
+  background-color: rgba(255, 255, 255, 0.89);
 }
 
 .patients-list span{
@@ -167,7 +183,7 @@ export default {
   cursor: pointer;
   padding: 0.8em;
   font-size: 1.25rem;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .btn-modal {

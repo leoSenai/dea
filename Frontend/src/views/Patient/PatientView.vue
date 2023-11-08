@@ -13,12 +13,6 @@
           <h4>{{ model.Name }}</h4>
           <p>{{ model.Cpf }}</p>
           <p>{{ model.Email }}</p>
-          <p
-            class="reset-password"
-            @click="resetPassword"
-          >
-            Redefinir Senha
-          </p>
         </div>
         <div class="edit-button-div">
           <button-primary
@@ -167,9 +161,6 @@ export default {
       //desaparece loading
       document.getElementById('loading-gif').style.display = 'none';
     },
-    changePassword(id) {
-      alert(id + ' - FUTURA IMPLEMENTACAO');
-    },
     changeNewBornValue() {
       const th = this;
       if (th.opcaoNewBorn == 'Sim') {
@@ -313,9 +304,9 @@ h5 {
 }
 
 .nextPersonView {
-  border: 1px solid var(--primary);
-  background-color: var(--neutral-light-gray);
-  color: green;
+  border: 1px solid;
+  background-color: var(--primary);
+  color: white;
   margin: 10px;
   width: -webkit-fill-available;
   margin-bottom: 20px;
@@ -323,7 +314,11 @@ h5 {
 }
 
 .nextPersonView:hover {
-  filter: brightness(0.8);
+  background-color: #45852a;
+}
+
+.nextPersonView button:hover{
+  background-color: #45852a;
 }
 
 .patient-content {
@@ -337,6 +332,11 @@ h5 {
     sans-serif;
   display: block;
   justify-content: space-between;
+  background-size: 50% !important;
+  background: url(../../assets/imgs/home-background.svg) no-repeat;
+  background-position-x:center;
+  background-position-y: center;
+  height: 100%;
 }
 
 section {
@@ -389,7 +389,7 @@ section {
 
 .patientView-header p {
   margin: 0;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .editIcon {
@@ -402,6 +402,7 @@ section {
   margin-top: 1.5rem;
   cursor: pointer;
   transition: 1.5s;
+  width: fit-content;
 }
 
 .back-page:hover {

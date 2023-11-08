@@ -52,6 +52,7 @@ func main() {
 	r.Get("/user/get-all", utils.VerifyToken(controller.GetAllUser))
 	r.Post("/user/insert", utils.VerifyToken(controller.PostUser))
 	r.Put("/user/update", utils.VerifyToken(controller.PutUser))
+	r.Put("/user/reset-password", utils.VerifyToken(controller.ResetPasswordUser))
 
 	r.Get("/cbo/get-by-id/{id}", utils.VerifyToken(controller.GetCboById))
 	r.Get("/cbo/get-all", utils.VerifyToken(controller.GetAllCbo))
@@ -112,6 +113,7 @@ func main() {
 	r.Get("/proximityhasquiz/get-by-id-quiz/{id}", utils.VerifyToken(controller.GetProximityQuizByQuizID))
 	r.Get("/proximityhasquiz/get-by-id-patient/{id}", utils.VerifyToken(controller.GetProximityQuizByPatientID))
 	r.Get("/proximityhasquiz/get-by-id-person/{id}", utils.VerifyToken(controller.GetProximityQuizByPersonID))
+	r.Get("/proximityhasquiz/get-by-id-quiz-person/{idquiz}/{idperson}", utils.VerifyToken(controller.GetProximityQuizByQuizPersonID))
 	r.Post("/proximityhasquiz/insert", utils.VerifyToken(controller.PostProximityQuiz))
 	r.Put("/proximityhasquiz/update", utils.VerifyToken(controller.PutProximityQuiz))
 

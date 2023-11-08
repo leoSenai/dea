@@ -4,7 +4,7 @@
     @close="closeModal"
   >
     <template #modal-title>
-      Vizualizar questionário de {{ patient.Name }}
+      Vizualizar questionário de {{ person.Name }}
     </template>
     <template #modal-content>
       <q-form ref="form">
@@ -45,7 +45,7 @@
           <div
             v-if="question.Answer!=''"
             style="display: flex; width: 100%;gap: 5px;"
-          >  
+          > 
             <QuestionPrimary
               :model-value="parseInt(question.Answer)"
               :answer-range="model.Interval"
@@ -89,7 +89,7 @@ import QuestionPrimary from '../../components/QuestionPrimary.vue';
     data() {
       return {
         show: false,
-        patient: [],
+        person: [],
         model: {
           Name: '',
           IdQuiz: null,
@@ -101,17 +101,19 @@ import QuestionPrimary from '../../components/QuestionPrimary.vue';
       };
     },
     methods: {
-      openModal(current, patient) {
+      openModal(current, person) {
         const th = this;
-        th.patient = patient
+        th.person = person
         th.show = true;
         if (current) {
           th.model = { ...current, Interval: +current.Interval };
           th.$api.QuestionController.getAll()
             .then(async ({ data }) => {
 
-              const awnsers = await th.$api.PatientHasQuizController.getByIdQuizPatient(th.model.IdQuiz, patient.IdPatient)
-              const answers = awnsers.data.data[0].Answers.split(';')
+              var awnsers = await th.$api.ProximityHasQuizController.getByIdQuizPerson(th.model.IdQuiz, person.IdPerson)
+              var answers = awnsers.data.data[0].Answers.split(';')
+              console.log(awnsers.data.data[0].Answers)
+              console.log('-------')
 
               const filteredQuestions = data.data
                 .filter(({ IdQuiz }) => IdQuiz === th.model.IdQuiz)
@@ -132,7 +134,8 @@ import QuestionPrimary from '../../components/QuestionPrimary.vue';
         }
       },
       goBack() {
-        this.$router.push('/pacienteInfo?id='+this.patient.IdPatient)
+        const th = this
+        this.$router.push('/pessoas-proximas/'+th.person.IdPerson+'/questionarios')
       },
       closeModal() {
         this.show = false;

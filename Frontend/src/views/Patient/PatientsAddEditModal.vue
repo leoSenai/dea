@@ -7,7 +7,20 @@
       {{ model && model.IdPatient ? 'Editar' : 'Cadastrar' }} Pacientes
     </template>
     <template #modal-content>
-      <q-form ref="form">
+      <q-select
+        v-show="!newPatient"
+        style="border: 1px solid rgba(0, 0, 0, 0.432);border-radius: 5px;"
+        label="&nbsp Paciente"
+      />
+      <q-checkbox 
+        v-model="newPatient"
+      >
+        Paciente novo
+      </q-checkbox>
+      <q-form
+        v-show="newPatient"
+        ref="form"
+      >
         <div class="row">
           <div class="col-12 col-lg-6 q-px-sm">
             <input-primary
@@ -152,6 +165,7 @@ import ModalPrimary from '../../components/ModalPrimary.vue';
 import InputPrimary from '../../components/InputPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import SelectPrimary from '../../components/SelectPrimary.vue';
+import cookie from '../../cookie';
 
 export default {
   components: {
@@ -163,6 +177,7 @@ export default {
   emits: ['close'],
   data() {
     return {
+      newPatient: false,
       show: false,
       model: {
         IdPatient: null,
@@ -215,7 +230,7 @@ export default {
         th.model.NewBorn = 0;
       }
       th.$api.PatientController.insert({
-        ...th.model,
+        Patient: th.model, IdUser: cookie.getUserId(cookie.get('authToken'))
       })
         .then(({ data }) => {
           th.model = data.data;

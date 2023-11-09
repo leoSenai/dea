@@ -12,6 +12,7 @@ import PatientController from './PatientController'
 import AnamneseController from './AnamneseController'
 import PatientHasQuizController from './PatientHasQuizController'
 import FiliatedsController from './FiliatedsController'
+import PatientHasUserController from './PatientHasUserController'
 
 export default {
   install: (app, options) => {
@@ -29,7 +30,8 @@ export default {
       PatientController,
       AnamneseController,
       PatientHasQuizController,
-      FiliatedsController
+      FiliatedsController,
+      PatientHasUserController,
     }
     app.provide('api', options)
   },

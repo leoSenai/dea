@@ -95,6 +95,7 @@ func GetAllPatient(w http.ResponseWriter, _ *http.Request) {
 			Phone:     patients[i].Phone,
 			BornDate:  patients[i].BornDate,
 			Sex:       patients[i].Sex,
+			Email:     patients[i].Email,
 			NewBorn:   patients[i].NewBorn,
 			DadName:   patients[i].DadName,
 			MomName:   patients[i].MomName,
@@ -104,7 +105,7 @@ func GetAllPatient(w http.ResponseWriter, _ *http.Request) {
 		})
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Pacientes encontrados com sucesso!", patients)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Pacientes encontrados com sucesso!", patientsDto)
 }
 
 func PostPatient(w http.ResponseWriter, r *http.Request) {

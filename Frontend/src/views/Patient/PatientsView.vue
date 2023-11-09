@@ -9,7 +9,7 @@
             </h3>
             <buttonPrimary
               type="button"
-              @click="openAddEditModal()"
+              @click="openAddEditModal(model)"
             >
               Adicionar
               <PhPlus
@@ -18,12 +18,14 @@
               />
             </buttonPrimary>
           </div>
-          <div class="patients-content q-mt-lg flex">
-            <div v-if="model.data.length == 0">
+          <div 
+            class="patients-content q-mt-lg flex" 
+          >
+            <div v-if="patients.length==0">
               <i>Não há pacientes cadastrados ainda.</i>
             </div>
-            <div
-              v-for="patient in model.data"
+            <div 
+              v-for="patient in patients"
               :key="patient.IdPatient"
               class="patients-list"
             >
@@ -44,7 +46,7 @@
                   @click="openAddEditModal(patient)"
                 >
                   <q-tooltip>
-                    Visualizar
+                    Editar
                   </q-tooltip>
                   <PhPencil color="black" />
                 </button>
@@ -75,6 +77,7 @@
 import buttonPrimary from '../../components/ButtonPrimary.vue';
 import { PhPlus, PhPencil, PhFingerprintSimple } from '@phosphor-icons/vue';
 import PatientsAddEditModal from './PatientsAddEditModal.vue';
+import cookie from '../../cookie';
 
 export default {
   components: {
@@ -86,6 +89,8 @@ export default {
   },
   data() {
     return {
+      patientsHasUser: [],
+      patients: [],
       model: {
         data: [],
         hasError: false,
@@ -98,15 +103,22 @@ export default {
   },
   methods: {
     load() {
-      const th = this;
-      th.$api.PatientController.getAll().then(({ data }) => {
-        th.model = data
-      }).catch(({ response }) => {
-        th.model = {
-          ...response.data,
-          hasError: true
-        }
-      })
+      this.patients = []
+      this.getPatientsOfUser()
+    },
+    async getPatientsOfUser(){
+      const th = this
+
+      th.patientsHasUser = (await th.$api.PatientHasUserController.getByIdUser(cookie.getUserId(cookie.get('authToken')))).data.data
+      th.patientsHasUser = th.patientsHasUser.map((el) => { return el.IdPatient })
+
+      for (let index = 0; index < th.patientsHasUser.length; index++) {
+        var dataPatient = (await th.$api.PatientController.getById(th.patientsHasUser[index])).data.data
+        th.patients.push(dataPatient)
+      }
+
+      th.model.data = th.patients
+   
     },
     openAddEditModal(current) {
       this.$refs.addEdit.openModal(current)

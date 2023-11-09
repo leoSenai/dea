@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import Cookie from '../cookie'
+import Cookie from '../utils/cookie'
 import logo from '/logo.png';
 import InputTemplate from '../components/InputPrimary.vue';
 import ButtonTemplate from '../components/ButtonPrimary.vue';

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Toastify from 'toastify-js';
-import Cookie from '../cookie';
+import Cookie from '../utils/cookie';
 import router from '../router';
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL_DEV

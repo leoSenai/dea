@@ -165,7 +165,7 @@ import ModalPrimary from '../../components/ModalPrimary.vue';
 import InputPrimary from '../../components/InputPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import SelectPrimary from '../../components/SelectPrimary.vue';
-import cookie from '../../cookie';
+import cookie from '../../utils/cookie';
 
 export default {
   components: {

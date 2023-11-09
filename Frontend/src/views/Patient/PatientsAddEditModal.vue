@@ -179,6 +179,7 @@ export default {
     return {
       newPatient: false,
       show: false,
+      aaa: 0,
       model: {
         IdPatient: null,
         Name: '',

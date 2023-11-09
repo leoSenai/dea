@@ -244,7 +244,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  max-height: 70vh;
+  max-height: 60vh;
   height: 100%;
   overflow-y: auto;
 }

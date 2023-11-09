@@ -110,10 +110,8 @@ import QuestionPrimary from '../../components/QuestionPrimary.vue';
           th.$api.QuestionController.getAll()
             .then(async ({ data }) => {
 
-              var awnsers = await th.$api.PatientHasQuizController.getByIdQuizPatient(th.model.IdQuiz, patient.IdPatient)
-              var answers = awnsers.data.data[0].Answers.split(';')
-              console.log(awnsers.data.data[0].Answers)
-              console.log('-------')
+              const awnsers = await th.$api.PatientHasQuizController.getByIdQuizPatient(th.model.IdQuiz, patient.IdPatient)
+              const answers = awnsers.data.data[0].Answers.split(';')
 
               const filteredQuestions = data.data
                 .filter(({ IdQuiz }) => IdQuiz === th.model.IdQuiz)

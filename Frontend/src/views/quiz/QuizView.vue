@@ -23,7 +23,7 @@
     >
       {{ model.message }}
     </div>
-    <div v-if="model.data.Quizzes==undefined">
+    <div v-if="!model.data.Quizzes">
       <i>Não há questionários criados até o momento.</i>
     </div>
     <div 
@@ -130,7 +130,7 @@ export default {
   },
   methods: {
     finished(quiz){
-      return this.model.data.FinishedQuizzes.map((el)=>{return el.IdQuiz==quiz.IdQuiz}).includes(true)
+      return this.model.data.FinishedQuizzes?.map((el)=>{return el.IdQuiz==quiz.IdQuiz}).includes(true)
     },
     load() {
       const th = this;

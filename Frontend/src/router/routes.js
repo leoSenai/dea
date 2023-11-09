@@ -14,6 +14,7 @@ import Cookie from '../cookie'
 
 import { PhUserList, PhUsers } from '@phosphor-icons/vue';
 import { PhArticle } from '@phosphor-icons/vue';
+import { RoleEnum } from '../utils/Enum';
 
 const authToken = Cookie.get('authToken')
 const userType = authToken ? Cookie.getUserType(authToken) : ''
@@ -43,7 +44,7 @@ export const routes = [
     },
   },
   {
-    path: '/pacienteInfo',
+    path: '/paciente',
     components: {
       default: PatientView,
       header: Header,
@@ -51,6 +52,14 @@ export const routes = [
     props: {
       header: { links },
     },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
+        return { path: '/' };
+      }
+      return true;
+    }
   },
   {
     path: '/login',
@@ -67,6 +76,14 @@ export const routes = [
     props: {
       header: { links },
     },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
+        return { path: '/' };
+      }
+      return true
+    }
   },
   {
     path: '/paciente/:id/pessoas-proximas',
@@ -77,6 +94,14 @@ export const routes = [
     props: {
       header: { links },
     },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
+        return { path: '/' };
+      }
+      return true
+    }
   },
   {
     path: '/paciente/:id/questionarios',
@@ -86,6 +111,14 @@ export const routes = [
     },
     props: {
       header: { links },
+      beforeEnter () {
+        const authToken = Cookie.get('authToken');
+        const typeUser = Cookie.getUserType(authToken);
+        if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
+          return { path: '/' };
+        }
+        return true
+      }
     },
   },
   {
@@ -106,6 +139,14 @@ export const routes = [
     },
     props: {
       header: { links },
+    },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Administrator) {
+        return { path: '/' };
+      }
+      return true;
     }
   },
   {
@@ -118,6 +159,14 @@ export const routes = [
     props: {
       header: { links },
     },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
+        return { path: '/' };
+      }
+      return true
+    }
   },
   {
     path: '/:pathMatch(.*)*',
@@ -125,16 +174,6 @@ export const routes = [
       default: NotFound,
       header: Header,
       input: InputPrimary
-    },
-    props: {
-      header: { links },
-    },
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    components: {
-      default: NotFound,
-      header: Header,
     },
     props: {
       header: { links },

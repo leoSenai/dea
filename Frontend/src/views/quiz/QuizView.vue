@@ -23,7 +23,7 @@
     >
       {{ model.message }}
     </div>
-    <div v-if="model.data.Quizzes==undefined">
+    <div v-if="!model.data.Quizzes">
       <i>Não há questionários criados até o momento.</i>
     </div>
     <div 

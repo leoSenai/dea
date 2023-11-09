@@ -74,7 +74,7 @@
 <script>
 import { PhUserCircle, PhList, PhDoor, PhSignOut } from '@phosphor-icons/vue';
 import ButtonPrimary from '../components/ButtonPrimary.vue';
-import cookie from '../cookie';
+import cookie from '../utils/cookie';
 
 export default {
   components: {
@@ -210,7 +210,7 @@ header {
 
 .sidebar.active {
   transform: translateX(0%);
-  box-shadow: 4px 3px 12px black;
+  box-shadow: 10px 0px 12px rgba(0, 0, 0, 0.15);
 }
 
 .user-header {

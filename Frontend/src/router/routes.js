@@ -10,7 +10,7 @@ import Users from '../views/Users/UsersView.vue'
 import InputPrimary from '../components/InputPrimary.vue';
 import NotFound from '../views/NotFoundView.vue';
 import Quiz from '../views/Quiz/QuizView.vue';
-import Cookie from '../cookie'
+import Cookie from '../utils/cookie'
 
 import { PhUserList, PhUsers } from '@phosphor-icons/vue';
 import { PhArticle } from '@phosphor-icons/vue';

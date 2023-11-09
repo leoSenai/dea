@@ -23,7 +23,7 @@
 </template>
 <script>
 import { PhBookOpen, PhPerson, PhScooter } from '@phosphor-icons/vue';
-import Cookie from '../cookie'
+import Cookie from '../utils/cookie'
 
 export default {
   components: { PhScooter, PhBookOpen, PhPerson },

@@ -94,6 +94,10 @@ func PutPatient(patientPut models.Patient) (patientBack models.Patient, err erro
 	if patientPut.IdPatient != 0 {
 		row := conn.Table("paciente").Where("idpaciente = ?", patientPut.IdPatient).Updates(&patientPut)
 		log.Printf("row: %v", row)
+		if row.Error != nil {
+			err = row.Error
+			return
+		}
 	}
 
 	return

@@ -130,6 +130,9 @@ func main() {
 
 	r.Put("/filiateds/update", utils.VerifyToken(controller.PutFiliateds))
 
+	r.Get("/patienthasuser/get-by-id-user/{id}", utils.VerifyToken(controller.GetPatientHasUserByUserId))
+	r.Post("/patienthasuser/insert", utils.VerifyToken(controller.PostPatientHasUser))
+
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {
 		log.Println("Server not initialized")

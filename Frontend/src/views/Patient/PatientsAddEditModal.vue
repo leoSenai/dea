@@ -4,21 +4,26 @@
     @close="closeModal"
   >
     <template #modal-title>
-      {{ model && model.IdPatient ? 'Editar' : 'Cadastrar' }} Pacientes
+      {{ model && model.IdPatient ? 'Editar' : (newPatient ? "Cadastrar" : "Adicionar") }} Paciente
     </template>
     <template #modal-content>
-      <q-select
-        v-show="!newPatient"
-        style="border: 1px solid rgba(0, 0, 0, 0.432);border-radius: 5px;"
-        label="&nbsp Paciente"
-      />
-      <q-checkbox 
-        v-model="newPatient"
-      >
-        Paciente novo
-      </q-checkbox>
+      <div v-if="!(model && model.IdPatient)">
+        <q-checkbox 
+          v-model="newPatient"
+        >
+          Paciente novo
+        </q-checkbox>
+        <q-select
+          v-show="!newPatient"
+          v-model="patientExistToAdd"
+          style="border: 1px solid rgba(0, 0, 0, 0.432);border-bottom: 1px solid gray;border-radius: 5px;padding-left: 10px;"
+          label="&nbsp Paciente"
+          :options="patientsDisponible"
+          option-label="Name"
+        />
+      </div>
       <q-form
-        v-show="newPatient"
+        v-show="(newPatient || (model && model.IdPatient))"
         ref="form"
       >
         <div class="row">
@@ -146,7 +151,7 @@
         type="submit"
         @click="createPatient"
       >
-        Cadastrar
+        {{ newPatient ? "Cadastrar" : "Adicionar" }}
       </button-primary>
       <button-primary
         v-else
@@ -178,6 +183,9 @@ export default {
   data() {
     return {
       newPatient: false,
+      patientExistToAdd: [],
+      patientsVisible: [],
+      patientsDisponible: [],
       show: false,
       model: {
         IdPatient: null,
@@ -196,42 +204,69 @@ export default {
       },
     };
   },
+  mounted() {
+    const th = this
+    th.$api.PatientController.getAll().then((data)=> {
+      th.patientsDisponible = data.data.data
+    })
+  },
   methods: {
     openModal(current) {
       const th = this;
       th.show = true;
       if (current) {
-        this.model = { ...current, NewBorn: current.NewBorn ? 'Sim' : 'Não' };
+
+        this.model = { ...current, NewBorn: current.NewBorn ? 'Sim' : 'Não'};
+        
+        if(!(th.model && th.model.IdPatient)){
+          th.patientsVisible = current.data
+          th.filterPatients()
+        }
+
       }
     },
-    createPatient() {
+    filterPatients(){
+      const th = this
+
+      for (let index = 0; index < th.model.data.length; index++) {
+        for (let index2 = 0; index2 < th.patientsDisponible.length; index2++) {
+          if(th.model.data[index].IdPatient == th.patientsDisponible[index2].IdPatient){
+            th.patientsDisponible.splice(index2, 1)
+          }
+        }
+      }
+   
+    },
+    createPatient() { //create or add
       const th = this;
-      if (
-        !th.model.Name ||
-        !th.model.Email ||
-        !th.model.Phone ||
-        !th.model.Address ||
-        !th.model.Cpf ||
-        !th.model.BornDate ||
-        !th.model.Sex ||
-        !th.model.DadName ||
-        !th.model.MomName ||
-        !th.model.Cid10 ||
-        !th.model.Cns ||
-        !th.model.NewBorn
-      ) {
-        alert('Certifique-se de preencher todos os campos.');
-        return;
-      }
-      th.model.Cid10 = th.model.Cid10 ? parseInt(th.model.Cid10, 10) : 0;
-      if (th.model.NewBorn === 'Sim') {
-        th.model.NewBorn = 1;
-      } else {
-        th.model.NewBorn = 0;
-      }
-      th.$api.PatientController.insert({
-        Patient: th.model, IdUser: cookie.getUserId(cookie.get('authToken'))
-      })
+
+      if(th.newPatient){ //criar novo paciente
+        if (
+          !th.model.Name ||
+          !th.model.Email ||
+          !th.model.Phone ||
+          !th.model.Address ||
+          !th.model.Cpf ||
+          !th.model.BornDate ||
+          !th.model.Sex ||
+          !th.model.DadName ||
+          !th.model.MomName ||
+          !th.model.Cid10 ||
+          !th.model.Cns ||
+          !th.model.NewBorn
+        ) {
+          alert('Certifique-se de preencher todos os campos.');
+          return;
+        }
+        th.model.Cid10 = th.model.Cid10 ? parseInt(th.model.Cid10, 10) : 0;
+        if (th.model.NewBorn === 'Sim') {
+          th.model.NewBorn = 1;
+        } else {
+          th.model.NewBorn = 0;
+        }
+        th.$api.PatientController.insert({
+          Patient: th.model, IdUser: cookie.getUserId(cookie.get('authToken'))
+        })
         .then(({ data }) => {
           th.model = data.data;
           if (th.model.IdPatient) {
@@ -248,6 +283,16 @@ export default {
         .then(() => {
           th.closeModal();
         });
+      }else{ //adicionar existente
+        var patientId = th.patientExistToAdd.IdPatient
+        var userId = cookie.getUserId(cookie.get('authToken'))
+
+        th.$api.PatientHasUserController.insert({IdPatient: patientId, IdUser: userId}).then(() => {
+          th.closeModal()
+        })
+
+      }
+
     },
     updatePatient() {
       const th = this;
@@ -280,7 +325,9 @@ export default {
     },
     closeModal() {
       this.show = false;
-      this.model=[]
+      this.patients = []
+      this.patientsVisible = []
+      this.patientExistToAdd = []
       this.$emit('close');
     },
   },

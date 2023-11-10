@@ -130,7 +130,7 @@ export default {
   },
   methods: {
     finished(quiz){
-      return this.model.data.FinishedQuizzes.map((el)=>{return el.IdQuiz==quiz.IdQuiz}).includes(true)
+      return this.model.data.FinishedQuizzes?.map((el)=>{return el.IdQuiz==quiz.IdQuiz}).includes(true)
     },
     load() {
       const th = this;

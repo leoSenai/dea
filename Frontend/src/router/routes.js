@@ -29,7 +29,7 @@ const allUserLinks = [
   { path: '/pacientes', name: 'Pacientes', icon: PhUserList}
 ]
 
-const links = userType === 'P' ? closePeopleLinks : allUserLinks
+export const links = userType === 'P' ? closePeopleLinks : allUserLinks
 
 export const routes = [
   {

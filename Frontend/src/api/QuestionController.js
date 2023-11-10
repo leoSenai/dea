@@ -16,5 +16,8 @@ export default {
   },
   delete(id) {
     return axios.delete(this.url + 'delete/' + id)
+  },
+  getByQuizId(id) {
+    return axios.get(this.url + 'get-by-quiz-id/' + id)
   }
 }

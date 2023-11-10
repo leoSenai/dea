@@ -9,7 +9,7 @@ import ProximityQuizzes from '../views/Proximity/ProximityQuizzes.vue'
 import Users from '../views/Users/UsersView.vue'
 import InputPrimary from '../components/InputPrimary.vue';
 import NotFound from '../views/NotFoundView.vue';
-import Quiz from '../views/Quiz/QuizView.vue';
+import Quiz from '../views/quiz/QuizView.vue';
 import Cookie from '../utils/cookie'
 
 import { PhUserList, PhUsers } from '@phosphor-icons/vue';

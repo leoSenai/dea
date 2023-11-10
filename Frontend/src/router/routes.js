@@ -10,6 +10,7 @@ import Users from '../views/Users/UsersView.vue'
 import InputPrimary from '../components/InputPrimary.vue';
 import NotFound from '../views/NotFoundView.vue';
 import Quiz from '../views/quiz/QuizView.vue';
+import ClosePeopleQuiz from '../views/ClosePeopleQuiz/ClosePeopleQuizView.vue';
 import Cookie from '../utils/cookie'
 
 import { PhUserList, PhUsers } from '@phosphor-icons/vue';
@@ -26,7 +27,8 @@ const closePeopleLinks = [
 const allUserLinks = [
   { path: '/usuarios', name: 'Usuários', icon: PhUsers },
   { path: '/questionarios', name: 'Questionários', icon: PhArticle },
-  { path: '/pacientes', name: 'Pacientes', icon: PhUserList}
+  { path: '/pacientes', name: 'Pacientes', icon: PhUserList},
+  { path: '/questionarios-pessoas-proximas', name: 'Questionários', icon: PhUserList}
 ]
 
 export const links = userType === 'P' ? closePeopleLinks : allUserLinks
@@ -179,4 +181,14 @@ export const routes = [
       header: { links },
     },
   },
+  {
+    path: '/questionarios-pessoas-proximas',
+    components: {
+      default: ClosePeopleQuiz,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+  }
 ];

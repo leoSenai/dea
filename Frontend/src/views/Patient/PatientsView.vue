@@ -8,6 +8,7 @@
               Pacientes
             </h3>
             <buttonPrimary
+              v-if="!isMobile"
               type="button"
               @click="openAddEditModal(model)"
             >
@@ -54,7 +55,8 @@
             </div>
           </div>
           <div
-            class="btn-modal hidden flex justify-center items-center"
+            v-if="isMobile"
+            class="btn-modal flex justify-center items-center"
             type="button"
             @click="openAddEditModal()"
           >
@@ -97,6 +99,11 @@ export default {
         message: ''
       }
     };
+  },
+  computed: {
+    isMobile() {
+      return this.$q.screen.xs || this.$q.screen.sm
+    }
   },
   mounted() {
     this.load();

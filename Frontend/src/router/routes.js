@@ -9,17 +9,34 @@ import Users from '../views/Users/UsersView.vue'
 import InputPrimary from '../components/InputPrimary.vue';
 import NotFound from '../views/NotFoundView.vue';
 import Quiz from '../views/Quiz/QuizView.vue';
+import Cookie from '../cookie'
 
 import { PhUserList, PhUsers } from '@phosphor-icons/vue';
 import { PhArticle } from '@phosphor-icons/vue';
 
-const links = [
-  { path: '/usuarios', name: 'Usuários', icon: PhUsers },
-  { path: '/questionarios', name: 'Questionários', icon: PhArticle },
-  { path: '/pacientes', name: 'Pacientes', icon: PhUserList}
-];
+const typeUser = Cookie.getUserType(Cookie.get('authToken'))
 
-export const routes = [
+function getLinks(){
+  if(typeUser=='U'){
+    return [
+      { path: '/usuarios', name: 'Usuários', icon: PhUsers },
+      { path: '/questionarios', name: 'Questionários', icon: PhArticle },
+      { path: '/pacientes', name: 'Pacientes', icon: PhUserList}
+    ];
+  }else if(typeUser=='PA'){
+    return [
+      { path: '/questionarios-paciente', name: 'Ver questionários', icon: PhArticle },
+    ];
+  }else{
+    return [
+      { path: '/questionarios-pessoa-proxima', name: 'Ver questionários', icon: PhArticle },
+    ];
+  }
+}
+
+const links = getLinks()
+
+const routesU = [
   {
     path: '/',
     components: {
@@ -28,7 +45,7 @@ export const routes = [
     },
     props: {
       header: { links },
-      default: { links }
+      default: { links } 
     },
   },
   {
@@ -131,3 +148,160 @@ export const routes = [
     },
   },
 ];
+
+const routesPA = [
+  {
+    path: '/',
+    components: {
+      default: Home,
+      header: Header,
+    },
+    props: {
+      header: { links },
+      default: { links }
+    },
+  },
+  {
+    path: '/home',
+    components: {
+      default: Home,
+      header: Header,
+    },
+    props: {
+      header: { links },
+      default: { links }
+    },
+  },
+  {
+    path: '/login',
+    components: {
+      default: Login,
+    },
+  },
+  {
+    path: '/questionarios-paciente',
+    components: {
+      default: Quiz,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+  },
+  {
+    path: '/paciente/:id/questionarios',
+    components: {
+      default: PatientQuizzes,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    components: {
+      default: NotFound,
+      header: Header,
+      input: InputPrimary
+    },
+    props: {
+      header: { links },
+    },
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    components: {
+      default: NotFound,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+  },
+];
+
+const routesPR = [
+  {
+    path: '/',
+    components: {
+      default: Home,
+      header: Header,
+    },
+    props: {
+      header: { links },
+      default: { links }
+    },
+  },
+  {
+    path: '/home',
+    components: {
+      default: Home,
+      header: Header,
+    },
+    props: {
+      header: { links },
+      default: { links }
+    },
+  },
+  {
+    path: '/login',
+    components: {
+      default: Login,
+    },
+  },
+  {
+    path: '/questionarios-pessoa-proxima',
+    components: {
+      default: Quiz,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+  },
+  {
+    path: '/pessoa-proxima/:id/questionarios',
+    components: {
+      default: PatientQuizzes,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    components: {
+      default: NotFound,
+      header: Header,
+      input: InputPrimary
+    },
+    props: {
+      header: { links },
+    },
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    components: {
+      default: NotFound,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+  },
+];
+
+function getRouter(){
+  console.log(typeUser)
+  if(typeUser=='U'){
+    return routesU
+  }else if(typeUser=='PA'){
+    return routesPA
+  }else{
+    return routesPR
+  }
+}
+
+export const routes = getRouter()

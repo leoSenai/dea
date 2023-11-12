@@ -1,74 +1,85 @@
 <template>
-  <div class="patient-quiz-content">
-    <div>
-      <div
-        class="back-page"
-        onclick="window.history.back()"
-      >
-        <PhCaretLeft color="#656565" />
-        Voltar
+  <div>
+    <div
+      v-if="isUserLogin"
+      class="patient-quiz-content"
+    >
+      <div>
+        <div
+          class="back-page"
+          onclick="window.history.back()"
+        >
+          <PhCaretLeft color="#656565" />
+          Voltar
+        </div>
       </div>
-    </div>
-    <div class="quiz-title">
-      <div class="title">
-        <h3>Questionários de {{ patient.Name }}</h3>
+      <div
+        class="quiz-title"
+      >
+        <div class="title">
+          <h3>Questionários de {{ patient.Name }}</h3>
+        </div>
+        <div 
+          v-if="!isMobile"
+          class="title-add-quiz"
+        />
+      </div>
+      <div
+        v-if="model.hasError"
+        class="error quiz"
+      >
+        {{ model.message }}
       </div>
       <div 
-        v-if="!isMobile"
-        class="title-add-quiz"
-      />
-    </div>
-    <div
-      v-if="model.hasError"
-      class="error quiz"
-    >
-      {{ model.message }}
-    </div>
-    <div 
-      v-for="quiz in model.data"
-      v-else
-      :key="quiz.IdQuiz"
-      class="row quiz"
-    >
-      <p @click="openViewModal(quiz)">
-        {{ quiz.Name }}
-      </p>
-      <div class="quiz-actions">
+        v-for="quiz in model.data"
+        v-else
+        :key="quiz.IdQuiz"
+        class="row quiz"
+      >
+        <p @click="openViewModal(quiz)">
+          {{ quiz.Name }}
+        </p>
+        <div class="quiz-actions">
+          <button
+            type="button"
+            @click="openViewModal(quiz)"
+          >
+            <PhEye color="black" />
+          </button>
+        </div>
+      </div>
+      <div 
+        v-if="isMobile"
+        class="add-quiz"
+      >
         <button
           type="button"
-          @click="openViewModal(quiz)"
+          @click="openAddEditModal()"
         >
-          <PhEye color="black" />
+          <PhPlus color="white" />
         </button>
       </div>
+      <QuizAddEditModal
+        ref="addEdit"
+        @close="load" 
+      />
+      <QuizPersonsAddEditModal
+        ref="addPersons"
+        @close="load"
+      />
+      <QuizViewModal
+        ref="viewQuiz"
+      />
     </div>
-    <div 
-      v-if="isMobile"
-      class="add-quiz"
-    >
-      <button
-        type="button"
-        @click="openAddEditModal()"
-      >
-        <PhPlus color="white" />
-      </button>
+    <div v-if="isPatientLogin">
+      Questionarios do paciente e quest.. respondidos
     </div>
-    <QuizAddEditModal
-      ref="addEdit"
-      @close="load" 
-    />
-    <QuizPersonsAddEditModal
-      ref="addPersons"
-      @close="load"
-    />
-    <QuizViewModal
-      ref="viewQuiz"
-    />
   </div>
 </template>
   <script>
   import { PhPlus, PhEye, PhCaretLeft } from '@phosphor-icons/vue';
   import QuizViewModal from './PatientQuizViewModal.vue'
+  import Cookie from '../../cookie';
   
   export default {
     components: {
@@ -91,10 +102,21 @@
     computed: {
       isMobile() {
         return this.$q.screen.xs || this.$q.screen.sm
-      }
+      },
+      isPatientLogin(){
+        return (Cookie.getUserType(Cookie.get('authToken'))) == 'PA'
+      },
+      isUserLogin(){
+        return (Cookie.getUserType(Cookie.get('authToken'))) == 'U'
+      },
     },
     mounted() {
-      this.load();
+      const th = this;
+      if(this.isPatientLogin){
+        //
+      }else if(this.isUserLogin){
+        th.load();
+      }
     },
     methods: {
       load() {

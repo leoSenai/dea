@@ -10,7 +10,7 @@ import Users from '../views/Users/UsersView.vue'
 import InputPrimary from '../components/InputPrimary.vue';
 import NotFound from '../views/NotFoundView.vue';
 import Quiz from '../views/Quiz/QuizView.vue';
-import Cookie from '../cookie' 
+import Cookie from '../cookie'
 
 import { PhUserList, PhUsers } from '@phosphor-icons/vue';
 import { PhArticle } from '@phosphor-icons/vue';
@@ -28,7 +28,7 @@ function getLinks(){
     return [
       { path: '/questionarios-paciente', name: 'Ver questionários', icon: PhArticle },
     ];
-  }else{
+  }else{ //PR
     return [
       { path: '/questionarios-pessoa-proxima', name: 'Ver questionários', icon: PhArticle },
     ];
@@ -57,14 +57,6 @@ const routesU = [
     },
     props: {
       header: { links },
-    },
-    beforeEnter () {
-      const authToken = Cookie.get('authToken');
-      const typeUser = Cookie.getUserType(authToken);
-      if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
-        return { path: '/' };
-      }
-      return true;
     }
   },
   {
@@ -93,14 +85,6 @@ const routesU = [
     props: {
       header: { links },
     },
-    beforeEnter () {
-      const authToken = Cookie.get('authToken');
-      const typeUser = Cookie.getUserType(authToken);
-      if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
-        return { path: '/' };
-      }
-      return true
-    }
   },
   {
     path: '/paciente/:id/pessoas-proximas',
@@ -110,14 +94,6 @@ const routesU = [
     },
     props: {
       header: { links },
-    },
-    beforeEnter () {
-      const authToken = Cookie.get('authToken');
-      const typeUser = Cookie.getUserType(authToken);
-      if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
-        return { path: '/' };
-      }
-      return true
     }
   },
   {
@@ -128,14 +104,6 @@ const routesU = [
     },
     props: {
       header: { links },
-      beforeEnter () {
-        const authToken = Cookie.get('authToken');
-        const typeUser = Cookie.getUserType(authToken);
-        if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
-          return { path: '/' };
-        }
-        return true
-      }
     },
   },
   {
@@ -157,14 +125,6 @@ const routesU = [
     props: {
       header: { links },
     },
-    beforeEnter () {
-      const authToken = Cookie.get('authToken');
-      const typeUser = Cookie.getUserType(authToken);
-      if (typeUser !== RoleEnum.Administrator) {
-        return { path: '/' };
-      }
-      return true;
-    }
   },
   {
     path: '/pacientes',

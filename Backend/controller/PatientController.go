@@ -95,6 +95,7 @@ func GetAllPatient(w http.ResponseWriter, _ *http.Request) {
 			Phone:     patients[i].Phone,
 			BornDate:  patients[i].BornDate,
 			Sex:       patients[i].Sex,
+			Email:     patients[i].Email,
 			NewBorn:   patients[i].NewBorn,
 			DadName:   patients[i].DadName,
 			MomName:   patients[i].MomName,
@@ -104,20 +105,20 @@ func GetAllPatient(w http.ResponseWriter, _ *http.Request) {
 		})
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Pacientes encontrados com sucesso!", patients)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Pacientes encontrados com sucesso!", patientsDto)
 }
 
 func PostPatient(w http.ResponseWriter, r *http.Request) {
-	var patient models.Patient
+	var patientPlusUser dtos.PatientPlusUser
 
-	err := json.NewDecoder(r.Body).Decode(&patient)
+	err := json.NewDecoder(r.Body).Decode(&patientPlusUser)
 	if err != nil {
 		log.Printf("Cannot do Post: %v", err.Error())
 		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi possível coletar as informações do paciente necessárias para o cadastro.", "")
 		return
 	}
 
-	patient, err = service.PostPatient(patient)
+	_, err = service.PostPatient(patientPlusUser)
 	if err != nil {
 		log.Printf("Cannot do Post: %v", err.Error())
 		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível cadastrar o paciente, erro interno no servidor.", "")

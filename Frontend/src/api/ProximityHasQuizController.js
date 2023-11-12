@@ -20,4 +20,7 @@ export default {
     update(data) {
         return axios.put(this.url + 'update', data)
     },
+    getByIdQuizPerson(idquiz, idperson) {
+        return axios.get(this.url + 'get-by-id-quiz-person/' + idquiz + '/' + idperson) 
+    },
 }

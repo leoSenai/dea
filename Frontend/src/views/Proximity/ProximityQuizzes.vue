@@ -1,85 +1,77 @@
 <template>
-  <div>
+  <div class="patient-quiz-content">
+    <div>
+      <div
+        class="back-page"
+        onclick="window.history.back()"
+      >
+        <PhCaretLeft color="#656565" />
+        Voltar
+      </div>
+    </div>
+    <div class="quiz-title">
+      <div class="title">
+        <h3>Questionários de {{ person.Name }}</h3>
+      </div>
+      <div 
+        v-if="!isMobile"
+        class="title-add-quiz"
+      />
+    </div>
     <div
-      v-if="isUserLogin"
-      class="patient-quiz-content"
+      v-if="model.hasError"
+      class="error quiz"
     >
-      <div>
-        <div
-          class="back-page"
-          onclick="window.history.back()"
-        >
-          <PhCaretLeft color="#656565" />
-          Voltar
-        </div>
-      </div>
-      <div
-        class="quiz-title"
-      >
-        <div class="title">
-          <h3>Questionários de {{ patient.Name }}</h3>
-        </div>
-        <div 
-          v-if="!isMobile"
-          class="title-add-quiz"
-        />
-      </div>
-      <div
-        v-if="model.hasError"
-        class="error quiz"
-      >
-        {{ model.message }}
-      </div>
-      <div 
-        v-for="quiz in model.data"
-        v-else
-        :key="quiz.IdQuiz"
-        class="row quiz"
-      >
-        <p @click="openViewModal(quiz)">
-          {{ quiz.Name }}
-        </p>
-        <div class="quiz-actions">
-          <button
-            type="button"
-            @click="openViewModal(quiz)"
-          >
-            <PhEye color="black" />
-          </button>
-        </div>
-      </div>
-      <div 
-        v-if="isMobile"
-        class="add-quiz"
-      >
+      {{ model.message }}
+    </div>
+    <div v-if="model.data.length==0">
+      <i>Não há questionários vinculados a esta pessoa próxima.</i>
+    </div>
+    <div 
+      v-for="quiz in model.data"
+      v-else
+      :key="quiz.IdQuiz"
+      class="row quiz"
+    >
+      <p @click="openViewModal(quiz)">
+        {{ quiz.Name }}
+      </p>
+      <div class="quiz-actions">
         <button
           type="button"
-          @click="openAddEditModal()"
+          @click="openViewModal(quiz)"
         >
-          <PhPlus color="white" />
+          <PhEye color="black" />
         </button>
       </div>
-      <QuizAddEditModal
-        ref="addEdit"
-        @close="load" 
-      />
-      <QuizPersonsAddEditModal
-        ref="addPersons"
-        @close="load"
-      />
-      <QuizViewModal
-        ref="viewQuiz"
-      />
     </div>
-    <div v-if="isPatientLogin">
-      Questionarios do paciente e quest.. respondidos
+    <div 
+      v-if="isMobile"
+      class="add-quiz"
+    >
+      <button
+        type="button"
+        @click="openAddEditModal()"
+      >
+        <PhPlus color="white" />
+      </button>
     </div>
+    <QuizAddEditModal
+      ref="addEdit"
+      @close="load" 
+    />
+    <QuizPersonsAddEditModal
+      ref="addPersons"
+      @close="load"
+    />
+    <QuizViewModal
+      ref="viewQuiz"
+    />
   </div>
 </template>
   <script>
   import { PhPlus, PhEye, PhCaretLeft } from '@phosphor-icons/vue';
-  import QuizViewModal from './PatientQuizViewModal.vue'
-  import Cookie from '../../cookie';
+  import QuizViewModal from './ProximityQuizViewModal.vue'
   
   export default {
     components: {
@@ -96,39 +88,28 @@
           message: '',
         },
         quizzes: [],
-        patient: []
+        person: []
       }
     },
     computed: {
       isMobile() {
         return this.$q.screen.xs || this.$q.screen.sm
-      },
-      isPatientLogin(){
-        return (Cookie.getUserType(Cookie.get('authToken'))) == 'PA'
-      },
-      isUserLogin(){
-        return (Cookie.getUserType(Cookie.get('authToken'))) == 'U'
-      },
+      }
     },
     mounted() {
-      const th = this;
-      if(this.isPatientLogin){
-        //
-      }else if(this.isUserLogin){
-        th.load();
-      }
+      this.load();
     },
     methods: {
       load() {
         const th = this;
 
-        var idPatient = this.$router.currentRoute.value.params.id;
+        var idPerson = this.$router.currentRoute.value.params.id;
 
-        th.$api.PatientController.getById(idPatient).then((data)=>{
-          th.patient = data.data.data
+        th.$api.PersonController.getById(idPerson).then((data)=>{
+          th.person = data.data.data
         })
 
-        th.$api.PatientHasQuizController.getByIdPatient(idPatient).then(async ({ data }) => {
+        th.$api.ProximityHasQuizController.getByIdPerson(idPerson).then(async ({ data }) => {
 
             th.quizzes = data.data.map((item) => {
                 return {IdQuiz: item.IdQuiz, Finished: item.Finished};
@@ -154,7 +135,7 @@
         th.model.data.push(data.data.data)
       },
       openViewModal(currentQuiz){
-        this.$refs.viewQuiz.openModal(currentQuiz, this.patient)
+        this.$refs.viewQuiz.openModal(currentQuiz, this.person)
       }
     },
   }
@@ -175,77 +156,18 @@
     display: flex;
     flex-direction: column;
     gap: .75rem;
+    background-size: 50% !important;
+    background: url(../../assets/imgs/home-background.svg) no-repeat;
+    background-position-x:center;
+    background-position-y: center;
+    height: 100%;
   }
-
-.back-page {
-  display: flex;
-  align-items: center;
-  margin-top: 1.5rem;
-  margin-left: 0.5rem;
-  cursor: pointer;
-  transition: 1.5s;
-}
-
-.quiz-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.error {
-  border: 1px solid var(--neutral-dark-gray);
-  border-radius: 4px;
-  padding: 1rem;
-}
-
-.quiz {
-  border: 1px solid var(--neutral-dark-gray);
-  color: var(--neutral-dark-gray);
-  padding: 0;
-  border-radius: 4px;
-  display: flex;
-  cursor: text;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.quiz:hover {
-  background-color: rgba(200, 255, 172, 0.041);
-}
-
-.quiz p {
-  margin: 0;
-  width: 80%;
-  height: 100%;
-  padding-left: 1rem;
-  align-items: center;
-  display: flex;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-
-.quiz button {
-  border: none;
-  background: none;
-  cursor: pointer;
-  padding: .5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: .1s;
-  border-radius: 9999px;
-  z-index: 1;
-}
-
-.quiz button:hover {
-  background: var(--neutral-gray);
-}
 
   .back-page {
     display: flex;
     align-items: center;
     margin-top: 1.5rem;
-    margin-left: 0.5rem;
+    margin-left: 1.5rem;
     cursor: pointer;
     width: fit-content;
     transition: 1.5s;

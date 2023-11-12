@@ -1,4 +1,4 @@
-import AuthController from '../api/AuthController'
+import AuthController from '../../api/AuthController'
 
 export default {
   get(name) {

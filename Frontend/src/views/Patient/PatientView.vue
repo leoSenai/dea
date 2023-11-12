@@ -13,12 +13,6 @@
           <h4>{{ model.Name }}</h4>
           <p>{{ model.Cpf }}</p>
           <p>{{ model.Email }}</p>
-          <p
-            class="reset-password"
-            @click="resetPassword"
-          >
-            Redefinir Senha
-          </p>
         </div>
         <div class="edit-button-div">
           <button-primary
@@ -49,12 +43,12 @@
       <div style="display: flex; align-items: center;">
         <h5>Anamnese</h5><p
           id="loading-gif"
-          style="display: none; margin: 0;"
+          style="display: none; margin: 0; color: rgb(8, 139, 8)"
         >
           <img
-            src="/src/assets/imgs/loading.gif"
-            style="width: 50px; height: 50px;"
-          >
+            src="/src/assets/imgs/save.png"
+            style="width: 20px; height: 20px; margin-top: 5px"
+          > Saving...
         </p>
       </div>
       <q-editor
@@ -89,7 +83,7 @@
 <script>
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import { PhCaretLeft, PhCaretRight, PhPencil } from '@phosphor-icons/vue';
-import cookie from '../../cookie';
+import cookie from '../../utils/cookie';
 import PatientsAddEditModal from './PatientsAddEditModal.vue';
 
 export default {
@@ -167,9 +161,6 @@ export default {
       //desaparece loading
       document.getElementById('loading-gif').style.display = 'none';
     },
-    changePassword(id) {
-      alert(id + ' - FUTURA IMPLEMENTACAO');
-    },
     changeNewBornValue() {
       const th = this;
       if (th.opcaoNewBorn == 'Sim') {
@@ -225,7 +216,9 @@ export default {
       const th = this;
       const idPatient = th.$router.currentRoute.value.query.id
       th.$api.AnamneseController.getByIdUserPatient({IdPatient: idPatient, IdUser: cookie.getUserId(cookie.get('authToken'))}).then(({data}) => {
-        data.data==undefined ? console.log('Anamnese pronta para ser criada.') : th.anamneseModel = { ...data.data }
+        if (data.data) {
+          th.anamneseModel = { ...data.data }
+        }
       })
     },
     resetPassword () {
@@ -311,9 +304,9 @@ h5 {
 }
 
 .nextPersonView {
-  border: 1px solid var(--primary);
-  background-color: var(--neutral-light-gray);
-  color: green;
+  border: 1px solid;
+  background-color: var(--primary);
+  color: white;
   margin: 10px;
   width: -webkit-fill-available;
   margin-bottom: 20px;
@@ -321,7 +314,11 @@ h5 {
 }
 
 .nextPersonView:hover {
-  filter: brightness(0.8);
+  background-color: #45852a;
+}
+
+.nextPersonView button:hover{
+  background-color: #45852a;
 }
 
 .patient-content {
@@ -335,6 +332,11 @@ h5 {
     sans-serif;
   display: block;
   justify-content: space-between;
+  background-size: 50% !important;
+  background: url(../../assets/imgs/home-background.svg) no-repeat;
+  background-position-x:center;
+  background-position-y: center;
+  height: 100%;
 }
 
 section {
@@ -387,7 +389,7 @@ section {
 
 .patientView-header p {
   margin: 0;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .editIcon {
@@ -400,6 +402,7 @@ section {
   margin-top: 1.5rem;
   cursor: pointer;
   transition: 1.5s;
+  width: fit-content;
 }
 
 .back-page:hover {

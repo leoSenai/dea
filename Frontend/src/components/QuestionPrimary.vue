@@ -47,7 +47,10 @@
                   borderColor: modelValue === answer.value ? answer.color : '',
                 }"
               >
-                <PhCheck v-if="answer.value === modelValue" />
+                <PhCheck
+                  v-if="answer.value === modelValue"
+                  color="white"
+                />
               </label>
             </div>
           </template>
@@ -140,14 +143,14 @@ export default {
 </script>
 <style scoped>
 .question-container {
+  color: var(--neutral-dark-gray);
+  width: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;
   padding: 1rem 1.5rem;
-
   border-radius: 8px;
-  background: var(--primary-700);
 }
 
 .question-answer {

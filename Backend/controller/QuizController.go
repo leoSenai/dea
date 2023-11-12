@@ -38,8 +38,13 @@ func GetQuizById(w http.ResponseWriter, r *http.Request) {
 	utils.ReturnResponseJSON(w, http.StatusOK, "Questionário encontrado com sucesso!", quiz)
 }
 
+type quizFull struct {
+	Quizzes         []models.Quiz
+	FinishedQuizzes []models.QuizFinished
+}
+
 func GetAllQuiz(w http.ResponseWriter, _ *http.Request) {
-	quizs, err := service.GetAllQuiz()
+	quizs, quizsFinisheds, err := service.GetAllQuiz()
 	if err != nil {
 		log.Printf("Cannot find Get: %s", err.Error())
 
@@ -51,7 +56,7 @@ func GetAllQuiz(w http.ResponseWriter, _ *http.Request) {
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Questionários encontrados!", quizs)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Questionários encontrados!", quizFull{Quizzes: quizs, FinishedQuizzes: quizsFinisheds})
 }
 
 func PostQuiz(w http.ResponseWriter, r *http.Request) {

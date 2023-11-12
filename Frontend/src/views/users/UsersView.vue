@@ -23,30 +23,53 @@
     >
       {{ model.message }}
     </div>
+    <div v-if="model.data.length==0">
+      <i>Não há usuários cadastrados até o momento.</i>
+    </div>
     <div
-      v-for="user in model.data"
       v-else
-      :key="user.Id"
-      class="row user"
+      class="user-list"
     >
-      <p @click="openViewModal(user)">
-        {{ user.Name }}
-      </p>
-      <div class="user-actions">
-        <button
-          type="button"
-          @click="openViewModal(user)"
-        >
-          <PhEye color="black" />
-        </button>
-        <button
-          type="button"
-          @click="openAddEditModal(user)"
-        >
-          <PhPencil color="black" />
-        </button>
+      <div
+        v-for="user in model.data"
+        :key="user.Id"
+        class="row user"
+      >
+        <p @click="openViewModal(user)">
+          {{ user.Name }}
+        </p>
+        <div class="user-actions">
+          <button
+            type="button"
+            @click="resetPassword(user)"
+          >
+            <q-tooltip>
+              Redefinir Senha
+            </q-tooltip>
+            <PhFingerprintSimple color="black" />
+          </button>
+          <button
+            type="button"
+            @click="openViewModal(user)"
+          >
+            <q-tooltip>
+              Visualizar
+            </q-tooltip>
+            <PhEye color="black" />
+          </button>
+          <button
+            type="button"
+            @click="openAddEditModal(user)"
+          >
+            <q-tooltip>
+              Editar
+            </q-tooltip>
+            <PhPencil color="black" />
+          </button>
+        </div>
       </div>
     </div>
+
     <div
       v-if="isMobile"
       class="add-user"
@@ -69,7 +92,7 @@
   </div>
 </template>
 <script>
-import { PhPlus, PhPencil, PhEye } from '@phosphor-icons/vue';
+import { PhPlus, PhPencil, PhEye, PhFingerprintSimple } from '@phosphor-icons/vue';
 import UsersAddEditModal from './UsersAddEditModal.vue';
 import ViewUserModal from './UserViewModal.vue'
 
@@ -79,7 +102,8 @@ export default {
     ViewUserModal,
     PhEye,
     PhPencil,
-    UsersAddEditModal
+    UsersAddEditModal,
+    PhFingerprintSimple
   },
   data() {
     return {
@@ -115,6 +139,10 @@ export default {
     },
     openAddEditModal(current) {
       this.$refs.addEdit.openModal(current)
+    },
+    resetPassword ({IdUser}) {
+      const th = this;
+      th.$api.UsersController.resetPassword(IdUser)
     }
   },
 }
@@ -124,8 +152,17 @@ export default {
   padding: 3rem 1.5rem;
   width: 100%;
   display: flex;
+  background: url(../../assets/imgs/home-background.svg) no-repeat;
   flex-direction: column;
+  background-position-x:center;
+  background-position-y: center;
+  background-size: 50%;
+  height: 100%;
   gap: .75rem;
+}
+
+.row{
+  background-color: rgba(255, 255, 255, 0.548);
 }
 
 .user-title {
@@ -201,6 +238,15 @@ export default {
 .add-user button:hover {
   filter: brightness(0.8);
   cursor: pointer;
+}
+
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 60vh;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .user {

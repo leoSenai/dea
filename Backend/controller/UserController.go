@@ -129,3 +129,23 @@ func PutUser(w http.ResponseWriter, r *http.Request) {
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Informações do usuário atualizadas com sucesso!", "")
 }
+
+func ResetPasswordUser(w http.ResponseWriter, r *http.Request) {
+	var userResetDto dtos.UserDTO
+
+	err := json.NewDecoder(r.Body).Decode(&userResetDto)
+
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")
+		return
+	}
+
+	hasReseted, err := service.ResetPasswordUser(userResetDto)
+
+	if err != nil || !hasReseted {
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "")
+		return
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Senha recriada com sucesso!", hasReseted)
+}

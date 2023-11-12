@@ -17,7 +17,7 @@ const isLoginScreen = location.href.includes('login')
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  height: calc(100vh - 5rem);
+  height: calc(100vh - 4.82rem);
 }
 
 .content.login-screen {

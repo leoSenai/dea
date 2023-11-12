@@ -23,36 +23,53 @@
     >
       {{ model.message }}
     </div>
+    <div v-if="!model.data.Quizzes">
+      <i>Não há questionários criados até o momento.</i>
+    </div>
     <div 
-      v-for="quiz in model.data"
-      v-else
-      :key="quiz.IdQuiz"
-      class="row quiz"
+      class="quiz-list"
     >
-      <p @click="openViewModal(quiz)">
-        {{ quiz.Name }}
-      </p>
-      <div class="quiz-actions">
-        <button
-          type="button"
-          @click="openViewModal(quiz)"
-        >
-          <PhEye color="black" />
-        </button>
-        <button
-          type="button"
-          @click="openAddEditModal(quiz)"
-        >
-          <PhPencil color="black" />
-        </button>
-        <button
-          type="button"
-          @click="openAddQuizPersons(quiz)"
-        >
-          <PhUser color="black" />
-        </button>
+      <div 
+        v-for="quiz in model.data.Quizzes"
+        :key="quiz.IdQuiz"
+        class="row quiz"
+      >
+        <p @click="openViewModal(quiz)">
+          {{ quiz.Name }}
+        </p>
+        <div class="quiz-actions">
+          <button
+            type="button"
+            @click="openViewModal(quiz)"
+          >
+            <q-tooltip>
+              Visualizar
+            </q-tooltip>
+            <PhEye color="black" />
+          </button>
+          <button
+            v-show="!finished(quiz)"
+            type="button"
+            @click="openAddEditModal(quiz)"
+          >
+            <q-tooltip>
+              Editar
+            </q-tooltip>
+            <PhPencil color="black" />
+          </button>
+          <button
+            type="button"
+            @click="openAddQuizPersons(quiz)"
+          >
+            <q-tooltip>
+              Filiados
+            </q-tooltip>
+            <PhUser color="black" />
+          </button>
+        </div>
       </div>
     </div>
+
     <div 
       v-if="isMobile"
       class="add-quiz"
@@ -112,6 +129,9 @@ export default {
     this.load();
   },
   methods: {
+    finished(quiz){
+      return this.model.data.FinishedQuizzes.map((el)=>{return el.IdQuiz==quiz.IdQuiz}).includes(true)
+    },
     load() {
       const th = this;
       th.$api.QuizController.getAll().then(({ data }) => {
@@ -150,6 +170,27 @@ export default {
   display: flex;
   flex-direction: column;
   gap: .75rem;
+  background: url(../../assets/imgs/home-background.svg) no-repeat;
+  background-position-x:center;
+  background-position-y: center;
+  height: 100%;
+  background-size: 50%;
+}
+
+.row{
+  background-color: rgba(255, 255, 255, 0.548);
+}
+
+.login-form .row:hover{
+  background-color: transparent !important;
+}
+
+.login-form .row{
+  background-color: transparent !important;
+}
+
+.row:hover{
+  background-color: rgba(255, 255, 255, 0.932) !important;
 }
 
 .quiz-title {
@@ -203,6 +244,15 @@ export default {
 
 .add-quiz button:hover {
   filter: brightness(0.8);
+}
+
+.quiz-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 70vh;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .quiz {

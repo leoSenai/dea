@@ -5,6 +5,7 @@ import Header from '../components/HeaderPrimary.vue';
 import Patients from '../views/Patient/PatientsView.vue';
 import Proximity from '../views/Proximity/ProximityView.vue';
 import PatientQuizzes from '../views/Patient/PatientQuizzes.vue'
+import ProximityQuizzes from '../views/Proximity/ProximityQuizzes.vue' 
 import Users from '../views/Users/UsersView.vue'
 import InputPrimary from '../components/InputPrimary.vue';
 import NotFound from '../views/NotFoundView.vue';
@@ -49,7 +50,7 @@ const routesU = [
     },
   },
   {
-    path: '/pacienteInfo',
+    path: '/paciente',
     components: {
       default: PatientView,
       header: Header,
@@ -57,6 +58,14 @@ const routesU = [
     props: {
       header: { links },
     },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
+        return { path: '/' };
+      }
+      return true;
+    }
   },
   {
     path: '/home',
@@ -84,6 +93,14 @@ const routesU = [
     props: {
       header: { links },
     },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
+        return { path: '/' };
+      }
+      return true
+    }
   },
   {
     path: '/paciente/:id/pessoas-proximas',
@@ -94,11 +111,37 @@ const routesU = [
     props: {
       header: { links },
     },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
+        return { path: '/' };
+      }
+      return true
+    }
   },
   {
     path: '/paciente/:id/questionarios',
     components: {
       default: PatientQuizzes,
+      header: Header,
+    },
+    props: {
+      header: { links },
+      beforeEnter () {
+        const authToken = Cookie.get('authToken');
+        const typeUser = Cookie.getUserType(authToken);
+        if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
+          return { path: '/' };
+        }
+        return true
+      }
+    },
+  },
+  {
+    path: '/pessoas-proximas/:id/questionarios',
+    components: {
+      default: ProximityQuizzes,
       header: Header,
     },
     props: {
@@ -113,6 +156,14 @@ const routesU = [
     },
     props: {
       header: { links },
+    },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Administrator) {
+        return { path: '/' };
+      }
+      return true;
     }
   },
   {

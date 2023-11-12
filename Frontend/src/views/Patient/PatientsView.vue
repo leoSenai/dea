@@ -77,7 +77,7 @@
 import buttonPrimary from '../../components/ButtonPrimary.vue';
 import { PhPlus, PhPencil, PhFingerprintSimple } from '@phosphor-icons/vue';
 import PatientsAddEditModal from './PatientsAddEditModal.vue';
-import cookie from '../../cookie';
+import cookie from '../../utils/cookie';
 
 export default {
   components: {
@@ -232,6 +232,7 @@ export default {
 
 .info-patients button {
   color: white;
+  margin-top: 4%;
 }
 
 
@@ -240,7 +241,8 @@ export default {
 }
 
 .info-patients button {
-  display: none;
+  display: block;
+  margin-right: 2rem;
 }
 
 .info-patients .patients-title {
@@ -253,11 +255,10 @@ export default {
   padding-right: 2rem;
   gap: 1rem;
   max-height: 60vh;
-  height: 100%;
   overflow-y: auto;
 }
 
 .btn-modal {
-  display: flex !important;
+  display: flex;
 }
 </style>

@@ -43,12 +43,12 @@
       <div style="display: flex; align-items: center;">
         <h5>Anamnese</h5><p
           id="loading-gif"
-          style="display: none; margin: 0;"
+          style="display: none; margin: 0; color: rgb(8, 139, 8)"
         >
           <img
-            src="/src/assets/imgs/loading.gif"
-            style="width: 50px; height: 50px;"
-          >
+            src="/src/assets/imgs/save.png"
+            style="width: 20px; height: 20px; margin-top: 5px"
+          > Saving...
         </p>
       </div>
       <q-editor

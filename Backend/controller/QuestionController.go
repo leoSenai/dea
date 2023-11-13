@@ -157,3 +157,20 @@ func DeleteQuestionById(w http.ResponseWriter, r *http.Request) {
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Pergunta eliminada com sucesso!", "")
 }
+
+func GetByQuizId (w http.ResponseWriter, r *http.Request) {
+	idParam := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Parâmetro de ID inválido.", "")
+		return
+	}
+
+	questions, err := service.GetByQuizId(int64(id))
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Erro ao obter as perguntas.", "")
+		return
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Perguntas encontradas com sucesso!", questions)
+}

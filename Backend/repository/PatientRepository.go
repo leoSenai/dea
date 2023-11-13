@@ -3,6 +3,7 @@ package repository
 import (
 	"api/db"
 	"api/models"
+	"api/models/dtos"
 	"api/utils"
 	"log"
 )
@@ -54,20 +55,26 @@ func GetAllPatient() (patients []models.Patient, err error) {
 	return
 }
 
-func PostPatient(patientPost models.Patient) (patientBack models.Patient, err error) {
+func PostPatient(patientPost dtos.PatientPlusUser) (patientBack models.Patient, err error) {
 	conn, err := db.GetDB()
 	if err != nil {
 		return
 	}
 
-	passwordEncrypted, salt := utils.GenerateEncryptedPassword(patientPost.Password)
-	patientPost.Password = passwordEncrypted
-	patientPost.Salt = salt
+	passwordEncrypted, salt := utils.GenerateEncryptedPassword(patientPost.Patient.Password)
+	patientPost.Patient.Password = passwordEncrypted
+	patientPost.Patient.Salt = salt
 
-	row := conn.Create(&patientPost)
+	row := conn.Create(&patientPost.Patient)
 	log.Printf("row: %v", row)
 
-	conn.First(&patientBack, patientPost.IdPatient)
+	conn.First(&patientBack, patientPost.Patient.IdPatient)
+
+	row = conn.Create(&models.PatientHasUser{
+		IdPatient: patientPost.Patient.IdPatient,
+		IdUser:    patientPost.IdUser,
+	})
+	log.Printf("row: %v", row)
 
 	return
 }

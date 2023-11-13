@@ -9,21 +9,20 @@ import ProximityQuizzes from '../views/Proximity/ProximityQuizzes.vue'
 import Users from '../views/Users/UsersView.vue'
 import InputPrimary from '../components/InputPrimary.vue';
 import NotFound from '../views/NotFoundView.vue';
-import Quiz from '../views/Quiz/QuizView.vue';
-import Cookie from '../cookie'
+import Quiz from '../views/quiz/QuizView.vue';
+import ClosePeopleQuiz from '../views/ClosePeopleQuiz/ClosePeopleQuizView.vue';
+import Cookie from '../utils/cookie'
 
 import { PhUserList, PhUsers } from '@phosphor-icons/vue';
 import { PhArticle } from '@phosphor-icons/vue';
-import Cookie from '../utils/cookie';
 import { RoleEnum } from '../utils/Enum';
 
 export const links = [
   { path: '/usuarios', name: 'Usuários', icon: PhUsers },
   { path: '/questionarios', name: 'Questionários', icon: PhArticle },
-  { path: '/pacientes', name: 'Pacientes', icon: PhUserList}
+  { path: '/pacientes', name: 'Pacientes', icon: PhUserList},
+  { path: '/questionarios-pessoas-proximas', name: 'Questionários', icon: PhUserList}
 ]
-
-const links = userType === 'P' ? closePeopleLinks : allUserLinks
 
 export const routes = [
   {
@@ -173,4 +172,14 @@ export const routes = [
       header: { links },
     },
   },
+  {
+    path: '/questionarios-pessoas-proximas',
+    components: {
+      default: ClosePeopleQuiz,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+  }
 ];

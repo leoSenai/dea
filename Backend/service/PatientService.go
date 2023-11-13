@@ -2,6 +2,7 @@ package service
 
 import (
 	"api/models"
+	"api/models/dtos"
 	"api/repository"
 	"api/utils"
 	"fmt"
@@ -27,7 +28,7 @@ func GetAllPatient() (patients []models.Patient, err error) {
 	return patients, err
 }
 
-func PostPatient(patientPost models.Patient) (patientBack models.Patient, err error) {
+func PostPatient(patientPost dtos.PatientPlusUser) (patientBack models.Patient, err error) {
 	patientBack, err = repository.PostPatient(patientPost)
 	return patientBack, err
 }

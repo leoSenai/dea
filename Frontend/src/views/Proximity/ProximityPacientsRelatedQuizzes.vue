@@ -1,17 +1,13 @@
 <template>
   <div class="patient-quiz-content">
-    <div
-      v-if="typeUser !== RoleEnum.Patient"
-      class="back-page"
-      onclick="window.history.back()"
-    >
-      <PhCaretLeft color="#656565" />
-      Voltar
-    </div>
     <div class="quiz-title">
       <div class="title">
         <h3>Questionários de {{ patient.Name }}</h3>
       </div>
+      <div
+        v-if="!isMobile"
+        class="title-add-quiz"
+      />
     </div>
     <div
       v-if="model.hasError"
@@ -37,43 +33,22 @@
           @click="openViewModal(quiz)"
         >
           <q-tooltip>
-            Visualizar
+            Responder
           </q-tooltip>
           <PhEye color="black" />
         </button>
-        <button
-          type="button"
-          @click="answerQuiz(quiz)"
-        >
-          <q-tooltip>
-            Responder
-          </q-tooltip>
-          <PhArticle color="black" />
-        </button>
       </div>
     </div>
-    <QuizAddEditModal
-      ref="addEdit"
-      @close="load"
-    />
-    <QuizViewModal ref="viewQuiz" />
-    <AnswerQuizModal ref="answerQuiz" />
   </div>
 </template>
 <script>
-import { PhEye, PhCaretLeft, PhArticle } from '@phosphor-icons/vue';
+import { PhEye } from '@phosphor-icons/vue';
 import cookie from '../../utils/cookie';
 import { RoleEnum } from '../../utils/Enum';
-import AnswerQuizModal from '../ClosePeopleQuiz/AnswerQuizModal.vue';
-import QuizViewModal from './PatientQuizViewModal.vue'
 
 export default {
   components: {
-    PhCaretLeft,
-    QuizViewModal,
-    PhEye,
-    PhArticle,
-    AnswerQuizModal
+    PhEye
   },
   data() {
     return {
@@ -95,7 +70,6 @@ export default {
       const token = cookie.get('authToken')
       return cookie.getUserType(token)
     },
-    ...RoleEnum
   },
   mounted() {
     this.load();
@@ -104,13 +78,13 @@ export default {
     load() {
       const th = this;
 
-      var idPatient = this.$router.currentRoute.value.params.id;
+      var idPatient = this.$router.currentRoute.value.params.idPatient;
 
       th.$api.PatientController.getById(idPatient).then((data) => {
         th.patient = data.data.data
       })
 
-      th.$api.PatientHasQuizController.getByIdPatient(idPatient).then(async ({ data }) => {
+      th.$api.ProximityHasQuizController.getByIdPatient(idPatient).then(async ({ data }) => {
 
         if (data.data) {
 
@@ -137,12 +111,6 @@ export default {
       }
       th.model.data.push(data.data.data)
     },
-    openViewModal(currentQuiz) {
-      this.$refs.viewQuiz.openModal(currentQuiz, this.patient)
-    },
-    answerQuiz (currentQuiz) {
-      this.$refs.answerQuiz.openModal(currentQuiz)
-    }
   },
 }
 </script>
@@ -351,7 +319,4 @@ export default {
     z-index: 0;
     cursor: pointer;
   }
-  .add-questionary {
-    padding: .75rem 1rem !important;
-    font-size: .875rem;  }
-</style>
+  </style>

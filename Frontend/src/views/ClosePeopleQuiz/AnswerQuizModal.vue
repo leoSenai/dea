@@ -4,21 +4,25 @@
     @close="closeModal"
   >
     <template #modal-title>
-      Responder questionário
+      {{ Quiz.Name.includes('EM ABERTO') ? 'Responder' : 'Visualizar' }} Questionário: {{ Quiz.Name }}
     </template>
     <template #modal-content>
-      <div
-        v-for="question in model.Questions"
-        :key="question.id"
-        class="questionBox"
-      >
-        <div class="questionLabelBox">
-          {{ question.label }}
+      <q-form ref="form">
+        <div
+          v-for="(question, i) in model.Questions"
+          :key="question.key"
+          class="question row q-mb-sm"
+        >
+          <question-primary
+            v-model="model.Answers[i]"
+            :question-number="i + 1"
+            :is-answered="!Quiz.Name.includes('EM ABERTO')"
+            :interval="Quiz.Interval"
+          >
+            {{ question.Desc }}
+          </question-primary>
         </div>
-        <div class="questionAnswerBox">
-          <input type="text">
-        </div>
-      </div>
+      </q-form>
     </template>
     <template #modal-actions>
       <div class="modal-actions">
@@ -34,7 +38,7 @@
           type="submit"
           @click="saveAnswers"
         >
-          Cadastrar
+          Responder
         </button-primary>
       </div>
     </template>
@@ -43,11 +47,13 @@
 <script>
 import ModalPrimary from '../../components/ModalPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
+import QuestionPrimary from '../../components/QuestionPrimary.vue';
 
 export default {
   components: {
     ModalPrimary,
     ButtonPrimary,
+    QuestionPrimary
   },
   emits: ['close', 'error'],
   data() {
@@ -55,36 +61,52 @@ export default {
       show: false,
       model: {
         Title: '',
-        Questions: []
-      }
+        Questions: [],
+        Answers: []
+      },
+      aaa: 0,
+      Quiz: {}
     }
   },
   methods: {
-    async openModal() {
+    openModal(currentQuiz) {
       this.show = true
-      this.fetchData()
+      this.loadQuiz(currentQuiz)
     },
     closeModal() {
       this.show = false
       this.$emit('close')
-    },
-    async saveAnswers() {
-      try {
-        this.$api.QuestionController.insert(this.model.Questions)
-        this.closeModal()
-      } catch (error) {
-        this.$emit('error', error)
+      this.model = {
+        Title: '',
+        Questions: []
       }
     },
-    async fetchData () {
-        try {
-            const response = await this.$api.QuestionController.getByQuizId()
-            this.model = response.data.data
-        } catch (error) {
-            this.$emit('error', error)
-        }
+    loadQuiz(currentQuiz) {
+      const th = this
+      th.Quiz = currentQuiz
+      console.log('currente', th.Quiz)
+      th.$api.QuestionController.getAll()
+        .then(({ data }) => {
+          const filteredQuestions = data.data.filter(el => el.IdQuiz === currentQuiz.IdQuiz)
+          th.model.Questions = filteredQuestions
+        })
+    },
+    saveAnswers() {
+      const th = this
+      console.log('answer')
+      console.log(this.model.Answers)
+      const dto = {
+        ProximityIdPatient: th.$route.params.id,
+        IdQuiz: th.Quiz.IdQuiz,
+        Finished: true,
+        Answers: th.model.Answers,
+        AnswerdIn: new Date()
+      }
+      th.$api.ProximityHasQuizController.update(dto).then(response => {
+        console.log(response)
+      })
     }
-  },
+  }
 };
 </script>
 <style scoped>
@@ -92,6 +114,7 @@ export default {
   width: 100%;
   position: relative;
 }
+
 .fill-content {
   width: 100%;
 }

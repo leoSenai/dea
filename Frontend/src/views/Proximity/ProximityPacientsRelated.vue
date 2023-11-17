@@ -1,79 +1,34 @@
 <template>
-  <div class="patient-quiz-content">
-    <div
-      v-if="typeUser !== RoleEnum.Patient"
-      class="back-page"
-      onclick="window.history.back()"
-    >
-      <PhCaretLeft color="#656565" />
-      Voltar
-    </div>
-    <div class="quiz-title">
+  <div class="proximity-patient-content">
+    <div class="proximity-patient-title">
       <div class="title">
-        <h3>Questionários de {{ patient.Name }}</h3>
+        <h3>Pacientes de {{ proximity.Name }}</h3>
       </div>
+      <div
+        v-if="!isMobile"
+        class="title-add-proximity-patient"
+      />
     </div>
-    <div
-      v-if="model.hasError"
-      class="error quiz"
-    >
-      {{ model.message }}
-    </div>
-    <div v-if="model.data.length==0">
-      <i>Não há questionários vinculados a este paciente.</i>
+    <div v-if="patients.length==0">
+      <i>Não há pacientes vinculados a você.</i>
     </div>
     <div 
-      v-for="quiz in model.data"
+      v-for="patient in patients"
       v-else
-      :key="quiz.IdQuiz"
-      class="row quiz"
+      :key="patient.IdPatient"
+      class="row proximity-patient"
     >
-      <p @click="openViewModal(quiz)">
-        {{ quiz.Name }}
+      <p @click="viewQuizzes(patient.IdPatient)">
+        {{ patient.Name }}{{ patient.IdPatient }}
       </p>
-      <div class="quiz-actions">
-        <button
-          type="button"
-          @click="openViewModal(quiz)"
-        >
-          <q-tooltip>
-            Visualizar
-          </q-tooltip>
-          <PhEye color="black" />
-        </button>
-        <button
-          type="button"
-          @click="answerQuiz(quiz)"
-        >
-          <q-tooltip>
-            Responder
-          </q-tooltip>
-          <PhArticle color="black" />
-        </button>
-      </div>
     </div>
-    <QuizAddEditModal
-      ref="addEdit"
-      @close="load"
-    />
-    <QuizViewModal ref="viewQuiz" />
-    <AnswerQuizModal ref="answerQuiz" />
   </div>
 </template>
 <script>
-import { PhEye, PhCaretLeft, PhArticle } from '@phosphor-icons/vue';
 import cookie from '../../utils/cookie';
-import { RoleEnum } from '../../utils/Enum';
-import AnswerQuizModal from '../ClosePeopleQuiz/AnswerQuizModal.vue';
-import QuizViewModal from './PatientQuizViewModal.vue'
 
 export default {
   components: {
-    PhCaretLeft,
-    QuizViewModal,
-    PhEye,
-    PhArticle,
-    AnswerQuizModal
   },
   data() {
     return {
@@ -82,20 +37,18 @@ export default {
         hasError: false,
         message: '',
       },
-      quizzes: [],
-      patient: [],
-      RoleEnum
+      patients: [],
+      proximity: {}
     }
   },
   computed: {
     isMobile() {
       return this.$q.screen.xs || this.$q.screen.sm
     },
-    typeUser () {
+    personId () {
       const token = cookie.get('authToken')
-      return cookie.getUserType(token)
-    },
-    ...RoleEnum
+      return cookie.getUserId(token)
+    }
   },
   mounted() {
     this.load();
@@ -103,51 +56,26 @@ export default {
   methods: {
     load() {
       const th = this;
-
-      var idPatient = this.$router.currentRoute.value.params.id;
-
-      th.$api.PatientController.getById(idPatient).then((data) => {
-        th.patient = data.data.data
-      })
-
-      th.$api.PatientHasQuizController.getByIdPatient(idPatient).then(async ({ data }) => {
-
-        if (data.data) {
-
-          th.quizzes = data.data.map((item) => {
-            return { IdQuiz: item.IdQuiz, Finished: item.Finished };
+      th.$api.PersonController.getById(th.personId).then(response => {
+        th.proximity = response.data.data
+        th.$api.ProximityController.getByIdPerson(th.personId).then(({data}) => {
+          data.data.forEach(({ IdPatient }) => {
+            th.$api.PatientController.getById(IdPatient).then(responsePatient => {
+              th.patients.push(responsePatient.data.data)
+              console.log(responsePatient.data)
+            })
           })
-
-          for (var id in th.quizzes) {
-
-            var result = await th.$api.QuizController.getById(th.quizzes[id].IdQuiz)
-            th.loadQuiz(result, id)
-          }
-        }
-
+        })
       })
     },
-    loadQuiz(data, id) {
-      const th = this
-      var quizFinished = th.quizzes[id].Finished
-      if (quizFinished == 0) {
-        data.data.data.Name += ' - EM ABERTO'
-      } else {
-        data.data.data.Name += ' - RESPONDIDO'
-      }
-      th.model.data.push(data.data.data)
-    },
-    openViewModal(currentQuiz) {
-      this.$refs.viewQuiz.openModal(currentQuiz, this.patient)
-    },
-    answerQuiz (currentQuiz) {
-      this.$refs.answerQuiz.openModal(currentQuiz)
+    viewQuizzes(patientId) {
+      this.$router.push(`/pessoa-proxima/${this.personId}/paciente/${patientId}/questionarios`)
     }
   },
 }
 </script>
 <style>
-.quiz-actions {
+.proximity-patient-actions {
   display: flex;
   gap: 0.6em;
   width: 20%;
@@ -163,7 +91,7 @@ export default {
   background-color: transparent !important;
 }
 
-.patient-quiz-content {
+.proximity-patient-content {
   padding: 3rem 1.5rem;
   padding-top: 0;
   width: 100%;
@@ -186,7 +114,7 @@ export default {
   transition: 1.5s;
 }
 
-.quiz-title {
+.proximity-patient-title {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -198,7 +126,7 @@ export default {
   padding: 1rem;
 }
 
-.quiz {
+.proximity-patient {
   border: 1px solid var(--neutral-dark-gray);
   color: var(--neutral-dark-gray);
   padding: 0;
@@ -209,11 +137,11 @@ export default {
   align-items: center;
 }
 
-.quiz:hover {
+.proximity-patient:hover {
   background-color: rgba(200, 255, 172, 0.041);
 }
 
-.quiz p {
+.proximity-patient p {
   margin: 0;
   width: 80%;
   height: 100%;
@@ -224,7 +152,7 @@ export default {
   padding-bottom: 1rem;
 }
 
-.quiz button {
+.proximity-patient button {
   border: none;
   background: none;
   cursor: pointer;
@@ -237,7 +165,7 @@ export default {
   z-index: 1;
 }
 
-.quiz button:hover {
+.proximity-patient button:hover {
   background: var(--neutral-gray);
 }
 
@@ -251,13 +179,13 @@ export default {
     transition: 1.5s;
   }
   
-  .quiz-title {
+  .proximity-patient-title {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
   
-  .title-add-quiz button {
+  .title-add-proximity-patient button {
     background: var(--primary);
     border-radius: 8px;
     border: none;
@@ -271,7 +199,7 @@ export default {
     cursor: pointer;
   }
   
-  .title-add-quiz button:hover {
+  .title-add-proximity-patient button:hover {
     filter: brightness(0.8);
   }
   
@@ -281,13 +209,13 @@ export default {
     padding: 1rem;
   }
   
-  .add-quiz {
+  .add-proximity-patient {
     position: absolute;
     bottom: 1rem;
     right: 1rem;
   }
   
-  .add-quiz button {
+  .add-proximity-patient button {
     background: var(--primary);
     border-radius: 99999px;
     font-size: 2rem;
@@ -300,11 +228,11 @@ export default {
     transition: .2s;
   }
   
-  .add-quiz button:hover {
+  .add-proximity-patient button:hover {
     filter: brightness(0.8);
   }
   
-  .quiz {
+  .proximity-patient {
     border: 1px solid var(--neutral-dark-gray);
     color: var(--neutral-dark-gray);
     padding: 0;
@@ -315,11 +243,11 @@ export default {
     align-items: center;
   }
   
-  .quiz:hover {
+  .proximity-patient:hover {
     background-color: rgba(200, 255, 172, 0.041);
   }
   
-  .quiz p {
+  .proximity-patient p {
     margin: 0;
     width: 80%;
     height: 100%;
@@ -330,7 +258,7 @@ export default {
     padding-bottom: 1rem;
   }
   
-  .quiz button {
+  .proximity-patient button {
     border: none;
     background: none;
     cursor: pointer;
@@ -343,15 +271,12 @@ export default {
     z-index: 1;
   }
   
-  .quiz button:hover {
+  .proximity-patient button:hover {
     background: var(--neutral-gray);
   }
   
-  .row.quiz{
+  .row.proximity-patient{
     z-index: 0;
     cursor: pointer;
   }
-  .add-questionary {
-    padding: .75rem 1rem !important;
-    font-size: .875rem;  }
-</style>
+  </style>

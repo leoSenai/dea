@@ -79,7 +79,7 @@
   <script>
   import { PhPlus, PhEye, PhCaretLeft } from '@phosphor-icons/vue';
   import QuizViewModal from './PatientQuizViewModal.vue'
-  import Cookie from '../../cookie';
+  import Cookie from '../../utils/cookie';
   
   export default {
     components: {

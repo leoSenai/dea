@@ -42,6 +42,7 @@
           <PhEye color="black" />
         </button>
         <button
+          v-if="quiz.Name.includes('EM ABERTO')"
           type="button"
           @click="answerQuiz(quiz)"
         >
@@ -57,14 +58,14 @@
       @close="load"
     />
     <QuizViewModal ref="viewQuiz" />
-    <AnswerQuizModal ref="answerQuiz" />
+    <QuizAnswerModal ref="answerQuiz" />
   </div>
 </template>
 <script>
 import { PhEye, PhCaretLeft, PhArticle } from '@phosphor-icons/vue';
 import cookie from '../../utils/cookie';
 import { RoleEnum } from '../../utils/Enum';
-import AnswerQuizModal from '../ClosePeopleQuiz/AnswerQuizModal.vue';
+import QuizAnswerModal from '../Quiz/QuizAnswerModal.vue';
 import QuizViewModal from './PatientQuizViewModal.vue'
 
 export default {
@@ -73,7 +74,7 @@ export default {
     QuizViewModal,
     PhEye,
     PhArticle,
-    AnswerQuizModal
+    QuizAnswerModal
   },
   data() {
     return {

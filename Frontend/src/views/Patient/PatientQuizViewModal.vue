@@ -34,27 +34,27 @@
           :key="question.key"
           class="question row q-mb-sm"
         >
+          <div
+            v-if="question.Answer"
+            style="display: flex; width: 100%;gap: 5px;"
+          >  
+            <QuestionPrimary
+              :model-value="parseInt(question.Answer)"
+              :answer-range="model.Interval"
+              :question-number="i + 1"
+              :is-answered="true"
+            >
+              <i>{{ question.Desc }}</i>
+            </QuestionPrimary>
+          </div>
           <input-primary
-            v-if="question.Answer==''"
+            v-else
             v-model="question.Desc"
             :disable="true"
             :name="`${i}`"
             :label="`Pergunta ${i + 1}`"
             label-color="primary"
           />
-          <div
-            v-if="question.Answer!=''"
-            style="display: flex; width: 100%;gap: 5px;"
-          >  
-            <QuestionPrimary
-              :model-value="parseInt(question.Answer)"
-              :answer-range="model.Interval"
-              :question-number="question.key"
-              :is-answered="false"
-            >
-              <i>{{ question.Desc }}</i>
-            </QuestionPrimary>
-          </div>
         </div>
       </q-form>
     </template>
@@ -111,7 +111,7 @@ import QuestionPrimary from '../../components/QuestionPrimary.vue';
             .then(async ({ data }) => {
 
               const awnsers = await th.$api.PatientHasQuizController.getByIdQuizPatient(th.model.IdQuiz, patient.IdPatient)
-              const answers = awnsers.data.data[0].Answers.split(';')
+              const answers = awnsers.data.data[0].Answers.split(',')
 
               const filteredQuestions = data.data
                 .filter(({ IdQuiz }) => IdQuiz === th.model.IdQuiz)
@@ -120,7 +120,7 @@ import QuestionPrimary from '../../components/QuestionPrimary.vue';
                   return {
                     IdQuestion: el.IdQuestion,
                     Desc: el.Desc,
-                    Answer: answers[index]==undefined ? '' : answers[index],
+                    Answer: answers[index]  ? answers[index] : null,
                     key: el.IdQuestion,
                   };
                 });

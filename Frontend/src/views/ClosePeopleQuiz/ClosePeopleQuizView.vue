@@ -29,7 +29,7 @@
         <div class="quiz-actions">
           <button
             type="button"
-            @click="openAnswerQuizModal(user)"
+            @click="openQuizAnswerModal(user)"
           >
             <q-tooltip>
               Editar
@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <AnswerQuizModal
+    <QuizAnswerModal
       ref="answerModal"
       @close="load"
       @error="error"
@@ -49,12 +49,12 @@
 </template>
 <script>
 import { PhPencil } from '@phosphor-icons/vue'
-import AnswerQuizModal from './AnswerQuizModal.vue'
+import QuizAnswerModal from '../Quiz/QuizAnswerModal.vue'
 
 export default {
   components: {
     PhPencil,
-    AnswerQuizModal
+    QuizAnswerModal
   },
   data() {
     return {

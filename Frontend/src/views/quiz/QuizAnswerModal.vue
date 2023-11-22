@@ -4,7 +4,7 @@
     @close="closeModal"
   >
     <template #modal-title>
-      {{ Quiz.Name.includes('EM ABERTO') ? 'Responder' : 'Visualizar' }} Questionário: {{ Quiz.Name }}
+      {{ isAnswered ? 'Responder' : 'Visualizar' }} Questionário: {{ Quiz.Name }}
     </template>
     <template #modal-content>
       <q-form ref="form">
@@ -16,7 +16,7 @@
           <question-primary
             v-model="model.Answers[i]"
             :question-number="i + 1"
-            :is-answered="!Quiz.Name.includes('EM ABERTO')"
+            :is-answered="!isAnswered"
             :interval="Quiz.Interval"
           >
             {{ question.Desc }}
@@ -34,6 +34,7 @@
           Fechar
         </button-primary>
         <button-primary
+          v-if="isAnswered"
           size="sm"
           type="submit"
           @click="saveAnswers"
@@ -48,6 +49,8 @@
 import ModalPrimary from '../../components/ModalPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import QuestionPrimary from '../../components/QuestionPrimary.vue';
+import Cookie from '../../utils/cookie'
+import { RoleEnum } from '../../utils/Enum'
 
 export default {
   components: {
@@ -68,6 +71,15 @@ export default {
       Quiz: {}
     }
   },
+  computed: {
+    typeUser () {
+      const authToken = Cookie.get('authToken');
+      return Cookie.getUserType(authToken);
+    },
+    isAnswered () {
+      return this.Quiz.Name.includes('EM ABERTO')
+    }
+  },
   methods: {
     openModal(currentQuiz) {
       this.show = true
@@ -84,27 +96,39 @@ export default {
     loadQuiz(currentQuiz) {
       const th = this
       th.Quiz = currentQuiz
-      console.log('currente', th.Quiz)
       th.$api.QuestionController.getAll()
         .then(({ data }) => {
           const filteredQuestions = data.data.filter(el => el.IdQuiz === currentQuiz.IdQuiz)
           th.model.Questions = filteredQuestions
+            if (th.typeUser === RoleEnum.Patient) {
+              th.$api.PatientHasQuizController.getByIdQuizPatient(th.Quiz.IdQuiz, th.$route.params.id).then(response => {
+                response.data.data[0].Answers.split(',').forEach((el, i) => {
+                  th.model.Answers[i] = el
+                })
+              })
+          }
         })
     },
     saveAnswers() {
       const th = this
-      console.log('answer')
-      console.log(this.model.Answers)
+
       const dto = {
-        ProximityIdPatient: th.$route.params.id,
+        IdPatient: +th.$route.params.id,
         IdQuiz: th.Quiz.IdQuiz,
-        Finished: true,
-        Answers: th.model.Answers,
+        Finished: th.model.Questions.length === th.model.Answers.length ? 1 : 0,
+        Answers: th.model.Answers.toString(),
         AnswerdIn: new Date()
       }
-      th.$api.ProximityHasQuizController.update(dto).then(response => {
-        console.log(response)
-      })
+
+      if (th.typeUser === RoleEnum.Person) {
+        th.$api.ProximityHasQuizController.update(dto).then(response => {
+          if (response) th.closeModal()
+        })
+      } else if (th.typeUser === RoleEnum.Patient) {
+        th.$api.PatientHasQuizController.update(dto).then(response => {
+          if (response) th.closeModal()
+        })
+      }
     }
   }
 };

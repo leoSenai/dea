@@ -16,7 +16,7 @@
       {{ model.message }}
     </div>
     <div v-if="model.data.length==0">
-      <i>Não há questionários vinculados a este paciente.</i>
+      <i>Não há questionários vinculados a esta pessoa.</i>
     </div>
     <div 
       v-for="quiz in model.data"
@@ -70,6 +70,12 @@ export default {
       const token = cookie.get('authToken')
       return cookie.getUserType(token)
     },
+    idPatient () {
+      return this.$router.currentRoute.value.params.idPatient
+    },
+    idPerson () {
+      return this.$router.currentRoute.value.params.id
+    }
   },
   mounted() {
     this.load();
@@ -78,17 +84,15 @@ export default {
     load() {
       const th = this;
 
-      var idPatient = this.$router.currentRoute.value.params.idPatient;
-
-      th.$api.PatientController.getById(idPatient).then((data) => {
+      th.$api.PatientController.getById(th.idPatient).then((data) => {
         th.patient = data.data.data
       })
 
-      th.$api.ProximityHasQuizController.getByIdPatient(idPatient).then(async ({ data }) => {
+      th.$api.ProximityHasQuizController.getByIdPatient(th.idPatient).then(async ({ data }) => {
 
         if (data.data) {
 
-          th.quizzes = data.data.map((item) => {
+          th.quizzes = data.data.filter(item => item.ProximityIdPerson === th.idPerson).map((item) => {
             return { IdQuiz: item.IdQuiz, Finished: item.Finished };
           })
 

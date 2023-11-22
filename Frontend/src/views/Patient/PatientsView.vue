@@ -19,13 +19,11 @@
               />
             </buttonPrimary>
           </div>
-          <div 
-            class="patients-content q-mt-lg flex" 
-          >
-            <div v-if="patients.length==0">
+          <div class="patients-content q-mt-lg flex">
+            <div v-if="patients.length == 0">
               <i>Não há pacientes cadastrados ainda.</i>
             </div>
-            <div 
+            <div
               v-for="patient in patients"
               :key="patient.IdPatient"
               class="patients-list"
@@ -80,6 +78,7 @@ import buttonPrimary from '../../components/ButtonPrimary.vue';
 import { PhPlus, PhPencil, PhFingerprintSimple } from '@phosphor-icons/vue';
 import PatientsAddEditModal from './PatientsAddEditModal.vue';
 import cookie from '../../utils/cookie';
+import { RoleEnum } from '../../utils/Enum'
 
 export default {
   components: {
@@ -103,6 +102,10 @@ export default {
   computed: {
     isMobile() {
       return this.$q.screen.xs || this.$q.screen.sm
+    },
+    typeUser() {
+      const authToken = cookie.get('authToken');
+      return cookie.getUserType(authToken);
     }
   },
   mounted() {
@@ -113,19 +116,25 @@ export default {
       this.patients = []
       this.getPatientsOfUser()
     },
-    async getPatientsOfUser(){
+    async getPatientsOfUser() {
       const th = this
 
       th.patientsHasUser = (await th.$api.PatientHasUserController.getByIdUser(cookie.getUserId(cookie.get('authToken')))).data.data
-      th.patientsHasUser = th.patientsHasUser.map((el) => { return el.IdPatient })
+      if (th.patientsHasUser) {
 
-      for (let index = 0; index < th.patientsHasUser.length; index++) {
-        var dataPatient = (await th.$api.PatientController.getById(th.patientsHasUser[index])).data.data
-        th.patients.push(dataPatient)
+        th.patientsHasUser = th.patientsHasUser?.map((el) => { return el.IdPatient })
+
+        for (let index = 0; index < th.patientsHasUser.length; index++) {
+          var dataPatient = (await th.$api.PatientController.getById(th.patientsHasUser[index])).data.data
+          th.patients.push(dataPatient)
+        }
+
+      } else if (th.typeUser === RoleEnum.Administrator) {
+        const aux = await th.$api.PatientController.getAll()
+        th.patients = aux.data.data
       }
-
       th.model.data = th.patients
-   
+
     },
     openAddEditModal(current) {
       this.$refs.addEdit.openModal(current)

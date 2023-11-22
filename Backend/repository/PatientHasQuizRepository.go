@@ -66,7 +66,7 @@ func PostPatientQuiz(patientHasQuiz models.PatientHasQuiz) (models.PatientHasQui
 
 	//patientHasQuiz.AnsweredIn = strings.Split(patientHasQuiz.AnsweredIn, ".")[0]
 
-	conn.Omit("respondido_em", "respostas").Create(&patientHasQuiz)
+	conn.Create(&patientHasQuiz)
 
 	return patientHasQuiz, err
 }

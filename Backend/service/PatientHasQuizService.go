@@ -23,7 +23,8 @@ func GetPatientQuizByPatientID(idPatient int64) (patientHasQuizz []models.Patien
 
 func PostPatientQuiz(patientHasQuiz models.PatientHasQuiz) (err error) {
 
-	//patientHasQuiz.AnsweredIn = time.Now().Local().String()
+	patientHasQuiz.AnsweredIn = "1600-01-01 00:00:00"
+	patientHasQuiz.Answers = ""
 
 	patientHasQuiz, _ = repository.PostPatientQuiz(patientHasQuiz)
 

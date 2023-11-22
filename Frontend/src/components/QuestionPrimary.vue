@@ -15,7 +15,7 @@
     <div class="question-answer">
       <template v-if="isAnswered">
         <p class="heading-subtitle">
-          Resposta: {{ modelValue < 10 ? "0" + modelValue : modelValue }}
+          Resposta: {{ model < 10 ? "0" + model : model }}
         </p>
       </template>
       <template v-else>
@@ -35,20 +35,20 @@
                 type="radio"
                 name="option-question"
                 style="display: none"
-                :checked="modelValue === answer.value"
-                @input="$emit('update:modelValue', answer.value)"
+                :checked="model === answer.value"
+                @click="() => model = answer.value"
               >
               <label
                 :for="`question-${questionNumber}-option-${answer.value}`"
                 class="icon"
                 :style="{
                   transform: `scale(${answer.scale})`,
-                  background: modelValue === answer.value ? answer.color : '',
-                  borderColor: modelValue === answer.value ? answer.color : '',
+                  background: model === answer.value ? answer.color : '',
+                  borderColor: model === answer.value ? answer.color : '',
                 }"
               >
                 <PhCheck
-                  v-if="answer.value === modelValue"
+                  v-if="answer.value === model"
                   color="white"
                 />
               </label>
@@ -138,6 +138,14 @@ export default {
         };
       });
     },
+    model: {
+      get () {
+        return this.modelValue
+      },
+      set(value) {
+        this.$emit('update:modelValue', value)
+      }
+    }
   },
 };
 </script>

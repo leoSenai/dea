@@ -102,12 +102,7 @@ export default {
       th.$api.AuthController.login(th.model).then(({ data }) => {
         if (data) {
           Cookie.set({ name: 'authToken', value: data.data })
-          var userType = Cookie.getUserType(Cookie.get('authToken'))
-          if(userType=='A' || userType == 'U'){
-            this.$router.push('/')
-          }else if(userType == 'P'){
-            this.$router.push('/')
-          }
+          this.$router.push('/home')
         }
       })
     }

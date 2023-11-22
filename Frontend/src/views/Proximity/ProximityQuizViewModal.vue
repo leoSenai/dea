@@ -112,8 +112,6 @@ import QuestionPrimary from '../../components/QuestionPrimary.vue';
 
               var awnsers = await th.$api.ProximityHasQuizController.getByIdQuizPerson(th.model.IdQuiz, person.IdPerson)
               var answers = awnsers.data.data[0].Answers.split(';')
-              console.log(awnsers.data.data[0].Answers)
-              console.log('-------')
 
               const filteredQuestions = data.data
                 .filter(({ IdQuiz }) => IdQuiz === th.model.IdQuiz)

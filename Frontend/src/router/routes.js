@@ -41,7 +41,6 @@ export const routes = [
       const authToken = Cookie.get('authToken');
       const typeUser = Cookie.getUserType(authToken);
       const userId = Cookie.getUserId(authToken)
-      console.log(typeUser)
       if (typeUser === RoleEnum.Patient) {
         return { path: `/paciente/${userId}/questionarios` };
       } else if (typeUser === RoleEnum.Person) {

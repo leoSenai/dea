@@ -62,7 +62,6 @@ export default {
           data.data.forEach(({ IdPatient }) => {
             th.$api.PatientController.getById(IdPatient).then(responsePatient => {
               th.patients.push(responsePatient.data.data)
-              console.log(responsePatient.data)
             })
           })
         })

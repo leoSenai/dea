@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { routes } from './routes';
+import Cookie from '../utils/cookie';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -7,11 +8,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  const authToken = `; ${document.cookie}`.split('; authToken=').pop().split(';').shift()
+  const authToken = Cookie.get('authToken');
+
   if (!authToken && to.path !== '/login') {
-    return { path: '/login' }
+    return { path: '/login' };
   } else if (authToken && to.path === '/login') {
-    return { path: '/' }
+    return { path: '/' };
   }
 });
 

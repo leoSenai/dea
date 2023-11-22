@@ -4,6 +4,7 @@ import (
 	"api/db"
 	"api/models"
 	"fmt"
+	"strings"
 )
 
 func VerifyResponseQuizById(idQuiz int64) (hasQuiz bool, err error) {
@@ -34,7 +35,7 @@ func GetPatientQuizByQuizID(quizID int64) ([]models.PatientHasQuiz, error) {
 
 	var patientHasQuizzes []models.PatientHasQuiz
 
-	if err := conn.Where("questionario_idquestionario = ?", quizID).Find(&patientHasQuizzes).Error; err != nil {
+	if err := conn.Where("questionario_idquestionario = ? AND finalizado = 0", quizID).Find(&patientHasQuizzes).Error; err != nil {
 		return nil, err
 	}
 
@@ -49,7 +50,7 @@ func GetPatientQuizByPatientID(patientID int64) ([]models.PatientHasQuiz, error)
 
 	var patientHasQuizzes []models.PatientHasQuiz
 
-	if err := conn.Where("proximidade_paciente_idpaciente = ?", patientID).Find(&patientHasQuizzes).Error; err != nil {
+	if err := conn.Where("paciente_idpaciente = ?", patientID).Find(&patientHasQuizzes).Error; err != nil {
 		return nil, err
 	}
 
@@ -63,6 +64,8 @@ func PostPatientQuiz(patientHasQuiz models.PatientHasQuiz) (models.PatientHasQui
 		return patientHasQuiz, err
 	}
 
+	//patientHasQuiz.AnsweredIn = strings.Split(patientHasQuiz.AnsweredIn, ".")[0]
+
 	conn.Create(&patientHasQuiz)
 
 	return patientHasQuiz, err
@@ -75,7 +78,9 @@ func PutPatientQuiz(patientHasQuiz models.PatientHasQuiz) error {
 		return err
 	}
 
-	result := conn.Where("proximidade_paciente_idpaciente = ? AND proximidade_pessoa_idpessoa = ? AND questionario_idquestionario = ?", patientHasQuiz.IdPatient, patientHasQuiz.IdQuiz).Updates(
+	patientHasQuiz.AnsweredIn = strings.Split(patientHasQuiz.AnsweredIn, ".")[0]
+
+	result := conn.Where("paciente_idpaciente = ? AND questionario_idquestionario = ?", patientHasQuiz.IdPatient, patientHasQuiz.IdQuiz).Updates(
 		models.PatientHasQuiz{
 			Finished:   patientHasQuiz.Finished,
 			Answers:    patientHasQuiz.Answers,
@@ -91,4 +96,35 @@ func PutPatientQuiz(patientHasQuiz models.PatientHasQuiz) error {
 	}
 
 	return nil
+}
+
+func GetPatientQuizByQuizPatientID(idQuiz int64, idPatient int64) (alreadyExist bool, patientHasQuizzes []models.PatientHasQuiz, err error) {
+	conn, err := db.GetDB()
+
+	var count int64
+	row := conn.Table("paciente_has_questionario").Where("paciente_idpaciente = ? AND questionario_idquestionario = ?", idPatient, idQuiz).Find(&patientHasQuizzes)
+	if row.Error != nil {
+		err = row.Error
+		return
+	}
+
+	row.Count(&count)
+	if count > 0 {
+		alreadyExist = true
+	} else {
+		alreadyExist = false
+	}
+
+	return alreadyExist, patientHasQuizzes, err
+}
+
+func DeletePatientHasQuiz(patientHasQuizRemoved models.PatientHasQuiz) (err error) {
+	conn, err := db.GetDB()
+
+	conn.Omit("respondido_em", "respostas").Where("paciente_idpaciente = ? AND questionario_idquestionario = ? AND finalizado = 0", patientHasQuizRemoved.IdPatient, patientHasQuizRemoved.IdQuiz).Delete(&patientHasQuizRemoved)
+	if err != nil {
+		return err
+	}
+
+	return
 }

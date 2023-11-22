@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="background">
     <div>
       <div
         class="back-page"
@@ -33,16 +33,28 @@
       >
         {{ model.message }}
       </div>
+      <div v-if="model.data.length==0">
+        <i>Não há pessoas próximas vinculadas a este paciente.</i>
+      </div>
       <div
         v-for="proximity in model.data"
         v-else
-        :key="proximity.Idproximity"
+        :key="proximity.IdPerson"
         class="row proximity"
       >
-        <p>
+        <p @click="openViewModal(proximity)">
           {{ proximity.Name }}
         </p>
         <div class="proximity-actions">
+          <button
+            type="button"
+            @click="viewQuizzes(proximity.IdPerson)"
+          >
+            <q-tooltip>
+              Questionários
+            </q-tooltip>
+            <PhTable color="black" />
+          </button>
           <button
             type="button"
             @click="resetPassword(proximity)"
@@ -56,7 +68,19 @@
             type="button"
             @click="openAddEditModal(proximity)"
           >
+            <q-tooltip>
+              Editar
+            </q-tooltip>
             <PhPencil color="black" />
+          </button>
+          <button
+            type="button"
+            @click="openViewModal(proximity)"
+          >
+            <q-tooltip>
+              Visualizar
+            </q-tooltip>
+            <PhEye color="black" />
           </button>
         </div>
       </div>
@@ -76,11 +100,16 @@
       ref="addEdit"
       @close="load"
     />
+    <ProximityViewModal
+      ref="viewModal"
+      @close="load"
+    />
   </div>
 </template>
 <script>
-import { PhPlus, PhPencil, PhFingerprintSimple, PhCaretLeft } from '@phosphor-icons/vue';
+import { PhPlus, PhPencil, PhFingerprintSimple, PhCaretLeft, PhEye, PhTable } from '@phosphor-icons/vue';
 import ProximityAddEditModal from './ProximityAddEditModal.vue';
+import ProximityViewModal from './ProximityViewModal.vue'
 
 /* 
 
@@ -93,10 +122,13 @@ export default {
   components: {
     PhPlus,
     ProximityAddEditModal,
+    ProximityViewModal,
     PhPencil,
     PhFingerprintSimple,
-    PhCaretLeft
-  },
+    PhCaretLeft,
+    PhEye,
+    PhTable
+},
   data() {
     return {
       model: {
@@ -121,6 +153,11 @@ export default {
     this.load();
   },
   methods: {
+    viewQuizzes(idProximity) {
+      this.$router.push(
+        '/pessoas-proximas/' + idProximity + '/questionarios'
+      );
+    },
     load() {
       const th = this;
       th.$api.ProximityController.getPersonsByIdPatient(th.patientId).then(
@@ -129,7 +166,6 @@ export default {
         }
       );
       th.$api.PatientController.getById(th.patientId).then((response) => {
-        console.log(response)
         th.patientModel.Name = response.data.data.Name
       })
     },
@@ -137,10 +173,13 @@ export default {
       this.$refs.addEdit.openModal(current);
     },
     goBack() {
-      this.$router.push('/paciente/id')
+      this.$router.push('/pacienteInfo?id='+this.patientId)
     },
     resetPassword({ IdPerson, Email }) {
       this.$api.PersonController.resetPassword({ IdPerson, Email })
+    },
+    openViewModal(current) {
+      this.$refs.viewModal.openModal(current);
     }
   },
 };
@@ -152,12 +191,29 @@ export default {
   height: 18px;
 }
 
+.background{
+  background-size: 50% !important;
+  background: url(../../assets/imgs/home-background.svg) no-repeat;
+  background-position-x:center;
+  background-position-y: center;
+  height: 100%;
+}
+
+.row.proximity{
+  padding: 0;
+  position: static;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+
 .back-page {
   display: flex;
   align-items: center;
   margin-top: 1.5rem;
   margin-left: 1.5rem;
   cursor: pointer;
+  width: fit-content;
   transition: 1.5s;
 }
 
@@ -242,9 +298,18 @@ export default {
   cursor: pointer;
 }
 
+.proximity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 70vh;
+  height: 100%;
+  overflow-y: auto;
+}
+
 .proximity {
   border: 1px solid;
-  padding: 1rem;
+  padding: 0.8rem;
   border-radius: 4px;
   display: flex;
   justify-content: space-between;
@@ -257,6 +322,11 @@ export default {
 
 .proximity p {
   margin: 0;
+  padding: 0.8rem;
+  width: 100%;
+  z-index: 1;
+  display: block;
+  position: relative;
 }
 
 .proximity button {
@@ -276,7 +346,10 @@ export default {
 }
 
 .proximity-actions {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  margin-left: -75%;
+  z-index: 4;
+  position: relative;
 }
 </style>

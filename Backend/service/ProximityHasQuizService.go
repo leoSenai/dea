@@ -29,16 +29,16 @@ func GetProximityQuizByPersonID(idPerson int64) (proximityHasQuizz []models.Prox
 }
 
 func PostProximityQuiz(proximityHasQuiz models.ProximityHasQuiz) (err error) {
-	existingProximityHasQuiz, err := repository.GetProximityQuizByQuizPatientPersonIDs(proximityHasQuiz.IdQuiz, proximityHasQuiz.ProximityIdPatient, proximityHasQuiz.ProximityIdPerson)
-	if err != nil {
-		return err
-	}
+	//existingProximityHasQuiz, err := repository.GetProximityQuizByQuizPatientPersonIDs(proximityHasQuiz.IdQuiz, proximityHasQuiz.ProximityIdPatient, proximityHasQuiz.ProximityIdPerson)
+	//if err != nil {
+	//	return err
+	//}
 
-	if existingProximityHasQuiz.IdQuiz != 0 {
-		return fmt.Errorf("Já esta relacionado no banco de dados")
-	}
+	//if existingProximityHasQuiz.IdQuiz != 0 {
+	//	return fmt.Errorf("Já esta relacionado no banco de dados")
+	//}
 
-	proximityHasQuiz.AnsweredIn = time.Now().Local().String()
+	//proximityHasQuiz.AnsweredIn = time.Now().Local().String()
 
 	proximityHasQuiz, err = repository.PostProximityQuiz(proximityHasQuiz)
 
@@ -58,4 +58,17 @@ func PutProximityQuiz(proximityHasQuiz models.ProximityHasQuiz) (err error) {
 	} else {
 		return fmt.Errorf("Relacionamento não cadastrado no banco de dados")
 	}
+}
+
+func GetProximityQuizByQuizPersonID(idQuiz int64, idPerson int64) (alreadyExist bool, proximityHasQuizzes []models.ProximityHasQuiz, err error) {
+	alreadyExist, proximityHasQuizzes, _ = repository.GetProximityQuizByQuizPersonID(idQuiz, idPerson)
+	return alreadyExist, proximityHasQuizzes, err
+}
+
+func DeleteProximityQuiz(proximityHasQuizRemoved models.ProximityHasQuiz) (err error) {
+	err = repository.DeleteProximityHasQuiz(proximityHasQuizRemoved)
+	if err != nil {
+		return err
+	}
+	return err
 }

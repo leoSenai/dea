@@ -13,11 +13,17 @@
           <h4>{{ model.Name }}</h4>
           <p>{{ model.Cpf }}</p>
           <p>{{ model.Email }}</p>
+          <p
+            class="reset-password"
+            @click="resetPassword"
+          >
+            Redefinir Senha
+          </p>
         </div>
         <div class="edit-button-div">
           <button-primary
             class="editBtn" 
-            @click="editPatient(model.IdPatient)"
+            @click="editPatient"
           >
             <PhPencil class="editIcon" />
             {{ editOrSave }}
@@ -33,7 +39,24 @@
         Ver pessoas próximas
         <PhCaretRight />
       </button-primary>
-      <h5>Anamnese</h5>
+      <button-primary
+        class="nextPersonView" 
+        @click="viewQuizzes()"
+      >
+        Questionários
+        <PhCaretRight />
+      </button-primary>
+      <div style="display: flex; align-items: center;">
+        <h5>Anamnese</h5><p
+          id="loading-gif"
+          style="display: none; margin: 0;"
+        >
+          <img
+            src="/src/assets/imgs/loading.gif"
+            style="width: 50px; height: 50px;"
+          >
+        </p>
+      </div>
       <q-editor
         v-model="anamneseModel.Notes"
         :disable="campoAnamneseDesabilitado"
@@ -57,13 +80,16 @@
         </button-primary>
       </div>
     </section>
-    <PatientsAddEditModal />
+    <PatientsAddEditModal 
+      ref="addEdit"
+      @close="load" 
+    />
   </div>
 </template>
 <script>
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import { PhCaretLeft, PhCaretRight, PhPencil } from '@phosphor-icons/vue';
-import cookie from '../../cookie';
+import cookie from '../../utils/cookie';
 import PatientsAddEditModal from './PatientsAddEditModal.vue';
 
 export default {
@@ -72,7 +98,7 @@ export default {
     PhPencil,
     PhCaretLeft,
     PhCaretRight,
-    PatientsAddEditModal
+    PatientsAddEditModal,
 },
   data() {
     return {
@@ -103,21 +129,30 @@ export default {
         Indicative: 0,
       },
       campoAnamneseDesabilitado: false,
-    };
+      countdown: 5,
+      countdownInterval: null
+    }
+  },
+  watch: {
+    'anamneseModel.Notes' () {
+      document.getElementById('loading-gif').style.display = 'block';
+      clearInterval(this.countdownInterval)
+      this.startSaveCountdown()
+    },
   },
   mounted () {
     const th = this
-    const idPatient = th.$router.currentRoute.value.query.id
-    th.$api.PatientController.getById(idPatient).then(({data}) => {
-      th.model = { ...data.data }
-    })
+    th.load()
   },
   methods: {
-    goBack () {
-      this.$router.push('/pacientes')
+    viewQuizzes() {
+      this.$router.push(
+        '/paciente/' + this.model.IdPatient + '/questionarios'
+      );
     },
-    editPatient(id) {
-      console.log(id)
+    editPatient() {
+      const th = this;
+      th.$refs.addEdit.openModal(th.model)
     },
     savePatientData() {
       const th = this;
@@ -129,9 +164,8 @@ export default {
       th.anamneseModel.IdPatient = th.model.IdPatient;
       th.anamneseModel.IdUser = cookie.getUserId(cookie.get('authToken'));
       th.$api.AnamneseController.update(th.anamneseModel);
-    },
-    changePassword(id) {
-      alert(id + ' - FUTURA IMPLEMENTACAO');
+      //desaparece loading
+      document.getElementById('loading-gif').style.display = 'none';
     },
     changeNewBornValue() {
       const th = this;
@@ -157,6 +191,46 @@ export default {
         '/paciente/' + this.model.IdPatient + '/pessoas-proximas'
       );
     },
+    goBack() {
+      var contentElement = document.getElementsByClassName('content')[0];
+      contentElement.style.overflow = 'hidden';
+      this.$router.push('/pacientes')
+    },
+    startSaveCountdown() {
+      this.countdownInterval = setInterval(() => {
+        if (this.countdown === 0) {
+          clearInterval(this.countdownInterval);
+          this.saveAnamnese()
+          this.resetSaveCountdown()
+        }
+        this.countdown -= 1
+      }, 1000);
+    },
+    resetSaveCountdown() {
+      this.countdown = 5;
+    },
+    load () {
+      const th = this;
+      const idPatient = th.$router.currentRoute.value.query.id
+      th.$api.PatientController.getById(idPatient).then(({data}) => {
+        th.model = { ...data.data }
+      })
+
+      th.getAnamneseInfo()
+    },
+    getAnamneseInfo(){
+      const th = this;
+      const idPatient = th.$router.currentRoute.value.query.id
+      th.$api.AnamneseController.getByIdUserPatient({IdPatient: idPatient, IdUser: cookie.getUserId(cookie.get('authToken'))}).then(({data}) => {
+        if (data.data) {
+          th.anamneseModel = { ...data.data }
+        }
+      })
+    },
+    resetPassword () {
+      const th = this;
+      th.$api.PatientController.resetPassword(th.model.IdPatient)
+    }
   },
 };
 </script>
@@ -199,6 +273,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 0.5rem;
 }
 
 .edit-button-div .editBtn {
@@ -235,9 +310,9 @@ h5 {
 }
 
 .nextPersonView {
-  border: 1px solid var(--primary);
-  background-color: var(--neutral-light-gray);
-  color: green;
+  border: 1px solid;
+  background-color: var(--primary);
+  color: white;
   margin: 10px;
   width: -webkit-fill-available;
   margin-bottom: 20px;
@@ -245,12 +320,16 @@ h5 {
 }
 
 .nextPersonView:hover {
-  filter: brightness(0.8);
+  background-color: #45852a;
+}
+
+.nextPersonView button:hover{
+  background-color: #45852a;
 }
 
 .patient-content {
   width: 99%;
-  height: auto;
+  overflow-y: auto;
   padding: 20px;
   padding-top: 0;
   margin-left: 0.5%;
@@ -259,6 +338,11 @@ h5 {
     sans-serif;
   display: block;
   justify-content: space-between;
+  background-size: 50% !important;
+  background: url(../../assets/imgs/home-background.svg) no-repeat;
+  background-position-x:center;
+  background-position-y: center;
+  height: 100%;
 }
 
 section {
@@ -301,6 +385,7 @@ section {
     sans-serif;
   display: flex;
   justify-content: space-between;
+  gap: 10px;
 }
 
 .patientView-header section {
@@ -310,7 +395,7 @@ section {
 
 .patientView-header p {
   margin: 0;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .editIcon {
@@ -323,9 +408,21 @@ section {
   margin-top: 1.5rem;
   cursor: pointer;
   transition: 1.5s;
+  width: fit-content;
 }
 
 .back-page:hover {
   filter: brightness(0.2);
+}
+
+p.reset-password {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: .875rem;
+  cursor: pointer;
+}
+
+p.reset-password:hover {
+  filter: brightness(0.8);
 }
 </style>

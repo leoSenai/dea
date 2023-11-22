@@ -13,6 +13,43 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
+func GetProximityQuizByQuizPersonID(w http.ResponseWriter, r *http.Request) {
+	idQuizParam := chi.URLParam(r, "idquiz")
+	idPersonParam := chi.URLParam(r, "idperson")
+
+	idQuiz, err := strconv.Atoi(idQuizParam)
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "Ops! Parâmetros incorretos.")
+		return
+	}
+	idPerson, err := strconv.Atoi(idPersonParam)
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, err.Error(), "Ops! Parâmetros incorretos.")
+		return
+	}
+
+	if idQuiz <= 0 || idPerson <= 0 {
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "ID inválido", "")
+		return
+	}
+
+	var proximityHasQuiz []models.ProximityHasQuiz
+
+	_, proximityHasQuiz, err = service.GetProximityQuizByQuizPersonID(int64(idQuiz), int64(idPerson))
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, err.Error(), "Ops! Erro interno do servidor.")
+		return
+	}
+
+	if len(proximityHasQuiz) == 0 {
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não existem relacionamentos com este ID de questionário e pessoa próxima", "")
+		return
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Busca realizada com sucesso!", proximityHasQuiz)
+
+}
+
 func GetProximityQuizByQuizPatientPersonIDs(w http.ResponseWriter, r *http.Request) {
 	var proximityHasQuizDto dtos.ProximityHasQuizDto
 
@@ -56,7 +93,7 @@ func GetProximityQuizByQuizID(w http.ResponseWriter, r *http.Request) {
 	proximityHasQuiz, err = service.GetProximityQuizByQuizID(int64(id))
 
 	if len(proximityHasQuiz) == 0 {
-		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não existem relacionamento para este questionario", "")
+		utils.ReturnResponseJSON(w, http.StatusNoContent, "Não existem pessoas próximas para este questionario", "")
 		return
 	}
 

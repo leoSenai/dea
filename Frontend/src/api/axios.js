@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Toastify from 'toastify-js';
-import Cookie from '../cookie';
+import Cookie from '../utils/cookie';
 import router from '../router';
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL_DEV
@@ -9,7 +9,6 @@ axios.interceptors.request.use(config => {
   config.headers = {
     Authorization: `; ${document.cookie}`.split('; authToken=').pop().split(';').shift()
   }
-  console.log(config)
   return config
 }, (err) => {
   return Promise.reject(err);
@@ -72,7 +71,7 @@ axios.interceptors.response.use((response) => {
     Cookie.delete('authToken');
     router.push('/login')
   } else if (response.status === 401) {
-    router.push('/')
+    router.push('/home')
     return
   }
 

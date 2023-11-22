@@ -1,10 +1,21 @@
 <template>
   <div class="home">
     <div class="home-options">
-      <template v-for="link in links" :key="link.path">
-        <router-link :to="link.path" class="link" tabindex="0" @blur="hideSidebar">
+      <template
+        v-for="link in linksData"
+        :key="link.path"
+      >
+        <router-link
+          :to="link.path"
+          class="link"
+          tabindex="0"
+          @blur="hideSidebar"
+        >
           {{ link.name }}
-          <component :is="link.icon" class="link-icon" />
+          <component
+            :is="link.icon"
+            class="link-icon"
+          />
         </router-link>
       </template>
     </div>
@@ -12,6 +23,7 @@
 </template>
 <script>
 import { PhBookOpen, PhPerson, PhScooter } from '@phosphor-icons/vue';
+import Cookie from '../utils/cookie'
 
 export default {
   components: { PhScooter, PhBookOpen, PhPerson },
@@ -22,12 +34,33 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      userType: '',
+      linksData: []
+    };
+  },
+  mounted () {
+    this.getData()
+    this.fixScreenSize()
   },
   methods: {
-    goLinkMenu(linktag) {
+    goLinkMenu (linktag) {
       this.$router.push('/' + linktag);
     },
+    getData () {
+      this.userType = Cookie.getUserType(Cookie.get('authToken'))
+      this.linksData = this.links
+    },
+    fixScreenSize () {
+      try{
+        const contentLoginScreen = document.body.getElementsByClassName('login-screen')
+        if(contentLoginScreen.length != 0){
+          contentLoginScreen[0].classList.remove('login-screen')
+        }
+      } finally {
+        //
+      }
+    }
   },
 };
 </script>
@@ -47,7 +80,7 @@ export default {
   flex-direction: column;
   gap: 1rem;
   width: 30rem;
-  border-radius: 4px;
+  border-radius: 15px;
   background: var(--primary-700);
   padding: 3rem 1rem;
 }

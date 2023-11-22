@@ -2,6 +2,7 @@ package service
 
 import (
 	"api/models"
+	"api/models/dtos"
 	"api/repository"
 	"api/utils"
 	"fmt"
@@ -12,12 +13,22 @@ func GetPatientById(id int64) (patient models.Patient, err error) {
 	return patient, err
 }
 
+func GetAllPatientsByUserID(id int64) (patients []models.Patient, err error) {
+	patients, err = repository.GetAllPatientsByUserID(id)
+	return patients, err
+}
+
+func GetPatientByName(name string) (patient models.Patient, err error) {
+	patient, err = repository.GetPatientByName(name)
+	return patient, err
+}
+
 func GetAllPatient() (patients []models.Patient, err error) {
 	patients, err = repository.GetAllPatient()
 	return patients, err
 }
 
-func PostPatient(patientPost models.Patient) (patientBack models.Patient, err error) {
+func PostPatient(patientPost dtos.PatientPlusUser) (patientBack models.Patient, err error) {
 	patientBack, err = repository.PostPatient(patientPost)
 	return patientBack, err
 }

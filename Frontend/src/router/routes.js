@@ -4,42 +4,29 @@ import PatientView from '../views/Patient/PatientView.vue'
 import Header from '../components/HeaderPrimary.vue';
 import Patients from '../views/Patient/PatientsView.vue';
 import Proximity from '../views/Proximity/ProximityView.vue';
+import PatientQuizzes from '../views/Patient/PatientQuizzes.vue'
+import ProximityQuizzes from '../views/Proximity/ProximityQuizzes.vue' 
 import Users from '../views/Users/UsersView.vue'
 import InputPrimary from '../components/InputPrimary.vue';
 import NotFound from '../views/NotFoundView.vue';
-import Quiz from '../views/Quiz/QuizView.vue';
+import Quiz from '../views/quiz/QuizView.vue';
+import ClosePeopleQuiz from '../views/ClosePeopleQuiz/ClosePeopleQuizView.vue';
+import ProximityPacientsRelated from '../views/Proximity/ProximityPacientsRelated.vue';
+import ProximityPacientsRelatedQuizzes from '../views/Proximity/ProximityPacientsRelatedQuizzes.vue';
+
+import Cookie from '../utils/cookie'
 
 import { PhUserList, PhUsers } from '@phosphor-icons/vue';
 import { PhArticle } from '@phosphor-icons/vue';
+import { RoleEnum } from '../utils/Enum';
 
-const links = [
+export const links = [
   { path: '/usuarios', name: 'Usuários', icon: PhUsers },
   { path: '/questionarios', name: 'Questionários', icon: PhArticle },
-  { path: '/pacientes', name: 'Pacientes', icon: PhUserList}
-];
+  { path: '/pacientes', name: 'Pacientes', icon: PhUserList},
+]
 
 export const routes = [
-  {
-    path: '/',
-    components: {
-      default: Home,
-      header: Header,
-    },
-    props: {
-      header: { links },
-      default: { links }
-    },
-  },
-  {
-    path: '/pacienteInfo',
-    components: {
-      default: PatientView,
-      header: Header,
-    },
-    props: {
-      header: { links },
-    },
-  },
   {
     path: '/home',
     components: {
@@ -50,6 +37,36 @@ export const routes = [
       header: { links },
       default: { links }
     },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      const userId = Cookie.getUserId(authToken)
+      console.log(typeUser)
+      if (typeUser === RoleEnum.Patient) {
+        return { path: `/paciente/${userId}/questionarios` };
+      } else if (typeUser === RoleEnum.Person) {
+        return { path: `/pessoa-proxima/${userId}/pacientes` };
+      }
+      return true;
+    }
+  },
+  {
+    path: '/paciente',
+    components: {
+      default: PatientView,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
+        return { path: '/' };
+      }
+      return true;
+    }
   },
   {
     path: '/login',
@@ -66,6 +83,14 @@ export const routes = [
     props: {
       header: { links },
     },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
+        return { path: '/' };
+      }
+      return true
+    }
   },
   {
     path: '/paciente/:id/pessoas-proximas',
@@ -76,6 +101,78 @@ export const routes = [
     props: {
       header: { links },
     },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
+        return { path: '/' };
+      }
+      return true
+    }
+  },
+  {
+    path: '/paciente/:id/questionarios',
+    components: {
+      default: PatientQuizzes,
+      header: Header,
+    },
+    props: {
+      header: { links },
+      beforeEnter () {
+        const authToken = Cookie.get('authToken');
+        const typeUser = Cookie.getUserType(authToken);
+        if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
+          return { path: '/' };
+        }
+        return true
+      }
+    },
+  },
+  {
+    path: '/pessoas-proximas/:id/questionarios',
+    components: {
+      default: ProximityQuizzes,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+  },
+  {
+    path: '/pessoa-proxima/:id/pacientes',
+    components: {
+      default: ProximityPacientsRelated,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Person) {
+        return { path: '/' };
+      }
+      return true;
+    }
+  },
+  {
+    path: '/pessoa-proxima/:id/paciente/:idPatient/questionarios',
+    components: {
+      default: ProximityPacientsRelatedQuizzes,
+      header: Header,
+    },
+    props: {
+      header: { links },
+    },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Person) {
+        return { path: '/' };
+      }
+      return true;
+    }
   },
   {
     path: '/usuarios',
@@ -85,6 +182,14 @@ export const routes = [
     },
     props: {
       header: { links },
+    },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Administrator) {
+        return { path: '/' };
+      }
+      return true;
     }
   },
   {
@@ -97,13 +202,20 @@ export const routes = [
     props: {
       header: { links },
     },
+    beforeEnter () {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
+        return { path: '/' };
+      }
+      return true
+    }
   },
   {
-    path: '/:pathMatch(.*)*',
+    path: '/questionarios-pessoas-proximas',
     components: {
-      default: NotFound,
+      default: ClosePeopleQuiz,
       header: Header,
-      input: InputPrimary
     },
     props: {
       header: { links },
@@ -114,6 +226,7 @@ export const routes = [
     components: {
       default: NotFound,
       header: Header,
+      input: InputPrimary
     },
     props: {
       header: { links },

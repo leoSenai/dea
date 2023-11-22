@@ -52,6 +52,7 @@ func main() {
 	r.Get("/user/get-all", utils.VerifyToken(controller.GetAllUser))
 	r.Post("/user/insert", utils.VerifyToken(controller.PostUser))
 	r.Put("/user/update", utils.VerifyToken(controller.PutUser))
+	r.Put("/user/reset-password", utils.VerifyToken(controller.ResetPasswordUser))
 
 	r.Get("/cbo/get-by-id/{id}", utils.VerifyToken(controller.GetCboById))
 	r.Get("/cbo/get-all", utils.VerifyToken(controller.GetAllCbo))
@@ -112,6 +113,7 @@ func main() {
 	r.Get("/proximityhasquiz/get-by-id-quiz/{id}", utils.VerifyToken(controller.GetProximityQuizByQuizID))
 	r.Get("/proximityhasquiz/get-by-id-patient/{id}", utils.VerifyToken(controller.GetProximityQuizByPatientID))
 	r.Get("/proximityhasquiz/get-by-id-person/{id}", utils.VerifyToken(controller.GetProximityQuizByPersonID))
+	r.Get("/proximityhasquiz/get-by-id-quiz-person/{idquiz}/{idperson}", utils.VerifyToken(controller.GetProximityQuizByQuizPersonID))
 	r.Post("/proximityhasquiz/insert", utils.VerifyToken(controller.PostProximityQuiz))
 	r.Put("/proximityhasquiz/update", utils.VerifyToken(controller.PutProximityQuiz))
 
@@ -120,10 +122,13 @@ func main() {
 	r.Get("/patienthasdoctor/get-all", utils.VerifyToken(controller.GetAllPatientHasDoctor))
 	r.Post("/patienthasdoctor/insert", utils.VerifyToken(controller.PostPatientHasDoctor))
 
-	r.Get("/patienthasquiz/get-by-id-quiz/{id}", utils.VerifyToken(controller.GetProximityQuizByQuizID))
-	r.Get("/patienthasquiz/get-by-id-patient/{id}", utils.VerifyToken(controller.GetProximityQuizByPatientID))
-	r.Post("/patienthasquiz/insert", utils.VerifyToken(controller.PostProximityQuiz))
-	r.Put("/patienthasquiz/update", utils.VerifyToken(controller.PutProximityQuiz))
+	r.Get("/patienthasquiz/get-by-id-quiz/{id}", utils.VerifyToken(controller.GetPatientQuizByQuizID))
+	r.Get("/patienthasquiz/get-by-id-quiz-patient/{idquiz}/{idpatient}", utils.VerifyToken(controller.GetPatientQuizByQuizPatientID))
+	r.Get("/patienthasquiz/get-by-id-patient/{id}", utils.VerifyToken(controller.GetPatientQuizByPatientID))
+	r.Post("/patienthasquiz/insert", utils.VerifyToken(controller.PostPatientQuiz))
+	r.Put("/patienthasquiz/update", utils.VerifyToken(controller.PutPatientQuiz))
+
+	r.Put("/filiateds/update", utils.VerifyToken(controller.PutFiliateds))
 
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {

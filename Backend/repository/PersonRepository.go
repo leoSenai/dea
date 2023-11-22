@@ -6,6 +6,7 @@ import (
 	"api/utils"
 	"errors"
 	"fmt"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -21,6 +22,18 @@ func GetPersonById(id int64) (person models.Person, err error) {
 	if person.IdPerson == 0 {
 		person = models.Person{}
 	}
+
+	return
+}
+
+func GetPersonByName(name string) (person models.Person, err error) {
+	conn, err := db.GetDB()
+	if err != nil {
+		return
+	}
+
+	row := conn.First(&person, "nome = ?", name)
+	log.Printf("row: %v", row)
 
 	return
 }

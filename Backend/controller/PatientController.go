@@ -54,6 +54,23 @@ func GetPatientById(w http.ResponseWriter, r *http.Request) {
 	utils.ReturnResponseJSON(w, http.StatusOK, "Paciente encontrado com sucesso!", patientDto)
 }
 
+func GetAllPatientsByUserID(w http.ResponseWriter, r *http.Request) {
+
+	idParam := chi.URLParam(r, "id")
+
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		log.Printf("Cannot parse ID: %v", err.Error())
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi possível coletar o id do usuário na requisição.", "")
+		return
+	}
+
+	patients, err := service.GetAllPatientsByUserID(int64(id))
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Pacientes encontrados com sucesso!", patients)
+	return
+}
+
 func GetAllPatient(w http.ResponseWriter, _ *http.Request) {
 	patients, err := service.GetAllPatient()
 	if err != nil {
@@ -91,16 +108,16 @@ func GetAllPatient(w http.ResponseWriter, _ *http.Request) {
 }
 
 func PostPatient(w http.ResponseWriter, r *http.Request) {
-	var patient models.Patient
+	var patientPlusUser dtos.PatientPlusUser
 
-	err := json.NewDecoder(r.Body).Decode(&patient)
+	err := json.NewDecoder(r.Body).Decode(&patientPlusUser)
 	if err != nil {
 		log.Printf("Cannot do Post: %v", err.Error())
 		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi possível coletar as informações do paciente necessárias para o cadastro.", "")
 		return
 	}
 
-	patient, err = service.PostPatient(patient)
+	_, err = service.PostPatient(patientPlusUser)
 	if err != nil {
 		log.Printf("Cannot do Post: %v", err.Error())
 		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível cadastrar o paciente, erro interno no servidor.", "")

@@ -12,9 +12,9 @@ func GetQuizById(id int64) (quiz models.Quiz, err error) {
 	return quiz, err
 }
 
-func GetAllQuiz() (quiz []models.Quiz, err error) {
-	quizs, err := repository.GetAllQuiz()
-	return quizs, err
+func GetAllQuiz() (quiz []models.Quiz, quizsFinisheds []models.QuizFinished, err error) {
+	quizs, quizsFinisheds, err := repository.GetAllQuiz()
+	return quizs, quizsFinisheds, err
 }
 
 func PostQuiz(quizPost models.Quiz) (quizBack models.Quiz, err error) {

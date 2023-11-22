@@ -1,10 +1,26 @@
 <template>
-  <modal-primary v-model="show" @close="closeModal">
+  <modal-primary
+    v-model="show" 
+    @close="closeModal"
+  >
     <template #modal-title>
       {{ model && model.IdPatient ? 'Editar' : 'Cadastrar' }} Pacientes
     </template>
     <template #modal-content>
-      <q-form ref="form">
+      <q-select
+        v-show="!newPatient"
+        style="border: 1px solid rgba(0, 0, 0, 0.432);border-radius: 5px;"
+        label="&nbsp Paciente"
+      />
+      <q-checkbox 
+        v-model="newPatient"
+      >
+        Paciente novo
+      </q-checkbox>
+      <q-form
+        v-show="newPatient"
+        ref="form"
+      >
         <div class="row">
           <div class="col-12 col-lg-6 q-px-sm">
             <input-primary
@@ -79,7 +95,7 @@
               required
             />
           </div>
-          <div class="col-12 col-lg-4">
+          <div class="col-12 col-lg-4 q-px-sm">
             <input-primary
               v-model="model.MomName"
               label="Nome da mãe"
@@ -98,19 +114,10 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-12 col-lg-4 q-px-sm">
+          <div class="col-12 col-lg-8 q-px-sm">
             <input-primary
               v-model="model.Cns"
               label="CNS"
-              label-color="primary"
-              required
-            />
-          </div>
-          <div class="col-12 col-lg-4 q-px-sm">
-            <input-primary
-              v-model="model.Password"
-              type="password"
-              label="Senha"
               label-color="primary"
               required
             />
@@ -158,6 +165,7 @@ import ModalPrimary from '../../components/ModalPrimary.vue';
 import InputPrimary from '../../components/InputPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import SelectPrimary from '../../components/SelectPrimary.vue';
+import cookie from '../../utils/cookie';
 
 export default {
   components: {
@@ -169,7 +177,9 @@ export default {
   emits: ['close'],
   data() {
     return {
+      newPatient: false,
       show: false,
+      aaa: 0,
       model: {
         IdPatient: null,
         Name: '',
@@ -182,7 +192,6 @@ export default {
         DadName: '',
         MomName: '',
         Cid10: 0,
-        Password: '',
         Cns: '',
         NewBorn: '',
       },
@@ -209,7 +218,6 @@ export default {
         !th.model.DadName ||
         !th.model.MomName ||
         !th.model.Cid10 ||
-        !th.model.Password ||
         !th.model.Cns ||
         !th.model.NewBorn
       ) {
@@ -223,7 +231,7 @@ export default {
         th.model.NewBorn = 0;
       }
       th.$api.PatientController.insert({
-        ...th.model,
+        Patient: th.model, IdUser: cookie.getUserId(cookie.get('authToken'))
       })
         .then(({ data }) => {
           th.model = data.data;
@@ -243,7 +251,13 @@ export default {
         });
     },
     updatePatient() {
-      const th =this;
+      const th = this;
+
+      if (th.model.NewBorn === 'Sim') {
+        th.model.NewBorn = 1;
+      } else {
+        th.model.NewBorn = 0;
+      }
 
       th.$api.PatientController.update({
         ...th.model,
@@ -267,6 +281,7 @@ export default {
     },
     closeModal() {
       this.show = false;
+      this.model=[]
       this.$emit('close');
     },
   },

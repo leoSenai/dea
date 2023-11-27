@@ -22,73 +22,104 @@
   </div>
 </template>
 <script>
-import { PhBookOpen, PhPerson, PhScooter, PhArticle, PhUsers, PhUserList } from '@phosphor-icons/vue';
-import Cookie from '../utils/cookie'
+import {
+  PhBookOpen,
+  PhPerson,
+  PhScooter,
+  PhArticle,
+  PhUsers,
+  PhUserList,
+} from '@phosphor-icons/vue';
+import Cookie from '../utils/cookie';
+import { RoleEnum } from '../utils/Enum';
 
 export default {
-  components: { PhScooter, PhBookOpen, PhPerson,PhArticle, PhUsers, PhUserList },
+  components: {
+    PhScooter,
+    PhBookOpen,
+    PhPerson,
+    PhArticle,
+    PhUsers,
+    PhUserList,
+  },
   data() {
     return {
       userType: '',
-      linksData: []
+      linksData: [],
     };
   },
   computed: {
-    linksMenu(){
-      return this.getLinks()
-    } 
+    linksMenu() {
+      return this.getLinks();
+    },
   },
-  mounted () {
-    this.getData()
-    this.fixScreenSize()
+  mounted() {
+    this.getData();
+    this.fixScreenSize();
   },
   methods: {
-    getLinks(){
-      try{
-        const authToken = Cookie.get('authToken');
-        const typeUser = Cookie.getUserType(authToken);
-        const userId = Cookie.getUserId(authToken)
+    getLinks() {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      const userId = Cookie.getUserId(authToken);
 
-        if(typeUser=='PA'){
+      switch (typeUser) {
+        case RoleEnum.Patient: {
           return [
-            { path: '/paciente/'+userId+'/questionarios', name: 'Questionários', icon: PhArticle },
-          ]
-        }else if(typeUser=='A'){
+            {
+              path: '/paciente/' + userId + '/questionarios',
+              name: 'Questionários',
+              icon: PhArticle,
+            },
+          ];
+        }
+        case RoleEnum.Administrator: {
           return [
             { path: '/usuarios', name: 'Usuários', icon: PhUsers },
-          ]
-        }else if(typeUser=='U'){
+            { path: '/questionarios', name: 'Questionários', icon: PhArticle },
+            { path: '/pacientes', name: 'Pacientes', icon: PhUserList },
+          ];
+        }
+        case RoleEnum.User: {
           return [
             { path: '/questionarios', name: 'Questionários', icon: PhArticle },
-            { path: '/pacientes', name: 'Pacientes', icon: PhUserList},
-          ]
-        }else if(typeUser=='PR'){
-          return [
-            { path: '/pessoas-proximas/'+userId+'/questionarios', name: 'Questionários', icon: PhArticle },
-          ]
+            { path: '/pacientes', name: 'Pacientes', icon: PhUserList },
+          ];
         }
-
-      }catch{
-        console.log('Erro ao tentar obter links de redirecionamento...')
+        case RoleEnum.Person: {
+          return [
+            {
+              path: '/pessoas-proximas/' + userId + '/questionarios',
+              name: 'Questionários',
+              icon: PhArticle,
+            },
+            {
+              path: '/pessoa-proxima/' + userId + '/pacientes',
+              name: 'Meus filiados',
+              icon: PhUserList,
+            },
+          ];
+        }
       }
     },
-    goLinkMenu (linktag) {
+    goLinkMenu(linktag) {
       this.$router.push(linktag);
     },
-    getData () {
-      this.userType = Cookie.getUserType(Cookie.get('authToken'))
-      this.linksData = this.links
+    getData() {
+      this.userType = Cookie.getUserType(Cookie.get('authToken'));
+      this.linksData = this.links;
     },
-    fixScreenSize () {
-      try{
-        const contentLoginScreen = document.body.getElementsByClassName('login-screen')
-        if(contentLoginScreen.length != 0){
-          contentLoginScreen[0].classList.remove('login-screen')
+    fixScreenSize() {
+      try {
+        const contentLoginScreen =
+          document.body.getElementsByClassName('login-screen');
+        if (contentLoginScreen.length != 0) {
+          contentLoginScreen[0].classList.remove('login-screen');
         }
       } finally {
         //
       }
-    }
+    },
   },
 };
 </script>

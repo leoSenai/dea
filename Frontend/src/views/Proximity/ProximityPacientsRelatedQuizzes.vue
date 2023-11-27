@@ -81,7 +81,7 @@ export default {
     this.load();
   },
   methods: {
-    load() {
+    async load() {
       const th = this;
 
       th.$api.PatientController.getById(th.idPatient).then((data) => {
@@ -89,7 +89,7 @@ export default {
       })
 
       th.$api.ProximityHasQuizController.getByIdPatient(th.idPatient).then(async ({ data }) => {
-
+        console.log(data)
         if (data.data) {
 
           th.quizzes = data.data.filter(item => item.ProximityIdPerson === th.idPerson).map((item) => {
@@ -97,8 +97,8 @@ export default {
           })
 
           for (var id in th.quizzes) {
-
-            var result = await th.$api.QuizController.getById(th.quizzes[id].IdQuiz)
+            const result = await th.$api.QuizController.getById(th.quizzes[id].IdQuiz)
+            console.log(result)
             th.loadQuiz(result, id)
           }
         }
@@ -107,7 +107,7 @@ export default {
     },
     loadQuiz(data, id) {
       const th = this
-      var quizFinished = th.quizzes[id].Finished
+      const quizFinished = th.quizzes[id].Finished
       if (quizFinished == 0) {
         data.data.data.Name += ' - EM ABERTO'
       } else {

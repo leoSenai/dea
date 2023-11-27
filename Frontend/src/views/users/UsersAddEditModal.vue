@@ -229,7 +229,7 @@ export default {
               Phone,
             })
               .then(({ data }) => {
-                if(data.data==''){
+                if(data.data=='' && !data.message.includes('atualizadas com sucesso')){
                   return 
                 }else{
                   th.model = data.data;
@@ -250,7 +250,7 @@ export default {
           })
             .then(({ data }) => {
               if(!data.message.includes('cadastrado com sucesso')){
-                return 
+                return
               }else{
                 th.model = data.data;
                 th.closeModal();
@@ -294,11 +294,11 @@ export default {
       }else if (!th.model.IdUser && th.model.Password.length < 6) {
         alert('A senha deve conter no mínimo 6 caracteres!');
         return false;
-      }else if(!th.model.TypeUser.value){
+      }else if(th.model.TypeUser.value==null || th.model.TypeUser==''){
         alert('Selecione um tipo de usuário!');
         return false;
-      }else if (!(th.model.Phone.length == 15)) {
-        alert('O telefone deve conter 11 digitos!');
+      }else if (!(th.model.Phone.length == 15) || th.model.Phone[5]!='9') {
+        alert('O telefone deve conter 11 digitos e um dígito "9" após o DDD!');
         return false;
       }else if (!validCbo) {
         alert('Digite um CBO válido!');

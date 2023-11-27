@@ -225,12 +225,27 @@ export default {
     })
   },
   methods: {
+    getSex(current){
+      
+      if(current.Sex=='M'){
+        return {label: 'Masculino', value: 'M'}
+      }else if(current.Sex=='F'){
+        return {label: 'Feminino', value: 'F'}
+      }else if(current.Sex=='O'){
+        return {label: 'Outros', value: 'O'}
+      }else{
+        return {label: 'Prefiro não dizer', value: 'P'}
+      }
+        
+    },
     openModal(current) {
       const th = this;
       th.show = true;
       if (current) {
 
-        this.model = { ...current, NewBorn: current.NewBorn ? 'Sim' : 'Não'};
+        var sexo = th.getSex(current)
+
+        this.model = { ...current, NewBorn: current.NewBorn ? 'Sim' : 'Não', Sex: sexo};
         
         if(!(th.model && th.model.IdPatient)){
           th.patientsVisible = current.data
@@ -277,6 +292,17 @@ export default {
           validMomName = false
         }
 
+        var validDadName;
+        try{
+          if(!th.model.DadName){   
+            validDadName = true 
+          }else{
+            validDadName = (th.model.DadName.match(/\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g))[0]==th.model.DadName
+          }
+        }catch{
+          validDadName = false
+        }
+
         var date_field = new Date()
         date_field.setTime(Date.parse(th.model.BornDate))
         date_field.setDate(date_field.getDate()+1)
@@ -304,6 +330,9 @@ export default {
         }else if(!th.model.Sex){
           alert('Preencha o sexo do paciente corretamente!')
           return
+        }else if(!validDadName){
+          alert('Preencha o nome do pai do paciente corretamente!')
+          return
         }else if (!validMomName || th.model.MomName.length > 80){
           alert('Preencha o nome da mãe do paciente corretamente!')
           return
@@ -313,7 +342,7 @@ export default {
         }else if(!th.model.Cns || !(th.model.Cns.length <= 15) || isNaN(th.model.Cns)){
           alert('Preencha o CNS do paciente corretamente!')
           return
-        }else if(!th.model.NewBorn || (th.model.NewBorn=='Não' && (date_field.toDateString()==date_now.toDateString()))){
+        }else if(!th.model.NewBorn || (th.model.NewBorn=='Não' && (date_field.toDateString()==date_now.toDateString())) || (th.model.NewBorn=='Sim' && (date_field.toDateString()!=date_now.toDateString()))){
           alert('Preencha o campo "Recem nascido" corretamente!')
           return
         }
@@ -386,6 +415,17 @@ export default {
         validMomName = false
       }
 
+      var validDadName;
+      try{
+        if(!th.model.DadName){   
+          validDadName = true 
+        }else{
+          validDadName = (th.model.DadName.match(/\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g))[0]==th.model.DadName
+        }
+      }catch{
+        validDadName = false
+      } 
+
       var date_field = new Date()
       date_field.setTime(Date.parse(th.model.BornDate))
       date_field.setDate(date_field.getDate()+1)
@@ -413,6 +453,9 @@ export default {
       }else if(!th.model.Sex){
         alert('Preencha o sexo do paciente corretamente!')
         return
+      }else if(!validDadName){
+          alert('Preencha o nome do pai do paciente corretamente!')
+          return
       }else if (!validMomName || th.model.MomName.length > 80){
         alert('Preencha o nome da mãe do paciente corretamente!')
         return
@@ -422,7 +465,7 @@ export default {
       }else if(!th.model.Cns || !(th.model.Cns.length <= 15) || isNaN(th.model.Cns)){
         alert('Preencha o CNS do paciente corretamente!')
         return
-      }else if(!th.model.NewBorn || (th.model.NewBorn=='Não' && (date_field.toDateString()==date_now.toDateString()))){
+      }else if(!th.model.NewBorn || (th.model.NewBorn=='Não' && (date_field.toDateString()==date_now.toDateString())) || (th.model.NewBorn=='Sim' && (date_field.toDateString()!=date_now.toDateString()))){
         alert('Preencha o campo "Recem nascido" corretamente!')
         return
       }

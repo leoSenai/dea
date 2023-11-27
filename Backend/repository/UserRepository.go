@@ -96,6 +96,7 @@ func PutUser(userPut models.User) (userBack models.User, err error) {
 		userPut.IdCbo = cbo.IdCbo
 
 		row := conn.Table("usuario").Where("idusuario = ?", userPut.IdUser).Updates(&userPut)
+		conn.Table("usuario").Select("ativo").Where("idusuario = ?", userPut.IdUser).Updates(&userPut)
 		log.Printf("row: %v", row)
 	}
 

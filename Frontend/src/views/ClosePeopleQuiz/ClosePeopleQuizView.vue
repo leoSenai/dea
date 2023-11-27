@@ -49,7 +49,7 @@
 </template>
 <script>
 import { PhPencil } from '@phosphor-icons/vue'
-import QuizAnswerModal from '../Quiz/QuizAnswerModal.vue'
+import QuizAnswerModal from '../quiz/QuizAnswerModal.vue'
 
 export default {
   components: {

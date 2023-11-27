@@ -64,7 +64,7 @@
             label="Telefone"
             label-color="primary"
             required
-            mask="(##) ##### - ####"
+            mask="(##) #####-####"
             hint="Exemplo: (##) ##### - ####"
           />
           <q-select
@@ -79,7 +79,7 @@
             options-dark
             class="select row q-pt-sm"
           />
-          <q-select
+          <!--<q-select
             v-model="model.IdService"
             :disable="true"
             :options="optionsServices"
@@ -90,7 +90,7 @@
             option-value="value"
             options-dark
             class="select row q-pt-lg"
-          />
+          />-->
         </div>
       </q-form>
     </template>
@@ -126,18 +126,16 @@
           Name: '',
           Email: '',
           Password: '',
-          TypeUser: { label: 'Administrador', value: 'A' },
+          TypeUser: { label: '', value: '' },
           Active: { label: 'Sim', value: 1 },
           Phone: '',
           IdCbo: '',
           IdService: '',
         },
         optionsTypeUser: [
-          { label: 'Administrador', value: 'A' },
-          { label: 'Outro', value: 'O' },
-          { label: 'Psicologo', value: 'P' },
-          { label: 'Psiquiatra', value: 'C' },
-        ],
+        { label: 'Administrador', value: 'A' },
+        { label: 'Usuário', value: 'U' },
+      ],
         optionsActive: [
           { label: 'Sim', value: 1 },
           { label: 'Não', value: 0 },

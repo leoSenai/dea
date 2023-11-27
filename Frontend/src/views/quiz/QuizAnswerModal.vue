@@ -87,11 +87,8 @@ export default {
     },
     closeModal() {
       this.show = false
+      this.model.Answers = []
       this.$emit('close')
-      this.model = {
-        Title: '',
-        Questions: []
-      }
     },
     loadQuiz(currentQuiz) {
       const th = this
@@ -121,9 +118,20 @@ export default {
       }
 
       if (th.typeUser === RoleEnum.Person) {
-        th.$api.ProximityHasQuizController.update(dto).then(response => {
+        console.log(th.$route.params.id)
+        var dtoProximityHasQuiz = {
+          //ProximityIdPatient : 0,
+          ProximityIdPerson : parseInt(th.$route.params.id),
+          IdQuiz : th.Quiz.IdQuiz,
+          Finished: th.model.Questions.length === th.model.Answers.length ? 1 : 0,
+          Answers: th.model.Answers.toString(),
+          AnsweredIn: new Date()
+        }
+
+        th.$api.ProximityHasQuizController.update(dtoProximityHasQuiz).then(response => {
           if (response) th.closeModal()
         })
+      
       } else if (th.typeUser === RoleEnum.Patient) {
         th.$api.PatientHasQuizController.update(dto).then(response => {
           if (response) th.closeModal()

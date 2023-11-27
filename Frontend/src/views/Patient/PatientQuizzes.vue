@@ -42,7 +42,7 @@
           <PhEye color="black" />
         </button>
         <button
-          v-if="quiz.Name.includes('EM ABERTO')"
+          v-if="quiz.Name.includes('EM ABERTO') && typeUser === RoleEnum.Patient"
           type="button"
           @click="answerQuiz(quiz)"
         >
@@ -58,14 +58,17 @@
       @close="load"
     />
     <QuizViewModal ref="viewQuiz" />
-    <QuizAnswerModal ref="answerQuiz" />
+    <QuizAnswerModal 
+      ref="answerQuiz" 
+      @close="load"
+    />
   </div>
 </template>
 <script>
 import { PhEye, PhCaretLeft, PhArticle } from '@phosphor-icons/vue';
 import cookie from '../../utils/cookie';
 import { RoleEnum } from '../../utils/Enum';
-import QuizAnswerModal from '../Quiz/QuizAnswerModal.vue';
+import QuizAnswerModal from '../quiz/QuizAnswerModal.vue'
 import QuizViewModal from './PatientQuizViewModal.vue'
 
 export default {
@@ -96,16 +99,27 @@ export default {
       const token = cookie.get('authToken')
       return cookie.getUserType(token)
     },
+    idUser() {
+      const token = cookie.get('authToken')
+      return cookie.getUserId(token)
+    },
     ...RoleEnum
   },
   mounted() {
     this.load();
+    this.fixScreenSize()
   },
   methods: {
     load() {
       const th = this;
-
       var idPatient = this.$router.currentRoute.value.params.id;
+
+      if(th.idUser!=idPatient){
+        alert('Você não tem permissão para acessar essa tela!')
+        th.$api.AuthController.logout();
+        window.history.back()
+        return
+      }
 
       th.$api.PatientController.getById(idPatient).then((data) => {
         th.patient = data.data.data
@@ -118,7 +132,7 @@ export default {
           th.quizzes = data.data.map((item) => {
             return { IdQuiz: item.IdQuiz, Finished: item.Finished };
           })
-
+          th.model.data = []
           for (var id in th.quizzes) {
 
             var result = await th.$api.QuizController.getById(th.quizzes[id].IdQuiz)
@@ -127,6 +141,16 @@ export default {
         }
 
       })
+    },
+    fixScreenSize () {
+      try{
+        const contentLoginScreen = document.body.getElementsByClassName('login-screen')
+        if(contentLoginScreen.length != 0){
+          contentLoginScreen[0].classList.remove('login-screen')
+        }
+      } finally {
+        //
+      }
     },
     loadQuiz(data, id) {
       const th = this
@@ -166,7 +190,7 @@ export default {
 
 .patient-quiz-content {
   padding: 3rem 1.5rem;
-  padding-top: 0;
+  padding-top: 2rem;
   width: 100%;
   display: flex;
   flex-direction: column;

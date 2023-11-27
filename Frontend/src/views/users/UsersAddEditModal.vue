@@ -58,21 +58,17 @@
             label="Telefone"
             label-color="primary"
             required
-            mask="(##) ##### - ####"
-            hint="Exemplo: (##) ##### - ####"
+            mask="(##) #####-####"
+            hint="Exemplo: (##) #####-####"
           />
-          <q-select
+          <input-primary
             v-model="model.IdCbo"
-            :options="optionsCbo"
-            outlined
-            label="Cbo"
+            label="Código Brasileiro de Ocupação (2002)"
             label-color="primary"
-            option-label="label"
-            option-value="value"
-            options-dark
-            class="select row q-pt-sm"
+            required
+            mask="######"
           />
-          <q-select
+          <!--<q-select
             v-model="model.IdService"
             :options="optionsServices"
             outlined
@@ -82,7 +78,7 @@
             option-value="value"
             options-dark
             class="select row q-pt-lg"
-          />
+          />-->
         </div>
       </q-form>
     </template>
@@ -134,7 +130,7 @@ export default {
         Name: '',
         Email: '',
         Password: '',
-        TypeUser: { label: 'Administrador', value: 'A' },
+        TypeUser: { label: null, value: null },
         Active: { label: 'Sim', value: 1 },
         Phone: '',
         IdCbo: '',
@@ -142,9 +138,7 @@ export default {
       },
       optionsTypeUser: [
         { label: 'Administrador', value: 'A' },
-        { label: 'Outro', value: 'O' },
-        { label: 'Psicologo', value: 'P' },
-        { label: 'Psiquiatra', value: 'C' },
+        { label: 'Usuário', value: 'U' },
       ],
       optionsActive: [
         { label: 'Sim', value: 1 },
@@ -158,19 +152,29 @@ export default {
     async openModal(current) {
       const th = this;
       th.show = true;
-        const responseService = await th.$api.ServicesController.getAll();
-        th.optionsServices = responseService.data.data.map((service) => ({
-          label: service.Desc,
-          value: service.IdServices,
-        }));
+       // const responseService = await th.$api.ServicesController.getAll();
+        //th.optionsServices = responseService.data.data.map((service) => ({
+        //  label: service.Desc,
+        //  value: service.IdServices,
+        //}));
 
-        const responseCbo = await th.$api.CboController.getAll();
-        th.optionsCbo = responseCbo.data.data.map((cbo) => ({
-          label: cbo.Desc,
-          value: cbo.IdCbo,
-        }));
+        //var responseCboExist = await th.$api.CboController.getAll();
+          var responseCbo = await th.$api.CboController.getAll();
+          th.optionsCbo = responseCbo.data.data
+  
+        //    for (let i = 0; i < th.optionsCbo.length; i++) {
+        //      const optioncbo = th.optionsCbo[i];
+        //      await th.$api.CboController.update(optioncbo);
+        //    }
+        //  }
+        //}
+
 
         if (current) {
+
+          var idCboCurrent = current?.IdCbo
+          var codeCbo = (th.optionsCbo.map((cbos) => { return {valid: idCboCurrent==cbos.IdCbo, Code: cbos.Code} })).find((result) => result.valid==true).Code
+
           const model = {
             ...current,
             TypeUser: th.optionsTypeUser.find(
@@ -179,10 +183,8 @@ export default {
             Active: th.optionsActive.find(
               (active) => active.value === current?.Active
             ),
-            IdCbo: th.optionsCbo.find((cbo) => cbo.value === current?.IdCbo),
-            IdService: th.optionsServices.find(
-              (service) => service.value === current?.IdServices
-            ),
+            IdCbo: codeCbo,
+            IdService: 1,
           };
 
           th.model = { ...model };
@@ -195,11 +197,11 @@ export default {
         Name: '',
         Email: '',
         Password: '',
-        TypeUser: 'A',
-        Active: 1,
+        TypeUser: null,
+        Active: undefined,
         Phone: '',
         IdCbo: '',
-        IdService: '',
+        IdService: 1,
       };
       this.$emit('close');
     },
@@ -209,8 +211,8 @@ export default {
         success = th.validations();
 
         if (success) {
-          const IdCbo = th.model.IdCbo.value;
-          const IdServices = th.model.IdService.value;
+          const IdCbo = parseInt(th.model.IdCbo);
+          const IdServices = 1;
           const TypeUser = th.model.TypeUser.value;
           const Active = th.model.Active.value;
           const Phone = th.model.Phone.replace(/\D/g, '');
@@ -227,12 +229,14 @@ export default {
               Phone,
             })
               .then(({ data }) => {
-                th.model = data.data;
-                return;
+                if(data.data==''){
+                  return 
+                }else{
+                  th.model = data.data;
+                  th.closeModal();
+                  return;
+                }
               })
-              .then(() => {
-                th.closeModal();
-              });
             return;
           }
 
@@ -245,46 +249,70 @@ export default {
             Phone,
           })
             .then(({ data }) => {
-              th.model = data.data;
-              return;
+              if(!data.message.includes('cadastrado com sucesso')){
+                return 
+              }else{
+                th.model = data.data;
+                th.closeModal();
+                return;
+              }
             })
-            .then(() => {
-              th.closeModal();
-            });
+            
         }
       });
     },
     validations() {
       const th = this;
-      if (!th.model.IdUser && th.model.Password.length < 6) {
+      
+      var validName;
+      try{
+        validName = (th.model.Name.match(/\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g))[0]==th.model.Name
+      }catch{
+        validName = false
+      }
+      
+      var validEmail;
+      try{
+        validEmail = (th.model.Email.match(/^([\w.]{3,})@([a-z]{1,}[.]){1,}([a-z]{1,})/g))[0]==th.model.Email
+      }catch{
+        validEmail = false
+      }
+      
+      var validCbo;
+      try{
+        validCbo = (String(th.model.IdCbo).match(/^[0-9]{3,6}/g))[0]==String(th.model.IdCbo)
+      }catch{
+        validCbo = false
+      }
+
+      if (th.model.Name.length < 3 || !validName) {
+        alert('O nome deve conter no mínimo 3 caracteres, ter sobrenome, e todas letras iniciais maiúsculas!');
+        return false;
+      }else if (th.model.Email.length < 3 || !validEmail) {
+        alert('O e-mail deve conter no mínimo 3 caracteres, conter "@", e dominio do email!');
+        return false;
+      }else if (!th.model.IdUser && th.model.Password.length < 6) {
         alert('A senha deve conter no mínimo 6 caracteres!');
         return false;
-      }
-
-      if (th.model.Name.length < 3) {
-        alert('O nome deve conter no mínimo 3 caracteres!');
+      }else if(!th.model.TypeUser.value){
+        alert('Selecione um tipo de usuário!');
+        return false;
+      }else if (!(th.model.Phone.length == 15)) {
+        alert('O telefone deve conter 11 digitos!');
+        return false;
+      }else if (!validCbo) {
+        alert('Digite um CBO válido!');
         return false;
       }
 
-      if (th.model.Phone.length < 14) {
-        alert('O telefone deve conter no mínimo 10 caracteres!');
-        return false;
-      }
 
-      if (th.model.Email.length < 3 && !th.model.Email.includes('@')) {
-        alert('O e-mail deve conter no mínimo 3 caracteres e conter @!');
-        return false;
-      }
 
-      if (th.model.IdCbo === '') {
-        alert('Selecione um CBO!');
-        return false;
-      }
 
-      if (th.model.IdService === '') {
-        alert('Selecione um Serviço!');
-        return false;
-      }
+
+      //if (th.model.IdService === '') {
+      //  alert('Selecione um Serviço!');
+      //  return false;
+      //}
       return true;
     },
   },

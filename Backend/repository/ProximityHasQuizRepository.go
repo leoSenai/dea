@@ -4,6 +4,7 @@ import (
 	"api/db"
 	"api/models"
 	"fmt"
+	"regexp"
 	"strings"
 )
 
@@ -95,9 +96,11 @@ func PutProximityQuiz(proximityHasQuiz models.ProximityHasQuiz) error {
 		return err
 	}
 
+	sampleRegexp := regexp.MustCompile(`,`)
+	proximityHasQuiz.Answers = sampleRegexp.ReplaceAllString(proximityHasQuiz.Answers, ";")
 	proximityHasQuiz.AnsweredIn = strings.Split(proximityHasQuiz.AnsweredIn, ".")[0]
 
-	result := conn.Where("proximidade_paciente_idpaciente = ? AND proximidade_pessoa_idpessoa = ? AND questionario_idquestionario = ?", proximityHasQuiz.ProximityIdPatient, proximityHasQuiz.ProximityIdPerson, proximityHasQuiz.IdQuiz).Updates(
+	result := conn.Omit("proximidade_paciente_idpaciente").Where("proximidade_pessoa_idpessoa = ? AND questionario_idquestionario = ?", proximityHasQuiz.ProximityIdPerson, proximityHasQuiz.IdQuiz).Updates(
 		models.ProximityHasQuiz{
 			Finished:   proximityHasQuiz.Finished,
 			Answers:    proximityHasQuiz.Answers,
@@ -119,7 +122,7 @@ func GetProximityQuizByQuizPersonID(idQuiz int64, idPerson int64) (alreadyExist 
 	conn, err := db.GetDB()
 
 	var count int64
-	row := conn.Table("proximidade_has_questionario").Where("proximidade_pessoa_idpessoa = ? AND questionario_idquestionario = ?", idPerson, idQuiz).Find(&proximityHasQuizzes)
+	row := conn.Table("proximidade_has_questionario").Omit("proximidade_paciente_idpaciente").Where("proximidade_pessoa_idpessoa = ? AND questionario_idquestionario = ?", idPerson, idQuiz).Find(&proximityHasQuizzes)
 	if row.Error != nil {
 		err = row.Error
 		return

@@ -40,23 +40,23 @@ func PostProximityQuiz(proximityHasQuiz models.ProximityHasQuiz) (err error) {
 
 	//proximityHasQuiz.AnsweredIn = time.Now().Local().String()
 
-	proximityHasQuiz, err = repository.PostProximityQuiz(proximityHasQuiz)
+	_, _ = repository.PostProximityQuiz(proximityHasQuiz)
 
 	return nil
 }
 
 func PutProximityQuiz(proximityHasQuiz models.ProximityHasQuiz) (err error) {
-	existingProximityHasQuiz, err := repository.GetProximityQuizByQuizPatientPersonIDs(proximityHasQuiz.IdQuiz, proximityHasQuiz.ProximityIdPatient, proximityHasQuiz.ProximityIdPerson)
+	alreadyExist, _, err := repository.GetProximityQuizByQuizPersonID(proximityHasQuiz.IdQuiz, proximityHasQuiz.ProximityIdPerson)
 	if err != nil {
 		return err
 	}
 
-	if existingProximityHasQuiz.IdQuiz != 0 {
+	if alreadyExist {
 		proximityHasQuiz.AnsweredIn = time.Now().Local().String()
 		err := repository.PutProximityQuiz(proximityHasQuiz)
 		return err
 	} else {
-		return fmt.Errorf("Relacionamento não cadastrado no banco de dados")
+		return fmt.Errorf("relacionamento nao cadastrado no banco de dados")
 	}
 }
 

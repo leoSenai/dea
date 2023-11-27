@@ -13,14 +13,25 @@ func VerifyResponseQuizById(idQuiz int64) (hasQuiz bool, err error) {
 		return
 	}
 
-	var count int64
-	row := conn.Table("paciente_has_questionario").Where("respondido_em IS NOT NULL AND questionario_idquestionario = ?", idQuiz).Count(&count)
-	if row.Error != nil {
-		err = row.Error
+	var countPatient int64
+	row1 := conn.Table("paciente_has_questionario").Where("respondido_em IS NOT NULL AND questionario_idquestionario = ?", idQuiz).Count(&countPatient)
+	if row1.Error != nil {
+		err = row1.Error
 		return
 	}
 
-	if count > 0 {
+	if countPatient > 0 {
+		hasQuiz = true
+	}
+
+	var countPerson int64
+	row2 := conn.Table("proximidade_has_questionario").Where("respondido_em IS NOT NULL AND questionario_idquestionario = ?", idQuiz).Count(&countPerson)
+	if row2.Error != nil {
+		err = row2.Error
+		return
+	}
+
+	if countPerson > 0 {
 		hasQuiz = true
 	}
 

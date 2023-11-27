@@ -17,7 +17,9 @@
             required
           />
         </div>
-        <div class="row q-mb-sm interval-field">
+        <div 
+          class="row q-mb-sm interval-field"
+        >
           <span>Intervalo de resposta: {{ model.Interval }}</span>
           <q-slider
             v-model="model.Interval"
@@ -77,6 +79,8 @@ import ModalPrimary from '../../components/ModalPrimary.vue';
 import InputPrimary from '../../components/InputPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import QuestionPrimary from '../../components/QuestionPrimary.vue';
+import { RoleEnum } from '../../utils/Enum';
+import cookie from '../../utils/cookie';
 
   export default {
     components: {
@@ -98,7 +102,19 @@ import QuestionPrimary from '../../components/QuestionPrimary.vue';
           Updated: null,
         },
         questions: [{ key: 0, Desc: '', IdQuestion: null, Answer: ''}],
+        RoleEnum
       };
+    },
+    computed: {
+      ...RoleEnum,
+      typeUser () {
+      const token = cookie.get('authToken')
+      return cookie.getUserType(token)
+      },
+      idUser() {
+        const token = cookie.get('authToken')
+        return cookie.getUserId(token)
+      },
     },
     methods: {
       openModal(current, person) {

@@ -33,6 +33,7 @@
               :disable="true"
               label="Telefone"
               format="phone"
+              mask="(##) #####-####"
               label-color="primary"
               required
             />

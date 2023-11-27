@@ -2,7 +2,7 @@
   <div class="home">
     <div class="home-options">
       <template
-        v-for="link in linksData"
+        v-for="link in linksMenu"
         :key="link.path"
       >
         <router-link
@@ -22,30 +22,58 @@
   </div>
 </template>
 <script>
-import { PhBookOpen, PhPerson, PhScooter } from '@phosphor-icons/vue';
+import { PhBookOpen, PhPerson, PhScooter, PhArticle, PhUsers, PhUserList } from '@phosphor-icons/vue';
 import Cookie from '../utils/cookie'
 
 export default {
-  components: { PhScooter, PhBookOpen, PhPerson },
-  props: {
-    links: {
-      type: Array,
-      required: true,
-    },
-  },
+  components: { PhScooter, PhBookOpen, PhPerson,PhArticle, PhUsers, PhUserList },
   data() {
     return {
       userType: '',
       linksData: []
     };
   },
+  computed: {
+    linksMenu(){
+      return this.getLinks()
+    } 
+  },
   mounted () {
     this.getData()
     this.fixScreenSize()
   },
   methods: {
+    getLinks(){
+      try{
+        const authToken = Cookie.get('authToken');
+        const typeUser = Cookie.getUserType(authToken);
+        const userId = Cookie.getUserId(authToken)
+
+        if(typeUser=='PA'){
+          return [
+            { path: '/paciente/'+userId+'/questionarios', name: 'Questionários', icon: PhArticle },
+          ]
+        }else if(typeUser=='A'){
+          return [
+            { path: '/usuarios', name: 'Usuários', icon: PhUsers },
+          ]
+        }else if(typeUser=='U'){
+          return [
+            { path: '/questionarios', name: 'Questionários', icon: PhArticle },
+            { path: '/pacientes', name: 'Pacientes', icon: PhUserList},
+          ]
+        }else if(typeUser=='PR'){
+          return [
+            { path: '/pessoas-proximas/'+userId+'/questionarios', name: 'Pacientes', icon: PhArticle },
+          ]
+        }
+
+      }catch{
+        console.log('Erro ao tentar obter links de redirecionamento...')
+      }
+    },
     goLinkMenu (linktag) {
-      this.$router.push('/' + linktag);
+      this.$router.push(linktag);
     },
     getData () {
       this.userType = Cookie.getUserType(Cookie.get('authToken'))

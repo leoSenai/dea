@@ -50,6 +50,7 @@
               v-model="model.Phone"
               label="Telefone"
               label-color="primary"
+              mask="(##) #####-####"
               required
             />
           </div>
@@ -58,6 +59,7 @@
               v-model="model.Cpf"
               label="CPF"
               label-color="primary"
+              mask="###.###.###-##"
               required
             />
           </div>
@@ -83,10 +85,14 @@
             />
           </div>
           <div class="col-12 col-lg-6 q-px-sm">
-            <input-primary
+            <q-select
               v-model="model.Sex"
+              :options="sex_options"
               label="Sexo"
+              option-label="label"
+              option-value="value"
               label-color="primary"
+              class="q-field select row select-input q-field__control"
               required
             />
           </div>
@@ -97,7 +103,6 @@
               v-model="model.DadName"
               label="Nome do pai"
               label-color="primary"
-              required
             />
           </div>
           <div class="col-12 col-lg-4 q-px-sm">
@@ -111,8 +116,8 @@
           <div class="col-12 col-lg-4 q-px-sm">
             <input-primary
               v-model="model.Cid10"
-              type="number"
-              label="CID"
+              mask="#########"
+              label="Código CID"
               label-color="primary"
               required
             />
@@ -123,6 +128,8 @@
             <input-primary
               v-model="model.Cns"
               label="CNS"
+              maxlength="15"
+              mask="###############"
               label-color="primary"
               required
             />
@@ -186,6 +193,12 @@ export default {
       patientExistToAdd: [],
       patientsVisible: [],
       patientsDisponible: [],
+      sex_options: [
+        {label: 'Masculino', value: 'M'},
+        {label: 'Feminino', value: 'F'},
+        {label: 'Outros', value: 'O'},
+        {label: 'Prefiro não dizer', value: 'P'}
+      ],
       show: false,
       aaa: 0,
       model: {
@@ -242,29 +255,78 @@ export default {
       const th = this;
 
       if(th.newPatient){ //criar novo paciente
-        if (
-          !th.model.Name ||
-          !th.model.Email ||
-          !th.model.Phone ||
-          !th.model.Address ||
-          !th.model.Cpf ||
-          !th.model.BornDate ||
-          !th.model.Sex ||
-          !th.model.DadName ||
-          !th.model.MomName ||
-          !th.model.Cid10 ||
-          !th.model.Cns ||
-          !th.model.NewBorn
-        ) {
-          alert('Certifique-se de preencher todos os campos.');
-          return;
+
+        var validPatientName;
+        try{
+          validPatientName = (th.model.Name.match(/\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g))[0]==th.model.Name
+        }catch{
+          validPatientName = false
         }
-        th.model.Cid10 = th.model.Cid10 ? parseInt(th.model.Cid10, 10) : 0;
+
+        var validEmail;
+        try{
+          validEmail = (th.model.Email.match(/^([\w.]{3,})@([a-z]{1,}[.]){1,}([a-z]{1,})/g))[0]==th.model.Email
+        }catch{
+          validEmail = false
+        }
+
+        var validMomName;
+        try{
+          validMomName = (th.model.MomName.match(/\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g))[0]==th.model.MomName
+        }catch{
+          validMomName = false
+        }
+
+        var date_field = new Date()
+        date_field.setTime(Date.parse(th.model.BornDate))
+        date_field.setDate(date_field.getDate()+1)
+        var date_now = new Date()
+        var dateIsValid = (date_field.getDate() <= date_now.getDate() || date_field.getTime() <= date_now.getTime())
+
+        if(!validPatientName || th.model.Name.length > 90){
+          alert('Preencha o nome do paciente corretamente!')
+          return
+        }else if(!validEmail){
+          alert('Preencha o e-mail do paciente corretamente!')
+          return
+        }else if(!th.model.Phone || !(th.model.Phone.length == 15) || th.model.Phone[5]!='9'){
+          alert('Preencha o telefone do paciente corretamente!')
+          return
+        }else if(!th.model.Address || th.model.Address.length > 255){
+          alert('Preencha o endereço do paciente corretamente!')
+          return
+        }else if(!th.model.Cpf || !(th.model.Cpf.length == 14)){
+          alert('Preencha o CPF do paciente corretamente!')
+          return
+        }else if(!th.model.BornDate || !dateIsValid){
+          alert('Preencha a data de nascimento do paciente corretamente, ou verifique se a data corresponde a um recém nascido!')
+          return
+        }else if(!th.model.Sex){
+          alert('Preencha o sexo do paciente corretamente!')
+          return
+        }else if (!validMomName || th.model.MomName.length > 80){
+          alert('Preencha o nome da mãe do paciente corretamente!')
+          return
+        }else if(!th.model.Cid10 || !(th.model.Cid10 <= 999999999)){
+          alert('Preencha o CID10 do paciente corretamente!')
+          return
+        }else if(!th.model.Cns || !(th.model.Cns.length <= 15) || isNaN(th.model.Cns)){
+          alert('Preencha o CNS do paciente corretamente!')
+          return
+        }else if(!th.model.NewBorn || (th.model.NewBorn=='Não' && (date_field.toDateString()==date_now.toDateString()))){
+          alert('Preencha o campo "Recem nascido" corretamente!')
+          return
+        }
+
+        th.model.Cid10 = th.model.Cid10 ? parseInt(th.model.Cid10) : 0;
         if (th.model.NewBorn === 'Sim') {
           th.model.NewBorn = 1;
         } else {
           th.model.NewBorn = 0;
         }
+
+        th.model.Sex = th.model.Sex.value
+
         th.$api.PatientController.insert({
           Patient: th.model, IdUser: cookie.getUserId(cookie.get('authToken'))
         })
@@ -285,6 +347,11 @@ export default {
           th.closeModal();
         });
       }else{ //adicionar existente
+
+        if(th.patientExistToAdd.length==0){
+          alert('Selecione um paciente para adicionar/vincular!')
+          return
+        }
         var patientId = th.patientExistToAdd.IdPatient
         var userId = cookie.getUserId(cookie.get('authToken'))
 
@@ -298,11 +365,75 @@ export default {
     updatePatient() {
       const th = this;
 
+      var validPatientName;
+      try{
+        validPatientName = (th.model.Name.match(/\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g))[0]==th.model.Name
+      }catch{
+        validPatientName = false
+      }
+
+      var validEmail;
+      try{
+        validEmail = (th.model.Email.match(/^([\w.]{3,})@([a-z]{1,}[.]){1,}([a-z]{1,})/g))[0]==th.model.Email
+      }catch{
+        validEmail = false
+      }
+
+      var validMomName;
+      try{
+        validMomName = (th.model.MomName.match(/\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g))[0]==th.model.MomName
+      }catch{
+        validMomName = false
+      }
+
+      var date_field = new Date()
+      date_field.setTime(Date.parse(th.model.BornDate))
+      date_field.setDate(date_field.getDate()+1)
+      var date_now = new Date()
+      var dateIsValid = (date_field.getDate() <= date_now.getDate() || date_field.getTime() <= date_now.getTime())
+
+      if(!validPatientName || th.model.Name.length > 90){
+        alert('Preencha o nome do paciente corretamente!')
+        return
+      }else if(!validEmail){
+        alert('Preencha o e-mail do paciente corretamente!')
+        return
+      }else if(!th.model.Phone || !(th.model.Phone.length == 15) || th.model.Phone[5]!='9'){
+        alert('Preencha o telefone do paciente corretamente!')
+        return
+      }else if(!th.model.Address || th.model.Address.length > 255){
+        alert('Preencha o endereço do paciente corretamente!')
+        return
+      }else if(!th.model.Cpf || !(th.model.Cpf.length == 14)){
+        alert('Preencha o CPF do paciente corretamente!')
+        return
+      }else if(!th.model.BornDate || !dateIsValid){
+        alert('Preencha a data de nascimento do paciente corretamente, ou verifique se a data corresponde a um recém nascido!')
+        return
+      }else if(!th.model.Sex){
+        alert('Preencha o sexo do paciente corretamente!')
+        return
+      }else if (!validMomName || th.model.MomName.length > 80){
+        alert('Preencha o nome da mãe do paciente corretamente!')
+        return
+      }else if(!th.model.Cid10 || !(th.model.Cid10 <= 999999999)){
+        alert('Preencha o CID10 do paciente corretamente!')
+        return
+      }else if(!th.model.Cns || !(th.model.Cns.length <= 15) || isNaN(th.model.Cns)){
+        alert('Preencha o CNS do paciente corretamente!')
+        return
+      }else if(!th.model.NewBorn || (th.model.NewBorn=='Não' && (date_field.toDateString()==date_now.toDateString()))){
+        alert('Preencha o campo "Recem nascido" corretamente!')
+        return
+      }
+
       if (th.model.NewBorn === 'Sim') {
         th.model.NewBorn = 1;
       } else {
         th.model.NewBorn = 0;
       }
+
+      th.model.Sex = th.model.Sex.value
 
       th.$api.PatientController.update({
         ...th.model,

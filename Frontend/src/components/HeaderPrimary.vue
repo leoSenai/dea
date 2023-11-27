@@ -51,7 +51,7 @@
       @blur="hideSidebar"
     >
       <template
-        v-for="link in links"
+        v-for="link in linksMenuSidebar"
         :key="link.path"
       >
         <router-link
@@ -72,37 +72,66 @@
 </template>
 
 <script>
-import { PhUserCircle, PhList, PhDoor, PhSignOut } from '@phosphor-icons/vue';
+import { PhUserCircle, PhList, PhDoor, PhSignOut, PhArticle, PhUsers, PhUserList } from '@phosphor-icons/vue';
 import ButtonPrimary from '../components/ButtonPrimary.vue';
 import cookie from '../utils/cookie';
 
 export default {
   components: {
     PhUserCircle,
+    PhUsers,
+    PhUserList,
+    PhArticle,
     PhList,
     ButtonPrimary,
     PhDoor,
     PhSignOut
   },
-  props: {
-    links: {
-      type: Array,
-      required: true,
-    },
-  },
   data() {
     return {
       LogoSrc: '/logo.png',
       isSidebarActive: false,
-      showExitDropDown: false
+      showExitDropDown: false,
     };
   },
   computed: {
     username() {
       return cookie.getAuthUser(cookie.get('authToken'));
     },
+    linksMenuSidebar(){
+      return this.getLinks()
+    }
   },
   methods: {
+    getLinks(){
+      try{
+        const authToken = cookie.get('authToken');
+        const typeUser = cookie.getUserType(authToken);
+        const userId = cookie.getUserId(authToken)
+
+        if(typeUser=='PA'){
+          return [
+            { path: '/paciente/'+userId+'/questionarios', name: 'Questionários', icon: PhArticle },
+          ]
+        }else if(typeUser=='A'){
+          return [
+            { path: '/usuarios', name: 'Usuários', icon: PhUsers },
+          ]
+        }else if(typeUser=='U'){
+          return [
+            { path: '/questionarios', name: 'Questionários', icon: PhArticle },
+            { path: '/pacientes', name: 'Pacientes', icon: PhUserList},
+          ]
+        }else if(typeUser=='PR'){
+          return [
+            { path: '/pessoas-proximas/'+userId+'/questionarios', name: 'Pacientes', icon: PhArticle },
+          ]
+        }
+
+      }catch{
+        console('Erro ao tentar obter links de redirecionamento...')
+      }
+    },
     toggleSidebar() {
       this.isSidebarActive = !this.isSidebarActive;
     },

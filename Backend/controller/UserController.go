@@ -98,7 +98,7 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 
 		log.Printf("Cannot do Post: %s", err.Error())
 
-		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível cadastrar o usuário, houve um erro interno no sistema.", "")
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, err.Error(), "")
 
 		return
 	}

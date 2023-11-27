@@ -37,17 +37,6 @@ export const routes = [
       header: { links },
       default: { links }
     },
-    beforeEnter () {
-      const authToken = Cookie.get('authToken');
-      const typeUser = Cookie.getUserType(authToken);
-      const userId = Cookie.getUserId(authToken)
-      if (typeUser === RoleEnum.Patient) {
-        return { path: `/paciente/${userId}/questionarios` };
-      } else if (typeUser === RoleEnum.Person) {
-        return { path: `/pessoa-proxima/${userId}/pacientes` };
-      }
-      return true;
-    }
   },
   {
     path: '/paciente',
@@ -117,11 +106,13 @@ export const routes = [
     },
     props: {
       header: { links },
-      beforeEnter () {
+      beforeEnter (next) {
         const authToken = Cookie.get('authToken');
         const typeUser = Cookie.getUserType(authToken);
-        if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User) {
+        if (typeUser !== RoleEnum.Administrator && typeUser !== RoleEnum.User && typeUser !== RoleEnum.Patient) {
           return { path: '/' };
+        }else if(typeUser == RoleEnum.Patient){
+          next()
         }
         return true
       }

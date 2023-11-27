@@ -5,4 +5,7 @@ export default {
     getAll() {
       return axios.get(this.url + 'get-all')
     },
+    update(data) {
+      return axios.put(this.url + 'update', data)
+    },
 }

@@ -64,7 +64,7 @@ export default {
           ]
         }else if(typeUser=='PR'){
           return [
-            { path: '/pessoas-proximas/'+userId+'/questionarios', name: 'Pacientes', icon: PhArticle },
+            { path: '/pessoas-proximas/'+userId+'/questionarios', name: 'Questionários', icon: PhArticle },
           ]
         }
 

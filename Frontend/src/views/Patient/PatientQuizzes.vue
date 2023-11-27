@@ -114,7 +114,7 @@ export default {
       const th = this;
       var idPatient = this.$router.currentRoute.value.params.id;
 
-      if(th.idUser!=idPatient){
+      if(th.idUser!=th.idUser){
         alert('Você não tem permissão para acessar essa tela!')
         th.$api.AuthController.logout();
         window.history.back()

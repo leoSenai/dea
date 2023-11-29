@@ -35,7 +35,7 @@
               required
             />
           </div>
-          <div class="col-12 col-md-6 q-px-sm">
+          <div class="col-12 col-lg-6 q-px-sm">
             <input-primary
               v-model="model.Email"
               label="E-mail"
@@ -48,7 +48,7 @@
           <div class="col-12 col-lg-6 q-px-sm">
             <input-primary
               v-model="model.Phone"
-              label="Telefone"
+              label="Celular"
               label-color="primary"
               mask="(##) #####-####"
               required
@@ -179,6 +179,7 @@ import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import SelectPrimary from '../../components/SelectPrimary.vue';
 import cookie from '../../utils/cookie';
 import CPF from '../../utils/cpf/validator.js'
+import Toastify from 'toastify-js';
 
 export default {
   components: {
@@ -213,7 +214,7 @@ export default {
         Sex: '',
         DadName: '',
         MomName: '',
-        Cid10: 0,
+        Cid10: '',
         Cns: '',
         NewBorn: '',
       },
@@ -323,7 +324,7 @@ export default {
           alert('Preencha o e-mail do paciente corretamente!')
           return
         }else if(!th.model.Phone || !(th.model.Phone.length == 15) || th.model.Phone[5]!='9'){
-          alert('Preencha o telefone do paciente corretamente!')
+          alert('Preencha o celular do paciente corretamente!')
           return
         }else if(!th.model.Address || th.model.Address.length > 255){
           alert('Preencha o endereço do paciente corretamente!')
@@ -361,27 +362,61 @@ export default {
           th.model.NewBorn = 0;
         }
 
+        var sexModel = th.model.Sex
         th.model.Sex = th.model.Sex.value
 
-        th.$api.PatientController.insert({
-          Patient: th.model, IdUser: cookie.getUserId(cookie.get('authToken'))
-        })
-        .then(({ data }) => {
-          th.model = data.data;
-          if (th.model.IdPatient) {
-            th.patients.forEach((patient) => {
-              const patientDto = {
-                IdPatient: th.model.IdPatient,
-                Desc: patient.Desc.trim(),
-              };
-              th.$api.PatientController.insert(patientDto);
+        th.$api.PatientController.getByDoc(th.model.Cpf).then(({ data }) => {
+          if (data.data!='' && data.data.Cpf!=th.model.Cpf || data.data=='') {
+            th.$api.PatientController.insert({
+              Patient: th.model, IdUser: cookie.getUserId(cookie.get('authToken'))
+            })
+            .then(({ data }) => {
+              th.model = data.data;
+              if (th.model.IdPatient) {
+                th.patients.forEach((patient) => {
+                  const patientDto = {
+                    IdPatient: th.model.IdPatient,
+                    Desc: patient.Desc.trim(),
+                  };
+                  th.$api.PatientController.insert(patientDto);
+                });
+              }
+              return;
+            })
+            .then(() => {
+              th.closeModal();
             });
+          }else{
+            if (th.model.NewBorn === 1) {
+              th.model.NewBorn = 'Sim';
+            } else {
+              th.model.NewBorn = 'Não';
+            }
+            th.model.Sex = sexModel
+            Toastify({
+                avatar: '/x-circle-fill.svg',
+                text: 'O CPF inserido já está cadastrado!',
+                duration: 3000,
+                gravity: 'top',
+                position: 'right',
+                style: {
+                  background:
+                    'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
+                  color: 'white',
+                  boxShadow:
+                    '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '.25rem',
+                },
+                offset: {
+                  x: 0,
+                  y: 65,
+                },
+              }).showToast();
           }
-          return;
         })
-        .then(() => {
-          th.closeModal();
-        });
+
       }else{ //adicionar existente
 
         if(th.patientExistToAdd.length==0){
@@ -452,7 +487,7 @@ export default {
         alert('Preencha o e-mail do paciente corretamente!')
         return
       }else if(!th.model.Phone || !(th.model.Phone.length == 15) || th.model.Phone[5]!='9'){
-        alert('Preencha o telefone do paciente corretamente!')
+        alert('Preencha o celular do paciente corretamente!')
         return
       }else if(!th.model.Address || th.model.Address.length > 255){
         alert('Preencha o endereço do paciente corretamente!')
@@ -489,27 +524,60 @@ export default {
         th.model.NewBorn = 0;
       }
 
+      var sexModel = th.model.Sex
       th.model.Sex = th.model.Sex.value
 
-      th.$api.PatientController.update({
-        ...th.model,
-      })
-        .then(({ data }) => {
-          th.model = data.data;
-          if (th.model.IdPatient) {
-            th.patients.forEach((patient) => {
-              const patientDto = {
-                IdPatient: th.model.IdPatient,
-                Desc: patient.Desc.trim(),
-              };
-              th.$api.PatientController.insert(patientDto);
+      th.$api.PatientController.getByDoc(th.model.Cpf).then(({ data }) => {
+          if ((data.data!='' && data.data.IdPatient==th.model.IdPatient) || (data.data=='')) {
+            th.$api.PatientController.update({
+              ...th.model,
+            })
+            .then(({ data }) => {
+              th.model = data.data;
+              if (th.model.IdPatient) {
+                th.patients.forEach((patient) => {
+                  const patientDto = {
+                    IdPatient: th.model.IdPatient,
+                    Desc: patient.Desc.trim(),
+                  };
+                  th.$api.PatientController.insert(patientDto);
+                });
+              }
+              return;
+            })
+            .then(() => {
+              th.closeModal();
             });
+          }else{
+            if (th.model.NewBorn === 1) {
+              th.model.NewBorn = 'Sim';
+            } else {
+              th.model.NewBorn = 'Não';
+            }
+            th.model.Sex = sexModel
+            Toastify({
+                avatar: '/x-circle-fill.svg',
+                text: 'O CPF inserido já está cadastrado!',
+                duration: 3000,
+                gravity: 'top',
+                position: 'right',
+                style: {
+                  background:
+                    'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
+                  color: 'white',
+                  boxShadow:
+                    '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '.25rem',
+                },
+                offset: {
+                  x: 0,
+                  y: 65,
+                },
+              }).showToast();
           }
-          return;
         })
-        .then(() => {
-          th.closeModal();
-        });
     },
     closeModal() {
       this.show = false;

@@ -55,7 +55,7 @@
           />
           <input-primary
             v-model="model.Phone"
-            label="Telefone"
+            label="Celular"
             label-color="primary"
             required
             mask="(##) #####-####"
@@ -298,7 +298,7 @@ export default {
         alert('Selecione um tipo de usuário!');
         return false;
       }else if (!(th.model.Phone.length == 15) || th.model.Phone[5]!='9') {
-        alert('O telefone deve conter 11 digitos e um dígito "9" após o DDD!');
+        alert('O celular deve conter 11 digitos e um dígito "9" após o DDD!');
         return false;
       }else if (!validCbo) {
         alert('Digite um CBO válido!');

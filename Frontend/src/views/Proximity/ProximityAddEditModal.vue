@@ -28,7 +28,7 @@
           <div class="col q-ml-sm">
             <input-primary
               v-model="model.Phone"
-              label="Telefone"
+              label="Celular"
               format="phone"
               mask="(##) #####-####"
               hint="Exemplo: (##) #####-####"
@@ -223,7 +223,7 @@ export default {
           alert('Informe um e-mail válido!')
           return
         }else if(!(th.model.Phone.length == 15) || th.model.Phone[5]!='9'){
-          alert('Informe um telefone válido!')
+          alert('Informe um celular válido!')
           return
         }else if(!th.model.BornDate || !dateIsValid){
           alert('Preencha a data de nascimento corretamente!')
@@ -324,7 +324,7 @@ export default {
           alert('Informe um e-mail válido!')
           return
         }else if(!(th.model.Phone.length == 15) || th.model.Phone[5]!='9'){
-          alert('Informe um telefone válido!')
+          alert('Informe um celular válido!')
           return
         }else if(!th.model.BornDate || !dateIsValid){
           alert('Preencha a data de nascimento corretamente!')

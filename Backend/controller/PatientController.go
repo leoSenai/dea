@@ -177,3 +177,29 @@ func ResetPasswordPatient(w http.ResponseWriter, r *http.Request) {
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Senha do paciente redefinida com sucesso.", "")
 }
+
+func GetPatientByDocNumber(w http.ResponseWriter, r *http.Request) {
+
+	docNumber := chi.URLParam(r, "docNumber")
+
+	patient, err := service.GetPatientByDocNumber(docNumber)
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, err.Error(), "")
+		return
+	}
+
+	if patient.IdPatient == 0 {
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Paciente não encontrada", "")
+		return
+	}
+
+	var patientDto dtos.PatientDTO = dtos.PatientDTO{
+		IdPatient: patient.IdPatient,
+		Name:      patient.Name,
+		BornDate:  patient.BornDate,
+		Cpf:       patient.Cpf,
+		Email:     patient.Email,
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Pessoa encontrada com sucesso", patientDto)
+}

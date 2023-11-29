@@ -61,7 +61,7 @@
           <input-primary
             v-model="model.Phone"
             :disable="true"
-            label="Telefone"
+            label="Celular"
             label-color="primary"
             required
             mask="(##) #####-####"

@@ -103,3 +103,18 @@ func PutPatient(patientPut models.Patient) (patientBack models.Patient, err erro
 
 	return
 }
+
+func GetPatientByDocNumber(docNumber string) (patient models.Patient, err error) {
+	conn, err := db.GetDB()
+	if err != nil {
+		return patient, err
+	}
+
+	conn.Where("cpf = ?", docNumber).First(&patient)
+
+	if patient.IdPatient == 0 {
+		patient = models.Patient{}
+	}
+
+	return patient, nil
+}

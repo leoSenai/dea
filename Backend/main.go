@@ -64,6 +64,7 @@ func main() {
 	r.Post("/patient/insert", utils.VerifyToken(controller.PostPatient))
 	r.Put("/patient/update", utils.VerifyToken(controller.PutPatient))
 	r.Put("/patient/reset-password", utils.VerifyToken(controller.ResetPasswordPatient))
+	r.Get("/patient/get-by-doc/{docNumber}", utils.VerifyToken(controller.GetPatientByDocNumber))
 
 	r.Get("/doctor/get-by-id/{id}", utils.VerifyToken(controller.GetDoctorById))
 	r.Get("/doctor/get-all", utils.VerifyToken(controller.GetAllDoctor))

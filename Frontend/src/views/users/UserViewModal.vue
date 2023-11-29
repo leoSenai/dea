@@ -4,7 +4,7 @@
     @close="closeModal"
   >
     <template #modal-title>
-      Visualizar Usuário
+      Visualizar Médico
     </template>
     <template #modal-content>
       <q-form ref="form">
@@ -134,7 +134,7 @@
         },
         optionsTypeUser: [
         { label: 'Administrador', value: 'A' },
-        { label: 'Usuário', value: 'U' },
+        { label: 'Médico', value: 'U' },
       ],
         optionsActive: [
           { label: 'Sim', value: 1 },

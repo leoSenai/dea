@@ -61,7 +61,7 @@ func GetAllPatientsByUserID(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
 		log.Printf("Cannot parse ID: %v", err.Error())
-		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi possível coletar o id do usuário na requisição.", "")
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi possível coletar o id do médico na requisição.", "")
 		return
 	}
 

@@ -135,9 +135,7 @@ export default {
         }
         case RoleEnum.Administrator: {
           return [
-            { path: '/usuarios', name: 'Usuários', icon: PhUsers },
-            { path: '/questionarios', name: 'Questionários', icon: PhArticle },
-            { path: '/pacientes', name: 'Pacientes', icon: PhUserList },
+            { path: '/usuarios', name: 'Médicos', icon: PhUsers },
           ];
         }
         case RoleEnum.User: {
@@ -152,11 +150,6 @@ export default {
               path: '/pessoas-proximas/' + userId + '/questionarios',
               name: 'Questionários',
               icon: PhArticle,
-            },
-            {
-              path: '/pessoa-proxima/'+ userId +'/pacientes',
-              name: 'Meus filiados',
-              icon: PhUserList,
             },
             
           ];

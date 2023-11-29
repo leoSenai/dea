@@ -21,7 +21,7 @@ import { PhArticle } from '@phosphor-icons/vue';
 import { RoleEnum } from '../utils/Enum';
 
 export const links = [
-  { path: '/usuarios', name: 'Usuários', icon: PhUsers },
+  { path: '/usuarios', name: 'Médicos', icon: PhUsers },
   { path: '/questionarios', name: 'Questionários', icon: PhArticle },
   { path: '/pacientes', name: 'Pacientes', icon: PhUserList},
 ]

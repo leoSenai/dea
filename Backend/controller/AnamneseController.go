@@ -43,7 +43,7 @@ func GetAnamneseByIdUserPatient(w http.ResponseWriter, r *http.Request) {
 	idUser, err := strconv.Atoi(idUserParam)
 	if err != nil {
 		log.Printf("Cannot parse ID User: %s", err.Error())
-		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi especificado o id do usuário procurado.", "")
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi especificado o id do médico procurado.", "")
 
 		return
 	}
@@ -153,7 +153,7 @@ func GetReport(w http.ResponseWriter, r *http.Request) {
 	id_user, err := strconv.Atoi(idUserParam)
 	if err != nil {
 		log.Printf("Cannot parse ID User: %s", err.Error())
-		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi especificado o id do usuário no corpo de requisição.", "")
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi especificado o id do médico no corpo de requisição.", "")
 		return
 	}
 	id_patient, err := strconv.Atoi(idPatientParam)

@@ -18,7 +18,7 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
 		log.Printf("Cannot parse ID: %s", err.Error())
-		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi especificado o id do usuário procurado.", "")
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi especificado o id do médico procurado.", "")
 
 		return
 	}
@@ -27,11 +27,11 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("Cannot find Get: %s", err.Error())
 
-		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível encontrar usuário, houve um erro interno no servidor.", "")
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível encontrar o médico, houve um erro interno no servidor.", "")
 
 		return
 	} else if user.IdUser == 0 {
-		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não foi possível encontrar o usuário.", "")
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não foi possível encontrar o médico.", "")
 		return
 	}
 
@@ -43,7 +43,7 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 		Active:   user.Active,
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Usuário encontrado com sucesso!", userDtoSend)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Médico encontrado com sucesso!", userDtoSend)
 }
 
 func GetAllUser(w http.ResponseWriter, _ *http.Request) {
@@ -55,7 +55,7 @@ func GetAllUser(w http.ResponseWriter, _ *http.Request) {
 
 		return
 	} else if len(users) == 0 {
-		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não há usuários cadastrados na base de dados.", "")
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não há médicos cadastrados na base de dados.", "")
 		return
 	}
 
@@ -78,7 +78,7 @@ func GetAllUser(w http.ResponseWriter, _ *http.Request) {
 
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Usuários encontrados!", usersDto)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Médicos encontrados!", usersDto)
 }
 
 func PostUser(w http.ResponseWriter, r *http.Request) {
@@ -88,7 +88,7 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("Cannot do Post: %s", err.Error())
 
-		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Houve algum erro ao tentar obter as informações para cadastro do usuário.", "")
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Houve algum erro ao tentar obter as informações para cadastro do médico.", "")
 
 		return
 	}
@@ -103,7 +103,7 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Usuário cadastrado com sucesso!", "")
+	utils.ReturnResponseJSON(w, http.StatusOK, "Médico cadastrado com sucesso!", "")
 }
 
 func PutUser(w http.ResponseWriter, r *http.Request) {
@@ -112,7 +112,7 @@ func PutUser(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		log.Printf("Cannot do Put: %s", err.Error())
-		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Houve algum erro ao tentar obter as informações de atualização do usuário.", "")
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Houve algum erro ao tentar obter as informações de atualização do médico.", "")
 
 		return
 	}
@@ -122,12 +122,12 @@ func PutUser(w http.ResponseWriter, r *http.Request) {
 
 		log.Printf("Cannot do Put: %s", err.Error())
 
-		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível atualizar o usuário, houve um erro interno no sistema.", "")
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, "Não foi possível atualizar o médico, houve um erro interno no sistema.", "")
 
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Informações do usuário atualizadas com sucesso!", "")
+	utils.ReturnResponseJSON(w, http.StatusOK, "Informações do médico atualizadas com sucesso!", "")
 }
 
 func ResetPasswordUser(w http.ResponseWriter, r *http.Request) {

@@ -33,6 +33,7 @@
     "@vitejs/plugin-vue": "^4.1.0",
     "eslint-plugin-storybook": "^0.6.12",
     "eslint-plugin-vue": "^9.14.1",
+    "gerador-validador-cpf": "^5.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "storybook": "^7.0.18",

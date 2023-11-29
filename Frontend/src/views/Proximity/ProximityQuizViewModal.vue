@@ -25,7 +25,7 @@
             v-model="model.Interval"
             :disable="true"
             :min="3"
-            :max="7"
+            :max="5"
             :step="1"
             label
             color="primary"

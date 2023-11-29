@@ -113,6 +113,8 @@ import ModalPrimary from '../../components/ModalPrimary.vue';
 import InputPrimary from '../../components/InputPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import SelectPrimary from '../../components/SelectPrimary.vue';
+import CPF from '../../utils/cpf/validator.js'
+import Toastify from 'toastify-js';
 
 export default {
   components: {
@@ -203,6 +205,13 @@ export default {
         var validDocNumber;
         try{
           validDocNumber = th.model.DocNumber.match(/(^\d{3}.\d{3}.\d{3}-\d{2})|(^\d{2}.\d{3}.\d{3}[/]\d{4}-\d{2})/g)[0]==th.model.DocNumber
+          if(th.model.DocType=='CPF'){
+            if(th.model.DocNumber && (new CPF().validate(th.model.DocNumber))){
+              validDocNumber = true
+            }else{
+              validDocNumber = false
+            }
+          }
         }catch{
           validDocNumber = false
         }
@@ -234,7 +243,29 @@ export default {
               th.$api.PersonController.insert({ ...th.model, IdPatient: +th.IdPatient}).then(() => {
                 th.closeModal()
               })
-            } else {
+            } else if(data.data.Name != th.model.Name){
+              Toastify({
+                avatar: '/x-circle-fill.svg',
+                text: 'O CPF inserido já está cadastrado!',
+                duration: 3000,
+                gravity: 'top',
+                position: 'right',
+                style: {
+                  background:
+                    'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
+                  color: 'white',
+                  boxShadow:
+                    '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '.25rem',
+                },
+                offset: {
+                  x: 0,
+                  y: 65,
+                },
+              }).showToast();
+            }else{
               th.updatePerson();
             }
           })
@@ -273,6 +304,15 @@ export default {
         var validDocNumber;
         try{
           validDocNumber = th.model.DocNumber.match(/(^\d{3}.\d{3}.\d{3}-\d{2})|(^\d{2}.\d{3}.\d{3}[/]\d{4}-\d{2})/g)[0]==th.model.DocNumber
+
+          if(th.model.DocType=='CPF'){
+            if(th.model.DocNumber && (new CPF().validate(th.model.DocNumber))){
+              validDocNumber = true
+            }else{
+              validDocNumber = false
+            }
+          }
+
         }catch{
           validDocNumber = false
         }
@@ -299,8 +339,35 @@ export default {
 
         if(success){
           const modelPerson = th.model
-          th.$api.PersonController.update({ ...modelPerson, IdPatient: +th.IdPatient}).then(() => {
-            th.closeModal()
+
+          th.$api.PersonController.getByDoc(th.model.DocNumber).then(({ data }) => {
+            if (data.data && data.data.IdPerson==th.model.IdPerson) {
+              th.$api.PersonController.update({ ...modelPerson, IdPatient: +th.IdPatient}).then(() => {
+                th.closeModal()
+              })
+            } else if(data.data.Name != th.model.Name){
+              Toastify({
+                avatar: '/x-circle-fill.svg',
+                text: 'O CPF inserido já está cadastrado!',
+                duration: 3000,
+                gravity: 'top',
+                position: 'right',
+                style: {
+                  background:
+                    'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
+                  color: 'white',
+                  boxShadow:
+                    '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '.25rem',
+                },
+                offset: {
+                  x: 0,
+                  y: 65,
+                },
+              }).showToast();
+            }
           })
         }else{
           alert('Preencha todos os campos!')

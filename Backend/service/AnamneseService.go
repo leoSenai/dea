@@ -414,7 +414,7 @@ func GetReport(anamnese models.Anamnese, grau int) (anamnese_file http.File, err
 	pdf.Cell(&gopdf.Rect{
 		W: 180,
 		H: 60,
-	}, "Assinatura do Doutor")
+	}, "Assinatura do "+user.Name)
 
 	indicativo_desc := ""
 

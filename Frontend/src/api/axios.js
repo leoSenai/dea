@@ -46,7 +46,8 @@ axios.interceptors.response.use((response) => {
 }, ({ response }) => {
   if(response.data.message.includes('Pessoa não encontrada') || 
     response.data.message.includes('Não existem relacionamento com este ID de Pessoa') ||
-    response.data.message.includes('Não existem relacionamento com este ID de Paciente')){
+    response.data.message.includes('Não existem relacionamento com este ID de Paciente') ||
+    response.data.message.includes('Não há proximidades cadastradas a este paciente')){
     //do nothing
   }else{
     Toastify({

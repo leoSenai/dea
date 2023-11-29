@@ -178,6 +178,7 @@ import InputPrimary from '../../components/InputPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import SelectPrimary from '../../components/SelectPrimary.vue';
 import cookie from '../../utils/cookie';
+import CPF from '../../utils/cpf/validator.js'
 
 export default {
   components: {
@@ -309,6 +310,12 @@ export default {
         var date_now = new Date()
         var dateIsValid = (date_field.getDate() <= date_now.getDate() || date_field.getTime() <= date_now.getTime())
 
+        var validCpf = false
+
+        if(th.model.Cpf && (new CPF().validate(th.model.Cpf))){
+          validCpf = true
+        }
+
         if(!validPatientName || th.model.Name.length > 90){
           alert('Preencha o nome do paciente corretamente!')
           return
@@ -321,7 +328,7 @@ export default {
         }else if(!th.model.Address || th.model.Address.length > 255){
           alert('Preencha o endereço do paciente corretamente!')
           return
-        }else if(!th.model.Cpf || !(th.model.Cpf.length == 14)){
+        }else if(!th.model.Cpf || !(th.model.Cpf.length == 14) || !validCpf){
           alert('Preencha o CPF do paciente corretamente!')
           return
         }else if(!th.model.BornDate || !dateIsValid){
@@ -339,7 +346,7 @@ export default {
         }else if(!th.model.Cid10 || !(th.model.Cid10 <= 999999999)){
           alert('Preencha o CID10 do paciente corretamente!')
           return
-        }else if(!th.model.Cns || !(th.model.Cns.length <= 15) || isNaN(th.model.Cns)){
+        }else if(!th.model.Cns || !(th.model.Cns.length == 15) || isNaN(th.model.Cns)){
           alert('Preencha o CNS do paciente corretamente!')
           return
         }else if(!th.model.NewBorn || (th.model.NewBorn=='Não' && (date_field.toDateString()==date_now.toDateString())) || (th.model.NewBorn=='Sim' && (date_field.toDateString()!=date_now.toDateString()))){
@@ -432,6 +439,12 @@ export default {
       var date_now = new Date()
       var dateIsValid = (date_field.getDate() <= date_now.getDate() || date_field.getTime() <= date_now.getTime())
 
+      var validCpf = false
+
+        if(th.model.Cpf && (new CPF().validate(th.model.Cpf))){
+          validCpf = true
+        }
+
       if(!validPatientName || th.model.Name.length > 90){
         alert('Preencha o nome do paciente corretamente!')
         return
@@ -444,7 +457,7 @@ export default {
       }else if(!th.model.Address || th.model.Address.length > 255){
         alert('Preencha o endereço do paciente corretamente!')
         return
-      }else if(!th.model.Cpf || !(th.model.Cpf.length == 14)){
+      }else if(!th.model.Cpf || !(th.model.Cpf.length == 14) || !validCpf){
         alert('Preencha o CPF do paciente corretamente!')
         return
       }else if(!th.model.BornDate || !dateIsValid){
@@ -462,7 +475,7 @@ export default {
       }else if(!th.model.Cid10 || !(th.model.Cid10 <= 999999999)){
         alert('Preencha o CID10 do paciente corretamente!')
         return
-      }else if(!th.model.Cns || !(th.model.Cns.length <= 15) || isNaN(th.model.Cns)){
+      }else if(!th.model.Cns || !(th.model.Cns.length == 15) || isNaN(th.model.Cns)){
         alert('Preencha o CNS do paciente corretamente!')
         return
       }else if(!th.model.NewBorn || (th.model.NewBorn=='Não' && (date_field.toDateString()==date_now.toDateString())) || (th.model.NewBorn=='Sim' && (date_field.toDateString()!=date_now.toDateString()))){

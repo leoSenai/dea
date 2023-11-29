@@ -21,7 +21,7 @@
           <q-slider
             v-model="model.Interval"
             :min="3"
-            :max="7"
+            :max="5"
             :step="1"
             label
             color="primary"

@@ -84,6 +84,10 @@
       ref="addEdit"
       @close="load" 
     />
+    <PatientConfirmLaudo
+      ref="confirmModal"
+      @close="load"
+    />
   </div>
 </template>
 <script>
@@ -91,6 +95,7 @@ import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import { PhCaretLeft, PhCaretRight, PhPencil } from '@phosphor-icons/vue';
 import cookie from '../../utils/cookie';
 import PatientsAddEditModal from './PatientsAddEditModal.vue';
+import PatientConfirmLaudo from './PatientConfirmLaudo.vue'
 
 export default {
   components: {
@@ -99,6 +104,7 @@ export default {
     PhCaretLeft,
     PhCaretRight,
     PatientsAddEditModal,
+    PatientConfirmLaudo,
 },
   data() {
     return {
@@ -108,6 +114,7 @@ export default {
       opcaoNewBorn: '',
       opcaoAtivo: '',
       editOrSave: 'Editar',
+      grau: -1,
       model: {
         IdPatient: null,
         Name: '',
@@ -175,8 +182,13 @@ export default {
         th.model.NewBorn = 0;
       }
     },
-    gerarLaudo() {
-      //const th = this
+    async gerarLaudo() {
+      const th = this
+      if(th.analiseConclusiva){
+        th.$refs.confirmModal.openModal(th.model, th.anamneseModel)
+      }else{
+        alert('Para gerar o laudo, a anamnese precisa ser conclusiva!')
+      }
     },
     changeAtivoValue() {
       const th = this;

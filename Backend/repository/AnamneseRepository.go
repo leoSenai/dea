@@ -64,7 +64,7 @@ func PutAnamnese(anamnesePut models.Anamnese) (anamneseBack models.Anamnese, err
 	anamneseBack = anamnesePut
 
 	if anamnesePut.IdAnamnese != 0 {
-		row := conn.Table("anamnese").Where("idanamnese = ?", anamnesePut.IdAnamnese).Updates(&anamneseBack)
+		row := conn.Table("anamnese").Select("indicativo").Where("idanamnese = ?", anamnesePut.IdAnamnese).Updates(&anamneseBack)
 		log.Printf("row: %v", row)
 		conn.First(&anamneseBack, anamnesePut.IdAnamnese)
 	}

@@ -17,5 +17,8 @@ export default {
   },
   update(data) {
     return axios.put(appUrl + 'update', data)
-  }
+  },
+  getLaudo(idUser, idPatient, grau){
+    return axios.get(appUrl + 'report/'+idUser+'/'+idPatient+'/'+grau)
+  },
 }

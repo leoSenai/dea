@@ -96,6 +96,7 @@ import { PhCaretLeft, PhCaretRight, PhPencil } from '@phosphor-icons/vue';
 import cookie from '../../utils/cookie';
 import PatientsAddEditModal from './PatientsAddEditModal.vue';
 import PatientConfirmLaudo from './PatientConfirmLaudo.vue'
+import Toastify from 'toastify-js';
 
 export default {
   components: {
@@ -182,13 +183,40 @@ export default {
         th.model.NewBorn = 0;
       }
     },
-    async gerarLaudo() {
+    gerarLaudo() {
       const th = this
+
+    if(th.anamneseModel.Notes!=undefined && th.anamneseModel.Notes!=null && th.anamneseModel.Notes!='' && th.anamneseModel.Notes != '  ' && th.anamneseModel.Notes.length > 10){
       if(th.analiseConclusiva){
         th.$refs.confirmModal.openModal(th.model, th.anamneseModel)
       }else{
         alert('Para gerar o laudo, a anamnese precisa ser conclusiva!')
       }
+    }else{
+      Toastify({
+        avatar: '/x-circle-fill.svg',
+        text: 'A anamnese precisa estar feita antes de gerar um laudo!',
+        duration: 3000,
+        gravity: 'top',
+        position: 'right',
+        style: {
+          background:
+            'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
+          color: 'white',
+          boxShadow:
+            '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '.25rem',
+        },
+        offset: {
+          x: 0,
+          y: 65,
+        },
+      }).showToast();
+      th.getAnamneseInfo()
+    }
+
     },
     changeAtivoValue() {
       const th = this;

@@ -9,6 +9,9 @@ export default {
   getById(id) {
     return axios.get(appUrl + 'get-by-id/' + id)
   },
+  getByDoc(doc) {
+    return axios.get(appUrl + 'get-by-doc/' + doc)
+  },
   insert(data) {
     return axios.post(appUrl + 'insert', data)
   },

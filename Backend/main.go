@@ -64,6 +64,7 @@ func main() {
 	r.Post("/patient/insert", utils.VerifyToken(controller.PostPatient))
 	r.Put("/patient/update", utils.VerifyToken(controller.PutPatient))
 	r.Put("/patient/reset-password", utils.VerifyToken(controller.ResetPasswordPatient))
+	r.Get("/patient/get-by-doc/{docNumber}", utils.VerifyToken(controller.GetPatientByDocNumber))
 
 	r.Get("/doctor/get-by-id/{id}", utils.VerifyToken(controller.GetDoctorById))
 	r.Get("/doctor/get-all", utils.VerifyToken(controller.GetAllDoctor))
@@ -93,6 +94,7 @@ func main() {
 	r.Get("/anamnese/get-all", utils.VerifyToken(controller.GetAllAnamnese))
 	r.Post("/anamnese/insert", utils.VerifyToken(controller.PostAnamnese))
 	r.Put("/anamnese/update", utils.VerifyToken(controller.PutAnamnese))
+	r.Get("/anamnese/report/{iduser}/{idpatient}/{grau}", utils.VerifyToken(controller.GetReport))
 
 	r.Get("/asking/get-by-id/{id}", utils.VerifyToken(controller.GetAskingById))
 	r.Get("/asking/get-all", utils.VerifyToken(controller.GetAllAsking))
@@ -129,6 +131,9 @@ func main() {
 	r.Put("/patienthasquiz/update", utils.VerifyToken(controller.PutPatientQuiz))
 
 	r.Put("/filiateds/update", utils.VerifyToken(controller.PutFiliateds))
+
+	r.Get("/patienthasuser/get-by-id-user/{id}", utils.VerifyToken(controller.GetPatientHasUserByUserId))
+	r.Post("/patienthasuser/insert", utils.VerifyToken(controller.PostPatientHasUser))
 
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configs.GetServerPort()), r)
 	if err != nil {

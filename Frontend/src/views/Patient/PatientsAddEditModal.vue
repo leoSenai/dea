@@ -1,24 +1,39 @@
 <template>
   <modal-primary
-    v-model="show" 
+    v-model="show"
     @close="closeModal"
   >
     <template #modal-title>
-      {{ model && model.IdPatient ? 'Editar' : 'Cadastrar' }} Pacientes
+      {{
+        model && model.IdPatient
+          ? 'Editar'
+          : newPatient
+            ? 'Cadastrar'
+            : 'Adicionar'
+      }}
+      Paciente
     </template>
     <template #modal-content>
-      <q-select
-        v-show="!newPatient"
-        style="border: 1px solid rgba(0, 0, 0, 0.432);border-radius: 5px;"
-        label="&nbsp Paciente"
-      />
-      <q-checkbox 
-        v-model="newPatient"
-      >
-        Paciente novo
-      </q-checkbox>
+      <div v-if="!(model && model.IdPatient)">
+        <q-checkbox v-model="newPatient">
+          Paciente novo
+        </q-checkbox>
+        <q-select
+          v-show="!newPatient"
+          v-model="patientExistToAdd"
+          style="
+            border: 1px solid rgba(0, 0, 0, 0.432);
+            border-bottom: 1px solid gray;
+            border-radius: 5px;
+            padding-left: 10px;
+          "
+          label="&nbsp Paciente"
+          :options="patientsDisponible"
+          option-label="Name"
+        />
+      </div>
       <q-form
-        v-show="newPatient"
+        v-show="newPatient || (model && model.IdPatient)"
         ref="form"
       >
         <div class="row">
@@ -30,7 +45,7 @@
               required
             />
           </div>
-          <div class="col-12 col-md-6 q-px-sm">
+          <div class="col-12 col-lg-6 q-px-sm">
             <input-primary
               v-model="model.Email"
               label="E-mail"
@@ -43,8 +58,9 @@
           <div class="col-12 col-lg-6 q-px-sm">
             <input-primary
               v-model="model.Phone"
-              label="Telefone"
+              label="Celular"
               label-color="primary"
+              mask="(##) #####-####"
               required
             />
           </div>
@@ -53,6 +69,7 @@
               v-model="model.Cpf"
               label="CPF"
               label-color="primary"
+              mask="###.###.###-##"
               required
             />
           </div>
@@ -78,10 +95,14 @@
             />
           </div>
           <div class="col-12 col-lg-6 q-px-sm">
-            <input-primary
+            <q-select
               v-model="model.Sex"
+              :options="sex_options"
               label="Sexo"
+              option-label="label"
+              option-value="value"
               label-color="primary"
+              class="q-field select row select-input q-field__control"
               required
             />
           </div>
@@ -92,7 +113,6 @@
               v-model="model.DadName"
               label="Nome do pai"
               label-color="primary"
-              required
             />
           </div>
           <div class="col-12 col-lg-4 q-px-sm">
@@ -106,8 +126,8 @@
           <div class="col-12 col-lg-4 q-px-sm">
             <input-primary
               v-model="model.Cid10"
-              type="number"
-              label="CID"
+              mask="#########"
+              label="Código CID"
               label-color="primary"
               required
             />
@@ -118,6 +138,8 @@
             <input-primary
               v-model="model.Cns"
               label="CNS"
+              maxlength="15"
+              mask="###############"
               label-color="primary"
               required
             />
@@ -133,7 +155,7 @@
       </q-form>
     </template>
     <template #modal-actions>
-      <button-primary 
+      <button-primary
         outlined
         size="sm"
         @click="closeModal"
@@ -142,15 +164,15 @@
       </button-primary>
       <button-primary
         v-if="!model.IdPatient"
-        size="sm" 
+        size="sm"
         type="submit"
         @click="createPatient"
       >
-        Cadastrar
+        {{ newPatient ? 'Cadastrar' : 'Adicionar' }}
       </button-primary>
       <button-primary
         v-else
-        size="sm" 
+        size="sm"
         type="submit"
         @click="updatePatient"
       >
@@ -166,6 +188,8 @@ import InputPrimary from '../../components/InputPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import SelectPrimary from '../../components/SelectPrimary.vue';
 import cookie from '../../utils/cookie';
+import CPF from '../../utils/cpf/validator.js';
+import Toastify from 'toastify-js';
 
 export default {
   components: {
@@ -178,6 +202,15 @@ export default {
   data() {
     return {
       newPatient: false,
+      patientExistToAdd: [],
+      patientsVisible: [],
+      patientsDisponible: [],
+      sex_options: [
+        { label: 'Masculino', value: 'M' },
+        { label: 'Feminino', value: 'F' },
+        { label: 'Outros', value: 'O' },
+        { label: 'Prefiro não dizer', value: 'P' },
+      ],
       show: false,
       aaa: 0,
       model: {
@@ -191,97 +224,443 @@ export default {
         Sex: '',
         DadName: '',
         MomName: '',
-        Cid10: 0,
+        Cid10: '',
         Cns: '',
         NewBorn: '',
       },
     };
   },
+  mounted() {
+    const th = this;
+    th.$api.PatientController.getAll().then((data) => {
+      th.patientsDisponible = data.data.data;
+    });
+  },
   methods: {
+    getSex(current) {
+      if (current.Sex == 'M') {
+        return { label: 'Masculino', value: 'M' };
+      } else if (current.Sex == 'F') {
+        return { label: 'Feminino', value: 'F' };
+      } else if (current.Sex == 'O') {
+        return { label: 'Outros', value: 'O' };
+      } else {
+        return { label: 'Prefiro não dizer', value: 'P' };
+      }
+    },
     openModal(current) {
       const th = this;
       th.show = true;
       if (current) {
-        this.model = { ...current, NewBorn: current.NewBorn ? 'Sim' : 'Não' };
+        var sexo = th.getSex(current);
+
+        this.model = {
+          ...current,
+          NewBorn: current.NewBorn ? 'Sim' : 'Não',
+          Sex: sexo,
+        };
+
+        if (!(th.model && th.model.IdPatient)) {
+          th.patientsVisible = current.data;
+          th.filterPatients();
+        }
+      }
+    },
+    filterPatients() {
+      const th = this;
+
+      for (let index = 0; index < th.model.data.length; index++) {
+        for (let index2 = 0; index2 < th.patientsDisponible.length; index2++) {
+          if (
+            th.model.data[index].IdPatient ==
+            th.patientsDisponible[index2].IdPatient
+          ) {
+            th.patientsDisponible.splice(index2, 1);
+          }
+        }
       }
     },
     createPatient() {
       const th = this;
-      if (
-        !th.model.Name ||
-        !th.model.Email ||
-        !th.model.Phone ||
-        !th.model.Address ||
-        !th.model.Cpf ||
-        !th.model.BornDate ||
-        !th.model.Sex ||
-        !th.model.DadName ||
-        !th.model.MomName ||
-        !th.model.Cid10 ||
-        !th.model.Cns ||
-        !th.model.NewBorn
-      ) {
-        alert('Certifique-se de preencher todos os campos.');
-        return;
-      }
-      th.model.Cid10 = th.model.Cid10 ? parseInt(th.model.Cid10, 10) : 0;
-      if (th.model.NewBorn === 'Sim') {
-        th.model.NewBorn = 1;
-      } else {
-        th.model.NewBorn = 0;
-      }
-      th.$api.PatientController.insert({
-        Patient: th.model, IdUser: cookie.getUserId(cookie.get('authToken'))
-      })
-        .then(({ data }) => {
-          th.model = data.data;
-          if (th.model.IdPatient) {
-            th.patients.forEach((patient) => {
-              const patientDto = {
-                IdPatient: th.model.IdPatient,
-                Desc: patient.Desc.trim(),
-              };
-              th.$api.PatientController.insert(patientDto);
-            });
+
+      if (th.newPatient) {
+        var validPatientName;
+        try {
+          validPatientName =
+            th.model.Name.match(
+              /\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g
+            )[0] == th.model.Name;
+        } catch {
+          validPatientName = false;
+        }
+
+        var validEmail;
+        try {
+          validEmail =
+            th.model.Email.match(
+              /^([\w.]{3,})@([a-z]{1,}[.]){1,}([a-z]{1,})/g
+            )[0] == th.model.Email;
+        } catch {
+          validEmail = false;
+        }
+
+        var validMomName;
+        try {
+          validMomName =
+            th.model.MomName.match(
+              /\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g
+            )[0] == th.model.MomName;
+        } catch {
+          validMomName = false;
+        }
+
+        var validDadName;
+        try {
+          if (!th.model.DadName) {
+            validDadName = true;
+          } else {
+            validDadName =
+              th.model.DadName.match(
+                /\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g
+              )[0] == th.model.DadName;
           }
+        } catch {
+          validDadName = false;
+        }
+
+        var date_field = new Date();
+        date_field.setTime(Date.parse(th.model.BornDate));
+        date_field.setDate(date_field.getDate() + 1);
+        var date_now = new Date();
+        var dateIsValid =
+          date_field.getDate() <= date_now.getDate() ||
+          date_field.getTime() <= date_now.getTime();
+
+        var validCpf = false;
+
+        if (th.model.Cpf && new CPF().validate(th.model.Cpf)) {
+          validCpf = true;
+        }
+
+        if (!validPatientName || th.model.Name.length > 90) {
+          alert('Preencha o nome do paciente corretamente!');
           return;
-        })
-        .then(() => {
+        } else if (!validEmail) {
+          alert('Preencha o e-mail do paciente corretamente!');
+          return;
+        } else if (
+          !th.model.Phone ||
+          !(th.model.Phone.length == 15) ||
+          th.model.Phone[5] != '9'
+        ) {
+          alert('Preencha o celular do paciente corretamente!');
+          return;
+        } else if (!th.model.Address || th.model.Address.length > 255) {
+          alert('Preencha o endereço do paciente corretamente!');
+          return;
+        } else if (!th.model.Cpf || !(th.model.Cpf.length == 14) || !validCpf) {
+          alert('Preencha o CPF do paciente corretamente!');
+          return;
+        } else if (!th.model.BornDate || !dateIsValid) {
+          alert(
+            'Preencha a data de nascimento do paciente corretamente, ou verifique se a data corresponde a um recém nascido!'
+          );
+          return;
+        } else if (!th.model.Sex) {
+          alert('Preencha o sexo do paciente corretamente!');
+          return;
+        } else if (!validDadName) {
+          alert('Preencha o nome do pai do paciente corretamente!');
+          return;
+        } else if (!validMomName || th.model.MomName.length > 80) {
+          alert('Preencha o nome da mãe do paciente corretamente!');
+          return;
+        } else if (!th.model.Cid10 || !(th.model.Cid10 <= 999999999)) {
+          alert('Preencha o CID10 do paciente corretamente!');
+          return;
+        } else if (
+          !th.model.Cns ||
+          !(th.model.Cns.length == 15) ||
+          isNaN(th.model.Cns)
+        ) {
+          alert('Preencha o CNS do paciente corretamente!');
+          return;
+        } else if (
+          !th.model.NewBorn ||
+          (th.model.NewBorn == 'Não' &&
+            date_field.toDateString() == date_now.toDateString()) ||
+          (th.model.NewBorn == 'Sim' &&
+            date_field.toDateString() != date_now.toDateString())
+        ) {
+          alert('Preencha o campo "Recem nascido" corretamente!');
+          return;
+        }
+
+        th.model.Cid10 = th.model.Cid10 ? parseInt(th.model.Cid10) : 0;
+        if (th.model.NewBorn === 'Sim') {
+          th.model.NewBorn = 1;
+        } else {
+          th.model.NewBorn = 0;
+        }
+
+        var sexModel = th.model.Sex;
+        th.model.Sex = th.model.Sex.value;
+
+        th.$api.PatientController.getByDoc(th.model.Cpf).then(({ data }) => {
+          if (
+            (data.data != '' && data.data.Cpf != th.model.Cpf) ||
+            data.data == ''
+          ) {
+            th.$api.PatientController.insert({
+              Patient: th.model,
+              IdUser: cookie.getUserId(cookie.get('authToken')),
+            })
+              .then(({ data }) => {
+                th.model = data.data;
+                if (th.model.IdPatient) {
+                  th.patients.forEach((patient) => {
+                    const patientDto = {
+                      IdPatient: th.model.IdPatient,
+                      Desc: patient.Desc.trim(),
+                    };
+                    th.$api.PatientController.insert(patientDto);
+                  });
+                }
+                return;
+              })
+              .then(() => {
+                th.closeModal();
+              });
+          } else {
+            if (th.model.NewBorn === 1) {
+              th.model.NewBorn = 'Sim';
+            } else {
+              th.model.NewBorn = 'Não';
+            }
+            th.model.Sex = sexModel;
+            Toastify({
+              avatar: '/x-circle-fill.svg',
+              text: 'O CPF inserido já está cadastrado!',
+              duration: 3000,
+              gravity: 'top',
+              position: 'right',
+              style: {
+                background:
+                  'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
+                color: 'white',
+                boxShadow:
+                  '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '.25rem',
+              },
+              offset: {
+                x: 0,
+                y: 65,
+              },
+            }).showToast();
+          }
+        });
+      } else {
+        if (th.patientExistToAdd.length == 0) {
+          alert('Selecione um paciente para adicionar/vincular!');
+          return;
+        }
+        var patientId = th.patientExistToAdd.IdPatient;
+        var userId = cookie.getUserId(cookie.get('authToken'));
+
+        th.$api.PatientHasUserController.insert({
+          IdPatient: patientId,
+          IdUser: userId,
+        }).then(() => {
           th.closeModal();
         });
+      }
     },
     updatePatient() {
       const th = this;
 
+      var validPatientName;
+      try {
+        validPatientName =
+          th.model.Name.match(
+            /\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g
+          )[0] == th.model.Name;
+      } catch {
+        validPatientName = false;
+      }
+
+      var validEmail;
+      try {
+        validEmail =
+          th.model.Email.match(
+            /^([\w.]{3,})@([a-z]{1,}[.]){1,}([a-z]{1,})/g
+          )[0] == th.model.Email;
+      } catch {
+        validEmail = false;
+      }
+
+      var validMomName;
+      try {
+        validMomName =
+          th.model.MomName.match(
+            /\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g
+          )[0] == th.model.MomName;
+      } catch {
+        validMomName = false;
+      }
+
+      var validDadName;
+      try {
+        if (!th.model.DadName) {
+          validDadName = true;
+        } else {
+          validDadName =
+            th.model.DadName.match(
+              /\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g
+            )[0] == th.model.DadName;
+        }
+      } catch {
+        validDadName = false;
+      }
+
+      var date_field = new Date();
+      date_field.setTime(Date.parse(th.model.BornDate));
+      date_field.setDate(date_field.getDate() + 1);
+      var date_now = new Date();
+      var dateIsValid =
+        date_field.getDate() <= date_now.getDate() ||
+        date_field.getTime() <= date_now.getTime();
+
+      var validCpf = false;
+
+      if (th.model.Cpf && new CPF().validate(th.model.Cpf)) {
+        validCpf = true;
+      }
+
+      if (!validPatientName || th.model.Name.length > 90) {
+        alert('Preencha o nome do paciente corretamente!');
+        return;
+      } else if (!validEmail) {
+        alert('Preencha o e-mail do paciente corretamente!');
+        return;
+      } else if (
+        !th.model.Phone ||
+        !(th.model.Phone.length == 15) ||
+        th.model.Phone[5] != '9'
+      ) {
+        alert('Preencha o celular do paciente corretamente!');
+        return;
+      } else if (!th.model.Address || th.model.Address.length > 255) {
+        alert('Preencha o endereço do paciente corretamente!');
+        return;
+      } else if (!th.model.Cpf || !(th.model.Cpf.length == 14) || !validCpf) {
+        alert('Preencha o CPF do paciente corretamente!');
+        return;
+      } else if (!th.model.BornDate || !dateIsValid) {
+        alert(
+          'Preencha a data de nascimento do paciente corretamente, ou verifique se a data corresponde a um recém nascido!'
+        );
+        return;
+      } else if (!th.model.Sex) {
+        alert('Preencha o sexo do paciente corretamente!');
+        return;
+      } else if (!validDadName) {
+        alert('Preencha o nome do pai do paciente corretamente!');
+        return;
+      } else if (!validMomName || th.model.MomName.length > 80) {
+        alert('Preencha o nome da mãe do paciente corretamente!');
+        return;
+      } else if (!th.model.Cid10 || !(th.model.Cid10 <= 999999999)) {
+        alert('Preencha o CID10 do paciente corretamente!');
+        return;
+      } else if (
+        !th.model.Cns ||
+        !(th.model.Cns.length == 15) ||
+        isNaN(th.model.Cns)
+      ) {
+        alert('Preencha o CNS do paciente corretamente!');
+        return;
+      } else if (
+        !th.model.NewBorn ||
+        (th.model.NewBorn == 'Não' &&
+          date_field.toDateString() == date_now.toDateString()) ||
+        (th.model.NewBorn == 'Sim' &&
+          date_field.toDateString() != date_now.toDateString())
+      ) {
+        alert('Preencha o campo "Recem nascido" corretamente!');
+        return;
+      }
+
       if (th.model.NewBorn === 'Sim') {
         th.model.NewBorn = 1;
       } else {
         th.model.NewBorn = 0;
       }
 
-      th.$api.PatientController.update({
-        ...th.model,
-      })
-        .then(({ data }) => {
-          th.model = data.data;
-          if (th.model.IdPatient) {
-            th.patients.forEach((patient) => {
-              const patientDto = {
-                IdPatient: th.model.IdPatient,
-                Desc: patient.Desc.trim(),
-              };
-              th.$api.PatientController.insert(patientDto);
+      var sexModel = th.model.Sex;
+      th.model.Sex = th.model.Sex.value;
+
+      th.$api.PatientController.getByDoc(th.model.Cpf).then(({ data }) => {
+        if (
+          (data.data != '' && data.data.IdPatient == th.model.IdPatient) ||
+          data.data == ''
+        ) {
+          th.$api.PatientController.update({
+            ...th.model,
+          })
+            .then(({ data }) => {
+              th.model = data.data;
+              if (th.model.IdPatient) {
+                th.patients.forEach((patient) => {
+                  const patientDto = {
+                    IdPatient: th.model.IdPatient,
+                    Desc: patient.Desc.trim(),
+                  };
+                  th.$api.PatientController.insert(patientDto);
+                });
+              }
+              return;
+            })
+            .then(() => {
+              th.closeModal();
             });
+        } else {
+          if (th.model.NewBorn === 1) {
+            th.model.NewBorn = 'Sim';
+          } else {
+            th.model.NewBorn = 'Não';
           }
-          return;
-        })
-        .then(() => {
-          th.closeModal();
-        });
+          th.model.Sex = sexModel;
+          Toastify({
+            avatar: '/x-circle-fill.svg',
+            text: 'O CPF inserido já está cadastrado!',
+            duration: 3000,
+            gravity: 'top',
+            position: 'right',
+            style: {
+              background:
+                'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
+              color: 'white',
+              boxShadow:
+                '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '.25rem',
+            },
+            offset: {
+              x: 0,
+              y: 65,
+            },
+          }).showToast();
+        }
+      });
     },
     closeModal() {
       this.show = false;
-      this.model=[]
+      this.patients = [];
+      this.patientsVisible = [];
+      this.patientExistToAdd = [];
       this.$emit('close');
     },
   },

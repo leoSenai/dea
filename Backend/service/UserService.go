@@ -24,6 +24,19 @@ func GetAllUser() (user []models.User, err error) {
 }
 
 func PostUser(userPost models.User) (userBack models.User, err error) {
+	found := repository.VerifyUserExistanceByDocument(userPost.Email)
+
+	if found {
+		return userBack, fmt.Errorf("esse usuario ja foi cadastrado no sistema")
+	}
+
+	cbo, _ := repository.GetCboByCode(int64(userPost.IdCbo))
+	if cbo.IdCbo == 0 {
+		return userBack, fmt.Errorf("o codigo brasileiro de opcupacao informado nao existe na base de dados")
+	}
+
+	userPost.IdCbo = cbo.IdCbo
+
 	userBack, err = repository.PostUser(userPost)
 	return userBack, err
 }

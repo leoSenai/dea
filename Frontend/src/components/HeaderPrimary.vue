@@ -20,7 +20,13 @@
         class="user-header"
         @click="openProfileMenu"
       >
-        <div :class="['user', 'white', showExitDropDown ? 'user-dropdown-active' : '']">
+        <div
+          :class="[
+            'user',
+            'white',
+            showExitDropDown ? 'user-dropdown-active' : '',
+          ]"
+        >
           <ph-user-circle
             class="user-icon"
             regular
@@ -51,7 +57,7 @@
       @blur="hideSidebar"
     >
       <template
-        v-for="link in links"
+        v-for="link in linksMenuSidebar"
         :key="link.path"
       >
         <router-link
@@ -72,37 +78,84 @@
 </template>
 
 <script>
-import { PhUserCircle, PhList, PhDoor, PhSignOut } from '@phosphor-icons/vue';
+import {
+  PhUserCircle,
+  PhList,
+  PhDoor,
+  PhSignOut,
+  PhArticle,
+  PhUsers,
+  PhUserList,
+} from '@phosphor-icons/vue';
 import ButtonPrimary from '../components/ButtonPrimary.vue';
 import cookie from '../utils/cookie';
+import { RoleEnum } from '../utils/Enum';
 
 export default {
   components: {
     PhUserCircle,
+    PhUsers,
+    PhUserList,
+    PhArticle,
     PhList,
     ButtonPrimary,
     PhDoor,
-    PhSignOut
-  },
-  props: {
-    links: {
-      type: Array,
-      required: true,
-    },
+    PhSignOut,
   },
   data() {
     return {
       LogoSrc: '/logo.png',
       isSidebarActive: false,
-      showExitDropDown: false
+      showExitDropDown: false,
     };
   },
   computed: {
     username() {
       return cookie.getAuthUser(cookie.get('authToken'));
     },
+    linksMenuSidebar() {
+      return this.getLinks();
+    },
   },
   methods: {
+    getLinks() {
+      const authToken = cookie.get('authToken');
+      const typeUser = cookie.getUserType(authToken);
+      const userId = cookie.getUserId(authToken);
+
+      switch (typeUser) {
+        case RoleEnum.Patient: {
+          return [
+            {
+              path: '/paciente/' + userId + '/questionarios',
+              name: 'Questionários',
+              icon: PhArticle,
+            },
+          ];
+        }
+        case RoleEnum.Administrator: {
+          return [
+            { path: '/usuarios', name: 'Médicos', icon: PhUsers },
+          ];
+        }
+        case RoleEnum.User: {
+          return [
+            { path: '/questionarios', name: 'Questionários', icon: PhArticle },
+            { path: '/pacientes', name: 'Pacientes', icon: PhUserList },
+          ];
+        }
+        case RoleEnum.Person: {
+          return [
+            {
+              path: '/pessoas-proximas/' + userId + '/questionarios',
+              name: 'Questionários',
+              icon: PhArticle,
+            },
+            
+          ];
+        }
+      }
+    },
     toggleSidebar() {
       this.isSidebarActive = !this.isSidebarActive;
     },
@@ -118,7 +171,7 @@ export default {
       this.$router.push('/login');
     },
     openProfileMenu() {
-      this.showExitDropDown = !this.showExitDropDown
+      this.showExitDropDown = !this.showExitDropDown;
     },
   },
 };
@@ -238,10 +291,10 @@ header {
   gap: 1rem;
   background: var(--primary-700);
   border: none;
-  padding: .5rem;
+  padding: 0.5rem;
   border-radius: 4px;
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .dropdown-exit button:hover {

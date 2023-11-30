@@ -24,7 +24,7 @@
         </div>
         <div class="question-range">
           <template
-            v-for="answer in answers"
+            v-for="(answer, i) in answers"
             :key="answer.value"
           >
             <div class="answer-container">
@@ -52,6 +52,7 @@
                   color="white"
                 />
               </label>
+              {{ i + 1 }}
             </div>
           </template>
         </div>
@@ -186,5 +187,9 @@ export default {
   align-items: center;
   justify-content: center;
   transition: 0.2s ease;
+  margin-bottom: .25rem;
+}
+.answer-container {
+  text-align: center;
 }
 </style>

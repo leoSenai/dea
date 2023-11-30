@@ -93,8 +93,28 @@ func PutPatient(patientPut models.Patient) (patientBack models.Patient, err erro
 
 	if patientPut.IdPatient != 0 {
 		row := conn.Table("paciente").Where("idpaciente = ?", patientPut.IdPatient).Updates(&patientPut)
+		conn.Table("paciente").Select("nomePai", "recemNascido", "ativo").Where("idpaciente = ?", patientPut.IdPatient).Updates(&patientPut)
 		log.Printf("row: %v", row)
+		if row.Error != nil {
+			err = row.Error
+			return
+		}
 	}
 
 	return
+}
+
+func GetPatientByDocNumber(docNumber string) (patient models.Patient, err error) {
+	conn, err := db.GetDB()
+	if err != nil {
+		return patient, err
+	}
+
+	conn.Where("cpf = ?", docNumber).First(&patient)
+
+	if patient.IdPatient == 0 {
+		patient = models.Patient{}
+	}
+
+	return patient, nil
 }

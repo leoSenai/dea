@@ -21,7 +21,7 @@
           <q-slider
             v-model="model.Interval"
             :min="3"
-            :max="7"
+            :max="5"
             :step="1"
             label
             color="primary"
@@ -173,12 +173,26 @@ export default {
     createQuiz() {
       const th = this;
       th.$refs.form.validate().then((success) => {
-        if (th.questions.some(({ Desc }) => !Desc || Desc.trim() === '')) {
+        
+        var validQuizName;
+        try{
+          validQuizName = (th.model.Name.match(/^[A-Z]{1}[\w áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ':"!+|)(?%#-]{1,}/g)[0]==th.model.Name)
+        }catch{
+          validQuizName = false
+        }
+
+        if(!validQuizName){
+          alert(
+            'Insira um nome de questionário válido!'
+          )
+          return
+        }else if (th.questions.some(({ Desc }) => !Desc || Desc.trim() === '')) {
           alert(
             'Não é possível criar questionários com questões sem descrição!'
           );
           return;
         }
+
         if (success) {
           th.$api.QuizController.insert({
             ...th.model,
@@ -206,14 +220,30 @@ export default {
     },
     updateQuiz() {
       const th = this;
+
       th.$refs.form.validate().then((success) => {
+
+        var validQuizName;
+        try{
+          validQuizName = (th.model.Name.match(/^[A-Z]{1}[\w áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ':"!+|)(?%#-]{1,}/g)[0]==th.model.Name)
+        }catch{
+          validQuizName = false
+        }
+
+        if(!validQuizName){
+          alert(
+            'Insira um nome de questionário válido!'
+          )
+          return
+        }else if (th.questions.some(({ Desc }) => !Desc || Desc.trim() === '')) {
+          alert(
+            'Não é possível criar questionários com questões sem descrição!'
+          );
+          return;
+        }
+
         if (success) {
-          if (th.questions.some(({ Desc }) => !Desc || Desc.trim() === '')) {
-            alert(
-              'Não é possível atualizar questionários com questões sem descrição!'
-            );
-            return;
-          }
+
           th.$api.QuizController.update({
             ...th.model,
             Interval: th.model.Interval.toString(),

@@ -21,7 +21,7 @@
               color="primary"
               outlined
               dark
-              label="Email ou Telefone"
+              label="Email ou Celular"
               class="q-mt-md"
             >
               <template #before-label>

@@ -61,7 +61,7 @@ func GetAllPatientsByUserID(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
 		log.Printf("Cannot parse ID: %v", err.Error())
-		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi possível coletar o id do usuário na requisição.", "")
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi possível coletar o id do médico na requisição.", "")
 		return
 	}
 
@@ -95,6 +95,7 @@ func GetAllPatient(w http.ResponseWriter, _ *http.Request) {
 			Phone:     patients[i].Phone,
 			BornDate:  patients[i].BornDate,
 			Sex:       patients[i].Sex,
+			Email:     patients[i].Email,
 			NewBorn:   patients[i].NewBorn,
 			DadName:   patients[i].DadName,
 			MomName:   patients[i].MomName,
@@ -104,7 +105,7 @@ func GetAllPatient(w http.ResponseWriter, _ *http.Request) {
 		})
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Pacientes encontrados com sucesso!", patients)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Pacientes encontrados com sucesso!", patientsDto)
 }
 
 func PostPatient(w http.ResponseWriter, r *http.Request) {
@@ -175,4 +176,30 @@ func ResetPasswordPatient(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Senha do paciente redefinida com sucesso.", "")
+}
+
+func GetPatientByDocNumber(w http.ResponseWriter, r *http.Request) {
+
+	docNumber := chi.URLParam(r, "docNumber")
+
+	patient, err := service.GetPatientByDocNumber(docNumber)
+	if err != nil {
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, err.Error(), "")
+		return
+	}
+
+	if patient.IdPatient == 0 {
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Paciente não encontrada", "")
+		return
+	}
+
+	var patientDto dtos.PatientDTO = dtos.PatientDTO{
+		IdPatient: patient.IdPatient,
+		Name:      patient.Name,
+		BornDate:  patient.BornDate,
+		Cpf:       patient.Cpf,
+		Email:     patient.Email,
+	}
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Pessoa encontrada com sucesso", patientDto)
 }

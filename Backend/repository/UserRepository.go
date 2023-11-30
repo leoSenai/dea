@@ -3,9 +3,7 @@ package repository
 import (
 	"api/db"
 	"api/models"
-	repositoryUtils "api/repository/utils"
 	generalUtils "api/utils"
-	"errors"
 	"log"
 )
 
@@ -51,20 +49,13 @@ func PostUser(userPost models.User) (userBack models.User, err error) {
 		return
 	}
 
-	found := repositoryUtils.VerifyUserExistanceByDocument(userPost.Email)
+	passwordEncrypted, salt := generalUtils.GenerateEncryptedPassword(userPost.Password)
+	userPost.Password = passwordEncrypted
+	userPost.Salt = salt
+	userPost.IdServices = 1
 
-	if found {
-		err = errors.New("esse usuario ja foi cadastrado no sistema")
-	} else {
-
-		passwordEncrypted, salt := generalUtils.GenerateEncryptedPassword(userPost.Password)
-		userPost.Password = passwordEncrypted
-		userPost.Salt = salt
-
-		row := conn.Create(&userPost)
-		log.Printf("row: %v", row)
-
-	}
+	row := conn.Create(&userPost)
+	log.Printf("row: %v", row)
 
 	return
 }
@@ -79,12 +70,36 @@ func PutUser(userPut models.User) (userBack models.User, err error) {
 		passwordEncrypted, salt := generalUtils.GenerateEncryptedPassword(userPut.Password)
 		userPut.Password = passwordEncrypted
 		userPut.Salt = salt
+		userPut.IdServices = 1
 	}
 
 	if userPut.IdUser != 0 {
+
+		cbo, _ := GetCboByCode(int64(userPut.IdCbo))
+		userPut.IdCbo = cbo.IdCbo
+
 		row := conn.Table("usuario").Where("idusuario = ?", userPut.IdUser).Updates(&userPut)
+		conn.Table("usuario").Select("ativo").Where("idusuario = ?", userPut.IdUser).Updates(&userPut)
 		log.Printf("row: %v", row)
 	}
 
 	return
+}
+
+func VerifyUserExistanceByDocument(email string) (exist bool) {
+
+	conn, err := db.GetDB()
+	if err != nil {
+		return
+	}
+
+	var userFound models.User
+
+	conn.First(&userFound, "email = ?", email)
+
+	if userFound.IdUser != 0 {
+		return true
+	}
+
+	return false
 }

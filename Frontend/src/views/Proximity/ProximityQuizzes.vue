@@ -41,7 +41,20 @@
           type="button"
           @click="openViewModal(quiz)"
         >
+          <q-tooltip>
+            Visualizar
+          </q-tooltip>
           <PhEye color="black" />
+        </button>
+        <button
+          v-if="quiz.Name.includes('EM ABERTO') && typeUser === RoleEnum.Person"
+          type="button"
+          @click="answerQuiz(quiz)"
+        >
+          <q-tooltip>
+            Responder
+          </q-tooltip>
+          <PhArticle color="black" />
         </button>
       </div>
     </div>
@@ -67,16 +80,25 @@
     <QuizViewModal
       ref="viewQuiz"
     />
+    <QuizAnswerModal 
+      ref="answerQuiz" 
+      @close="load"
+    />
   </div>
 </template>
   <script>
-  import { PhPlus, PhEye, PhCaretLeft } from '@phosphor-icons/vue';
+  import { PhPlus, PhEye, PhCaretLeft, PhArticle } from '@phosphor-icons/vue';
   import QuizViewModal from './ProximityQuizViewModal.vue'
+  import QuizAnswerModal from '../quiz/QuizAnswerModal.vue'
+  import { RoleEnum } from '../../utils/Enum';
+  import cookie from '../../utils/cookie';
   
   export default {
     components: {
       PhPlus,
+      QuizAnswerModal,
       PhCaretLeft,
+      PhArticle,
       QuizViewModal,
       PhEye
   },
@@ -88,13 +110,23 @@
           message: '',
         },
         quizzes: [],
-        person: []
+        person: [],
+        RoleEnum
       }
     },
     computed: {
       isMobile() {
         return this.$q.screen.xs || this.$q.screen.sm
-      }
+      },
+      typeUser () {
+      const token = cookie.get('authToken')
+      return cookie.getUserType(token)
+      },
+      idUser() {
+        const token = cookie.get('authToken')
+        return cookie.getUserId(token)
+      },
+    ...RoleEnum
     },
     mounted() {
       this.load();
@@ -114,7 +146,7 @@
             th.quizzes = data.data.map((item) => {
                 return {IdQuiz: item.IdQuiz, Finished: item.Finished};
             })
-
+            th.model.data = []
             for(var id in th.quizzes){
             
               var result = await th.$api.QuizController.getById(th.quizzes[id].IdQuiz)
@@ -136,6 +168,9 @@
       },
       openViewModal(currentQuiz){
         this.$refs.viewQuiz.openModal(currentQuiz, this.person)
+      },
+      answerQuiz (currentQuiz) {
+        this.$refs.answerQuiz.openModal(currentQuiz)
       }
     },
   }

@@ -38,6 +38,11 @@ func PutPatient(patientPut models.Patient) (patientBack models.Patient, err erro
 	return patientBack, err
 }
 
+func GetPatientByDocNumber(docNumber string) (patient models.Patient, err error) {
+	patient, err = repository.GetPatientByDocNumber(docNumber)
+	return patient, err
+}
+
 func ResetPasswordPatient(oldPatient models.Patient) (err error) {
 	var password string
 	password, err = utils.GenerateRandomPassword(8)

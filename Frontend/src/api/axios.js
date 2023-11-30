@@ -16,8 +16,7 @@ axios.interceptors.request.use(config => {
 
 axios.interceptors.response.use((response) => {
   if (
-    response.status >= 200 &&
-    response.status < 300 &&
+    response.status == 200 &&
     response.config.method !== 'get' &&
     !response.config.url.includes('question')
   ) {
@@ -45,27 +44,33 @@ axios.interceptors.response.use((response) => {
   }
   return response;
 }, ({ response }) => {
-  Toastify({
-    avatar: '/x-circle-fill.svg',
-    text: response && response.data ? response.data.message : 'Erro não identificado!',
-    duration: 3000,
-    gravity: 'top',
-    position: 'right',
-    style: {
-      background:
-        'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
-      color: 'white',
-      boxShadow:
-        '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '.25rem',
-    },
-    offset: {
-      x: 0,
-      y: location.href.includes('login') ? 0 : 65,
-    },
-  }).showToast();
+  if (!response.data.message.includes('Pessoa não encontrada') ||
+    !response.data.message.includes('Não existem relacionamento com este ID de Pessoa') ||
+    !response.data.message.includes('Não existem relacionamento com este ID de Paciente') ||
+    !response.data.message.includes('Não há proximidades cadastradas a este paciente') ||
+    !response.data.message.includes('Paciente não encontrada')) {
+    Toastify({
+      avatar: '/x-circle-fill.svg',
+      text: response && response.data ? response.data.message : 'Erro não identificado!',
+      duration: 3000,
+      gravity: 'top',
+      position: 'right',
+      style: {
+        background:
+          'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
+        color: 'white',
+        boxShadow:
+          '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '.25rem',
+      },
+      offset: {
+        x: 0,
+        y: location.href.includes('login') ? 0 : 65,
+      },
+    }).showToast();
+  }
 
   if (response.status === 401 && !response.data.message.includes('Permissão Inválida')) {
     Cookie.delete('authToken');

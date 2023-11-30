@@ -28,8 +28,10 @@
           <div class="col q-ml-sm">
             <input-primary
               v-model="model.Phone"
-              label="Telefone"
+              label="Celular"
               format="phone"
+              mask="(##) #####-####"
+              hint="Exemplo: (##) #####-####"
               label-color="primary"
               required
             />
@@ -37,9 +39,12 @@
         </div>
         <div class="row">
           <div class="col ">
-            <input-date-primary
+            <input-primary
               v-model="model.BornDate"
+              type="date"
+              label-color="primary"
               label="Data de Nascimento"
+              required
             />
           </div>
           <div class="col q-ml-sm">
@@ -47,14 +52,17 @@
               v-model="model.DocType"
               :options="docTypes"
               label="Tipo do Documento"
+              required
             />
           </div>
           <div class="col q-ml-sm">
             <input-primary
               v-model="model.DocNumber"
-              :format="model.DocType ? model.DocType.toLowerCase() : 'cpf'"
+              :format="model.DocType=='CNPJ' ? 'cnpj' : 'cpf'"
               label="Número do Documento"
               label-color="primary"
+              :mask=" model.DocType=='CNPJ' ? '##.###.###/####-##': '###.###.###-##' "
+              required
             />
           </div>
         </div>
@@ -66,6 +74,7 @@
             label-color="primary"
             type="textarea"
             autogrow
+            required
           />
         </div>
       </q-form>
@@ -103,15 +112,15 @@
 import ModalPrimary from '../../components/ModalPrimary.vue';
 import InputPrimary from '../../components/InputPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
-import InputDatePrimary from '../../components/InputDatePrimary.vue';
 import SelectPrimary from '../../components/SelectPrimary.vue';
+import CPF from '../../utils/cpf/validator.js'
+import Toastify from 'toastify-js';
 
 export default {
   components: {
     ModalPrimary,
     InputPrimary,
     ButtonPrimary,
-    InputDatePrimary,
     SelectPrimary
   },
   emits: ['close'],
@@ -125,7 +134,7 @@ export default {
         Phone: '',
         BornDate: '',
         DocNumber: '',
-        DocType: '',
+        DocType: 'CPF',
         Password: '',
         Salt: '',
         DescPerson: '',
@@ -146,8 +155,8 @@ export default {
       const th = this;
       th.show = true;
       if (current) {
-        current.BornDate = current.BornDate.split('-').reverse().join('/')
         th.model = current
+        th.model.DocType = current.DocType
       }
       th.descPersonDisabled = th.model.IdPerson ? true : false
     },
@@ -169,26 +178,203 @@ export default {
     },
     createPerson() {
       const th = this;
-      th.model.BornDate = th.model.BornDate.split('/').reverse().join('-')
-      const DocNumber = th.model.DocNumber.replaceAll('.', '').replaceAll('-', '').replaceAll('/', '')
-      th.$api.PersonController.getByDoc(DocNumber).then(({ data }) => {
-        if (!data.data) {
-          th.$api.PersonController.insert({ ...th.model, IdPatient: +th.IdPatient}).then(() => {
-            th.closeModal()
+
+      th.$refs.form.validate().then((success) => {
+        
+        var validName;
+        try{
+          validName = th.model.Name.match(/\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g)[0]==th.model.Name
+        }catch{
+          validName = false
+        }
+
+        
+        var validEmail;
+        try{
+          validEmail = (th.model.Email.match(/^([\w.]{3,})@([a-z]{1,}[.]){1,}([a-z]{1,})/g))[0]==th.model.Email
+        }catch{
+          validEmail = false
+        }
+
+        var date_field = new Date()
+        date_field.setTime(Date.parse(th.model.BornDate))
+        date_field.setDate(date_field.getDate()+1)
+        var date_now = new Date()
+        var dateIsValid = (date_field.getDate() <= date_now.getDate() || date_field.getTime() <= date_now.getTime())
+
+        var validDocNumber;
+        try{
+          validDocNumber = th.model.DocNumber.match(/(^\d{3}.\d{3}.\d{3}-\d{2})|(^\d{2}.\d{3}.\d{3}[/]\d{4}-\d{2})/g)[0]==th.model.DocNumber
+          if(th.model.DocType=='CPF'){
+            if(th.model.DocNumber && (new CPF().validate(th.model.DocNumber))){
+              validDocNumber = true
+            }else{
+              validDocNumber = false
+            }
+          }
+        }catch{
+          validDocNumber = false
+        }
+        
+        if(!validName){
+          alert('Informe um nome válido!')
+          return
+        }else if(!validEmail){
+          alert('Informe um e-mail válido!')
+          return
+        }else if(!(th.model.Phone.length == 15) || th.model.Phone[5]!='9'){
+          alert('Informe um celular válido!')
+          return
+        }else if(!th.model.BornDate || !dateIsValid){
+          alert('Preencha a data de nascimento corretamente!')
+          return
+        }else if(!validDocNumber){
+          alert('Informe um número de documento válido!')
+          return
+        }else if(!th.model.DescPerson || th.model.DescPerson.length < 3){
+          alert('Preencha a descrição de proximidade com o paciente corretamente!')
+          return
+        }
+
+        if(success){
+
+          th.$api.PersonController.getByDoc(th.model.DocNumber).then(({ data }) => {
+            if (!data.data) {
+              th.$api.PersonController.insert({ ...th.model, IdPatient: +th.IdPatient}).then(() => {
+                th.closeModal()
+              })
+            } else if(data.data.Name != th.model.Name){
+              Toastify({
+                avatar: '/x-circle-fill.svg',
+                text: 'O CPF inserido já está cadastrado!',
+                duration: 3000,
+                gravity: 'top',
+                position: 'right',
+                style: {
+                  background:
+                    'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
+                  color: 'white',
+                  boxShadow:
+                    '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '.25rem',
+                },
+                offset: {
+                  x: 0,
+                  y: 65,
+                },
+              }).showToast();
+            }else{
+              th.updatePerson();
+            }
           })
-        } else {
-          th.updatePerson();
+        }else{
+          alert('Preencha todos os campos!')
         }
       })
     },
     updatePerson() {
+
       const th = this;
-      th.model.BornDate = th.model.BornDate.split('/').reverse().join('-')
-      th.model.DocNumber = th.model.DocNumber.replaceAll('.', '').replaceAll('-', '').replaceAll('/', '')
-      const modelPerson = th.model
-      th.$api.PersonController.update({ ...modelPerson, IdPatient: +th.IdPatient}).then(() => {
-        th.closeModal()
+
+      th.$refs.form.validate().then((success) => {
+        
+        var validName;
+        try{
+          validName = th.model.Name.match(/\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g)[0]==th.model.Name
+        }catch{
+          validName = false
+        }
+
+        
+        var validEmail;
+        try{
+          validEmail = (th.model.Email.match(/^([\w.]{3,})@([a-z]{1,}[.]){1,}([a-z]{1,})/g))[0]==th.model.Email
+        }catch{
+          validEmail = false
+        }
+
+        var date_field = new Date()
+        date_field.setTime(Date.parse(th.model.BornDate))
+        date_field.setDate(date_field.getDate()+1)
+        var date_now = new Date()
+        var dateIsValid = (date_field.getDate() <= date_now.getDate() || date_field.getTime() <= date_now.getTime())
+
+        var validDocNumber;
+        try{
+          validDocNumber = th.model.DocNumber.match(/(^\d{3}.\d{3}.\d{3}-\d{2})|(^\d{2}.\d{3}.\d{3}[/]\d{4}-\d{2})/g)[0]==th.model.DocNumber
+
+          if(th.model.DocType=='CPF'){
+            if(th.model.DocNumber && (new CPF().validate(th.model.DocNumber))){
+              validDocNumber = true
+            }else{
+              validDocNumber = false
+            }
+          }
+
+        }catch{
+          validDocNumber = false
+        }
+        
+        if(!validName){
+          alert('Informe um nome válido!')
+          return
+        }else if(!validEmail){
+          alert('Informe um e-mail válido!')
+          return
+        }else if(!(th.model.Phone.length == 15) || th.model.Phone[5]!='9'){
+          alert('Informe um celular válido!')
+          return
+        }else if(!th.model.BornDate || !dateIsValid){
+          alert('Preencha a data de nascimento corretamente!')
+          return
+        }else if(!validDocNumber){
+          alert('Informe um número de documento válido!')
+          return
+        }else if(!th.model.DescPerson || th.model.DescPerson.length < 3){
+          alert('Preencha a descrição de proximidade com o paciente corretamente!')
+          return
+        }
+
+        if(success){
+          const modelPerson = th.model
+
+          th.$api.PersonController.getByDoc(th.model.DocNumber).then(({ data }) => {
+            if (data.data && data.data.IdPerson==th.model.IdPerson) {
+              th.$api.PersonController.update({ ...modelPerson, IdPatient: +th.IdPatient}).then(() => {
+                th.closeModal()
+              })
+            } else if(data.data.Name != th.model.Name){
+              Toastify({
+                avatar: '/x-circle-fill.svg',
+                text: 'O CPF inserido já está cadastrado!',
+                duration: 3000,
+                gravity: 'top',
+                position: 'right',
+                style: {
+                  background:
+                    'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
+                  color: 'white',
+                  boxShadow:
+                    '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '.25rem',
+                },
+                offset: {
+                  x: 0,
+                  y: 65,
+                },
+              }).showToast();
+            }
+          })
+        }else{
+          alert('Preencha todos os campos!')
+        }
       })
+
+
     },
   },
 };

@@ -4,7 +4,7 @@
     @close="closeModal"
   >
     <template #modal-title>
-      {{ model && model.IdUser ? 'Editar' : 'Cadastrar' }} Usuário
+      {{ model && model.IdUser ? 'Editar' : 'Cadastrar' }} Médico
     </template>
     <template #modal-content>
       <q-form ref="form">
@@ -55,24 +55,27 @@
           />
           <input-primary
             v-model="model.Phone"
-            label="Telefone"
+            label="Celular"
             label-color="primary"
             required
-            mask="(##) ##### - ####"
-            hint="Exemplo: (##) ##### - ####"
+            mask="(##) #####-####"
+            hint="Exemplo: (##) #####-####"
           />
-          <q-select
+          <input-primary
             v-model="model.IdCbo"
-            :options="optionsCbo"
-            outlined
-            label="Cbo"
+            label="Código Brasileiro de Ocupação (2002)"
             label-color="primary"
-            option-label="label"
-            option-value="value"
-            options-dark
-            class="select row q-pt-sm"
+            required
+            mask="######"
           />
-          <q-select
+          <input-primary
+            v-model="model.RegisterCR"
+            label="Código de Registro do Conselho Regional"
+            label-color="primary"
+            :maxlength="14"
+            required
+          />
+          <!--<q-select
             v-model="model.IdService"
             :options="optionsServices"
             outlined
@@ -82,7 +85,7 @@
             option-value="value"
             options-dark
             class="select row q-pt-lg"
-          />
+          />-->
         </div>
       </q-form>
     </template>
@@ -134,17 +137,16 @@ export default {
         Name: '',
         Email: '',
         Password: '',
-        TypeUser: { label: 'Administrador', value: 'A' },
+        TypeUser: { label: null, value: null },
         Active: { label: 'Sim', value: 1 },
         Phone: '',
         IdCbo: '',
         IdService: '',
+        RegisterCR: '',
       },
       optionsTypeUser: [
         { label: 'Administrador', value: 'A' },
-        { label: 'Outro', value: 'O' },
-        { label: 'Psicologo', value: 'P' },
-        { label: 'Psiquiatra', value: 'C' },
+        { label: 'Médico', value: 'U' },
       ],
       optionsActive: [
         { label: 'Sim', value: 1 },
@@ -158,36 +160,31 @@ export default {
     async openModal(current) {
       const th = this;
       th.show = true;
-        const responseService = await th.$api.ServicesController.getAll();
-        th.optionsServices = responseService.data.data.map((service) => ({
-          label: service.Desc,
-          value: service.IdServices,
-        }));
+      var responseCbo = await th.$api.CboController.getAll();
+      th.optionsCbo = responseCbo.data.data;
 
-        const responseCbo = await th.$api.CboController.getAll();
-        th.optionsCbo = responseCbo.data.data.map((cbo) => ({
-          label: cbo.Desc,
-          value: cbo.IdCbo,
-        }));
+      if (current) {
+        var idCboCurrent = current?.IdCbo;
+        var codeCbo = th.optionsCbo
+          .map((cbos) => {
+            return { valid: idCboCurrent == cbos.IdCbo, Code: cbos.Code };
+          })
+          .find((result) => result.valid == true).Code;
 
-        if (current) {
-          const model = {
-            ...current,
-            TypeUser: th.optionsTypeUser.find(
-              (type) => type.value === current?.TypeUser
-            ),
-            Active: th.optionsActive.find(
-              (active) => active.value === current?.Active
-            ),
-            IdCbo: th.optionsCbo.find((cbo) => cbo.value === current?.IdCbo),
-            IdService: th.optionsServices.find(
-              (service) => service.value === current?.IdServices
-            ),
-          };
+        const model = {
+          ...current,
+          TypeUser: th.optionsTypeUser.find(
+            (type) => type.value === current?.TypeUser
+          ),
+          Active: th.optionsActive.find(
+            (active) => active.value === current?.Active
+          ),
+          IdCbo: codeCbo,
+          IdService: 1,
+        };
 
-          th.model = { ...model };
-        }
-    
+        th.model = { ...model };
+      }
     },
     closeModal() {
       this.show = false;
@@ -195,11 +192,12 @@ export default {
         Name: '',
         Email: '',
         Password: '',
-        TypeUser: 'A',
-        Active: 1,
+        TypeUser: null,
+        Active: undefined,
         Phone: '',
         IdCbo: '',
-        IdService: '',
+        IdService: 1,
+        RegisterCR: '',
       };
       this.$emit('close');
     },
@@ -209,8 +207,8 @@ export default {
         success = th.validations();
 
         if (success) {
-          const IdCbo = th.model.IdCbo.value;
-          const IdServices = th.model.IdService.value;
+          const IdCbo = parseInt(th.model.IdCbo);
+          const IdServices = 1;
           const TypeUser = th.model.TypeUser.value;
           const Active = th.model.Active.value;
           const Phone = th.model.Phone.replace(/\D/g, '');
@@ -225,14 +223,18 @@ export default {
               TypeUser,
               Active,
               Phone,
-            })
-              .then(({ data }) => {
-                th.model = data.data;
+            }).then(({ data }) => {
+              if (
+                data.data == '' &&
+                !data.message.includes('atualizadas com sucesso')
+              ) {
                 return;
-              })
-              .then(() => {
+              } else {
+                th.model = data.data;
                 th.closeModal();
-              });
+                return;
+              }
+            });
             return;
           }
 
@@ -243,48 +245,79 @@ export default {
             TypeUser,
             Active,
             Phone,
-          })
-            .then(({ data }) => {
-              th.model = data.data;
+          }).then(({ data }) => {
+            if (!data.message.includes('cadastrado com sucesso')) {
               return;
-            })
-            .then(() => {
+            } else {
+              th.model = data.data;
               th.closeModal();
-            });
+              return;
+            }
+          });
         }
       });
     },
     validations() {
       const th = this;
-      if (!th.model.IdUser && th.model.Password.length < 6) {
+
+      var validName;
+      try {
+        validName =
+          th.model.Name.match(
+            /\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g
+          )[0] == th.model.Name;
+      } catch {
+        validName = false;
+      }
+
+      var validEmail;
+      try {
+        validEmail =
+          th.model.Email.match(
+            /^([\w.]{3,})@([a-z]{1,}[.]){1,}([a-z]{1,})/g
+          )[0] == th.model.Email;
+      } catch {
+        validEmail = false;
+      }
+
+      var validCbo;
+      try {
+        validCbo =
+          String(th.model.IdCbo).match(/^[0-9]{3,6}/g)[0] ==
+          String(th.model.IdCbo);
+      } catch {
+        validCbo = false;
+      }
+
+      if (th.model.Name.length < 3 || !validName) {
+        alert(
+          'O nome deve conter no mínimo 3 caracteres, ter sobrenome, e todas letras iniciais maiúsculas!'
+        );
+        return false;
+      } else if (th.model.Email.length < 3 || !validEmail) {
+        alert(
+          'O e-mail deve conter no mínimo 3 caracteres, conter "@", e dominio do email!'
+        );
+        return false;
+      } else if (!th.model.IdUser && th.model.Password.length < 6) {
         alert('A senha deve conter no mínimo 6 caracteres!');
         return false;
-      }
-
-      if (th.model.Name.length < 3) {
-        alert('O nome deve conter no mínimo 3 caracteres!');
+      } else if (th.model.TypeUser.value == null || th.model.TypeUser == '') {
+        alert('Selecione um tipo de usuário!');
+        return false;
+      } else if (!(th.model.Phone.length == 15) || th.model.Phone[5] != '9') {
+        alert('O celular deve conter 11 digitos e um dígito "9" após o DDD!');
+        return false;
+      } else if (!validCbo) {
+        alert('Digite um CBO válido!');
+        return false;
+      } else if (th.model.RegisterCR.length < 3) {
+        alert(
+          'O código de registro do conselho regional deve conter no mínimo 3 caracteres!'
+        );
         return false;
       }
 
-      if (th.model.Phone.length < 14) {
-        alert('O telefone deve conter no mínimo 10 caracteres!');
-        return false;
-      }
-
-      if (th.model.Email.length < 3 && !th.model.Email.includes('@')) {
-        alert('O e-mail deve conter no mínimo 3 caracteres e conter @!');
-        return false;
-      }
-
-      if (th.model.IdCbo === '') {
-        alert('Selecione um CBO!');
-        return false;
-      }
-
-      if (th.model.IdService === '') {
-        alert('Selecione um Serviço!');
-        return false;
-      }
       return true;
     },
   },

@@ -8,8 +8,9 @@
               Pacientes
             </h3>
             <buttonPrimary
+              v-if="!isMobile"
               type="button"
-              @click="openAddEditModal()"
+              @click="openAddEditModal(model)"
             >
               Adicionar
               <PhPlus
@@ -19,11 +20,11 @@
             </buttonPrimary>
           </div>
           <div class="patients-content q-mt-lg flex">
-            <div v-if="model.data.length == 0">
+            <div v-if="patients.length == 0">
               <i>Não há pacientes cadastrados ainda.</i>
             </div>
             <div
-              v-for="patient in model.data"
+              v-for="patient in patients"
               :key="patient.IdPatient"
               class="patients-list"
             >
@@ -44,7 +45,7 @@
                   @click="openAddEditModal(patient)"
                 >
                   <q-tooltip>
-                    Visualizar
+                    Editar
                   </q-tooltip>
                   <PhPencil color="black" />
                 </button>
@@ -52,7 +53,8 @@
             </div>
           </div>
           <div
-            class="btn-modal hidden flex justify-center items-center"
+            v-if="isMobile"
+            class="btn-modal flex justify-center items-center"
             type="button"
             @click="openAddEditModal()"
           >
@@ -75,6 +77,8 @@
 import buttonPrimary from '../../components/ButtonPrimary.vue';
 import { PhPlus, PhPencil, PhFingerprintSimple } from '@phosphor-icons/vue';
 import PatientsAddEditModal from './PatientsAddEditModal.vue';
+import cookie from '../../utils/cookie';
+import { RoleEnum } from '../../utils/Enum'
 
 export default {
   components: {
@@ -86,6 +90,8 @@ export default {
   },
   data() {
     return {
+      patientsHasUser: [],
+      patients: [],
       model: {
         data: [],
         hasError: false,
@@ -93,20 +99,42 @@ export default {
       }
     };
   },
+  computed: {
+    isMobile() {
+      return this.$q.screen.xs || this.$q.screen.sm
+    },
+    typeUser() {
+      const authToken = cookie.get('authToken');
+      return cookie.getUserType(authToken);
+    }
+  },
   mounted() {
     this.load();
   },
   methods: {
     load() {
-      const th = this;
-      th.$api.PatientController.getAll().then(({ data }) => {
-        th.model = data
-      }).catch(({ response }) => {
-        th.model = {
-          ...response.data,
-          hasError: true
+      this.patients = []
+      this.getPatientsOfUser()
+    },
+    async getPatientsOfUser() {
+      const th = this
+
+      th.patientsHasUser = (await th.$api.PatientHasUserController.getByIdUser(cookie.getUserId(cookie.get('authToken')))).data.data
+      if (th.patientsHasUser) {
+
+        th.patientsHasUser = th.patientsHasUser?.map((el) => { return el.IdPatient })
+
+        for (let index = 0; index < th.patientsHasUser.length; index++) {
+          var dataPatient = (await th.$api.PatientController.getById(th.patientsHasUser[index])).data.data
+          th.patients.push(dataPatient)
         }
-      })
+
+      } else if (th.typeUser === RoleEnum.Administrator) {
+        const aux = await th.$api.PatientController.getAll()
+        th.patients = aux.data.data
+      }
+      th.model.data = th.patients
+
     },
     openAddEditModal(current) {
       this.$refs.addEdit.openModal(current)
@@ -220,6 +248,7 @@ export default {
 
 .info-patients button {
   color: white;
+  margin-top: 4%;
 }
 
 
@@ -228,7 +257,8 @@ export default {
 }
 
 .info-patients button {
-  display: none;
+  display: block;
+  margin-right: 2rem;
 }
 
 .info-patients .patients-title {
@@ -241,11 +271,10 @@ export default {
   padding-right: 2rem;
   gap: 1rem;
   max-height: 60vh;
-  height: 100%;
   overflow-y: auto;
 }
 
 .btn-modal {
-  display: flex !important;
+  display: flex;
 }
 </style>

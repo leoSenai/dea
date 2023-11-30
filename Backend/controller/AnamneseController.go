@@ -43,7 +43,7 @@ func GetAnamneseByIdUserPatient(w http.ResponseWriter, r *http.Request) {
 	idUser, err := strconv.Atoi(idUserParam)
 	if err != nil {
 		log.Printf("Cannot parse ID User: %s", err.Error())
-		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi especificado o id do usuário procurado.", "")
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi especificado o id do médico procurado.", "")
 
 		return
 	}
@@ -125,6 +125,7 @@ func PutAnamnese(w http.ResponseWriter, r *http.Request) {
 	anamneseReturned, _ := service.GetAnamneseByIdUserPatient(int64(anamnese.IdUser), int64(anamnese.IdPatient))
 	if anamneseReturned.IdAnamnese != 0 {
 		anamneseReturned.Notes = anamnese.Notes
+		anamneseReturned.Indicative = anamnese.Indicative
 		anamnese, err = service.PutAnamnese(anamneseReturned)
 	} else {
 		anamnese, err = service.PostAnamnese(anamnese)
@@ -140,4 +141,53 @@ func PutAnamnese(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Informações da anamnese atualizadas com sucesso!", "")
+}
+
+func GetReport(w http.ResponseWriter, r *http.Request) {
+	idUserParam := chi.URLParam(r, "iduser")
+	idPatientParam := chi.URLParam(r, "idpatient")
+	grau := chi.URLParam(r, "grau")
+
+	id_user, err := strconv.Atoi(idUserParam)
+	if err != nil {
+		log.Printf("Cannot parse ID User: %s", err.Error())
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi especificado o id do médico no corpo de requisição.", "")
+		return
+	}
+	id_patient, err := strconv.Atoi(idPatientParam)
+	if err != nil {
+		log.Printf("Cannot parse ID User: %s", err.Error())
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi especificado o id do paciente no corpo de requisição.", "")
+		return
+	}
+
+	grau_int, err := strconv.Atoi(grau)
+	if err != nil {
+		log.Printf("Cannot parse ID User: %s", err.Error())
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi especificado o id do paciente no corpo de requisição.", "")
+		return
+	}
+
+	var anamnese_model models.Anamnese
+	anamnese_model.IdUser = id_user
+	anamnese_model.IdPatient = id_patient
+
+	anamnese_model, err = service.GetAnamneseByIdUserPatient(int64(anamnese_model.IdUser), int64(id_patient))
+	if err != nil {
+		log.Printf("Cannot parse ID User: %s", err.Error())
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi possível buscar informações da anamnese.", "")
+
+		return
+	}
+
+	report, err := service.GetReport(anamnese_model, grau_int)
+	if err != nil {
+		log.Printf("Cannot parse ID User: %s", err.Error())
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi possível gerar o laudo da anamnese.", "")
+
+		return
+	}
+
+	utils.ReturnResponseFile(w, http.StatusOK, "Laudo gerado! Aguarde o download do laudo começar...", report)
+	return
 }

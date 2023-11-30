@@ -1,6 +1,6 @@
 <template>
-  <modal-primary 
-    v-model="show" 
+  <modal-primary
+    v-model="show"
     @close="closeModal"
   >
     <template #modal-title>
@@ -11,12 +11,15 @@
         <p v-show="filiateds.length == 0">
           Nenhum paciente ou pessoa próxima relacionado ao questionário.
         </p>
-        <div 
-          v-for="(filiated) in filiateds"
+        <div
+          v-for="filiated in filiateds"
           :key="filiated.Name"
           class="row q-mb-sm quiz filiatedsModal"
         >
-          <span>{{ filiated.Name + (filiated.Type==='Patient' ? ' (paciente)' : ' (pessoa próxima)') }}</span>
+          <span>{{
+            filiated.Name +
+              (filiated.Type === 'Patient' ? ' (paciente)' : ' (pessoa próxima)')
+          }}</span>
           <button
             v-if="filiateds.length > 0"
             type="button"
@@ -40,7 +43,9 @@
             placeholder="Selecione uma opção"
             class="select-quasar newFiliated"
             max-options="3"
-            @update:model-value="updateFiliatedToAddList(filiatedsToAdd[i].Name)"
+            @update:model-value="
+              updateFiliatedToAddList(filiatedsToAdd[i].Name)
+            "
           />
           <button
             v-if="filiateds.length > 0"
@@ -51,9 +56,7 @@
             <b>X</b>
           </button>
         </div>
-        <div
-          class="row addFiliated"
-        >
+        <div class="row addFiliated">
           <button-primary
             class="fill-content"
             outlined
@@ -91,15 +94,10 @@
     </template>
   </modal-primary>
 </template>
-  <script>
+<script>
 import ModalPrimary from '../../components/ModalPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import { PhPlus } from '@phosphor-icons/vue';
-
-//TODO: toda la mierda
-
-//Existe o ProximityHasQuiz
-//e o PatientHasQuiz -ainda n tem controller
 
 export default {
   components: {
@@ -122,21 +120,25 @@ export default {
         Created: null,
         Updated: null,
       },
-      proximitysHasQuiz: [{
-        ProximityIdPatient: 0,
-        ProximityIdPerson: 0,
-        IdQuiz: 0,
-        Finished: 0,
-        Answers: '',
-        AnsweredIn: '',
-      }],
-      patientsHasQuiz: [{
-        IdPatient: 0,
-        IdQuiz: 0,
-        Finished: 0,
-        Answers: '',
-        AnsweredIn: '',
-      }],
+      proximitysHasQuiz: [
+        {
+          ProximityIdPatient: 0,
+          ProximityIdPerson: 0,
+          IdQuiz: 0,
+          Finished: 0,
+          Answers: '',
+          AnsweredIn: '',
+        },
+      ],
+      patientsHasQuiz: [
+        {
+          IdPatient: 0,
+          IdQuiz: 0,
+          Finished: 0,
+          Answers: '',
+          AnsweredIn: '',
+        },
+      ],
       patientsList: [],
       personsList: [],
       patientRemoved: [],
@@ -147,115 +149,107 @@ export default {
     };
   },
   methods: {
-    closeAddQSelect(){
-      this.filiatedsToAdd = []
+    closeAddQSelect() {
+      this.filiatedsToAdd = [];
     },
-    updateFiliatedToAddList(filiated_obj){
-      const th = this
-
-      //filiated_obj.Name
-      //filiated_obj.Type
+    updateFiliatedToAddList(filiated_obj) {
+      const th = this;
 
       var indexToRemove = th.filiatedToAddList.findIndex((fili) => {
-        return (fili.Name === filiated_obj.Name && fili.Type === filiated_obj.Type);
+        return (
+          fili.Name === filiated_obj.Name && fili.Type === filiated_obj.Type
+        );
       });
-      if(indexToRemove!=-1){// se achou o filiado na filiatedToAddList, remove-o
-        th.filiatedToAddList.splice(indexToRemove, 1)
-        th.filiatedToRemoveList.push(filiated_obj)
-        th.filiateds.push(filiated_obj)
+      if (indexToRemove != -1) {
+        th.filiatedToAddList.splice(indexToRemove, 1);
+        th.filiatedToRemoveList.push(filiated_obj);
+        th.filiateds.push(filiated_obj);
       }
 
       var index2Remove = th.filiatedsRemoved.findIndex((fili) => {
-        return (fili.Name === filiated_obj.Name && fili.Type === filiated_obj.Type);
+        return (
+          fili.Name === filiated_obj.Name && fili.Type === filiated_obj.Type
+        );
       });
-      if(index2Remove!=-1){
-        th.filiatedsRemoved.splice(index2Remove, 1)
+      if (index2Remove != -1) {
+        th.filiatedsRemoved.splice(index2Remove, 1);
       }
 
-      th.addFiliatedQSelectVisible = false
-      th.filiatedsToAdd = []
-      //th.filiatedToAddList = []
-      th.filiatedToRemoveList = []
-      th.patientRemoved = []
-      th.personRemoved = []
-
+      th.addFiliatedQSelectVisible = false;
+      th.filiatedsToAdd = [];
+      th.filiatedToRemoveList = [];
+      th.patientRemoved = [];
+      th.personRemoved = [];
     },
     openModal(current) {
-
       const th = this;
       th.show = true;
 
       if (current) {
         th.model = { ...current, Interval: +current.Interval };
-        //PROCURA PESSOAS PROXIMAS QUE TENHAM FILIACAO COM O QUIZ
-        th.$api.ProximityHasQuizController.getByIdQuiz(th.model.IdQuiz).then(({ data }) => {
-          if(data.data!==''){
-           
-            const filteredProximityHasQuiz = data.data.map((el) => {
-
-              return {
-                ProximityIdPatient: el.ProximityIdPatient,
-                ProximityIdPerson: el.ProximityIdPerson,
-                IdQuiz: el.IdQuiz,
-                Finished: el.Finished,
-                Answers: el.Answers,
-                AnsweredIn: el.AnsweredIn
-              };
-            });
-            
-            th.proximitysHasQuiz =
-            filteredProximityHasQuiz.length > 0
-              ? filteredProximityHasQuiz
-              : [];
-
-            for(let i in th.proximitysHasQuiz){
-
-              th.$api.PersonController.getById(th.proximitysHasQuiz[i].ProximityIdPerson).then(({data})=> {
-                th.personsList.push(data.data)
-
-                var personData = data.data;
-                var newFiliated = {
-                  Name: personData.Name,
-                  IdFiliated: personData.IdPerson,
-                  IdQuiz: th.model.IdQuiz,
-                  Finished: th.proximitysHasQuiz[i].Finished,
-                  Answers: th.proximitysHasQuiz[i].Answers,
-                  AnsweredIn: th.proximitysHasQuiz[i].AnsweredIn,
-                  Type: 'Person'
-                }
-                th.filiateds.push(newFiliated)
-
+        th.$api.ProximityHasQuizController.getByIdQuiz(th.model.IdQuiz).then(
+          ({ data }) => {
+            if (data.data !== '') {
+              const filteredProximityHasQuiz = data.data.map((el) => {
+                return {
+                  ProximityIdPatient: el.ProximityIdPatient,
+                  ProximityIdPerson: el.ProximityIdPerson,
+                  IdQuiz: el.IdQuiz,
+                  Finished: el.Finished,
+                  Answers: el.Answers,
+                  AnsweredIn: el.AnsweredIn,
+                };
               });
 
+              th.proximitysHasQuiz =
+                filteredProximityHasQuiz.length > 0
+                  ? filteredProximityHasQuiz
+                  : [];
+
+              for (let i in th.proximitysHasQuiz) {
+                th.$api.PersonController.getById(
+                  th.proximitysHasQuiz[i].ProximityIdPerson
+                ).then(({ data }) => {
+                  th.personsList.push(data.data);
+
+                  var personData = data.data;
+                  var newFiliated = {
+                    Name: personData.Name,
+                    IdFiliated: personData.IdPerson,
+                    IdQuiz: th.model.IdQuiz,
+                    Finished: th.proximitysHasQuiz[i].Finished,
+                    Answers: th.proximitysHasQuiz[i].Answers,
+                    AnsweredIn: th.proximitysHasQuiz[i].AnsweredIn,
+                    Type: 'Person',
+                  };
+                  th.filiateds.push(newFiliated);
+                });
+              }
             }
-
           }
-        });
+        );
 
-        //PROCURA PACIENTES QUE TENHAM FILIACAO COM O QUIZ
-        th.$api.PatientHasQuizController.getByIdQuiz(th.model.IdQuiz).then(({ data }) => {
-          if(data.data!==''){
-            
-            const filteredPatientHasQuiz = data.data.map((el) => {
+        th.$api.PatientHasQuizController.getByIdQuiz(th.model.IdQuiz).then(
+          ({ data }) => {
+            if (data.data !== '') {
+              const filteredPatientHasQuiz = data.data.map((el) => {
+                return {
+                  IdPatient: el.IdPatient,
+                  IdQuiz: el.IdQuiz,
+                  Finished: el.Finished,
+                  Answers: el.Answers,
+                  AnsweredIn: el.AnsweredIn,
+                };
+              });
 
-              return {
-                IdPatient: el.IdPatient,
-                IdQuiz: el.IdQuiz,
-                Finished: el.Finished,
-                Answers: el.Answers,
-                AnsweredIn: el.AnsweredIn
-              };
-            });
-            
-            th.patientsHasQuiz =
-            filteredPatientHasQuiz.length > 0
-              ? filteredPatientHasQuiz
-              : [];
+              th.patientsHasQuiz =
+                filteredPatientHasQuiz.length > 0 ? filteredPatientHasQuiz : [];
 
-              for(let i in th.patientsHasQuiz){
-
-                th.$api.PatientController.getById(th.patientsHasQuiz[i].IdPatient).then(({data})=> {
-                  th.patientsList.push(data.data)
+              for (let i in th.patientsHasQuiz) {
+                th.$api.PatientController.getById(
+                  th.patientsHasQuiz[i].IdPatient
+                ).then(({ data }) => {
+                  th.patientsList.push(data.data);
 
                   var patientData = data.data;
                   var newFiliated = {
@@ -265,120 +259,130 @@ export default {
                     Finished: th.patientsHasQuiz[i].Finished,
                     Answers: th.patientsHasQuiz[i].Answers,
                     AnsweredIn: th.patientsHasQuiz[i].AnsweredIn,
-                    Type: 'Patient'
-                  }
-                  th.filiateds.push(newFiliated)
-
+                    Type: 'Patient',
+                  };
+                  th.filiateds.push(newFiliated);
                 });
-
               }
             }
-        });
+          }
+        );
       }
     },
     addFiliated() {
-      const th = this
-      if(th.filiatedsToAdd.length==1){
-        return
+      const th = this;
+      if (th.filiatedsToAdd.length == 1) {
+        return;
       }
-      th.addFiliatedQSelectVisible = true
-      th.filiatedsToAdd.push({ Name: '' })
+      th.addFiliatedQSelectVisible = true;
+      th.filiatedsToAdd.push({ Name: '' });
 
-      if(th.filiatedToAddList.length===0){
-
-        //PROCURA TODOS PACIENTES E ADICIONA A LISTA DE FILIADOS PARA ADICIONAR
+      if (th.filiatedToAddList.length === 0) {
         th.$api.PatientController.getAll().then(({ data }) => {
-  
-          var patientList =  data.data //array com os objetos pacientes
+          var patientList = data.data;
           var alreadyIncluded;
-          //adapt each object to a filiated model and push to 'filiatedToAddList'
-          for(var i in patientList){
-  
-            alreadyIncluded = false
-            for(var l=0;l<th.filiateds.length;l++){
-              if(th.filiateds[l].Name==patientList[i].Name && th.filiateds[l].Type == 'Patient'){
+          for (var i in patientList) {
+            alreadyIncluded = false;
+            for (var l = 0; l < th.filiateds.length; l++) {
+              if (
+                th.filiateds[l].Name == patientList[i].Name &&
+                th.filiateds[l].Type == 'Patient'
+              ) {
                 alreadyIncluded = true;
               }
             }
-  
-            if(!alreadyIncluded){
-              th.filiatedToAddList.push({Name: patientList[i].Name, Type: 'Patient', IdQuiz: th.model.IdQuiz, IdFiliated: patientList[i].IdPatient})
+
+            if (!alreadyIncluded) {
+              th.filiatedToAddList.push({
+                Name: patientList[i].Name,
+                Type: 'Patient',
+                IdQuiz: th.model.IdQuiz,
+                IdFiliated: patientList[i].IdPatient,
+              });
             }
           }
         });
-  
-        //PROCURA TODOS PESSOAS E ADICIONA A LISTA DE FILIADOS PARA ADICIONAR
+
         th.$api.PersonController.getAll().then(({ data }) => {
-  
-          var personList =  data.data //array com os objetos pacientes
+          var personList = data.data;
           var alreadyIncluded;
-          //adapt each object to a filiated model and push to 'filiatedToAddList'
-          for(let i in personList){
-  
-            alreadyIncluded = false
-            for(let l=0;l<th.filiateds.length;l++){ 
-              if(th.filiateds[l].Name==personList[i].Name && th.filiateds[l].Type == 'Person'){
-                alreadyIncluded = true; 
+          for (let i in personList) {
+            alreadyIncluded = false;
+            for (let l = 0; l < th.filiateds.length; l++) {
+              if (
+                th.filiateds[l].Name == personList[i].Name &&
+                th.filiateds[l].Type == 'Person'
+              ) {
+                alreadyIncluded = true;
               }
             }
-  
-            if(!alreadyIncluded){
-              th.filiatedToAddList.push({Name: personList[i].Name, Type: 'Person', IdQuiz: th.model.IdQuiz, IdFiliated: personList[i].IdPerson})
+
+            if (!alreadyIncluded) {
+              th.filiatedToAddList.push({
+                Name: personList[i].Name,
+                Type: 'Person',
+                IdQuiz: th.model.IdQuiz,
+                IdFiliated: personList[i].IdPerson,
+              });
             }
           }
         });
       }
     },
-    removeFiliated(filiated){
-
-      const th = this
-      if(filiated.Name == ''){
-        return
+    removeFiliated(filiated) {
+      const th = this;
+      if (filiated.Name == '') {
+        return;
       }
-      if(filiated.Type==='Patient'){
-        th.removePatient(filiated)
-      }else{
-        th.removePerson(filiated)
+      if (filiated.Type === 'Patient') {
+        th.removePatient(filiated);
+      } else {
+        th.removePerson(filiated);
       }
     },
     removePatient(filiated) {
-
-      const th = this
+      const th = this;
       var indexToRemove = th.filiatedToAddList.findIndex((fili) => {
         return fili.Name === filiated.Name;
       });
-      if(indexToRemove==-1){
-        th.filiatedToAddList.push({Name: filiated.Name, Type: filiated.Type, IdQuiz: th.model.IdQuiz})
-        th.patientRemoved.push(filiated)
+      if (indexToRemove == -1) {
+        th.filiatedToAddList.push({
+          Name: filiated.Name,
+          Type: filiated.Type,
+          IdQuiz: th.model.IdQuiz,
+        });
+        th.patientRemoved.push(filiated);
       }
 
       var index2Remove = th.filiateds.findIndex((fili) => {
-        return (fili.Name === filiated.Name && fili.Type==='Patient');
+        return fili.Name === filiated.Name && fili.Type === 'Patient';
       });
-      if(index2Remove!=-1){
-        th.filiateds.splice(index2Remove, 1)
-        th.filiatedsRemoved.push(filiated)
+      if (index2Remove != -1) {
+        th.filiateds.splice(index2Remove, 1);
+        th.filiatedsRemoved.push(filiated);
       }
-
     },
     removePerson(filiated) {
-      const th = this
+      const th = this;
       var indexToRemove = th.filiatedToAddList.findIndex((fili) => {
         return fili.Name === filiated.Name;
       });
-      if(indexToRemove==-1){
-        th.filiatedToAddList.push({Name: filiated.Name, Type: filiated.Type, IdQuiz: th.model.IdQuiz})
-        th.personRemoved.push(filiated)
+      if (indexToRemove == -1) {
+        th.filiatedToAddList.push({
+          Name: filiated.Name,
+          Type: filiated.Type,
+          IdQuiz: th.model.IdQuiz,
+        });
+        th.personRemoved.push(filiated);
       }
 
       var index2Remove = th.filiateds.findIndex((fili) => {
-        return (fili.Name === filiated.Name && fili.Type==='Person');
+        return fili.Name === filiated.Name && fili.Type === 'Person';
       });
-      if(index2Remove!=-1){
-        th.filiateds.splice(index2Remove, 1)
-        th.filiatedsRemoved.push(filiated)
+      if (index2Remove != -1) {
+        th.filiateds.splice(index2Remove, 1);
+        th.filiatedsRemoved.push(filiated);
       }
-
     },
     closeModal() {
       this.show = false;
@@ -394,39 +398,39 @@ export default {
       this.patientsList = [];
       this.filiateds = [];
       this.patientRemoved = [];
-      this.personRemoved = []
+      this.personRemoved = [];
       this.filiatedsRemoved = [];
       this.filiatedsToAdd = [];
       this.filiatedToAddList = [];
       this.$emit('close');
     },
     updateQuizFiliated() {
-      
       const th = this;
-      const filiateds = th.filiateds
-      const filiatedsRemoved = th.filiatedsRemoved
+      const filiateds = th.filiateds;
+      const filiatedsRemoved = th.filiatedsRemoved;
 
-      //th.filiateds = [{Name: '', Type: '', IdQuiz: 0}]
-      //th.filiatedsRemoved = [{Name: '', Type: '', IdQuiz: 0}]
-      th.$api.FiliatedsController.update({Filiateds: filiateds, filiatedsRemoved: filiatedsRemoved})
-      th.closeModal()
+      th.$api.FiliatedsController.update({
+        Filiateds: filiateds,
+        filiatedsRemoved: filiatedsRemoved,
+      });
+      th.closeModal();
     },
   },
 };
 </script>
 <style scoped>
-.select-filiated{
+.select-filiated {
   display: flex;
   align-items: center;
   margin-bottom: 8px;
   z-index: 0;
 }
 
-.filiatedsModal{
+.filiatedsModal {
   padding: 16px;
 }
 
-.newFiliated{
+.newFiliated {
   border: #fff solid 1px;
   border-radius: 5px;
   width: -webkit-fill-available;
@@ -435,7 +439,8 @@ export default {
 .addFiliated {
   margin-top: 20px;
 }
-.remove-person, .remove-patient{
+.remove-person,
+.remove-patient {
   position: absolute;
   right: 1em;
   width: 1.5rem;
@@ -454,7 +459,7 @@ export default {
   border-radius: 99999px;
   cursor: pointer;
   z-index: 1;
-  padding: 4px
+  padding: 4px;
 }
 
 .fill-content {
@@ -508,7 +513,8 @@ export default {
 }
 </style>
 <style>
-  .select-filiated .q-field__append.q-field__marginal.row.no-wrap.items-center.q-anchor--skip{
-    padding-right: 3rem !important;
-  }
+.select-filiated
+  .q-field__append.q-field__marginal.row.no-wrap.items-center.q-anchor--skip {
+  padding-right: 3rem !important;
+}
 </style>

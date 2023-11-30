@@ -2,7 +2,7 @@
   <div class="home">
     <div class="home-options">
       <template
-        v-for="link in linksData"
+        v-for="link in linksMenu"
         :key="link.path"
       >
         <router-link
@@ -22,45 +22,95 @@
   </div>
 </template>
 <script>
-import { PhBookOpen, PhPerson, PhScooter } from '@phosphor-icons/vue';
-import Cookie from '../utils/cookie'
+import {
+  PhBookOpen,
+  PhPerson,
+  PhScooter,
+  PhArticle,
+  PhUsers,
+  PhUserList,
+} from '@phosphor-icons/vue';
+import Cookie from '../utils/cookie';
+import { RoleEnum } from '../utils/Enum';
 
 export default {
-  components: { PhScooter, PhBookOpen, PhPerson },
-  props: {
-    links: {
-      type: Array,
-      required: true,
-    },
+  components: {
+    PhScooter,
+    PhBookOpen,
+    PhPerson,
+    PhArticle,
+    PhUsers,
+    PhUserList,
   },
   data() {
     return {
       userType: '',
-      linksData: []
+      linksData: [],
     };
   },
-  mounted () {
-    this.getData()
-    this.fixScreenSize()
+  computed: {
+    linksMenu() {
+      return this.getLinks();
+    },
+  },
+  mounted() {
+    this.getData();
+    this.fixScreenSize();
   },
   methods: {
-    goLinkMenu (linktag) {
-      this.$router.push('/' + linktag);
-    },
-    getData () {
-      this.userType = Cookie.getUserType(Cookie.get('authToken'))
-      this.linksData = this.links
-    },
-    fixScreenSize () {
-      try{
-        const contentLoginScreen = document.body.getElementsByClassName('login-screen')
-        if(contentLoginScreen.length != 0){
-          contentLoginScreen[0].classList.remove('login-screen')
+    getLinks() {
+      const authToken = Cookie.get('authToken');
+      const typeUser = Cookie.getUserType(authToken);
+      const userId = Cookie.getUserId(authToken);
+
+      switch (typeUser) {
+        case RoleEnum.Patient: {
+          return [
+            {
+              path: '/paciente/' + userId + '/questionarios',
+              name: 'Questionários',
+              icon: PhArticle,
+            },
+          ];
         }
-      } finally {
-        //
+        case RoleEnum.Administrator: {
+          return [{ path: '/usuarios', name: 'Médicos', icon: PhUsers }];
+        }
+        case RoleEnum.User: {
+          return [
+            { path: '/questionarios', name: 'Questionários', icon: PhArticle },
+            { path: '/pacientes', name: 'Pacientes', icon: PhUserList },
+          ];
+        }
+        case RoleEnum.Person: {
+          return [
+            {
+              path: '/pessoas-proximas/' + userId + '/questionarios',
+              name: 'Questionários',
+              icon: PhArticle,
+            },
+          ];
+        }
       }
-    }
+    },
+    goLinkMenu(linktag) {
+      this.$router.push(linktag);
+    },
+    getData() {
+      this.userType = Cookie.getUserType(Cookie.get('authToken'));
+      this.linksData = this.links;
+    },
+    fixScreenSize() {
+      try {
+        const contentLoginScreen =
+          document.body.getElementsByClassName('login-screen');
+        if (contentLoginScreen.length != 0) {
+          contentLoginScreen[0].classList.remove('login-screen');
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    },
   },
 };
 </script>

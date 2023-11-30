@@ -4,7 +4,8 @@
     @close="closeModal"
   >
     <template #modal-title>
-      {{ isAnswered ? 'Responder' : 'Visualizar' }} Questionário: {{ Quiz.Name }}
+      {{ isAnswered ? 'Responder' : 'Visualizar' }} Questionário:
+      {{ Quiz.Name }}
     </template>
     <template #modal-content>
       <q-form ref="form">
@@ -49,14 +50,14 @@
 import ModalPrimary from '../../components/ModalPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import QuestionPrimary from '../../components/QuestionPrimary.vue';
-import Cookie from '../../utils/cookie'
-import { RoleEnum } from '../../utils/Enum'
+import Cookie from '../../utils/cookie';
+import { RoleEnum } from '../../utils/Enum';
 
 export default {
   components: {
     ModalPrimary,
     ButtonPrimary,
-    QuestionPrimary
+    QuestionPrimary,
   },
   emits: ['close', 'error'],
   data() {
@@ -65,72 +66,84 @@ export default {
       model: {
         Title: '',
         Questions: [],
-        Answers: []
+        Answers: [],
       },
       aaa: 0,
-      Quiz: {}
-    }
+      Quiz: {},
+    };
   },
   computed: {
-    typeUser () {
+    typeUser() {
       const authToken = Cookie.get('authToken');
       return Cookie.getUserType(authToken);
     },
-    isAnswered () {
-      return this.Quiz.Name.includes('EM ABERTO')
-    }
+    isAnswered() {
+      return this.Quiz.Name.includes('EM ABERTO');
+    },
   },
   methods: {
     openModal(currentQuiz) {
-      this.show = true
-      this.loadQuiz(currentQuiz)
+      this.show = true;
+      this.loadQuiz(currentQuiz);
     },
     closeModal() {
-      this.show = false
-      this.$emit('close')
-      this.model = {
-        Title: '',
-        Questions: []
-      }
+      this.show = false;
+      this.model.Answers = [];
+      this.$emit('close');
     },
     loadQuiz(currentQuiz) {
-      const th = this
-      th.Quiz = currentQuiz
-      th.$api.QuestionController.getAll()
-        .then(({ data }) => {
-          const filteredQuestions = data.data.filter(el => el.IdQuiz === currentQuiz.IdQuiz)
-          th.model.Questions = filteredQuestions
-            if (th.typeUser === RoleEnum.Patient) {
-              th.$api.PatientHasQuizController.getByIdQuizPatient(th.Quiz.IdQuiz, th.$route.params.id).then(response => {
-                response.data.data[0].Answers.split(',').forEach((el, i) => {
-                  th.model.Answers[i] = el
-                })
-              })
-          }
-        })
+      const th = this;
+      th.Quiz = currentQuiz;
+      th.$api.QuestionController.getAll().then(({ data }) => {
+        const filteredQuestions = data.data.filter(
+          (el) => el.IdQuiz === currentQuiz.IdQuiz
+        );
+        th.model.Questions = filteredQuestions;
+        if (th.typeUser === RoleEnum.Patient) {
+          th.$api.PatientHasQuizController.getByIdQuizPatient(
+            th.Quiz.IdQuiz,
+            th.$route.params.id
+          ).then((response) => {
+            response.data.data[0].Answers.split(',').forEach((el, i) => {
+              th.model.Answers[i] = el;
+            });
+          });
+        }
+      });
     },
     saveAnswers() {
-      const th = this
+      const th = this;
 
       const dto = {
         IdPatient: +th.$route.params.id,
         IdQuiz: th.Quiz.IdQuiz,
         Finished: th.model.Questions.length === th.model.Answers.length ? 1 : 0,
         Answers: th.model.Answers.toString(),
-        AnswerdIn: new Date()
-      }
+        AnswerdIn: new Date(),
+      };
 
       if (th.typeUser === RoleEnum.Person) {
-        th.$api.ProximityHasQuizController.update(dto).then(response => {
-          if (response) th.closeModal()
-        })
+        var dtoProximityHasQuiz = {
+          ProximityIdPerson: parseInt(th.$route.params.id),
+          IdQuiz: th.Quiz.IdQuiz,
+          Finished:
+            th.model.Questions.length === th.model.Answers.length ? 1 : 0,
+          Answers: th.model.Answers.toString(),
+          AnsweredIn: new Date(),
+        };
+
+        th.$api.ProximityHasQuizController.update(dtoProximityHasQuiz).then(
+          (response) => {
+            if (response) th.closeModal();
+          }
+        );
       } else if (th.typeUser === RoleEnum.Patient) {
-        th.$api.PatientHasQuizController.update(dto).then(response => {
-          if (response) th.closeModal()
-        })
+        th.$api.PatientHasQuizController.update(dto).then((response) => {
+          if (response) th.closeModal();
+        });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

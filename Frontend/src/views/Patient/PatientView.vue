@@ -22,7 +22,7 @@
         </div>
         <div class="edit-button-div">
           <button-primary
-            class="editBtn" 
+            class="editBtn"
             @click="editPatient"
           >
             <PhPencil class="editIcon" />
@@ -32,29 +32,31 @@
       </div>
     </div>
     <section>
-      <button-primary 
+      <button-primary
         class="nextPersonView"
-        @click="showNextPersons()" 
+        @click="showNextPersons()"
       >
         Ver pessoas próximas
         <PhCaretRight />
       </button-primary>
       <button-primary
-        class="nextPersonView" 
+        class="nextPersonView"
         @click="viewQuizzes()"
       >
         Questionários
         <PhCaretRight />
       </button-primary>
-      <div style="display: flex; align-items: center;">
-        <h5>Anamnese</h5><p
+      <div style="display: flex; align-items: center">
+        <h5>Anamnese</h5>
+        <p
           id="loading-gif"
           style="display: none; margin: 0; color: rgb(8, 139, 8)"
         >
           <img
             src="/src/assets/imgs/save.png"
             style="width: 20px; height: 20px; margin-top: 5px"
-          > Saving...
+          >
+          Saving...
         </p>
       </div>
       <q-editor
@@ -65,14 +67,14 @@
         type="textarea"
         :rows="15"
       />
-      <q-checkbox 
+      <q-checkbox
         v-model="analiseConclusiva"
         class="analiseConclusiva"
       >
         Análise conclusiva
       </q-checkbox>
       <div class="gerar-laudo-div">
-        <button-primary 
+        <button-primary
           class="gerar-laudo"
           @click="gerarLaudo()"
         >
@@ -80,9 +82,9 @@
         </button-primary>
       </div>
     </section>
-    <PatientsAddEditModal 
+    <PatientsAddEditModal
       ref="addEdit"
-      @close="load" 
+      @close="load"
     />
     <PatientConfirmLaudo
       ref="confirmModal"
@@ -95,7 +97,7 @@ import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import { PhCaretLeft, PhCaretRight, PhPencil } from '@phosphor-icons/vue';
 import cookie from '../../utils/cookie';
 import PatientsAddEditModal from './PatientsAddEditModal.vue';
-import PatientConfirmLaudo from './PatientConfirmLaudo.vue'
+import PatientConfirmLaudo from './PatientConfirmLaudo.vue';
 import Toastify from 'toastify-js';
 
 export default {
@@ -106,7 +108,7 @@ export default {
     PhCaretRight,
     PatientsAddEditModal,
     PatientConfirmLaudo,
-},
+  },
   data() {
     return {
       opcoesSimNao: ['Sim', 'Não'],
@@ -138,29 +140,27 @@ export default {
       },
       campoAnamneseDesabilitado: false,
       countdown: 5,
-      countdownInterval: null
-    }
+      countdownInterval: null,
+    };
   },
   watch: {
-    'anamneseModel.Notes' () {
+    'anamneseModel.Notes'() {
       document.getElementById('loading-gif').style.display = 'block';
-      clearInterval(this.countdownInterval)
-      this.startSaveCountdown()
+      clearInterval(this.countdownInterval);
+      this.startSaveCountdown();
     },
   },
-  mounted () {
-    const th = this
-    th.load()
+  mounted() {
+    const th = this;
+    th.load();
   },
   methods: {
     viewQuizzes() {
-      this.$router.push(
-        '/paciente/' + this.model.IdPatient + '/questionarios'
-      );
+      this.$router.push('/paciente/' + this.model.IdPatient + '/questionarios');
     },
     editPatient() {
       const th = this;
-      th.$refs.addEdit.openModal(th.model)
+      th.$refs.addEdit.openModal(th.model);
     },
     savePatientData() {
       const th = this;
@@ -172,7 +172,6 @@ export default {
       th.anamneseModel.IdPatient = th.model.IdPatient;
       th.anamneseModel.IdUser = cookie.getUserId(cookie.get('authToken'));
       th.$api.AnamneseController.update(th.anamneseModel);
-      //desaparece loading
       document.getElementById('loading-gif').style.display = 'none';
     },
     changeNewBornValue() {
@@ -184,13 +183,19 @@ export default {
       }
     },
     gerarLaudo() {
-      const th = this
+      const th = this;
 
-      if(th.anamneseModel.Notes!=undefined && th.anamneseModel.Notes!=null && th.anamneseModel.Notes!='' && th.anamneseModel.Notes != '  ' && th.anamneseModel.Notes.length > 10){
-        if(th.analiseConclusiva){
-          th.$refs.confirmModal.openModal(th.model, th.anamneseModel)
-        } else{
-          alert('Para gerar o laudo, a anamnese precisa ser conclusiva!')
+      if (
+        th.anamneseModel.Notes != undefined &&
+        th.anamneseModel.Notes != null &&
+        th.anamneseModel.Notes != '' &&
+        th.anamneseModel.Notes != '  ' &&
+        th.anamneseModel.Notes.length > 10
+      ) {
+        if (th.analiseConclusiva) {
+          th.$refs.confirmModal.openModal(th.model, th.anamneseModel);
+        } else {
+          alert('Para gerar o laudo, a anamnese precisa ser conclusiva!');
         }
       } else {
         Toastify({
@@ -214,9 +219,8 @@ export default {
             y: 65,
           },
         }).showToast();
-        th.getAnamneseInfo()
+        th.getAnamneseInfo();
       }
-
     },
     changeAtivoValue() {
       const th = this;
@@ -234,43 +238,46 @@ export default {
     goBack() {
       var contentElement = document.getElementsByClassName('content')[0];
       contentElement.style.overflow = 'hidden';
-      this.$router.push('/pacientes')
+      this.$router.push('/pacientes');
     },
     startSaveCountdown() {
       this.countdownInterval = setInterval(() => {
         if (this.countdown === 0) {
           clearInterval(this.countdownInterval);
-          this.saveAnamnese()
-          this.resetSaveCountdown()
+          this.saveAnamnese();
+          this.resetSaveCountdown();
         }
-        this.countdown -= 1
+        this.countdown -= 1;
       }, 1000);
     },
     resetSaveCountdown() {
       this.countdown = 5;
     },
-    load () {
+    load() {
       const th = this;
-      const idPatient = th.$router.currentRoute.value.query.id
-      th.$api.PatientController.getById(idPatient).then(({data}) => {
-        th.model = { ...data.data }
-      })
+      const idPatient = th.$router.currentRoute.value.query.id;
+      th.$api.PatientController.getById(idPatient).then(({ data }) => {
+        th.model = { ...data.data };
+      });
 
-      th.getAnamneseInfo()
+      th.getAnamneseInfo();
     },
-    getAnamneseInfo(){
+    getAnamneseInfo() {
       const th = this;
-      const idPatient = th.$router.currentRoute.value.query.id
-      th.$api.AnamneseController.getByIdUserPatient({IdPatient: idPatient, IdUser: cookie.getUserId(cookie.get('authToken'))}).then(({data}) => {
+      const idPatient = th.$router.currentRoute.value.query.id;
+      th.$api.AnamneseController.getByIdUserPatient({
+        IdPatient: idPatient,
+        IdUser: cookie.getUserId(cookie.get('authToken')),
+      }).then(({ data }) => {
         if (data.data) {
-          th.anamneseModel = { ...data.data }
+          th.anamneseModel = { ...data.data };
         }
-      })
+      });
     },
-    resetPassword () {
+    resetPassword() {
       const th = this;
-      th.$api.PatientController.resetPassword(th.model.IdPatient)
-    }
+      th.$api.PatientController.resetPassword(th.model.IdPatient);
+    },
   },
 };
 </script>
@@ -356,14 +363,14 @@ h5 {
   margin: 10px;
   width: -webkit-fill-available;
   margin-bottom: 20px;
-  transition: .5s;
+  transition: 0.5s;
 }
 
 .nextPersonView:hover {
   background-color: #45852a;
 }
 
-.nextPersonView button:hover{
+.nextPersonView button:hover {
   background-color: #45852a;
 }
 
@@ -380,7 +387,7 @@ h5 {
   justify-content: space-between;
   background-size: 50% !important;
   background: url(../../assets/imgs/home-background.svg) no-repeat;
-  background-position-x:center;
+  background-position-x: center;
   background-position-y: center;
   height: 100%;
 }
@@ -458,7 +465,7 @@ section {
 p.reset-password {
   color: var(--primary);
   font-weight: 600;
-  font-size: .875rem;
+  font-size: 0.875rem;
   cursor: pointer;
 }
 

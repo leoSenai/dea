@@ -36,11 +36,12 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var userDtoSend dtos.UserDTO = dtos.UserDTO{
-		IdUser:   user.IdUser,
-		Name:     user.Name,
-		TypeUser: user.TypeUser,
-		IdCbo:    user.IdCbo,
-		Active:   user.Active,
+		IdUser:     user.IdUser,
+		Name:       user.Name,
+		TypeUser:   user.TypeUser,
+		IdCbo:      user.IdCbo,
+		Active:     user.Active,
+		RegisterCR: user.RegisterCR,
 	}
 
 	utils.ReturnResponseJSON(w, http.StatusOK, "Médico encontrado com sucesso!", userDtoSend)
@@ -73,6 +74,7 @@ func GetAllUser(w http.ResponseWriter, _ *http.Request) {
 				IdServices: users[i].IdServices,
 				Email:      users[i].Email,
 				Phone:      users[i].Phone,
+				RegisterCR: users[i].RegisterCR,
 			},
 		)
 
@@ -98,7 +100,7 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 
 		log.Printf("Cannot do Post: %s", err.Error())
 
-		utils.ReturnResponseJSON(w, http.StatusInternalServerError, err.Error(), "")
+		utils.ReturnResponseJSON(w, http.StatusInternalServerError, err.Error(), "Erro ao cadastrar médico.")
 
 		return
 	}

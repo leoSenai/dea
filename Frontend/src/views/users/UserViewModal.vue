@@ -11,14 +11,14 @@
         <div class="row q-mb-sm">
           <input-primary
             v-model="model.Name"
-            :disable="true"
+            disable
             label="Nome"
             label-color="primary"
             required
           />
           <input-primary
             v-model="model.Email"
-            :disable="true"
+            disable
             label="E-mail"
             label-color="primary"
             required
@@ -27,7 +27,7 @@
           <input-primary
             v-if="!model.IdUser"
             v-model="model.Password"
-            :disable="true"
+            disable
             label="Senha"
             label-color="primary"
             required
@@ -36,7 +36,7 @@
           />
           <q-select
             v-model="model.TypeUser"
-            :disable="true"
+            disable
             :options="optionsTypeUser"
             outlined
             label="Tipo de Usuário"
@@ -48,7 +48,7 @@
           />
           <q-select
             v-model="model.Active"
-            :disable="true"
+            disable
             :options="optionsActive"
             outlined
             label="Ativo"
@@ -60,7 +60,7 @@
           />
           <input-primary
             v-model="model.Phone"
-            :disable="true"
+            disable
             label="Celular"
             label-color="primary"
             required
@@ -69,7 +69,7 @@
           />
           <q-select
             v-model="model.IdCbo"
-            :disable="true"
+            disable
             :options="optionsCbo"
             outlined
             label="Cbo"
@@ -79,9 +79,18 @@
             options-dark
             class="select row q-pt-sm"
           />
+          <input-primary
+            v-model="model.RegisterCR"
+            label="Código de Registro do Conselho Regional"
+            label-color="primary"
+            :maxlength="14"
+            required
+            disable
+            class="select row q-pt-lg q-mb-lg"
+          />
           <!--<q-select
             v-model="model.IdService"
-            :disable="true"
+            disable
             :options="optionsServices"
             outlined
             label="Serviço"
@@ -131,6 +140,7 @@
           Phone: '',
           IdCbo: '',
           IdService: '',
+          RegisterCR: ''
         },
         optionsTypeUser: [
         { label: 'Administrador', value: 'A' },
@@ -190,6 +200,7 @@
           Phone: '',
           IdCbo: '',
           IdService: '',
+          RegisterCR: ''
         };
         this.$emit('close');
       },

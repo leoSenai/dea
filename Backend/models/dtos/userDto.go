@@ -9,4 +9,5 @@ type UserDTO struct {
 	IdServices int64
 	Email      string
 	Phone      string
+	RegisterCR string
 }

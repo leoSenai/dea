@@ -11,6 +11,7 @@ type User struct {
 	IdServices int64  `gorm:"column:idservicos;primaryKey" json:"IdServices"`
 	Active     int    `gorm:"column:ativo" json:"Active"`
 	Phone      string `gorm:"column:telefone" json:"Phone"`
+	RegisterCR string `gorm:"column:registroCR" json:"RegisterCR"`
 }
 
 func (p *User) TableName() string {

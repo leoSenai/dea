@@ -68,6 +68,13 @@
             required
             mask="######"
           />
+          <input-primary
+            v-model="model.RegisterCR"
+            label="Código de Registro do Conselho Regional"
+            label-color="primary"
+            :maxlength="14"
+            required
+          />
           <!--<q-select
             v-model="model.IdService"
             :options="optionsServices"
@@ -135,6 +142,7 @@ export default {
         Phone: '',
         IdCbo: '',
         IdService: '',
+        RegisterCR: ''
       },
       optionsTypeUser: [
         { label: 'Administrador', value: 'A' },
@@ -202,6 +210,7 @@ export default {
         Phone: '',
         IdCbo: '',
         IdService: 1,
+        RegisterCR: ''
       };
       this.$emit('close');
     },
@@ -302,6 +311,9 @@ export default {
         return false;
       }else if (!validCbo) {
         alert('Digite um CBO válido!');
+        return false;
+      } else if (th.model.RegisterCR.length < 3) {
+        alert('O código de registro do conselho regional deve conter no mínimo 3 caracteres!');
         return false;
       }
 

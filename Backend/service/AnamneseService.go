@@ -4,12 +4,10 @@ import (
 	"api/models"
 	"api/repository"
 	"fmt"
-	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/signintech/gopdf"
 )
 
@@ -68,7 +66,7 @@ func GetMonthPTBR(month_int int) (month string) {
 	return
 }
 
-func GetReport(anamnese models.Anamnese, grau int) (anamnese_file http.File, err error) {
+func GetReport(anamnese models.Anamnese, grau int) (pdfBuffer []byte, err error) {
 
 	patient, _ := GetPatientById(int64(anamnese.IdPatient))
 	user, _ := GetUserById(int64(anamnese.IdUser))
@@ -431,12 +429,10 @@ func GetReport(anamnese models.Anamnese, grau int) (anamnese_file http.File, err
 
 	// -------------------------- FIM LAUDO ---------------------------
 
-	id_random := uuid.New().String()
+	var pdfBytes = pdf.GetBytesPdf()
+	// pdfBuffer = bytes.NewBuffer(pdfBytes)
 
-	report_path := "reports/report" + id_random + ".pdf"
-	pdf.WritePdf(report_path)
-
-	return anamnese_file, err
+	return pdfBytes, err
 }
 
 func GetGrau(grau int) (graustr string) {

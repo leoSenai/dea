@@ -142,10 +142,30 @@
                 })
 
                 var response = await th.$api.AnamneseController.getLaudo(th.modeloAnamnese.IdUser, th.model.IdPatient, th.grau.value)
-                console.log(response)
+                console.log(response.data)
+                const pdfBlob = new Blob([response.data], { type: 'application/pdf' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(pdfBlob)
+                link.style.visibility = 'hidden'
+                link.download = pdfBlob.name
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
             }else{
                 alert('O laudo só pode ser gerado quando a anamnese for conclusiva!')
             }
+        },
+        base64ToArrayBuffer(base64) {
+          console.log(base64)
+          const binaryString = window.atob(base64)
+          const binaryLen = binaryString.length
+          const bytes = new Uint8Array(binaryLen)
+          for(let i = 0; i < binaryLen; i++) {
+            const ascii = binaryString.charCodeAt(i)
+            bytes[i] = ascii
+          }
+
+          return bytes
         },
         closeModal() {
           this.show = false;

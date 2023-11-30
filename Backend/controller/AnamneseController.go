@@ -144,8 +144,6 @@ func PutAnamnese(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetReport(w http.ResponseWriter, r *http.Request) {
-	var report http.File
-
 	idUserParam := chi.URLParam(r, "iduser")
 	idPatientParam := chi.URLParam(r, "idpatient")
 	grau := chi.URLParam(r, "grau")
@@ -182,7 +180,7 @@ func GetReport(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	report, err = service.GetReport(anamnese_model, grau_int)
+	report, err := service.GetReport(anamnese_model, grau_int)
 	if err != nil {
 		log.Printf("Cannot parse ID User: %s", err.Error())
 		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi possível gerar o laudo da anamnese.", "")

@@ -95,6 +95,7 @@ func main() {
 	r.Post("/anamnese/insert", utils.VerifyToken(controller.PostAnamnese))
 	r.Put("/anamnese/update", utils.VerifyToken(controller.PutAnamnese))
 	r.Get("/anamnese/report/{iduser}/{idpatient}/{grau}", utils.VerifyToken(controller.GetReport))
+	r.Get("/anamnese/sumresults/{idpatient}", utils.VerifyToken(controller.GetSumResults))
 
 	r.Get("/asking/get-by-id/{id}", utils.VerifyToken(controller.GetAskingById))
 	r.Get("/asking/get-all", utils.VerifyToken(controller.GetAllAsking))

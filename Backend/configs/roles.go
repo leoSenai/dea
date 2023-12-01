@@ -26,7 +26,7 @@ var acessRoles = [][]string{
 		"patienthasdoctor/get-by-patient-id;patienthasdoctor/get-by-doctor-id;patienthasdoctor/get-all;patienthasdoctor/insert;anamnese/get-by-id-user-patient;" +
 		"proximity/get-persons-by-id-patient;filiateds/update;patient/reset-password;user/reset-password;" +
 		"/patienthasquiz/get-by-id-quiz;" + "/patienthasquiz/get-by-id-quiz-patient;" + "/patienthasquiz/get-by-id-patient;" + "/patienthasquiz/insert;" + "/patienthasquiz/update;" +
-		"anamnese/report;" + "patient/get-by-doc")},
+		"anamnese/report;" + "patient/get-by-doc;anamnese/sumresults")},
 
 	{"PA", ("person/get-by-id;person/get-all;user/get-by-id;user/get-all;" +
 		"patient/get-by-id;patient/get-all;doctor/get-by-id;doctor/get-all;" +

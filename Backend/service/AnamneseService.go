@@ -411,7 +411,7 @@ func GetReport(anamnese models.Anamnese, grau int) (pdfBuffer []byte, err error)
 
 	pdf.SetFillColor(0, 0, 0)
 
-	pdf.SetX(230)
+	pdf.SetX(210)
 	pdf.SetY(760)
 	pdf.Cell(&gopdf.Rect{
 		W: 180,

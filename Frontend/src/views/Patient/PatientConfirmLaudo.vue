@@ -55,6 +55,7 @@
                 ? 'width: 100%;'
                 : 'width: 50%;'
             "
+            @change="adjustGrau"
           />
           <q-select
             v-show="modeloAnamnese.Indicative.value == 1"
@@ -102,6 +103,7 @@
   import ButtonPrimary from '../../components/ButtonPrimary.vue';
   import { RoleEnum } from '../../utils/Enum';
   import cookie from '../../utils/cookie';
+  import Toastify from 'toastify-js';
   
 export default {
   components: {
@@ -179,13 +181,57 @@ openModal(current, modeloAnamnese) {
     })
   }
 },
+adjustGrau(){
+  const th = this
+  if(th.grau==null){
+    th.grau = { label: 'Selecione', value: 0 };
+  }
+},
 async generateLaudo(){
   const th = this
+
+  if(th.grau==null){
+    th.grau = { label: 'Selecione', value: 0 };
+  }
+
+  if(th.grau.value == 0 && th.modeloAnamnese.Indicative.value== 1){
+      Toastify({
+          avatar: '/x-circle-fill.svg',
+          text: 'Escolha um grau do TEA!',
+          duration: 3000,
+          gravity: 'top',
+          position: 'right',
+          style: {
+            background:
+              'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
+            color: 'white',
+            boxShadow:
+              '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '.25rem',
+          },
+          offset: {
+            x: 0,
+            y: 65,
+          },
+    }).showToast();
+    return
+  }
+
   if((th.grau.value != 0 && th.modeloAnamnese.Indicative.value== 1) || (th.modeloAnamnese.Indicative.value == 0) ){
 
     if (th.modeloAnamnese.Indicative.value == 0) {
       th.grau.value = 0;
     }
+
+    await th.$api.AnamneseController.update({
+          IdAnamnese: th.modeloAnamnese.IdAnamnese,
+          IdPatient: th.modeloAnamnese.IdPatient,
+          IdUser: th.modeloAnamnese.IdUser,
+          Notes: th.modeloAnamnese.Notes,
+          Indicative: th.modeloAnamnese.Indicative.value == 0 ? 0 : 1,
+    });
 
     var response = await th.$api.AnamneseController.getLaudo(
       th.modeloAnamnese.IdUser,
@@ -201,7 +247,7 @@ async generateLaudo(){
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
+
   }
 },
 base64ToArrayBuffer(base64) {

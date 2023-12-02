@@ -143,6 +143,23 @@ func PutAnamnese(w http.ResponseWriter, r *http.Request) {
 	utils.ReturnResponseJSON(w, http.StatusOK, "Informações da anamnese atualizadas com sucesso!", "")
 }
 
+func GetSumResults(w http.ResponseWriter, r *http.Request) {
+	var sumresults []models.SumResult
+	idPatientParam := chi.URLParam(r, "idpatient")
+
+	idPatient, err := strconv.Atoi(idPatientParam)
+	if err != nil {
+		log.Printf("Cannot parse ID Patient: %s", err.Error())
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi especificado o id do paciente.", "")
+
+		return
+	}
+	sumresults, _ = service.GetSumResults(idPatient)
+
+	utils.ReturnResponseJSON(w, http.StatusOK, "Resultados encontrados!", sumresults)
+	return
+}
+
 func GetReport(w http.ResponseWriter, r *http.Request) {
 	idUserParam := chi.URLParam(r, "iduser")
 	idPatientParam := chi.URLParam(r, "idpatient")

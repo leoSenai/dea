@@ -21,4 +21,7 @@ export default {
   getLaudo(idUser, idPatient, grau){
     return axios.get(appUrl + 'report/'+idUser+'/'+idPatient+'/'+grau)
   },
+  getSumResults(idpatient){
+    return axios.get(appUrl + 'sumresults/' + idpatient)
+  }
 }

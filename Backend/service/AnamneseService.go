@@ -36,6 +36,11 @@ func PutAnamnese(anamnesePut models.Anamnese) (anamneseBack models.Anamnese, err
 	return anamneseBack, err
 }
 
+func GetSumResults(idpatient int) (sumresults []models.SumResult, err error) {
+	sumresults, err = repository.GetSumResults(idpatient)
+	return sumresults, err
+}
+
 func GetMonthPTBR(month_int int) (month string) {
 	switch month_int {
 	case 1:

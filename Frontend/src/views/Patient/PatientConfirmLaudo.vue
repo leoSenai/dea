@@ -9,6 +9,38 @@
     <template #modal-content>
       <q-form ref="form">
         <div class="row q-mb-sm">
+          <div style="width: 100%;">
+            <h6>Somatório dos resultados:</h6>
+            <hr>
+            <div
+              class="main-results"
+            >
+              <table
+                class="sumresult-table"
+              >
+                <thead>
+                  <tr>
+                    <th><b>Nome do Questionário</b></th>
+                    <th><b>Pessoa Próxima</b></th>
+                    <th><b>Descrição da proximidade</b></th>
+                    <th><b>Somatório</b></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="sumresult in sumresults"
+                    :key="sumresult.ProximityName"
+                  >
+                    <td><i>{{ sumresult.QuizDesc }}</i></td>
+                    <td><i>{{ sumresult.ProximityName }}</i></td>
+                    <td><i>{{ sumresult.ProximityDesc }}</i></td>
+                    <td><i><b>{{ sumresult.Sum }}</b></i></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <hr>
+          </div>
           <q-select
             v-model="modeloAnamnese.Indicative"
             :options="indicativeOptions"
@@ -65,29 +97,33 @@
     </template>
   </modal-primary>
 </template>
-<script>
-import ModalPrimary from '../../components/ModalPrimary.vue';
-import ButtonPrimary from '../../components/ButtonPrimary.vue';
-import { RoleEnum } from '../../utils/Enum';
-import cookie from '../../utils/cookie';
-
-export default {
-  components: {
-    ModalPrimary,
-    ButtonPrimary,
-  },
-  emits: ['close'],
-  data() {
-    return {
-      show: false,
-      modeloAnamnese: {
-        IdAnamnese: null,
-        IdPatient: null,
-        IdUser: null,
-        Notes: '',
-        Indicative: {
-          label: 'Não possui Transtorno do Espectro Autista',
-          value: 0,
+    <script>
+  import ModalPrimary from '../../components/ModalPrimary.vue';
+  import ButtonPrimary from '../../components/ButtonPrimary.vue';
+  import { RoleEnum } from '../../utils/Enum';
+  import cookie from '../../utils/cookie';
+  
+    export default {
+      components: {
+        ModalPrimary,
+        ButtonPrimary,
+      },
+      emits: ['close'],
+      data() {
+        return {
+          show: false,
+          sumresults: [{
+            ProximityName: '',
+            ProximityDesc: '',
+            QuizDesc: '',
+            Sum: 0
+          }],
+          modeloAnamnese: {
+            IdAnamnese: null,
+            IdPatient: null,
+            IdUser: null,
+            Notes: '',
+            Indicative: {label: 'Não possui Transtorno do Espectro Autista', value: 0},
         },
       },
       grau: { label: 'Selecione', value: 0 },
@@ -150,13 +186,20 @@ export default {
           th.grau.value = 0;
         }
 
-        await th.$api.AnamneseController.update({
-          IdAnamnese: th.modeloAnamnese.IdAnamnese,
-          IdPatient: th.modeloAnamnese.IdPatient,
-          IdUser: th.modeloAnamnese.IdUser,
-          Notes: th.modeloAnamnese.Notes,
-          Indicative: th.modeloAnamnese.Indicative.value == 0 ? 0 : 1,
-        });
+            th.model = current
+            th.modeloAnamnese = {...modeloAnamnese}
+            th.modeloAnamnese.Indicative = 
+                modeloAnamnese.Indicative == 0 ? {label: 'Não possui Transtorno do Espectro Autista', value: 0} : {label: 'Possui Transtorno do Espectro Autista', value: 1};
+          
+            th.$api.AnamneseController.getSumResults(th.model.IdPatient).then((data) => {
+              th.sumresults = data.data.data
+            })
+          
+          }
+        },
+        async generateLaudo(){
+            const th = this
+            if((th.grau.value != 0 && th.modeloAnamnese.Indicative.value== 1) || (th.modeloAnamnese.Indicative.value == 0) ){
 
         var response = await th.$api.AnamneseController.getLaudo(
           th.modeloAnamnese.IdUser,
@@ -216,9 +259,42 @@ p {
   margin: 0;
 }
 
-.modal-actions {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-</style>
+    .modal-actions {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .main-results{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .sumresult-table{
+      text-align: center;
+      overflow:scroll;
+      margin: 0.5em;
+      display: flexbox;
+      max-height: 100px;
+      border: 1px solid black !important;
+      border-style: dashed;
+      background-color: rgb(30, 82, 30);
+      width: 100%;
+    }
+
+    .sumresult-table th, .sumresult-table td{
+      padding: 0.5em;
+      text-align: center;
+      border: 1% groove black !important;
+    }
+
+    .sumresult-table th {
+      background-color: rgb(88, 161, 88);
+    }
+
+    .sumresult-table td {
+      background-color: rgb(243, 255, 243);
+    }
+
+    </style>

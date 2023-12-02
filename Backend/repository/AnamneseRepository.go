@@ -4,6 +4,8 @@ import (
 	"api/db"
 	"api/models"
 	"log"
+	"strconv"
+	"strings"
 )
 
 func GetAnamneseById(id int64) (anamnese models.Anamnese, err error) {
@@ -70,5 +72,81 @@ func PutAnamnese(anamnesePut models.Anamnese) (anamneseBack models.Anamnese, err
 		conn.First(&anamneseBack, anamnesePut.IdAnamnese)
 	}
 
+	return
+}
+
+func GetSumResults(idpatient int) (sumresults []models.SumResult, err error) {
+	//sumresults - agrupado de somatorios de cada questionario de pessoa prox e de paciente
+
+	patientHasQuizzes, _ := GetPatientQuizByPatientID(int64(idpatient))
+	proximityHasQuizzes, _ := GetProximityQuizByPatientID(int64(idpatient))
+
+	if len(patientHasQuizzes) != 0 {
+		for _, patientHasQuiz := range patientHasQuizzes {
+			if patientHasQuiz.Finished == 1 {
+
+				patient, _ := GetPatientById(int64(idpatient))
+				quiz, _ := GetQuizById(patientHasQuiz.IdQuiz)
+
+				sumAnswersStr := strings.Split(patientHasQuiz.Answers, ";")
+				var answersInt []int
+				var sumAnswers int
+
+				for _, numStr := range sumAnswersStr {
+					num, _ := strconv.Atoi(numStr)
+					answersInt = append(answersInt, num)
+				}
+
+				for _, num := range answersInt {
+					sumAnswers += num
+				}
+
+				sumresults = append(sumresults, models.SumResult{
+					ProximityName: patient.Name,
+					ProximityDesc: patient.Name,
+					QuizDesc:      quiz.Name,
+					Sum:           sumAnswers,
+				})
+			}
+		}
+	}
+	if len(proximityHasQuizzes) != 0 {
+		for _, proximityHasQuiz := range proximityHasQuizzes {
+			if proximityHasQuiz.Finished == 1 {
+				person, _ := GetPersonById(int64(idpatient))
+				quiz, _ := GetQuizById(proximityHasQuiz.IdQuiz)
+
+				proximitys, _ := GetProximityAllByIdPatient(int64(idpatient))
+
+				var proximityDesc = ""
+
+				for _, prox := range proximitys {
+					if prox.IdPerson == person.IdPerson {
+						proximityDesc = prox.Desc
+					}
+				}
+
+				sumAnswersStr := strings.Split(proximityHasQuiz.Answers, ";")
+				var answersInt []int
+				var sumAnswers int
+
+				for _, numStr := range sumAnswersStr {
+					num, _ := strconv.Atoi(numStr)
+					answersInt = append(answersInt, num)
+				}
+
+				for _, num := range answersInt {
+					sumAnswers += num
+				}
+
+				sumresults = append(sumresults, models.SumResult{
+					ProximityName: person.Name,
+					ProximityDesc: proximityDesc,
+					QuizDesc:      quiz.Name,
+					Sum:           sumAnswers,
+				})
+			}
+		}
+	}
 	return
 }

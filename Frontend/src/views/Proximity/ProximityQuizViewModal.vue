@@ -43,7 +43,7 @@
             :name="`${i}`"
             :label="`Pergunta ${i + 1}`"
             label-color="primary"
-          />
+          />//
           <div
             v-if="question.Answer!=''"
             style="display: flex; width: 100%;gap: 5px;"

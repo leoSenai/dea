@@ -122,6 +122,7 @@
 import ModalPrimary from '../../components/ModalPrimary.vue';
 import InputPrimary from '../../components/InputPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
+import { alerta } from '../../utils/alert';
 
 export default {
   components: {
@@ -290,30 +291,30 @@ export default {
       }
 
       if (th.model.Name.length < 3 || !validName) {
-        alert(
-          'O nome deve conter no mínimo 3 caracteres, ter sobrenome, e todas letras iniciais maiúsculas!'
+        alerta(
+          'O nome deve conter no mínimo 3 caracteres, ter sobrenome, e todas letras iniciais maiúsculas!', false
         );
         return false;
       } else if (th.model.Email.length < 3 || !validEmail) {
-        alert(
-          'O e-mail deve conter no mínimo 3 caracteres, conter "@", e dominio do email!'
+        alerta(
+          'O e-mail deve conter no mínimo 3 caracteres, conter "@", e dominio do email!', false
         );
         return false;
       } else if (!th.model.IdUser && th.model.Password.length < 6) {
-        alert('A senha deve conter no mínimo 6 caracteres!');
+        alerta('A senha deve conter no mínimo 6 caracteres!', false);
         return false;
       } else if (th.model.TypeUser.value == null || th.model.TypeUser == '') {
-        alert('Selecione um tipo de usuário!');
+        alerta('Selecione um tipo de usuário!', false);
         return false;
       } else if (!(th.model.Phone.length == 15) || th.model.Phone[5] != '9') {
-        alert('O celular deve conter 11 digitos e um dígito "9" após o DDD!');
+        alerta('O celular deve conter 11 digitos e um dígito "9" após o DDD!', false);
         return false;
       } else if (!validCbo) {
-        alert('Digite um CBO válido!');
+        alerta('Digite um CBO válido!', false);
         return false;
       } else if (th.model.RegisterCR.length < 3) {
-        alert(
-          'O código de registro do conselho regional deve conter no mínimo 3 caracteres!'
+        alerta(
+          'O código de registro do conselho regional deve conter no mínimo 3 caracteres!', false
         );
         return false;
       }

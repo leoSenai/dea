@@ -43,7 +43,7 @@
         class="nextPersonView"
         @click="viewQuizzes()"
       >
-        Questionários
+        Questionários do Paciente
         <PhCaretRight />
       </button-primary>
       <div style="display: flex; align-items: center">

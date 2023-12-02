@@ -189,7 +189,7 @@ import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import SelectPrimary from '../../components/SelectPrimary.vue';
 import cookie from '../../utils/cookie';
 import CPF from '../../utils/cpf/validator.js';
-import Toastify from 'toastify-js';
+import { alerta } from '../../utils/alert';
 
 export default {
   components: {
@@ -343,47 +343,47 @@ export default {
         }
 
         if (!validPatientName || th.model.Name.length > 90) {
-          alert('Preencha o nome do paciente corretamente!');
+          alerta('Preencha o nome do paciente corretamente!', false);
           return;
         } else if (!validEmail) {
-          alert('Preencha o e-mail do paciente corretamente!');
+          alerta('Preencha o e-mail do paciente corretamente!', false);
           return;
         } else if (
           !th.model.Phone ||
           !(th.model.Phone.length == 15) ||
           th.model.Phone[5] != '9'
         ) {
-          alert('Preencha o celular do paciente corretamente!');
+          alerta('Preencha o celular do paciente corretamente!', false);
           return;
         } else if (!th.model.Address || th.model.Address.length > 255) {
-          alert('Preencha o endereço do paciente corretamente!');
+          alerta('Preencha o endereço do paciente corretamente!', false);
           return;
         } else if (!th.model.Cpf || !(th.model.Cpf.length == 14) || !validCpf) {
-          alert('Preencha o CPF do paciente corretamente!');
+          alerta('Preencha o CPF do paciente corretamente!', false);
           return;
         } else if (!th.model.BornDate || !dateIsValid) {
-          alert(
-            'Preencha a data de nascimento do paciente corretamente, ou verifique se a data corresponde a um recém nascido!'
+          alerta(
+            'Preencha a data de nascimento do paciente corretamente, ou verifique se a data corresponde a um recém nascido!', false
           );
           return;
         } else if (!th.model.Sex) {
-          alert('Preencha o sexo do paciente corretamente!');
+          alerta('Preencha o sexo do paciente corretamente!', false);
           return;
         } else if (!validDadName) {
-          alert('Preencha o nome do pai do paciente corretamente!');
+          alerta('Preencha o nome do pai do paciente corretamente!', false);
           return;
         } else if (!validMomName || th.model.MomName.length > 80) {
-          alert('Preencha o nome da mãe do paciente corretamente!');
+          alerta('Preencha o nome da mãe do paciente corretamente!', false);
           return;
         } else if (!th.model.Cid10 || !(th.model.Cid10 <= 999999999)) {
-          alert('Preencha o CID10 do paciente corretamente!');
+          alerta('Preencha o CID10 do paciente corretamente!', false);
           return;
         } else if (
           !th.model.Cns ||
           !(th.model.Cns.length == 15) ||
           isNaN(th.model.Cns)
         ) {
-          alert('Preencha o CNS do paciente corretamente!');
+          alerta('Preencha o CNS do paciente corretamente!', false);
           return;
         } else if (
           !th.model.NewBorn ||
@@ -392,7 +392,7 @@ export default {
           (th.model.NewBorn == 'Sim' &&
             date_field.toDateString() != date_now.toDateString())
         ) {
-          alert('Preencha o campo "Recem nascido" corretamente!');
+          alerta('Preencha o campo "Recem nascido" corretamente!', false);
           return;
         }
 
@@ -438,32 +438,12 @@ export default {
               th.model.NewBorn = 'Não';
             }
             th.model.Sex = sexModel;
-            Toastify({
-              avatar: '/x-circle-fill.svg',
-              text: 'O CPF inserido já está cadastrado!',
-              duration: 3000,
-              gravity: 'top',
-              position: 'right',
-              style: {
-                background:
-                  'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
-                color: 'white',
-                boxShadow:
-                  '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '.25rem',
-              },
-              offset: {
-                x: 0,
-                y: 65,
-              },
-            }).showToast();
+              alerta('O CPF inserido já está cadastrado!', false)
           }
         });
       } else {
         if (th.patientExistToAdd.length == 0) {
-          alert('Selecione um paciente para adicionar/vincular!');
+          alerta('Selecione um paciente para adicionar/vincular!', false);
           return;
         }
         var patientId = th.patientExistToAdd.IdPatient;
@@ -539,47 +519,47 @@ export default {
       }
 
       if (!validPatientName || th.model.Name.length > 90) {
-        alert('Preencha o nome do paciente corretamente!');
+        alerta('Preencha o nome do paciente corretamente!', false);
         return;
       } else if (!validEmail) {
-        alert('Preencha o e-mail do paciente corretamente!');
+        alerta('Preencha o e-mail do paciente corretamente!', false);
         return;
       } else if (
         !th.model.Phone ||
         !(th.model.Phone.length == 15) ||
         th.model.Phone[5] != '9'
       ) {
-        alert('Preencha o celular do paciente corretamente!');
+        alerta('Preencha o celular do paciente corretamente!', false);
         return;
       } else if (!th.model.Address || th.model.Address.length > 255) {
-        alert('Preencha o endereço do paciente corretamente!');
+        alerta('Preencha o endereço do paciente corretamente!', false);
         return;
       } else if (!th.model.Cpf || !(th.model.Cpf.length == 14) || !validCpf) {
-        alert('Preencha o CPF do paciente corretamente!');
+        alerta('Preencha o CPF do paciente corretamente!', false);
         return;
       } else if (!th.model.BornDate || !dateIsValid) {
-        alert(
-          'Preencha a data de nascimento do paciente corretamente, ou verifique se a data corresponde a um recém nascido!'
+        alerta(
+          'Preencha a data de nascimento do paciente corretamente, ou verifique se a data corresponde a um recém nascido!', false
         );
         return;
       } else if (!th.model.Sex) {
-        alert('Preencha o sexo do paciente corretamente!');
+        alerta('Preencha o sexo do paciente corretamente!', false);
         return;
       } else if (!validDadName) {
-        alert('Preencha o nome do pai do paciente corretamente!');
+        alerta('Preencha o nome do pai do paciente corretamente!', false);
         return;
       } else if (!validMomName || th.model.MomName.length > 80) {
-        alert('Preencha o nome da mãe do paciente corretamente!');
+        alerta('Preencha o nome da mãe do paciente corretamente!', false);
         return;
       } else if (!th.model.Cid10 || !(th.model.Cid10 <= 999999999)) {
-        alert('Preencha o CID10 do paciente corretamente!');
+        alerta('Preencha o CID10 do paciente corretamente!', false);
         return;
       } else if (
         !th.model.Cns ||
         !(th.model.Cns.length == 15) ||
         isNaN(th.model.Cns)
       ) {
-        alert('Preencha o CNS do paciente corretamente!');
+        alerta('Preencha o CNS do paciente corretamente!', false);
         return;
       } else if (
         !th.model.NewBorn ||
@@ -588,7 +568,7 @@ export default {
         (th.model.NewBorn == 'Sim' &&
           date_field.toDateString() != date_now.toDateString())
       ) {
-        alert('Preencha o campo "Recem nascido" corretamente!');
+        alerta('Preencha o campo "Recem nascido" corretamente!', false);
         return;
       }
 
@@ -632,27 +612,7 @@ export default {
             th.model.NewBorn = 'Não';
           }
           th.model.Sex = sexModel;
-          Toastify({
-            avatar: '/x-circle-fill.svg',
-            text: 'O CPF inserido já está cadastrado!',
-            duration: 3000,
-            gravity: 'top',
-            position: 'right',
-            style: {
-              background:
-                'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
-              color: 'white',
-              boxShadow:
-                '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '.25rem',
-            },
-            offset: {
-              x: 0,
-              y: 65,
-            },
-          }).showToast();
+          alerta('O CPF inserido já está cadastrado!', false)
         }
       });
     },

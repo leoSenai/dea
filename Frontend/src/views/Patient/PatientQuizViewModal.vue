@@ -44,7 +44,7 @@
               :model-value="parseInt(question.Answer)"
               :answer-range="model.Interval"
               :question-number="i + 1"
-              :is-answered="true"
+              :is-answered="false"
             >
               <i>{{ question.Desc }}</i>
             </QuestionPrimary>

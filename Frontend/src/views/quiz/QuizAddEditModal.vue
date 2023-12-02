@@ -97,6 +97,7 @@ import ModalPrimary from '../../components/ModalPrimary.vue';
 import InputPrimary from '../../components/InputPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import { PhPlus, PhX } from '@phosphor-icons/vue';
+import { alerta } from '../../utils/alert';
 
 export default {
   components: {
@@ -182,13 +183,13 @@ export default {
         }
 
         if(!validQuizName){
-          alert(
-            'Insira um nome de questionário válido!'
+          alerta(
+            'Insira um nome de questionário válido!', false
           )
           return
         }else if (th.questions.some(({ Desc }) => !Desc || Desc.trim() === '')) {
-          alert(
-            'Não é possível criar questionários com questões sem descrição!'
+          alerta(
+            'Não é possível criar questionários com questões sem descrição!', false
           );
           return;
         }
@@ -231,13 +232,13 @@ export default {
         }
 
         if(!validQuizName){
-          alert(
-            'Insira um nome de questionário válido!'
+          alerta(
+            'Insira um nome de questionário válido!', false
           )
           return
         }else if (th.questions.some(({ Desc }) => !Desc || Desc.trim() === '')) {
-          alert(
-            'Não é possível criar questionários com questões sem descrição!'
+          alerta(
+            'Não é possível criar questionários com questões sem descrição!', false
           );
           return;
         }

@@ -68,6 +68,7 @@ import cookie from '../../utils/cookie';
 import { RoleEnum } from '../../utils/Enum';
 import QuizAnswerModal from '../quiz/QuizAnswerModal.vue';
 import QuizViewModal from './PatientQuizViewModal.vue';
+import { alerta } from '../../utils/alert';
 
 export default {
   components: {
@@ -113,7 +114,7 @@ export default {
       var idPatient = this.$router.currentRoute.value.params.id;
 
       if (th.idUser != th.idUser) {
-        alert('Você não tem permissão para acessar essa tela!');
+        alerta('Você não tem permissão para acessar essa tela!', false);
         th.$api.AuthController.logout();
         window.history.back();
         return;

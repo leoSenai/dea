@@ -114,7 +114,7 @@ import InputPrimary from '../../components/InputPrimary.vue';
 import ButtonPrimary from '../../components/ButtonPrimary.vue';
 import SelectPrimary from '../../components/SelectPrimary.vue';
 import CPF from '../../utils/cpf/validator.js'
-import Toastify from 'toastify-js';
+import { alerta } from '../../utils/alert';
 
 export default {
   components: {
@@ -217,22 +217,22 @@ export default {
         }
         
         if(!validName){
-          alert('Informe um nome válido!')
+          alerta('Informe um nome válido!', false)
           return
         }else if(!validEmail){
-          alert('Informe um e-mail válido!')
+          alerta('Informe um e-mail válido!', false)
           return
         }else if(!(th.model.Phone.length == 15) || th.model.Phone[5]!='9'){
-          alert('Informe um celular válido!')
+          alerta('Informe um celular válido!', false)
           return
         }else if(!th.model.BornDate || !dateIsValid){
-          alert('Preencha a data de nascimento corretamente!')
+          alerta('Preencha a data de nascimento corretamente!', false)
           return
         }else if(!validDocNumber){
-          alert('Informe um número de documento válido!')
+          alerta('Informe um número de documento válido!', false)
           return
         }else if(!th.model.DescPerson || th.model.DescPerson.length < 3){
-          alert('Preencha a descrição de proximidade com o paciente corretamente!')
+          alerta('Preencha a descrição de proximidade com o paciente corretamente!', false)
           return
         }
 
@@ -244,33 +244,13 @@ export default {
                 th.closeModal()
               })
             } else if(data.data.Name != th.model.Name){
-              Toastify({
-                avatar: '/x-circle-fill.svg',
-                text: 'O CPF inserido já está cadastrado!',
-                duration: 3000,
-                gravity: 'top',
-                position: 'right',
-                style: {
-                  background:
-                    'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
-                  color: 'white',
-                  boxShadow:
-                    '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '.25rem',
-                },
-                offset: {
-                  x: 0,
-                  y: 65,
-                },
-              }).showToast();
+              alerta('O CPF inserido já está cadastrado!', false)
             }else{
               th.updatePerson();
             }
           })
         }else{
-          alert('Preencha todos os campos!')
+          alerta('Preencha todos os campos!', false)
         }
       })
     },
@@ -318,22 +298,22 @@ export default {
         }
         
         if(!validName){
-          alert('Informe um nome válido!')
+          alerta('Informe um nome válido!', false)
           return
         }else if(!validEmail){
-          alert('Informe um e-mail válido!')
+          alerta('Informe um e-mail válido!', false)
           return
         }else if(!(th.model.Phone.length == 15) || th.model.Phone[5]!='9'){
-          alert('Informe um celular válido!')
+          alerta('Informe um celular válido!', false)
           return
         }else if(!th.model.BornDate || !dateIsValid){
-          alert('Preencha a data de nascimento corretamente!')
+          alerta('Preencha a data de nascimento corretamente!', false)
           return
         }else if(!validDocNumber){
-          alert('Informe um número de documento válido!')
+          alerta('Informe um número de documento válido!', false)
           return
         }else if(!th.model.DescPerson || th.model.DescPerson.length < 3){
-          alert('Preencha a descrição de proximidade com o paciente corretamente!')
+          alerta('Preencha a descrição de proximidade com o paciente corretamente!', false)
           return
         }
 
@@ -346,31 +326,11 @@ export default {
                 th.closeModal()
               })
             } else if(data.data.Name != th.model.Name){
-              Toastify({
-                avatar: '/x-circle-fill.svg',
-                text: 'O CPF inserido já está cadastrado!',
-                duration: 3000,
-                gravity: 'top',
-                position: 'right',
-                style: {
-                  background:
-                    'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
-                  color: 'white',
-                  boxShadow:
-                    '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '.25rem',
-                },
-                offset: {
-                  x: 0,
-                  y: 65,
-                },
-              }).showToast();
+              alerta('O CPF inserido já está cadastrado!', false)
             }
           })
         }else{
-          alert('Preencha todos os campos!')
+          alerta('Preencha todos os campos!', false)
         }
       })
 

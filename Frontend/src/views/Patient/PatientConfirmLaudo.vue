@@ -114,12 +114,7 @@ export default {
   data() {
     return {
       show: false,
-      sumresults: [{
-        ProximityName: '',
-        ProximityDesc: '',
-        QuizDesc: '',
-        Sum: 0
-      }],
+      sumresults: [],
       modeloAnamnese: {
         IdAnamnese: null,
         IdPatient: null,
@@ -167,17 +162,42 @@ idUser() {
 methods: {
 openModal(current, modeloAnamnese) {
   const th = this;
-  th.show = true;
   if (current) {
     th.model = current;
-    th.modeloAnamnese = { ...modeloAnamnese };
-    th.modeloAnamnese.Indicative =
-      modeloAnamnese.Indicative == 0
-        ? { label: 'Não possui Transtorno do Espectro Autista', value: 0 }
-        : { label: 'Possui Transtorno do Espectro Autista', value: 1 };
-
     th.$api.AnamneseController.getSumResults(th.model.IdPatient).then((data) => {
       th.sumresults = data.data.data
+      if(!th.sumresults || th.sumresults.length==0){
+        Toastify({
+          avatar: '/x-circle-fill.svg',
+          text: 'Só é possível gerar o laudo se houver questionários respondidos.',
+          duration: 3000,
+          gravity: 'top',
+          position: 'right',
+          style: {
+            background:
+              'linear-gradient(90deg, var(--others-red-600) 0%, var(--others-red-300) 100%)',
+            color: 'white',
+            boxShadow:
+              '0px 0px 5px -16px var(--others-red-600), 5px 5px 36px -9px var(--others-red-300)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '.25rem',
+          },
+          offset: {
+            x: 0,
+            y: 65,
+          },
+        }).showToast();
+        th.closeModal()
+        return
+      }else{
+        th.show = true;
+        th.modeloAnamnese = { ...modeloAnamnese };
+        th.modeloAnamnese.Indicative =
+          modeloAnamnese.Indicative == 0
+            ? { label: 'Não possui Transtorno do Espectro Autista', value: 0 }
+            : { label: 'Possui Transtorno do Espectro Autista', value: 1 };
+      }
     })
   }
 },

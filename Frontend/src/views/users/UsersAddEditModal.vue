@@ -142,7 +142,7 @@ export default {
         Phone: '',
         IdCbo: '',
         IdService: '',
-        RegisterCR: ''
+        RegisterCR: '',
       },
       optionsTypeUser: [
         { label: 'Administrador', value: 'A' },
@@ -160,44 +160,31 @@ export default {
     async openModal(current) {
       const th = this;
       th.show = true;
-       // const responseService = await th.$api.ServicesController.getAll();
-        //th.optionsServices = responseService.data.data.map((service) => ({
-        //  label: service.Desc,
-        //  value: service.IdServices,
-        //}));
+      var responseCbo = await th.$api.CboController.getAll();
+      th.optionsCbo = responseCbo.data.data;
 
-        //var responseCboExist = await th.$api.CboController.getAll();
-          var responseCbo = await th.$api.CboController.getAll();
-          th.optionsCbo = responseCbo.data.data
-  
-        //    for (let i = 0; i < th.optionsCbo.length; i++) {
-        //      const optioncbo = th.optionsCbo[i];
-        //      await th.$api.CboController.update(optioncbo);
-        //    }
-        //  }
-        //}
+      if (current) {
+        var idCboCurrent = current?.IdCbo;
+        var codeCbo = th.optionsCbo
+          .map((cbos) => {
+            return { valid: idCboCurrent == cbos.IdCbo, Code: cbos.Code };
+          })
+          .find((result) => result.valid == true).Code;
 
+        const model = {
+          ...current,
+          TypeUser: th.optionsTypeUser.find(
+            (type) => type.value === current?.TypeUser
+          ),
+          Active: th.optionsActive.find(
+            (active) => active.value === current?.Active
+          ),
+          IdCbo: codeCbo,
+          IdService: 1,
+        };
 
-        if (current) {
-
-          var idCboCurrent = current?.IdCbo
-          var codeCbo = (th.optionsCbo.map((cbos) => { return {valid: idCboCurrent==cbos.IdCbo, Code: cbos.Code} })).find((result) => result.valid==true).Code
-
-          const model = {
-            ...current,
-            TypeUser: th.optionsTypeUser.find(
-              (type) => type.value === current?.TypeUser
-            ),
-            Active: th.optionsActive.find(
-              (active) => active.value === current?.Active
-            ),
-            IdCbo: codeCbo,
-            IdService: 1,
-          };
-
-          th.model = { ...model };
-        }
-    
+        th.model = { ...model };
+      }
     },
     closeModal() {
       this.show = false;
@@ -210,7 +197,7 @@ export default {
         Phone: '',
         IdCbo: '',
         IdService: 1,
-        RegisterCR: ''
+        RegisterCR: '',
       };
       this.$emit('close');
     },
@@ -236,16 +223,18 @@ export default {
               TypeUser,
               Active,
               Phone,
-            })
-              .then(({ data }) => {
-                if(data.data=='' && !data.message.includes('atualizadas com sucesso')){
-                  return 
-                }else{
-                  th.model = data.data;
-                  th.closeModal();
-                  return;
-                }
-              })
+            }).then(({ data }) => {
+              if (
+                data.data == '' &&
+                !data.message.includes('atualizadas com sucesso')
+              ) {
+                return;
+              } else {
+                th.model = data.data;
+                th.closeModal();
+                return;
+              }
+            });
             return;
           }
 
@@ -256,75 +245,79 @@ export default {
             TypeUser,
             Active,
             Phone,
-          })
-            .then(({ data }) => {
-              if(!data.message.includes('cadastrado com sucesso')){
-                return
-              }else{
-                th.model = data.data;
-                th.closeModal();
-                return;
-              }
-            })
-            
+          }).then(({ data }) => {
+            if (!data.message.includes('cadastrado com sucesso')) {
+              return;
+            } else {
+              th.model = data.data;
+              th.closeModal();
+              return;
+            }
+          });
         }
       });
     },
     validations() {
       const th = this;
-      
+
       var validName;
-      try{
-        validName = (th.model.Name.match(/\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g))[0]==th.model.Name
-      }catch{
-        validName = false
+      try {
+        validName =
+          th.model.Name.match(
+            /\b([A-Z][a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,}){1,} ([A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})(( [A-Z]{0,}[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,})?){0,}\b/g
+          )[0] == th.model.Name;
+      } catch {
+        validName = false;
       }
-      
+
       var validEmail;
-      try{
-        validEmail = (th.model.Email.match(/^([\w.]{3,})@([a-z]{1,}[.]){1,}([a-z]{1,})/g))[0]==th.model.Email
-      }catch{
-        validEmail = false
+      try {
+        validEmail =
+          th.model.Email.match(
+            /^([\w.]{3,})@([a-z]{1,}[.]){1,}([a-z]{1,})/g
+          )[0] == th.model.Email;
+      } catch {
+        validEmail = false;
       }
-      
+
       var validCbo;
-      try{
-        validCbo = (String(th.model.IdCbo).match(/^[0-9]{3,6}/g))[0]==String(th.model.IdCbo)
-      }catch{
-        validCbo = false
+      try {
+        validCbo =
+          String(th.model.IdCbo).match(/^[0-9]{3,6}/g)[0] ==
+          String(th.model.IdCbo);
+      } catch {
+        validCbo = false;
       }
 
       if (th.model.Name.length < 3 || !validName) {
-        alert('O nome deve conter no mínimo 3 caracteres, ter sobrenome, e todas letras iniciais maiúsculas!');
+        alert(
+          'O nome deve conter no mínimo 3 caracteres, ter sobrenome, e todas letras iniciais maiúsculas!'
+        );
         return false;
-      }else if (th.model.Email.length < 3 || !validEmail) {
-        alert('O e-mail deve conter no mínimo 3 caracteres, conter "@", e dominio do email!');
+      } else if (th.model.Email.length < 3 || !validEmail) {
+        alert(
+          'O e-mail deve conter no mínimo 3 caracteres, conter "@", e dominio do email!'
+        );
         return false;
-      }else if (!th.model.IdUser && th.model.Password.length < 6) {
+      } else if (!th.model.IdUser && th.model.Password.length < 6) {
         alert('A senha deve conter no mínimo 6 caracteres!');
         return false;
-      }else if(th.model.TypeUser.value==null || th.model.TypeUser==''){
+      } else if (th.model.TypeUser.value == null || th.model.TypeUser == '') {
         alert('Selecione um tipo de usuário!');
         return false;
-      }else if (!(th.model.Phone.length == 15) || th.model.Phone[5]!='9') {
+      } else if (!(th.model.Phone.length == 15) || th.model.Phone[5] != '9') {
         alert('O celular deve conter 11 digitos e um dígito "9" após o DDD!');
         return false;
-      }else if (!validCbo) {
+      } else if (!validCbo) {
         alert('Digite um CBO válido!');
         return false;
       } else if (th.model.RegisterCR.length < 3) {
-        alert('O código de registro do conselho regional deve conter no mínimo 3 caracteres!');
+        alert(
+          'O código de registro do conselho regional deve conter no mínimo 3 caracteres!'
+        );
         return false;
       }
 
-
-
-
-
-      //if (th.model.IdService === '') {
-      //  alert('Selecione um Serviço!');
-      //  return false;
-      //}
       return true;
     },
   },

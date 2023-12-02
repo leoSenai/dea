@@ -74,9 +74,7 @@ export default {
           ];
         }
         case RoleEnum.Administrator: {
-          return [
-            { path: '/usuarios', name: 'Médicos', icon: PhUsers },
-          ];
+          return [{ path: '/usuarios', name: 'Médicos', icon: PhUsers }];
         }
         case RoleEnum.User: {
           return [
@@ -109,8 +107,8 @@ export default {
         if (contentLoginScreen.length != 0) {
           contentLoginScreen[0].classList.remove('login-screen');
         }
-      } finally {
-        //
+      } catch (err) {
+        console.error(err);
       }
     },
   },

@@ -3,7 +3,6 @@ package utils
 import (
 	"encoding/base64"
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
@@ -20,7 +19,6 @@ func ReturnResponseJSON(w http.ResponseWriter, status int, message string, data 
 }
 
 func ReturnResponseFile(w http.ResponseWriter, status int, message string, data []byte) {
-	log.Println(data)
 	response := map[string]interface{}{
 		"message": message,
 		"data":    base64.StdEncoding.EncodeToString(data),

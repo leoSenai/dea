@@ -103,28 +103,27 @@
   import { RoleEnum } from '../../utils/Enum';
   import cookie from '../../utils/cookie';
   
-    export default {
-      components: {
-        ModalPrimary,
-        ButtonPrimary,
-      },
-      emits: ['close'],
-      data() {
-        return {
-          show: false,
-          sumresults: [{
-            ProximityName: '',
-            ProximityDesc: '',
-            QuizDesc: '',
-            Sum: 0
-          }],
-          modeloAnamnese: {
-            IdAnamnese: null,
-            IdPatient: null,
-            IdUser: null,
-            Notes: '',
-            Indicative: {label: 'Não possui Transtorno do Espectro Autista', value: 0},
-        },
+export default {
+  components: {
+    ModalPrimary,
+    ButtonPrimary,
+  },
+  emits: ['close'],
+  data() {
+    return {
+      show: false,
+      sumresults: [{
+        ProximityName: '',
+        ProximityDesc: '',
+        QuizDesc: '',
+        Sum: 0
+      }],
+      modeloAnamnese: {
+        IdAnamnese: null,
+        IdPatient: null,
+        IdUser: null,
+        Notes: '',
+        Indicative: {label: 'Não possui Transtorno do Espectro Autista', value: 0},
       },
       grau: { label: 'Selecione', value: 0 },
       indicativeOptions: [
@@ -149,152 +148,138 @@
         Cid10: null,
         Active: null,
       },
-      RoleEnum,
+      RoleEnum
     };
   },
-  computed: {
-    ...RoleEnum,
-    typeUser() {
-      const token = cookie.get('authToken');
-      return cookie.getUserType(token);
-    },
-    idUser() {
-      const token = cookie.get('authToken');
-      return cookie.getUserId(token);
-    },
-  },
-  methods: {
-    openModal(current, modeloAnamnese) {
-      const th = this;
-      th.show = true;
-      if (current) {
-        th.model = current;
-        th.modeloAnamnese = { ...modeloAnamnese };
-        th.modeloAnamnese.Indicative =
-          modeloAnamnese.Indicative == 0
-            ? { label: 'Não possui Transtorno do Espectro Autista', value: 0 }
-            : { label: 'Possui Transtorno do Espectro Autista', value: 1 };
-      }
-    },
-    async generateLaudo() {
-      const th = this;
-      if (
-        (th.grau.value != 0 && th.modeloAnamnese.Indicative.value == 1) ||
-        th.modeloAnamnese.Indicative.value == 0
-      ) {
-        if (th.modeloAnamnese.Indicative.value == 0) {
-          th.grau.value = 0;
-        }
+computed: {
+...RoleEnum,
+typeUser() {
+  const token = cookie.get('authToken');
+  return cookie.getUserType(token);
+},
+idUser() {
+  const token = cookie.get('authToken');
+  return cookie.getUserId(token);
+},
+},
+methods: {
+openModal(current, modeloAnamnese) {
+  const th = this;
+  th.show = true;
+  if (current) {
+    th.model = current;
+    th.modeloAnamnese = { ...modeloAnamnese };
+    th.modeloAnamnese.Indicative =
+      modeloAnamnese.Indicative == 0
+        ? { label: 'Não possui Transtorno do Espectro Autista', value: 0 }
+        : { label: 'Possui Transtorno do Espectro Autista', value: 1 };
 
-            th.model = current
-            th.modeloAnamnese = {...modeloAnamnese}
-            th.modeloAnamnese.Indicative = 
-                modeloAnamnese.Indicative == 0 ? {label: 'Não possui Transtorno do Espectro Autista', value: 0} : {label: 'Possui Transtorno do Espectro Autista', value: 1};
-          
-            th.$api.AnamneseController.getSumResults(th.model.IdPatient).then((data) => {
-              th.sumresults = data.data.data
-            })
-          
-          }
-        },
-        async generateLaudo(){
-            const th = this
-            if((th.grau.value != 0 && th.modeloAnamnese.Indicative.value== 1) || (th.modeloAnamnese.Indicative.value == 0) ){
+    th.$api.AnamneseController.getSumResults(th.model.IdPatient).then((data) => {
+      th.sumresults = data.data.data
+    })
+  }
+},
+async generateLaudo(){
+  const th = this
+  if((th.grau.value != 0 && th.modeloAnamnese.Indicative.value== 1) || (th.modeloAnamnese.Indicative.value == 0) ){
 
-        var response = await th.$api.AnamneseController.getLaudo(
-          th.modeloAnamnese.IdUser,
-          th.model.IdPatient,
-          th.grau.value
-        );
-        const bytes = this.base64ToArrayBuffer(response.data.data);
-        const pdfBlob = new Blob([bytes], { type: 'application/pdf' });
-        let link = document.createElement('a');
-        link.href = window.URL.createObjectURL(pdfBlob);
-        link.style.visibility = 'hidden';
-        link.download = pdfBlob.name;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } else {
-        alert('O laudo só pode ser gerado quando a anamnese for conclusiva!');
-      }
-    },
-    base64ToArrayBuffer(base64) {
-      const binaryString = window.atob(base64);
-      const binaryLen = binaryString.length;
-      const bytes = new Uint8Array(binaryLen);
-      for (let i = 0; i < binaryLen; i++) {
-        const ascii = binaryString.charCodeAt(i);
-        bytes[i] = ascii;
-      }
+    if (th.modeloAnamnese.Indicative.value == 0) {
+      th.grau.value = 0;
+    }
 
-      return bytes;
-    },
-    closeModal() {
-      this.show = false;
-      this.modeloAnamnese;
-      this.model = [];
-      this.$emit('close');
-    },
-  },
+    var response = await th.$api.AnamneseController.getLaudo(
+      th.modeloAnamnese.IdUser,
+      th.model.IdPatient,
+      th.grau.value
+    );
+    const bytes = this.base64ToArrayBuffer(response.data.data);
+    const pdfBlob = new Blob([bytes], { type: 'application/pdf' });
+    let link = document.createElement('a');
+    link.href = window.URL.createObjectURL(pdfBlob);
+    link.style.visibility = 'hidden';
+    link.download = pdfBlob.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+  }
+},
+base64ToArrayBuffer(base64) {
+  const binaryString = window.atob(base64);
+  const binaryLen = binaryString.length;
+  const bytes = new Uint8Array(binaryLen);
+  for (let i = 0; i < binaryLen; i++) {
+    const ascii = binaryString.charCodeAt(i);
+    bytes[i] = ascii;
+  }
+
+  return bytes;
+},
+closeModal() {
+  this.show = false;
+  this.modeloAnamnese;
+  this.model = [];
+  this.$emit('close');
+},
+},
 };
 </script>
 <style>
 .q-slide.answer .q-slider__track {
-  background: linear-gradient(to right, red, yellow 50%, #04df04) !important;
+background: linear-gradient(to right, red, yellow 50%, #04df04) !important;
 }
 .q-slide.answer .q-slider__selection {
-  background: transparent;
+background: transparent;
 }
 .q-slide.answer .text-primary {
-  color: blue !important;
+color: blue !important;
 }
 </style>
 <style scoped>
 .fill-content {
-  width: 100%;
+width: 100%;
 }
 
 p {
-  margin: 0;
+margin: 0;
 }
 
-    .modal-actions {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-    }
+.modal-actions {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
 
-    .main-results{
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
+.main-results{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 
-    .sumresult-table{
-      text-align: center;
-      overflow:scroll;
-      margin: 0.5em;
-      display: flexbox;
-      max-height: 100px;
-      border: 1px solid black !important;
-      border-style: dashed;
-      background-color: rgb(30, 82, 30);
-      width: 100%;
-    }
+.sumresult-table{
+  text-align: center;
+  overflow:scroll;
+  margin: 0.5em;
+  display: flexbox;
+  max-height: 100px;
+  border: 1px solid black !important;
+  border-style: dashed;
+  background-color: rgb(30, 82, 30);
+  width: 100%;
+}
 
-    .sumresult-table th, .sumresult-table td{
-      padding: 0.5em;
-      text-align: center;
-      border: 1% groove black !important;
-    }
+.sumresult-table th, .sumresult-table td{
+  padding: 0.5em;
+  text-align: center;
+  border: 1% groove black !important;
+}
 
-    .sumresult-table th {
-      background-color: rgb(88, 161, 88);
-    }
+.sumresult-table th {
+  background-color: rgb(88, 161, 88);
+}
 
-    .sumresult-table td {
-      background-color: rgb(243, 255, 243);
-    }
+.sumresult-table td {
+  background-color: rgb(243, 255, 243);
+}
 
-    </style>
+</style>

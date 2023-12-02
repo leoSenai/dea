@@ -178,7 +178,6 @@ func GetReport(anamnese models.Anamnese, grau int) (pdfBuffer []byte, err error)
 
 	//Set patient Age
 	patient_age_date, _ := time.Parse("2006-01-02", patient.BornDate)
-	fmt.Print(patient_age_date)
 	patient_age_years := (time.Now().Year() - patient_age_date.Year())
 	patient_age_months := (time.Now().Month() - patient_age_date.Month())
 	pdf.SetX(160)
@@ -412,7 +411,7 @@ func GetReport(anamnese models.Anamnese, grau int) (pdfBuffer []byte, err error)
 
 	pdf.SetFillColor(0, 0, 0)
 
-	pdf.SetX(250)
+	pdf.SetX(230)
 	pdf.SetY(760)
 	pdf.Cell(&gopdf.Rect{
 		W: 180,

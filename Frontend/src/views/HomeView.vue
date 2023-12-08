@@ -74,7 +74,7 @@ export default {
           ];
         }
         case RoleEnum.Administrator: {
-          return [{ path: '/usuarios', name: 'Médicos', icon: PhUsers }];
+          return [{ path: '/usuarios', name: 'Profissionais', icon: PhUsers }];
         }
         case RoleEnum.User: {
           return [

@@ -2,7 +2,7 @@
   <div class="user-content">
     <div class="user-title">
       <div class="title">
-        <h3>Médicos</h3>
+        <h3>Profissionais</h3>
       </div>
       <div
         v-if="!isMobile"
@@ -24,7 +24,7 @@
       {{ model.message }}
     </div>
     <div v-if="model.data.length==0">
-      <i>Não há médicos cadastrados até o momento.</i>
+      <i>Não há profissional cadastrados até o momento.</i>
     </div>
     <div
       v-else

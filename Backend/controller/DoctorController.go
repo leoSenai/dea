@@ -33,11 +33,11 @@ func GetDoctorById(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if doctor.IdDoctor == 0 {
-		utils.ReturnResponseJSON(w, http.StatusNotFound, "Médico não encontrada", "")
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Profissional não encontrado", "")
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Médico encontrada com sucesso", doctor)
+	utils.ReturnResponseJSON(w, http.StatusOK, "Profissional encontrada com sucesso", doctor)
 }
 
 func PostDoctor(w http.ResponseWriter, r *http.Request) {
@@ -66,7 +66,7 @@ func PostDoctor(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Médico cadastrado com sucesso!", "")
+	utils.ReturnResponseJSON(w, http.StatusOK, "Profissional cadastrado com sucesso!", "")
 }
 
 func GetAllDoctor(w http.ResponseWriter, _ *http.Request) {
@@ -77,7 +77,7 @@ func GetAllDoctor(w http.ResponseWriter, _ *http.Request) {
 	}
 
 	if len(doctors) == 0 {
-		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não há médicos cadastrados ainda.", "")
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não há profissional cadastrados ainda.", "")
 		return
 	}
 
@@ -107,5 +107,5 @@ func PutDoctor(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.ReturnResponseJSON(w, http.StatusOK, "Médico atualizada com sucesso!", "")
+	utils.ReturnResponseJSON(w, http.StatusOK, "Profissional atualizada com sucesso!", "")
 }

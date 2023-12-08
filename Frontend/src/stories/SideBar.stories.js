@@ -21,7 +21,7 @@ export const Primary = {
   args: {
     links: [
       { path: 'anamnese', name: 'Anamnese', icon: PhClipboardText },
-      { path: 'usuarios', name: 'Médicos', icon: PhUsers }
+      { path: 'usuarios', name: 'Profissionais', icon: PhUsers }
     ]
   }
 };

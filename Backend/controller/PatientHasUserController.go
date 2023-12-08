@@ -19,7 +19,7 @@ func GetPatientHasUserByUserId(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
 		log.Printf("Cannot parse ID: %v", err.Error())
-		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi possível coletar o id do médico na requisição.", "")
+		utils.ReturnResponseJSON(w, http.StatusBadRequest, "Não foi possível coletar o id do profissional na requisição.", "")
 		return
 	}
 

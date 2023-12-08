@@ -4,7 +4,7 @@
     @close="closeModal"
   >
     <template #modal-title>
-      Visualizar Médico
+      Visualizar Profissional
     </template>
     <template #modal-content>
       <q-form ref="form">
@@ -144,7 +144,7 @@
         },
         optionsTypeUser: [
         { label: 'Administrador', value: 'A' },
-        { label: 'Médico', value: 'U' },
+        { label: 'Profissional', value: 'U' },
       ],
         optionsActive: [
           { label: 'Sim', value: 1 },

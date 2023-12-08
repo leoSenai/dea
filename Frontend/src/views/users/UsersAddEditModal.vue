@@ -4,7 +4,7 @@
     @close="closeModal"
   >
     <template #modal-title>
-      {{ model && model.IdUser ? 'Editar' : 'Cadastrar' }} Médico
+      {{ model && model.IdUser ? 'Editar' : 'Cadastrar' }} Profissional
     </template>
     <template #modal-content>
       <q-form ref="form">
@@ -147,7 +147,7 @@ export default {
       },
       optionsTypeUser: [
         { label: 'Administrador', value: 'A' },
-        { label: 'Médico', value: 'U' },
+        { label: 'Profissional', value: 'U' },
       ],
       optionsActive: [
         { label: 'Sim', value: 1 },

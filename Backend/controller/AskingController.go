@@ -77,7 +77,7 @@ func GetAllAsking(w http.ResponseWriter, _ *http.Request) {
 	}
 
 	if len(askings) == 0 {
-		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não há médicos cadastrados ainda.", "")
+		utils.ReturnResponseJSON(w, http.StatusNotFound, "Não há profissionais cadastrados ainda.", "")
 		return
 	}
 

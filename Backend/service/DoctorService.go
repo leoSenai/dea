@@ -37,7 +37,7 @@ func PutDoctor(doctorUpdate models.Doctor) (err error) {
 	}
 
 	if doctor.IdDoctor == 0 {
-		return fmt.Errorf("Médico não está cadastrado no sistema!")
+		return fmt.Errorf("Profissional não está cadastrado no sistema!")
 	}
 
 	err = repository.PutDoctor(doctorUpdate)
